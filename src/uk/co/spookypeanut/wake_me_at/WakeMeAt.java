@@ -1,24 +1,25 @@
 package uk.co.spookypeanut.wake_me_at;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapView;
 
 //Create an anonymous implementation of OnClickListener
 
 
-public class wake_me_at extends Activity {
-	private OnClickListener mCorkyListener = new OnClickListener() {
+public class WakeMeAt extends Activity {
+	private OnClickListener mCorkyListener = new Button.OnClickListener() {
 	    public void onClick(View v) {
 	    	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
 	    	toast.show();
-	    	get_location getlocation = new get_location();
+	    	Intent i = new Intent(WakeMeAt.this.getApplication(), WakeMeAt.class);
+            startActivity(i);
+            
 	    }
 	};
 	

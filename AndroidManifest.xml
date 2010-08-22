@@ -5,15 +5,16 @@
       android:versionName="1.0">
     <application android:icon="@drawable/icon" android:label="@string/app_name" android:debuggable="true">
     <uses-library android:name="com.google.android.maps" />
-        <activity android:name=".wake_me_at"
-                  android:label="@string/app_name">
+        <activity android:label="@string/app_name" android:name="uk.co.spookypeanut.wake_me_at.WakeMeAt">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
 
-    </application>
+    <activity android:name="uk.co.spookypeanut.wake_me_at.GetLocation"><intent-filter><action android:name="android.intent.action.MAIN" /></intent-filter>
+</activity>
+</application>
 
 <uses-permission android:name="android.permission.INTERNET"/>
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
