@@ -18,7 +18,7 @@ public class MapOverlay extends ItemizedOverlay {
 	Context mContext;
 	
 	public MapOverlay(Drawable defaultMarker) {
-		super(boundCenterBottom(defaultMarker));
+		super(boundCenter(defaultMarker));
 	}
 
 	public void addOverlay(OverlayItem overlay) {
