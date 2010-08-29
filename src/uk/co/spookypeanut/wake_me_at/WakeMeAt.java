@@ -26,18 +26,13 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Toast;
 
-
-//Create an anonymous implementation of OnClickListener
-
-
 public class WakeMeAt extends Activity {
 	private OnClickListener mCorkyListener = new Button.OnClickListener() {
 	    public void onClick(View v) {
-	    	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
-	    	toast.show();
+//	    	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
+//	    	toast.show();
 	    	Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
             startActivity(i);
-            
 	    }
 	};
 	
@@ -49,6 +44,5 @@ public class WakeMeAt extends Activity {
 	    Button button = (Button)findViewById(R.id.getLocationButton);
 	    // Register the onClick listener with the implementation above
 	    button.setOnClickListener(mCorkyListener);
-
 	}
 }

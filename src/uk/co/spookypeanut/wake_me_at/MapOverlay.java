@@ -22,16 +22,16 @@ import java.util.ArrayList;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.ContextWrapper;
 import android.graphics.drawable.Drawable;
+import android.view.MotionEvent;
 import android.widget.Toast;
 
+import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
+import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-/**
- * @author hbush
- *
- */
 public class MapOverlay extends ItemizedOverlay {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 	private Context mContext;
@@ -54,19 +54,11 @@ public class MapOverlay extends ItemizedOverlay {
 	protected OverlayItem createItem(int i) {
 	  return mOverlays.get(i);
 	}
-	/* (non-Javadoc)
-	 * @see com.google.android.maps.ItemizedOverlay#createItem(int)
-	 */
 
-
-	/* (non-Javadoc)
-	 * @see com.google.android.maps.ItemizedOverlay#size()
-	 */
 	@Override
 	public int size() {
 	  return mOverlays.size();
 	}
-	
 	
 	@Override
 	protected boolean onTap(int index) {
@@ -77,4 +69,17 @@ public class MapOverlay extends ItemizedOverlay {
 	  dialog.show();
 	  return true;
 	}
+    public boolean onTouchEvent(MotionEvent event, MapView mapView) 
+    {   
+        if (event.getAction() == 1) {
+            GeoPoint p = mapView.getProjection().fromPixels(
+                (int) event.getX(),
+                (int) event.getY());
+            Toast.makeText(mContext, 
+                           p.getLatitudeE6() / 1E6 + "," + 
+                           p.getLongitudeE6() /1E6 , 
+                           Toast.LENGTH_SHORT).show();
+        }                            
+        return false;
+    } 
 }
