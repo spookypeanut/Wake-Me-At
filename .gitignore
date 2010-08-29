@@ -10,7 +10,7 @@ Thumbs.db
 Desktop.ini
 *~
 *.apk
-bin
+bin/*
 gen
 local.properties
 *.jar
