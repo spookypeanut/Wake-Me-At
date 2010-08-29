@@ -96,7 +96,14 @@ public class MapOverlay extends ItemizedOverlay implements OnGestureListener {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-		String address = addresses.get(0).getAddressLine(0);
+		String address = "";
+		if (addresses.size() > 0) 
+        {
+            for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
+                 i++)
+               address += addresses.get(0).getAddressLine(i) + "\n";
+        }
+
 		dialog.setMessage(address);
 		dialog.show();
 	}
