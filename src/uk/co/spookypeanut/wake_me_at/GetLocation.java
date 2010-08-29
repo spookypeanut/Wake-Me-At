@@ -2,7 +2,6 @@ package uk.co.spookypeanut.wake_me_at;
 
 import java.util.List;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
@@ -19,6 +18,8 @@ import com.google.android.maps.OverlayItem;
 
 public class GetLocation extends MapActivity implements LocationListener {
     MapView mapView;
+    OverlayItem destinationOverlay;
+    GeoPoint destination;
     /** Called when the activity is first created. */
     @Override
     public void onCreate(Bundle icicle) {
@@ -29,11 +30,11 @@ public class GetLocation extends MapActivity implements LocationListener {
         
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
-        MapOverlay itemizedoverlay = new MapOverlay(drawable);
-        GeoPoint point = getCurrentLocation(true);
-        OverlayItem overlayitem = new OverlayItem(point, "Hola, Mundo!", "I'm in Mexico City!");
-        itemizedoverlay.addOverlay(overlayitem);
-        mapOverlays.add(itemizedoverlay);
+        MapOverlay itemizedOverlay = new MapOverlay(drawable, this);
+        destination = getCurrentLocation(true);
+        destinationOverlay = new OverlayItem(destination, "Wake Me Here", "Location To Set Off Alarm");
+        itemizedOverlay.addOverlay(destinationOverlay);
+        mapOverlays.add(itemizedOverlay);
     }
     
     private GeoPoint getCurrentLocation(boolean moveMap) {

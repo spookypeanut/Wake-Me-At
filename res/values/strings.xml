@@ -2,6 +2,6 @@
 <resources>
     <string name="hello">Hello World, wake_me_at!</string>
     <string name="app_name">Wake Me At</string>
-<string name="getLocationButtonName">Get location...</string>
-<string name="map_name">Select location</string>
+    <string name="getLocationButtonName">Get location...</string>
+    <string name="map_name">Select location</string>
 </resources>

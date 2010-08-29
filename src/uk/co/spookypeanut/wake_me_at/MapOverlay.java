@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.widget.Toast;
 
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.OverlayItem;
@@ -15,7 +16,12 @@ import com.google.android.maps.OverlayItem;
  */
 public class MapOverlay extends ItemizedOverlay {
 	private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-	Context mContext;
+	private Context mContext;
+
+	public MapOverlay(Drawable defaultMarker, Context context) {
+	  super(boundCenter(defaultMarker));
+	  mContext = context;
+	}
 	
 	public MapOverlay(Drawable defaultMarker) {
 		super(boundCenter(defaultMarker));
@@ -43,10 +49,6 @@ public class MapOverlay extends ItemizedOverlay {
 	  return mOverlays.size();
 	}
 	
-	public MapOverlay(Drawable defaultMarker, Context context) {
-		  super(defaultMarker);
-		  mContext = context;
-		}
 	
 	@Override
 	protected boolean onTap(int index) {
