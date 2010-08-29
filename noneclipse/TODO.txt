@@ -1,0 +1,1 @@
+Allow switching to satellite view
