@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
@@ -78,8 +79,8 @@ implements LocationListener {
             destination = getSearchLocation(searchAddr, true);
         }
         OverlayItem destinationOverlay = new OverlayItem(destination,
-                "Wake Me Here",
-        "Location To Set Off Alarm");
+                                            "Wake Me Here",
+                                            "Location To Set Off Alarm");
         itemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(itemizedOverlay);
     }
@@ -245,14 +246,23 @@ implements LocationListener {
             if (addresses.size() > 0) 
             {
                 for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-                     i++)
+                        i++)
                     address += addresses.get(0).getAddressLine(i) + "\n";
             }
 
             dialog.setMessage(address);
+            dialog.setCancelable(true);
+            dialog.setPositiveButton(R.string.uselocationbutton,
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,
+                        int which) {
+                    Intent i = new Intent();
+                    setResult(RESULT_OK, i.setAction("passing data back"));
+                    finish();
+                }
+            });
+            dialog.setNegativeButton(R.string.dontuselocationbutton, null);
             dialog.show();
-            setResult(RESULT_OK, (new Intent()).setAction("passing it"));
-            //finish();
         }
 
         @Override

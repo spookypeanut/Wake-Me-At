@@ -25,8 +25,11 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
 
 public class WakeMeAt extends Activity {
+    public static final int GETLOCATION = 1;
+
     private OnClickListener mCorkyListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
@@ -35,8 +38,8 @@ public class WakeMeAt extends Activity {
             String searchAddr = searchAddrBox.getText().toString();
             //Toast.makeText(getApplicationContext(), searchAddr,
             //Toast.LENGTH_SHORT).show();
-            i.putExtra("searchAddr", searchAddr);
-            startActivity(i);
+            i.putExtra("searchAddr", searchAddr); 
+            startActivityForResult(i, GETLOCATION);
         }
     };
 
@@ -48,5 +51,14 @@ public class WakeMeAt extends Activity {
         Button button = (Button)findViewById(R.id.getLocationButton);
         // Register the onClick listener with the implementation above
         button.setOnClickListener(mCorkyListener);
+    }
+
+    protected void onActivityResult (int requestCode,
+            int resultCode,
+            Intent data) {
+        if (requestCode == GETLOCATION) {
+            Toast.makeText(getApplicationContext(), data.getAction(),
+                    Toast.LENGTH_SHORT).show();
+        }
     }
 }
