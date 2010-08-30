@@ -25,21 +25,19 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.content.Context;
-import android.content.ContextWrapper;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Geocoder;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapView;
 import com.google.android.maps.OverlayItem;
 
-public class MapOverlay extends ItemizedOverlay implements OnGestureListener {
+public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
 	private GestureDetector gestureDetector;
 	private MapView mapView;
 

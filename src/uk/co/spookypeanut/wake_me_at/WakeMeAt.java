@@ -21,10 +21,9 @@ package uk.co.spookypeanut.wake_me_at;
 import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.widget.Toast;
+import android.widget.Button;
 
 public class WakeMeAt extends Activity {
 	private OnClickListener mCorkyListener = new Button.OnClickListener() {

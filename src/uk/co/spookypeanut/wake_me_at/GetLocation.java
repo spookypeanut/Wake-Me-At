@@ -20,17 +20,12 @@ package uk.co.spookypeanut.wake_me_at;
 
 import java.util.List;
 
-import android.app.AlertDialog;
 import android.graphics.drawable.Drawable;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.View.OnLongClickListener;
-import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -40,7 +35,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class GetLocation extends MapActivity
-		implements LocationListener, OnLongClickListener, OnClickListener {
+		implements LocationListener {
     MapView mapView;
     OverlayItem destinationOverlay;
     GeoPoint destination;
@@ -51,7 +46,6 @@ public class GetLocation extends MapActivity
         setContentView(R.layout.get_location);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
-        mapView.setOnLongClickListener(this);
         
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
@@ -145,25 +139,4 @@ public class GetLocation extends MapActivity
 		
 	}
 
-	@Override
-	public boolean onLongClick(View v) {
-    //	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
-    	//toast.show();
-  	  AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-	  dialog.setTitle("Title");
-	  dialog.setMessage("Message");
-	  dialog.show();
-
-		return true;
-	}
-
-	@Override
-	public void onClick(View v) {
-	  	  AlertDialog.Builder dialog = new AlertDialog.Builder(this);
-		  dialog.setTitle("Title");
-		  dialog.setMessage("Message");
-		  dialog.show();
-
-	//		return true;
-	}
 }
