@@ -104,6 +104,7 @@ public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestur
 
 		dialog.setMessage(address);
 		dialog.show();
+ //       setResult(Activity.RESULT_OK, (new Intent()).setAction("passing it"));
 	}
 
 	@Override

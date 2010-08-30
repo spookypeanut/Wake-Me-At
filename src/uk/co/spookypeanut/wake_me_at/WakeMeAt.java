@@ -31,6 +31,7 @@ public class WakeMeAt extends Activity {
 //	    	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
 //	    	toast.show();
 	    	Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
+	    	i.putExtra("message", "this is my message");
             startActivity(i);
 	    }
 	};

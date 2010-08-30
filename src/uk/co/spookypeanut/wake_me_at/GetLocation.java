@@ -26,6 +26,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.MapActivity;
@@ -37,7 +38,7 @@ import com.google.android.maps.OverlayItem;
 public class GetLocation extends MapActivity
 		implements LocationListener {
     MapView mapView;
-    OverlayItem destinationOverlay;
+    MapOverlay itemizedOverlay;
     GeoPoint destination;
 
     @Override
@@ -49,13 +50,18 @@ public class GetLocation extends MapActivity
         
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
-        MapOverlay itemizedOverlay = new MapOverlay(drawable, this);
+        itemizedOverlay = new MapOverlay(drawable, this);
         destination = getCurrentLocation(true);
-        destinationOverlay = new OverlayItem(destination,
+        OverlayItem destinationOverlay = new OverlayItem(destination,
         		                             "Wake Me Here",
         		                             "Location To Set Off Alarm");
         itemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(itemizedOverlay);
+        
+        Bundle extras = this.getIntent().getExtras();
+        String message = extras.getString("message");
+    	Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
+    	toast.show();
     }
     
     private GeoPoint getCurrentLocation(boolean moveMap) {
