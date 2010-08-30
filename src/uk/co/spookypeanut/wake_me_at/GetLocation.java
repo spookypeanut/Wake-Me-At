@@ -53,17 +53,22 @@ public class GetLocation extends MapActivity
         mapView.setBuiltInZoomControls(true);
         
         Bundle extras = this.getIntent().getExtras();
-        String searchAddr = extras.getString("searchAddr");
+        String searchAddr = extras.getString("searchAddr").trim();
 
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         itemizedOverlay = new MapOverlay(drawable, this);
         
-        Toast.makeText(getApplicationContext(), searchAddr, Toast.LENGTH_SHORT).show();
-        if (searchAddr != "") {
-        	destination = getSearchLocation(searchAddr, true);
-        } else {
+        if (searchAddr.length() == 0) {
+        	Toast.makeText(getApplicationContext(),
+        			       "No search terms, using current location",
+        			       Toast.LENGTH_SHORT).show();
         	destination = getCurrentLocation(true);
+        } else {
+        	Toast.makeText(getApplicationContext(),
+        			       "Searching for \"" + searchAddr + "\"",
+        			       Toast.LENGTH_SHORT).show();
+        	destination = getSearchLocation(searchAddr, true);
         }
         OverlayItem destinationOverlay = new OverlayItem(destination,
         		                             "Wake Me Here",
