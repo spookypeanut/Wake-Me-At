@@ -24,15 +24,19 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.EditText;
 
 public class WakeMeAt extends Activity {
 	private OnClickListener mCorkyListener = new Button.OnClickListener() {
 	    public void onClick(View v) {
-//	    	Toast toast = Toast.makeText(getApplicationContext(), "Clicked", Toast.LENGTH_SHORT);
-//	    	toast.show();
 	    	Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
 	    	i.putExtra("message", "this is my message");
-            startActivity(i);
+		    EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
+		    String searchAddr = searchAddrBox.getText().toString();
+//	    	Toast.makeText(getApplicationContext(), searchAddr,
+//	    								 Toast.LENGTH_SHORT).show();
+	    	i.putExtra("searchAddr", searchAddr);
+	    	startActivity(i);
 	    }
 	};
 	

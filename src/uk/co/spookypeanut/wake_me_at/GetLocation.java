@@ -18,10 +18,14 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
 */
 
+import java.io.IOException;
 import java.util.List;
+import java.util.Locale;
 
 import android.graphics.drawable.Drawable;
+import android.location.Address;
 import android.location.Criteria;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -48,22 +52,48 @@ public class GetLocation extends MapActivity
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
         
+        Bundle extras = this.getIntent().getExtras();
+        String searchAddr = extras.getString("searchAddr");
+
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         itemizedOverlay = new MapOverlay(drawable, this);
-        destination = getCurrentLocation(true);
+        
+        Toast.makeText(getApplicationContext(), searchAddr, Toast.LENGTH_SHORT).show();
+        if (searchAddr != "") {
+        	destination = getSearchLocation(searchAddr, true);
+        } else {
+        	destination = getCurrentLocation(true);
+        }
         OverlayItem destinationOverlay = new OverlayItem(destination,
         		                             "Wake Me Here",
         		                             "Location To Set Off Alarm");
         itemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(itemizedOverlay);
-        
-        Bundle extras = this.getIntent().getExtras();
-        String message = extras.getString("message");
-    	Toast toast = Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT);
-    	toast.show();
     }
     
+    private GeoPoint getSearchLocation(String address, boolean moveMap) {
+    	Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+    	GeoPoint returnValue = new GeoPoint(0,0);
+    	try {
+            List<Address> locations = geoCoder.getFromLocationName(
+                address, 5);
+            if (locations.size() > 0) {
+                returnValue = new GeoPoint(
+                        (int) (locations.get(0).getLatitude() * 1E6), 
+                        (int) (locations.get(0).getLongitude() * 1E6));
+       //         mapView.invalidate();
+            }    
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+         if (moveMap) {
+            MapController mc = mapView.getController(); 
+        	mc.animateTo(returnValue);
+        }
+        return returnValue;
+        
+}    
     private GeoPoint getCurrentLocation(boolean moveMap) {
     		GeoPoint returnValue = new GeoPoint(0,0);
             LocationManager locMan;
@@ -84,16 +114,14 @@ public class GetLocation extends MapActivity
             	// TODO: do this properly 
                     return returnValue;
             }
-            GeoPoint point = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
+            returnValue = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
                                           (int) (currentLocation.getLongitude() * 1E6));
             if (moveMap) {
                 MapController mc = mapView.getController(); 
-            	mc.animateTo(point);
+            	mc.animateTo(returnValue);
             }
             locMan.removeUpdates(this);
-            return point;
-
-    	
+            return returnValue;
     }
     
     @Override
