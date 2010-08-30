@@ -16,7 +16,7 @@ package uk.co.spookypeanut.wake_me_at;
     You should have received a copy of the GNU General Public License
     along with Wake Me At, in the file "COPYING".  If not, see 
     <http://www.gnu.org/licenses/>.
-*/
+ */
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -47,7 +47,7 @@ import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
 public class GetLocation extends MapActivity
-		implements LocationListener {
+implements LocationListener {
     MapView mapView;
     MapOverlay itemizedOverlay;
     GeoPoint destination;
@@ -58,84 +58,84 @@ public class GetLocation extends MapActivity
         setContentView(R.layout.get_location);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
-        
+
         Bundle extras = this.getIntent().getExtras();
         String searchAddr = extras.getString("searchAddr").trim();
 
         List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         itemizedOverlay = new MapOverlay(drawable, this);
-        
+
         if (searchAddr.length() == 0) {
-        	Toast.makeText(getApplicationContext(),
-        			       "No search terms, using current location",
-        			       Toast.LENGTH_SHORT).show();
-        	destination = getCurrentLocation(true);
+            Toast.makeText(getApplicationContext(),
+                    "No search terms, using current location",
+                    Toast.LENGTH_SHORT).show();
+            destination = getCurrentLocation(true);
         } else {
-        	Toast.makeText(getApplicationContext(),
-        			       "Searching for \"" + searchAddr + "\"",
-        			       Toast.LENGTH_SHORT).show();
-        	destination = getSearchLocation(searchAddr, true);
+            Toast.makeText(getApplicationContext(),
+                    "Searching for \"" + searchAddr + "\"",
+                    Toast.LENGTH_SHORT).show();
+            destination = getSearchLocation(searchAddr, true);
         }
         OverlayItem destinationOverlay = new OverlayItem(destination,
-        		                             "Wake Me Here",
-        		                             "Location To Set Off Alarm");
+                "Wake Me Here",
+        "Location To Set Off Alarm");
         itemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(itemizedOverlay);
     }
-    
+
     private GeoPoint getSearchLocation(String address, boolean moveMap) {
-    	Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-    	GeoPoint returnValue = new GeoPoint(0,0);
-    	try {
+        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+        GeoPoint returnValue = new GeoPoint(0,0);
+        try {
             List<Address> locations = geoCoder.getFromLocationName(
-                address, 5);
+                    address, 5);
             if (locations.size() > 0) {
                 returnValue = new GeoPoint(
                         (int) (locations.get(0).getLatitude() * 1E6), 
                         (int) (locations.get(0).getLongitude() * 1E6));
-       //         mapView.invalidate();
+                //         mapView.invalidate();
             }    
         } catch (IOException e) {
             e.printStackTrace();
         }
-         if (moveMap) {
+        if (moveMap) {
             MapController mc = mapView.getController(); 
-        	mc.animateTo(returnValue);
+            mc.animateTo(returnValue);
         }
         return returnValue;
-        
-}    
+
+    }    
     private GeoPoint getCurrentLocation(boolean moveMap) {
-    		GeoPoint returnValue = new GeoPoint(0,0);
-            LocationManager locMan;
-            locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
-            locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER,
-            		                      1000, 2, this);
-            String provider = locMan.getBestProvider(new Criteria(), true);
-            if (provider == null) {
-            	// TODO: do this properly 
-                    return returnValue;
-            }
-            if(!locMan.isProviderEnabled(provider)){
-            	// TODO: do this properly 
-            		return returnValue;
-            }
-            Location currentLocation = locMan.getLastKnownLocation(provider);
-            if(currentLocation == null){
-            	// TODO: do this properly 
-                    return returnValue;
-            }
-            returnValue = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
-                                          (int) (currentLocation.getLongitude() * 1E6));
-            if (moveMap) {
-                MapController mc = mapView.getController(); 
-            	mc.animateTo(returnValue);
-            }
-            locMan.removeUpdates(this);
+        GeoPoint returnValue = new GeoPoint(0,0);
+        LocationManager locMan;
+        locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
+        locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER,
+                1000, 2, this);
+        String provider = locMan.getBestProvider(new Criteria(), true);
+        if (provider == null) {
+            // TODO: do this properly 
             return returnValue;
+        }
+        if(!locMan.isProviderEnabled(provider)){
+            // TODO: do this properly 
+            return returnValue;
+        }
+        Location currentLocation = locMan.getLastKnownLocation(provider);
+        if(currentLocation == null){
+            // TODO: do this properly 
+            return returnValue;
+        }
+        returnValue = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
+                (int) (currentLocation.getLongitude() * 1E6));
+        if (moveMap) {
+            MapController mc = mapView.getController(); 
+            mc.animateTo(returnValue);
+        }
+        locMan.removeUpdates(this);
+        return returnValue;
     }
-    
+
     @Override
     protected boolean isRouteDisplayed() {
         // TODO Auto-generated method stub
@@ -155,138 +155,138 @@ public class GetLocation extends MapActivity
     public void onPause(Bundle icicle) {
         super.onPause();
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle icicle) {
         super.onSaveInstanceState(icicle);
     }
 
-	@Override
-	public void onLocationChanged(Location location) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onLocationChanged(Location location) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void onProviderDisabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+    }
 
-	@Override
-	public void onProviderEnabled(String provider) {
-		// TODO Auto-generated method stub
-		
-	}
+    @Override
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras) {
-		// TODO Auto-generated method stub
-		
-	}
-	public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
-		private GestureDetector gestureDetector;
-		private MapView mapView;
+    }
 
-		private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-		private Context mContext;
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
 
-		public MapOverlay(Drawable defaultMarker, Context context) {
-			super(boundCenter(defaultMarker));
-			mContext = context;
-			gestureDetector = new GestureDetector(this);
-		}
+    }
 
-		public MapOverlay(Drawable defaultMarker) {
-			super(boundCenter(defaultMarker));
-		}
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
 
-		public void addOverlay(OverlayItem overlay) {
-			mOverlays.add(overlay);
-			populate();
-		}
+    }
+    public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
+        private GestureDetector gestureDetector;
+        private MapView mapView;
 
-		@Override
-		protected OverlayItem createItem(int i) {
-			return mOverlays.get(i);
-		}
+        private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
+        private Context mContext;
 
-		@Override
-		public int size() {
-			return mOverlays.size();
-		}
+        public MapOverlay(Drawable defaultMarker, Context context) {
+            super(boundCenter(defaultMarker));
+            mContext = context;
+            gestureDetector = new GestureDetector(this);
+        }
 
-		public boolean onTouchEvent(MotionEvent event, MapView mv) {
-			mapView = mv;
-			if (gestureDetector.onTouchEvent(event)) {
-				return true;
-			}
-			return false;
-		}
+        public MapOverlay(Drawable defaultMarker) {
+            super(boundCenter(defaultMarker));
+        }
 
-		@Override
-		public void onLongPress(MotionEvent event) {
-			Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
-			GeoPoint p = mapView.getProjection().fromPixels(
-					(int) event.getX(),
-					(int) event.getY());
+        public void addOverlay(OverlayItem overlay) {
+            mOverlays.add(overlay);
+            populate();
+        }
 
-			AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-			dialog.setTitle("Location");
-			List<Address> addresses = null;
-			try {
-				addresses = geoCoder.getFromLocation(
-						p.getLatitudeE6()  / 1E6, 
-						p.getLongitudeE6() / 1E6, 1);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			String address = "";
-			if (addresses.size() > 0) 
-	        {
-	            for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-	                 i++)
-	               address += addresses.get(0).getAddressLine(i) + "\n";
-	        }
+        @Override
+        protected OverlayItem createItem(int i) {
+            return mOverlays.get(i);
+        }
 
-			dialog.setMessage(address);
-			dialog.show();
-	        setResult(RESULT_OK, (new Intent()).setAction("passing it"));
-	        //finish();
-		}
+        @Override
+        public int size() {
+            return mOverlays.size();
+        }
 
-		@Override
-		public boolean onDown(MotionEvent e) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+        public boolean onTouchEvent(MotionEvent event, MapView mv) {
+            mapView = mv;
+            if (gestureDetector.onTouchEvent(event)) {
+                return true;
+            }
+            return false;
+        }
 
-		@Override
-		public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-				float velocityY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+        @Override
+        public void onLongPress(MotionEvent event) {
+            Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
+            GeoPoint p = mapView.getProjection().fromPixels(
+                    (int) event.getX(),
+                    (int) event.getY());
 
-		@Override
-		public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-				float distanceY) {
-			// TODO Auto-generated method stub
-			return false;
-		}
+            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+            dialog.setTitle("Location");
+            List<Address> addresses = null;
+            try {
+                addresses = geoCoder.getFromLocation(
+                        p.getLatitudeE6()  / 1E6, 
+                        p.getLongitudeE6() / 1E6, 1);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            String address = "";
+            if (addresses.size() > 0) 
+            {
+                for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
+                     i++)
+                    address += addresses.get(0).getAddressLine(i) + "\n";
+            }
 
-		@Override
-		public void onShowPress(MotionEvent e) {
-			// TODO Auto-generated method stub
+            dialog.setMessage(address);
+            dialog.show();
+            setResult(RESULT_OK, (new Intent()).setAction("passing it"));
+            //finish();
+        }
 
-		}
+        @Override
+        public boolean onDown(MotionEvent e) {
+            // TODO Auto-generated method stub
+            return false;
+        }
 
-		@Override
-		public boolean onSingleTapUp(MotionEvent e) {
-			// TODO Auto-generated method stub
-			return false;
-		} 
-	}
+        @Override
+        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                float velocityY) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+                float distanceY) {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+        @Override
+        public void onShowPress(MotionEvent e) {
+            // TODO Auto-generated method stub
+
+        }
+
+        @Override
+        public boolean onSingleTapUp(MotionEvent e) {
+            // TODO Auto-generated method stub
+            return false;
+        } 
+    }
 
 
 }
