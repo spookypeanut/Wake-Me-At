@@ -228,7 +228,7 @@ implements LocationListener {
         @Override
         public void onLongPress(MotionEvent event) {
             Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
-            GeoPoint p = mapView.getProjection().fromPixels(
+            destination = mapView.getProjection().fromPixels(
                     (int) event.getX(),
                     (int) event.getY());
 
@@ -237,8 +237,8 @@ implements LocationListener {
             List<Address> addresses = null;
             try {
                 addresses = geoCoder.getFromLocation(
-                        p.getLatitudeE6()  / 1E6, 
-                        p.getLongitudeE6() / 1E6, 1);
+                        destination.getLatitudeE6()  / 1E6, 
+                        destination.getLongitudeE6() / 1E6, 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -257,7 +257,9 @@ implements LocationListener {
                 public void onClick(DialogInterface dialog,
                         int which) {
                     Intent i = new Intent();
-                    setResult(RESULT_OK, i.setAction("passing data back"));
+                    setResult(RESULT_OK, i.setAction(
+                                             destination.getLatitudeE6() / 1E6 + "," +
+                                             destination.getLongitudeE6() / 1E6));
                     finish();
                 }
             });
