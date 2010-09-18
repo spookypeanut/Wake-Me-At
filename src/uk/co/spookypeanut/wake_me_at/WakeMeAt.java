@@ -36,11 +36,9 @@ public class WakeMeAt extends Activity {
     private OnClickListener mCorkyListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
-            i.putExtra("message", "this is my message");
             EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
             String searchAddr = searchAddrBox.getText().toString();
-            //Toast.makeText(getApplicationContext(), searchAddr,
-            //Toast.LENGTH_SHORT).show();
+            
             i.putExtra("searchAddr", searchAddr); 
             startActivityForResult(i, GETLOCATION);
         }
@@ -56,25 +54,24 @@ public class WakeMeAt extends Activity {
         button.setOnClickListener(mCorkyListener);
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        float longitude = settings.getFloat("longitude", (float) 0.0);
         float latitude = settings.getFloat("latitude", (float) 0.0);
-        
-        String longLatString = longitude + "," + latitude;
-        Toast.makeText(getApplicationContext(), longLatString,
+        float longitude = settings.getFloat("longitude", (float) 0.0);
+
+        String latLongString = longitude + "," + latitude;
+        Toast.makeText(getApplicationContext(), latLongString,
                 Toast.LENGTH_SHORT).show();
     }
 
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCATION) {
-            String longLatString = data.getAction();
-//            Toast.makeText(getApplicationContext(), longLatString,
-  //                  Toast.LENGTH_SHORT).show();
-            String tempStrings[] = longLatString.split(",");
-            String longString = tempStrings[0];
-            String latString = tempStrings[1];
-            float longFloat = Float.valueOf(longString.trim()).floatValue();
+            String latLongString = data.getAction();
+
+            String tempStrings[] = latLongString.split(",");
+            String latString = tempStrings[0];
+            String longString = tempStrings[1];
             float latFloat = Float.valueOf(latString.trim()).floatValue();
+            float longFloat = Float.valueOf(longString.trim()).floatValue();
             SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
             SharedPreferences.Editor editor = settings.edit();
             editor.putFloat("latitude", latFloat);
