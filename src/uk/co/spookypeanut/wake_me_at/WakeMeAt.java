@@ -18,6 +18,7 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import android.R.bool;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.Toast;
 
 public class WakeMeAt extends Activity {
@@ -52,16 +54,40 @@ public class WakeMeAt extends Activity {
         Button button = (Button)findViewById(R.id.getLocationButton);
         // Register the onClick listener with the implementation above
         button.setOnClickListener(mCorkyListener);
-        
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        float latitude = settings.getFloat("latitude", (float) 0.0);
-        float longitude = settings.getFloat("longitude", (float) 0.0);
 
-        String latLongString = longitude + "," + latitude;
-        Toast.makeText(getApplicationContext(), latLongString,
-                Toast.LENGTH_SHORT).show();
+        loadLatLong();
     }
 
+    protected void loadLatLong() {
+        latLongChanged(0, 0, true);
+    }
+    
+    protected void latLongChanged(float latitude, float longitude) {
+        latLongChanged(latitude, longitude, false);
+    }
+    
+    protected void latLongChanged(float latitude, float longitude, boolean load) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if (load) {
+            latitude = settings.getFloat("latitude", (float) 0.0);
+            longitude = settings.getFloat("longitude", (float) 0.0);
+        }
+        String latLongString = latitude + "," + longitude;
+        Toast.makeText(getApplicationContext(), latLongString,
+                Toast.LENGTH_SHORT).show();
+        TextView latText = (TextView)findViewById(R.id.latitude);
+        TextView longText = (TextView)findViewById(R.id.longitude);
+        latText.setText(String.valueOf(latitude));
+        longText.setText(String.valueOf(longitude));
+        
+        if (!load) {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putFloat("latitude", latitude);
+            editor.putFloat("longitude", longitude);
+            editor.commit();
+        }
+    }
+    
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCATION) {
@@ -72,11 +98,7 @@ public class WakeMeAt extends Activity {
             String longString = tempStrings[1];
             float latFloat = Float.valueOf(latString.trim()).floatValue();
             float longFloat = Float.valueOf(longString.trim()).floatValue();
-            SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("latitude", latFloat);
-            editor.putFloat("longitude", longFloat);
-            editor.commit();
+            latLongChanged(latFloat, longFloat);
         }
     }
 }
