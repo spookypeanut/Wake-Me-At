@@ -51,7 +51,14 @@
             android:layout_marginBottom="2dip"
             android:layout_marginTop="2dip"
             android:layout_width="wrap_content"/>
-        
+        <Button android:id="@+id/startService"
+            android:text="@string/startServiceButtonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <Button android:id="@+id/stopService"
+            android:text="@string/stopServiceButtonName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
     </LinearLayout>
 
 </ScrollView>

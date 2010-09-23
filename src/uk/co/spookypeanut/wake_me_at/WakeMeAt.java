@@ -18,8 +18,8 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
-import android.R.bool;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -35,7 +35,7 @@ public class WakeMeAt extends Activity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
 
 
-    private OnClickListener mCorkyListener = new Button.OnClickListener() {
+    private OnClickListener mGetLocListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
             EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
@@ -45,7 +45,26 @@ public class WakeMeAt extends Activity {
             startActivityForResult(i, GETLOCATION);
         }
     };
-
+    private OnClickListener mStartListener = new OnClickListener() {
+        public void onClick(View v) {
+            Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
+            intent.setClass(WakeMeAt.this, WakeMeAtService.class);
+            ComponentName service = startService(intent);
+            String message;
+            if (service == null) {
+                message = "null";
+            } else {
+                message = service.flattenToString();
+            }
+            Toast.makeText(getApplicationContext(), message,
+                    Toast.LENGTH_SHORT).show();
+        }
+    };
+    private OnClickListener mStopListener = new OnClickListener() {
+        public void onClick(View v) {
+            stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
+        }
+    };
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -53,7 +72,13 @@ public class WakeMeAt extends Activity {
         // Capture our button from layout
         Button button = (Button)findViewById(R.id.getLocationButton);
         // Register the onClick listener with the implementation above
-        button.setOnClickListener(mCorkyListener);
+        button.setOnClickListener(mGetLocListener);
+        
+        button = (Button)findViewById(R.id.startService);
+        button.setOnClickListener(mStartListener);
+
+        button = (Button)findViewById(R.id.stopService);
+        button.setOnClickListener(mStopListener);
 
         loadLatLong();
     }
@@ -71,6 +96,11 @@ public class WakeMeAt extends Activity {
         if (load) {
             latitude = settings.getFloat("latitude", (float) 0.0);
             longitude = settings.getFloat("longitude", (float) 0.0);
+        } else {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putFloat("latitude", latitude);
+            editor.putFloat("longitude", longitude);
+            editor.commit();
         }
         String latLongString = latitude + "," + longitude;
         Toast.makeText(getApplicationContext(), latLongString,
@@ -79,13 +109,6 @@ public class WakeMeAt extends Activity {
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(latitude));
         longText.setText(String.valueOf(longitude));
-        
-        if (!load) {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("latitude", latitude);
-            editor.putFloat("longitude", longitude);
-            editor.commit();
-        }
     }
     
     protected void onActivityResult (int requestCode,

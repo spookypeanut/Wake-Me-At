@@ -19,4 +19,8 @@
  <string name="map_name">Select location</string>
  <string name="uselocationbutton">Use this</string>
  <string name="dontuselocationbutton">Try again</string>
+
+<string name="foreground_service_started">Wake Me At service started</string>
+<string name="local_service_label">Wake Me At</string><string name="startServiceButtonName">Start Service</string>
+<string name="stopServiceButtonName">Stop Service</string>
 </resources>
