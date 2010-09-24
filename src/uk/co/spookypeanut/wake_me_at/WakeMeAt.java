@@ -27,12 +27,14 @@ import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-import android.widget.Toast;
+//import android.widget.Toast;
 
 public class WakeMeAt extends Activity {
     public static final int GETLOCATION = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-
+    
+    private double mLatitude = 0.0;
+    private double mLongitude = 0.0;
 
     private OnClickListener mGetLocListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -48,6 +50,8 @@ public class WakeMeAt extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
+            intent.putExtra("latitude", mLatitude);
+            intent.putExtra("longitude", mLongitude);
             startService(intent);
         }
     };
@@ -93,9 +97,11 @@ public class WakeMeAt extends Activity {
             editor.putFloat("longitude", longitude);
             editor.commit();
         }
-        String latLongString = latitude + "," + longitude;
-        Toast.makeText(getApplicationContext(), latLongString,
-                Toast.LENGTH_SHORT).show();
+        mLatitude = latitude;
+        mLongitude = longitude;
+//        String latLongString = latitude + "," + longitude;
+//        Toast.makeText(getApplicationContext(), latLongString,
+//                Toast.LENGTH_SHORT).show();
         TextView latText = (TextView)findViewById(R.id.latitude);
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(latitude));
