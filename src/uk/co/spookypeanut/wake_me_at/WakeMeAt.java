@@ -19,7 +19,6 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.app.Activity;
-import android.content.ComponentName;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -49,15 +48,7 @@ public class WakeMeAt extends Activity {
         public void onClick(View v) {
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
-            ComponentName service = startService(intent);
-            String message;
-            if (service == null) {
-                message = "null";
-            } else {
-                message = service.flattenToString();
-            }
-            Toast.makeText(getApplicationContext(), message,
-                    Toast.LENGTH_SHORT).show();
+            startService(intent);
         }
     };
     private OnClickListener mStopListener = new OnClickListener() {
