@@ -7,12 +7,17 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.content.Context;
 import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
 import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
-public class WakeMeAtService extends Service {
+public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
@@ -20,6 +25,7 @@ public class WakeMeAtService extends Service {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
+    private LocationManager locationManager;
     private NotificationManager mNM;
     private Method mStartForeground;
     private Method mStopForeground;
@@ -48,10 +54,6 @@ public class WakeMeAtService extends Service {
         mNM.notify(id, notification);
     }
     
-    /**
-     * This is a wrapper around the new stopForeground method, using the older
-     * APIs if it is not available.
-     */
     void stopForegroundCompat(int id) {
         // If we have the new stopForeground API, then use it.
         if (mStopForeground != null) {
@@ -86,21 +88,13 @@ public class WakeMeAtService extends Service {
             // Running on an older platform.
             mStartForeground = mStopForeground = null;
         }
+        locationManager =
+            (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        registerLocationListener();
         Toast.makeText(getApplicationContext(), "Service onCreate()",
                 Toast.LENGTH_SHORT).show();
     }
 
-    @Override
-    public void onDestroy() {
-        // Make sure our notification is gone.
-        stopForegroundCompat(R.string.foreground_service_started);
-    }
-
-
-
-    // This is the old onStart method that will be called on the pre-2.0
-    // platform.  On 2.0 or later we override onStartCommand() so this
-    // method will not be called.
     @Override
     public void onStart(Intent intent, int startId) {
         Toast.makeText(getApplicationContext(), "Service onStart()",
@@ -111,13 +105,62 @@ public class WakeMeAtService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         handleCommand(intent);
+        Toast.makeText(getApplicationContext(), "Service onStartCommand()",
+                Toast.LENGTH_SHORT).show();
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
     }
 
+    @Override
+    public void onDestroy() {
+        // Make sure our notification is gone.
+        stopForegroundCompat(R.string.foreground_service_started);
+        unregisterLocationListener();
+    }
 
+    public boolean stopService(Intent name) {
+        Log.d("WakeMeAt", "TrackRecordingService.stopService");
+        unregisterLocationListener();
+        return super.stopService(name);
+      }
+
+    public void registerLocationListener() {
+        Log.w("WakeMeAt",
+                "registerLocationListener()");
+        if (locationManager == null) {
+          Log.e("WakeMeAt",
+              "TrackRecordingService: Do not have any location manager.");
+          return;
+        }
+        Log.d("WakeMeAt",
+            "Preparing to register location listener w/ TrackRecordingService...");
+        try {
+          long desiredInterval = 10;
+          locationManager.requestLocationUpdates(
+              "gps", desiredInterval,
+              10,
+              // , 0 /* minDistance, get all updates to properly time pauses */
+              WakeMeAtService.this);
+        } catch (RuntimeException e) {
+          Log.e("WakeMeAt",
+              "Could not register location listener: " + e.getMessage(), e);
+        }
+      }
+
+    public void unregisterLocationListener() {
+        if (locationManager == null) {
+          Log.e("WakeMeAt",
+              "TrackRecordingService: Do not have any location manager.");
+          return;
+        }
+        locationManager.removeUpdates(this);
+        Log.d("WakeMeAt",
+            "Location listener now unregistered w/ TrackRecordingService.");
+      }
+ 
     void handleCommand(Intent intent) {
+
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // In this sample, we'll use the same text for the ticker and the expanded notification
             CharSequence text = getText(R.string.foreground_service_started);
@@ -142,6 +185,31 @@ public class WakeMeAtService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         return null;
+    }
+
+    @Override
+    public void onLocationChanged(Location location) {
+        Toast.makeText(getApplicationContext(), "Service onLocationChanged()",
+                Toast.LENGTH_SHORT).show();
+        
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+        
     }
     
 

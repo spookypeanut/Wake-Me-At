@@ -34,7 +34,7 @@
     <category android:name="android.intent.category.DEFAULT" />
    </intent-filter>
   </activity>
- <service android:name="WakeMeAtService" android:label="WMAS"></service>
+ <service android:name="WakeMeAtService" android:label="WMAS" android:icon="@drawable/icon" android:permission="android.permission.ACCESS_FINE_LOCATION"></service>
 </application>
 
  <uses-permission android:name="android.permission.INTERNET" />
