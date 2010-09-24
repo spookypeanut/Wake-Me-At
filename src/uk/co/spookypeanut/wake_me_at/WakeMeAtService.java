@@ -25,6 +25,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
+    private Location finalDestination = new Location("");
+    
     private LocationManager locationManager;
     private NotificationManager mNM;
     private Method mStartForeground;
@@ -79,6 +81,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+
+
         try {
             mStartForeground = getClass().getMethod("startForeground",
                     mStartForegroundSignature);
@@ -91,22 +95,27 @@ public class WakeMeAtService extends Service implements LocationListener {
         locationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
-        Toast.makeText(getApplicationContext(), "Service onCreate()",
-                Toast.LENGTH_SHORT).show();
     }
 
     @Override
     public void onStart(Intent intent, int startId) {
-        Toast.makeText(getApplicationContext(), "Service onStart()",
-                Toast.LENGTH_SHORT).show();
         handleCommand(intent);
     }
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        Log.d("WakeMeAt",
+                "onStartCommand()");
+        Bundle extras = intent.getExtras();
+
+        finalDestination.setLatitude(extras.getDouble("latitude"));
+        finalDestination.setLongitude(extras.getDouble("longitude"));
+
+        Log.d("WakeMeAt",
+            "Passed latlong: " + finalDestination.getLatitude() +
+            ", " + finalDestination.getLongitude());
+        
         handleCommand(intent);
-        Toast.makeText(getApplicationContext(), "Service onStartCommand()",
-                Toast.LENGTH_SHORT).show();
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
@@ -166,7 +175,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             CharSequence text = getText(R.string.foreground_service_started);
 
             // Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.icon, text,
+            Notification notification = new Notification(R.drawable.x, text,
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
@@ -189,11 +198,19 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        Toast.makeText(getApplicationContext(), "Service onLocationChanged()",
+        
+        double distanceAway = location.distanceTo(finalDestination);
+        String debugMessage = "You are " + roundToDecimals(distanceAway, 2) + "m away";
+        Toast.makeText(getApplicationContext(), debugMessage,
                 Toast.LENGTH_SHORT).show();
         
     }
 
+    public static double roundToDecimals(double d, int c) {
+        int temp=(int)((d*Math.pow(10,c)));
+        return (((double)temp)/Math.pow(10,c));
+        }
+    
     @Override
     public void onProviderDisabled(String provider) {
         // TODO Auto-generated method stub
