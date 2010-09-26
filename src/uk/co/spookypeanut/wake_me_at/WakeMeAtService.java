@@ -20,6 +20,7 @@ import android.widget.Toast;
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     static final String LOG_NAME = "WakeMeAt";
+    private static final int ALARMNOTIFY_ID = 1;
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
@@ -213,6 +214,21 @@ public class WakeMeAtService extends Service implements LocationListener {
         String debugMessage = "Alarm sounded";
         Toast.makeText(getApplicationContext(), debugMessage,
                 Toast.LENGTH_SHORT).show();
+        int icon = R.drawable.x;
+        CharSequence tickerText = "Approaching destination";
+        long when = System.currentTimeMillis();
+        Context context = getApplicationContext();
+        CharSequence contentTitle = "Approaching destination";
+        CharSequence contentText = "Approaching destination";
+        Notification notification = new Notification(icon, tickerText, when);
+        Intent notificationIntent = new Intent(this, WakeMeAt.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        notification.defaults |= Notification.DEFAULT_SOUND;
+        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        
+        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+        mNM.notify(ALARMNOTIFY_ID, notification);
+
     }
     public static double roundToDecimals(double d, int c) {
         int temp=(int)((d*Math.pow(10,c)));
