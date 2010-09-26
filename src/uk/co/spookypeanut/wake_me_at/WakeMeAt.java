@@ -36,6 +36,8 @@ public class WakeMeAt extends Activity {
     
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
+    private double mRadius = 0.0;
+
 
     private OnClickListener mGetLocListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -49,10 +51,14 @@ public class WakeMeAt extends Activity {
     };
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
+            EditText radiusBox = (EditText)findViewById(R.id.radius);
+            Float radius = Float.valueOf(radiusBox.getText().toString());
+            radiusChanged(radius);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
             intent.putExtra("latitude", mLatitude);
             intent.putExtra("longitude", mLongitude);
+            intent.putExtra("radius", radius);
             startService(intent);
         }
     };
@@ -75,8 +81,10 @@ public class WakeMeAt extends Activity {
 
         button = (Button)findViewById(R.id.stopService);
         button.setOnClickListener(mStopListener);
+        //TODO add text changed listener for radius
 
         loadLatLong();
+        loadRadius();
     }
 
     protected void loadLatLong() {
@@ -109,6 +117,27 @@ public class WakeMeAt extends Activity {
         longText.setText(String.valueOf(longitude));
     }
     
+    protected void loadRadius() {
+        radiusChanged(0, true);
+    }
+    
+    protected void radiusChanged(float radius) {
+        radiusChanged(radius, false);
+    }
+    
+    protected void radiusChanged(float radius, boolean load) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if (load) {
+            radius = settings.getFloat("radius", (float) 0.0);
+        } else {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putFloat("radius", radius);
+            editor.commit();
+        }
+        mRadius = radius;
+        TextView radText = (TextView)findViewById(R.id.radius);
+        radText.setText(String.valueOf(radius));
+    }
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCATION) {
