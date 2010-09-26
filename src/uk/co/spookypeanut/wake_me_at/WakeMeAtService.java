@@ -26,7 +26,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
-    private Location finalDestination = new Location("");
+    private Location mFinalDestination = new Location("");
     
     private LocationManager locationManager;
     private NotificationManager mNM;
@@ -108,12 +108,12 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "onStartCommand()");
         Bundle extras = intent.getExtras();
 
-        finalDestination.setLatitude(extras.getDouble("latitude"));
-        finalDestination.setLongitude(extras.getDouble("longitude"));
+        mFinalDestination.setLatitude(extras.getDouble("latitude"));
+        mFinalDestination.setLongitude(extras.getDouble("longitude"));
 
         Log.d(LOG_NAME,
-            "Passed latlong: " + finalDestination.getLatitude() +
-            ", " + finalDestination.getLongitude());
+            "Passed latlong: " + mFinalDestination.getLatitude() +
+            ", " + mFinalDestination.getLongitude());
         
         handleCommand(intent);
         // We want this service to continue running until it is explicitly
@@ -198,7 +198,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         
-        double distanceAway = location.distanceTo(finalDestination);
+        double distanceAway = location.distanceTo(mFinalDestination);
         String debugMessage = "You are " + roundToDecimals(distanceAway, 2) + "m away";
         Toast.makeText(getApplicationContext(), debugMessage,
                 Toast.LENGTH_SHORT).show();
