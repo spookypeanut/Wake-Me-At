@@ -19,6 +19,7 @@ import android.widget.Toast;
 
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
+    static final String LOG_NAME = "WakeMeAt";
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
@@ -43,10 +44,10 @@ public class WakeMeAtService extends Service implements LocationListener {
                 mStartForeground.invoke(this, mStartForegroundArgs);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                Log.w("WakeMeAt", "Unable to invoke startForeground", e);
+                Log.w(LOG_NAME, "Unable to invoke startForeground", e);
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                Log.w("WakeMeAt", "Unable to invoke startForeground", e);
+                Log.w(LOG_NAME, "Unable to invoke startForeground", e);
             }
             return;
         }
@@ -64,10 +65,10 @@ public class WakeMeAtService extends Service implements LocationListener {
                 mStopForeground.invoke(this, mStopForegroundArgs);
             } catch (InvocationTargetException e) {
                 // Should not happen.
-                Log.w("WakeMeAt", "Unable to invoke stopForeground", e);
+                Log.w(LOG_NAME, "Unable to invoke stopForeground", e);
             } catch (IllegalAccessException e) {
                 // Should not happen.
-                Log.w("WakeMeAt", "Unable to invoke stopForeground", e);
+                Log.w(LOG_NAME, "Unable to invoke stopForeground", e);
             }
             return;
         }
@@ -104,14 +105,13 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Log.d("WakeMeAt",
-                "onStartCommand()");
+        Log.d(LOG_NAME, "onStartCommand()");
         Bundle extras = intent.getExtras();
 
         finalDestination.setLatitude(extras.getDouble("latitude"));
         finalDestination.setLongitude(extras.getDouble("longitude"));
 
-        Log.d("WakeMeAt",
+        Log.d(LOG_NAME,
             "Passed latlong: " + finalDestination.getLatitude() +
             ", " + finalDestination.getLongitude());
         
@@ -129,20 +129,19 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
 
     public boolean stopService(Intent name) {
-        Log.d("WakeMeAt", "TrackRecordingService.stopService");
+        Log.d(LOG_NAME, "TrackRecordingService.stopService");
         unregisterLocationListener();
         return super.stopService(name);
       }
 
     public void registerLocationListener() {
-        Log.w("WakeMeAt",
-                "registerLocationListener()");
+        Log.d(LOG_NAME, "registerLocationListener()");
         if (locationManager == null) {
-          Log.e("WakeMeAt",
+          Log.e(LOG_NAME,
               "TrackRecordingService: Do not have any location manager.");
           return;
         }
-        Log.d("WakeMeAt",
+        Log.d(LOG_NAME,
             "Preparing to register location listener w/ TrackRecordingService...");
         try {
           long desiredInterval = 10;
@@ -152,19 +151,19 @@ public class WakeMeAtService extends Service implements LocationListener {
               // , 0 /* minDistance, get all updates to properly time pauses */
               WakeMeAtService.this);
         } catch (RuntimeException e) {
-          Log.e("WakeMeAt",
+          Log.e(LOG_NAME,
               "Could not register location listener: " + e.getMessage(), e);
         }
       }
 
     public void unregisterLocationListener() {
         if (locationManager == null) {
-          Log.e("WakeMeAt",
+          Log.e(LOG_NAME,
               "TrackRecordingService: Do not have any location manager.");
           return;
         }
         locationManager.removeUpdates(this);
-        Log.d("WakeMeAt",
+        Log.d(LOG_NAME,
             "Location listener now unregistered w/ TrackRecordingService.");
       }
  

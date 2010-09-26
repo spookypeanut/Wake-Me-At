@@ -32,6 +32,7 @@ import android.widget.TextView;
 public class WakeMeAt extends Activity {
     public static final int GETLOCATION = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
+    public static final String LOG_NAME = "WakeMeAt";
     
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
