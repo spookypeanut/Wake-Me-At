@@ -26,6 +26,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
+    private double mRadius = -1.0;
     private Location mFinalDestination = new Location("");
     
     private LocationManager locationManager;
@@ -110,6 +111,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
         mFinalDestination.setLatitude(extras.getDouble("latitude"));
         mFinalDestination.setLongitude(extras.getDouble("longitude"));
+        mRadius = extras.getFloat("radius");
 
         Log.d(LOG_NAME,
             "Passed latlong: " + mFinalDestination.getLatitude() +
@@ -197,14 +199,21 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        
         double distanceAway = location.distanceTo(mFinalDestination);
         String debugMessage = "You are " + roundToDecimals(distanceAway, 2) + "m away";
         Toast.makeText(getApplicationContext(), debugMessage,
                 Toast.LENGTH_SHORT).show();
+        if (distanceAway < mRadius) {
+            soundAlarm();
+        }
         
     }
 
+    public void soundAlarm() {
+        String debugMessage = "Alarm sounded";
+        Toast.makeText(getApplicationContext(), debugMessage,
+                Toast.LENGTH_SHORT).show();
+    }
     public static double roundToDecimals(double d, int c) {
         int temp=(int)((d*Math.pow(10,c)));
         return (((double)temp)/Math.pow(10,c));
