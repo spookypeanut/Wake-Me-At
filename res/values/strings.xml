@@ -23,4 +23,5 @@
 <string name="foreground_service_started">Wake Me At service started</string>
 <string name="local_service_label">Wake Me At</string><string name="startServiceButtonName">Start Service</string>
 <string name="stopServiceButtonName">Stop Service</string>
+<string name="loc_prov_spinner_label">Location Provider</string>
 </resources>
