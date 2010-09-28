@@ -1,1 +1,4 @@
 Allow switching to satellite view
+Pop up a list of alternatives when searching
+Save a list of destinations with names
+Use locations source other than gps
