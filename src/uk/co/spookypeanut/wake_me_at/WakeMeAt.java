@@ -22,9 +22,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.database.Cursor;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -32,7 +32,6 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
-//import android.widget.Toast;
 
 public class WakeMeAt extends Activity {
     public static final int GETLOCATION = 1;
@@ -59,11 +58,14 @@ public class WakeMeAt extends Activity {
             EditText radiusBox = (EditText)findViewById(R.id.radius);
             Float radius = Float.valueOf(radiusBox.getText().toString());
             radiusChanged(radius);
+            Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
+            String locProv = locProvSpin.getSelectedItem().toString();
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
             intent.putExtra("latitude", mLatitude);
             intent.putExtra("longitude", mLongitude);
-            intent.putExtra("radius", radius);
+            intent.putExtra("radius", mRadius);
+            Log.d(LOG_NAME, "provider: " + locProv);
             startService(intent);
         }
     };
@@ -87,8 +89,6 @@ public class WakeMeAt extends Activity {
         button = (Button)findViewById(R.id.stopService);
         button.setOnClickListener(mStopListener);
         //TODO add text changed listener for radius
-
-
         
         LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
