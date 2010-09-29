@@ -103,7 +103,6 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onStart(Intent intent, int startId) {
-        handleCommand(intent);
     }
 
     @Override
@@ -175,7 +174,6 @@ public class WakeMeAtService extends Service implements LocationListener {
       }
  
     void handleCommand(Intent intent) {
-
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // In this sample, we'll use the same text for the ticker and the expanded notification
             CharSequence text = getText(R.string.foreground_service_started);
@@ -205,9 +203,11 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         double distanceAway = location.distanceTo(mFinalDestination);
-        String debugMessage = "You are " + roundToDecimals(distanceAway, 2) + "m away";
-        Toast.makeText(getApplicationContext(), debugMessage,
-                Toast.LENGTH_SHORT).show();
+        String message = getText(R.string.notif_pre).toString() +
+                roundToDecimals(distanceAway, 2) +
+                getText(R.string.notif_post).toString();
+        mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
+        mNM.notify(R.string.foreground_service_started, mNotification);
         if (distanceAway < mRadius) {
             soundAlarm();
         }
