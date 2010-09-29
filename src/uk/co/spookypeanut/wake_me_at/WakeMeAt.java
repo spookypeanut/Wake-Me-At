@@ -39,7 +39,7 @@ public class WakeMeAt extends Activity {
     
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
-    private double mRadius = 0.0;
+    private float mRadius = 0;
 
 
     private OnClickListener mGetLocListener = new Button.OnClickListener() {
