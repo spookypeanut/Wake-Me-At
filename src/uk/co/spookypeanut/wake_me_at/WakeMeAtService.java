@@ -29,6 +29,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     private double mRadius = -1.0;
     private Location mFinalDestination = new Location("");
+    private String mProvider = "";
     
     private LocationManager locationManager;
     private NotificationManager mNM;
@@ -113,7 +114,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         mFinalDestination.setLatitude(extras.getDouble("latitude"));
         mFinalDestination.setLongitude(extras.getDouble("longitude"));
         mRadius = extras.getFloat("radius");
-
+        mProvider = extras.getString("provider");
+        Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         Log.d(LOG_NAME,
             "Passed latlong: " + mFinalDestination.getLatitude() +
             ", " + mFinalDestination.getLongitude());
@@ -153,10 +155,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         try {
           long desiredInterval = 10;
           locationManager.requestLocationUpdates(
-              "gps", desiredInterval,
-              10,
-              // , 0 /* minDistance, get all updates to properly time pauses */
-              WakeMeAtService.this);
+              mProvider, desiredInterval,
+              10, WakeMeAtService.this);
         } catch (RuntimeException e) {
           Log.e(LOG_NAME,
               "Could not register location listener: " + e.getMessage(), e);
