@@ -95,9 +95,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             // Running on an older platform.
             mStartForeground = mStopForeground = null;
         }
-        locationManager =
-            (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-        registerLocationListener();
+
     }
 
     @Override
@@ -117,6 +115,10 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME,
             "Passed latlong: " + mFinalDestination.getLatitude() +
             ", " + mFinalDestination.getLongitude());
+        
+        locationManager =
+            (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+        registerLocationListener();
         
         handleCommand(intent);
         // We want this service to continue running until it is explicitly
