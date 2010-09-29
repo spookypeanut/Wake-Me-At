@@ -32,6 +32,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     private LocationManager locationManager;
     private NotificationManager mNM;
+    private Notification mNotification;
+    private PendingIntent mIntentOnSelect;
     private Method mStartForeground;
     private Method mStopForeground;
     private Object[] mStartForegroundArgs = new Object[2];
@@ -179,18 +181,18 @@ public class WakeMeAtService extends Service implements LocationListener {
             CharSequence text = getText(R.string.foreground_service_started);
 
             // Set the icon, scrolling text and timestamp
-            Notification notification = new Notification(R.drawable.x, text,
+            mNotification = new Notification(R.drawable.x, text,
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0,
+            mIntentOnSelect = PendingIntent.getActivity(this, 0,
                     new Intent(this, WakeMeAt.class), 0);
 
             // Set the info for the views that show in the notification panel.
-            notification.setLatestEventInfo(this, getText(R.string.local_service_label),
-                           text, contentIntent);
+            mNotification.setLatestEventInfo(this, getText(R.string.foreground_service_started),
+                           text, mIntentOnSelect);
             
-            startForegroundCompat(R.string.foreground_service_started, notification);
+            startForegroundCompat(R.string.foreground_service_started, mNotification);
             
         }
     }
