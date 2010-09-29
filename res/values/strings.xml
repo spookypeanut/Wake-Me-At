@@ -13,15 +13,16 @@
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
 <resources>
- <string name="hello">Hello World, wake_me_at!</string>
+ 
  <string name="app_name">Wake Me At</string>
- <string name="getLocationButtonName">Get location...</string>
+ <string name="get_loc_button_name">Get location...</string>
  <string name="map_name">Select location</string>
  <string name="uselocationbutton">Use this</string>
  <string name="dontuselocationbutton">Try again</string>
 
 <string name="foreground_service_started">Wake Me At service started</string>
-<string name="local_service_label">Wake Me At</string><string name="startServiceButtonName">Start Service</string>
-<string name="stopServiceButtonName">Stop Service</string>
+<string name="notif_pre">You are </string><string name="start_button_name">Start Service</string>
+<string name="stop_button_name">Stop Service</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
+<string name="notif_post">m away</string>
 </resources>

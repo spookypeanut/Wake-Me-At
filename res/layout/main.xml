@@ -36,7 +36,7 @@
         android:prompt="@string/loc_prov_spinner_label"/>
     
         <Button android:id="@+id/getLocationButton"
-            android:text="@string/getLocationButtonName"
+            android:text="@string/get_loc_button_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     
@@ -76,12 +76,12 @@
             android:layout_width="wrap_content"/>
             
         <Button android:id="@+id/startService"
-            android:text="@string/startServiceButtonName"
+            android:text="@string/start_button_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
             
         <Button android:id="@+id/stopService"
-            android:text="@string/stopServiceButtonName"
+            android:text="@string/stop_button_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </LinearLayout>
