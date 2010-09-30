@@ -135,7 +135,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         // Make sure our notification is gone.
-        stopForegroundCompat(R.string.foreground_service_started);
+        stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
     }
 
@@ -193,7 +193,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             mNotification.setLatestEventInfo(this, getText(R.string.foreground_service_started),
                            text, mIntentOnSelect);
             
-            startForegroundCompat(R.string.foreground_service_started, mNotification);
+            startForegroundCompat(ALARMNOTIFY_ID, mNotification);
             
         }
     }
@@ -210,7 +210,7 @@ public class WakeMeAtService extends Service implements LocationListener {
                 roundToDecimals(mDistanceAway, 2) +
                 getText(R.string.notif_post).toString();
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
-        mNM.notify(R.string.foreground_service_started, mNotification);
+        mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mDistanceAway < mRadius) {
             soundAlarm();
         }
@@ -218,23 +218,17 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
 
     public void soundAlarm() {
-        String debugMessage = "Alarm sounded";
-        Toast.makeText(getApplicationContext(), debugMessage,
-                Toast.LENGTH_SHORT).show();
-        int icon = R.drawable.x;
-        CharSequence tickerText = "Approaching destination";
-        long when = System.currentTimeMillis();
         Context context = getApplicationContext();
         CharSequence contentTitle = "Approaching destination";
-        CharSequence contentText = "Approaching destination";
-        Notification notification = new Notification(icon, tickerText, when);
+        CharSequence contentText = "Approaching destination" + mDistanceAway;
+        
         Intent notificationIntent = new Intent(this, WakeMeAt.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        notification.defaults |= Notification.DEFAULT_SOUND;
-        notification.defaults |= Notification.DEFAULT_VIBRATE;
+        mNotification.defaults |= Notification.DEFAULT_SOUND;
+        mNotification.defaults |= Notification.DEFAULT_VIBRATE;
         
-        notification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-        mNM.notify(ALARMNOTIFY_ID, notification);
+        mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+        mNM.notify(ALARMNOTIFY_ID, mNotification);
 
     }
     public static double roundToDecimals(double d, int c) {
