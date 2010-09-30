@@ -127,6 +127,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         handleCommand(intent);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
+        Toast.makeText(getApplicationContext(), R.string.foreground_service_started,
+                Toast.LENGTH_SHORT).show();
         return START_STICKY;
     }
 
