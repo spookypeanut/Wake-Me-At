@@ -25,4 +25,5 @@
 <string name="stop_button_name">Stop Service</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
 <string name="notif_post">m away</string>
+<string name="foreground_service_stopped">Wake Me At service stopped</string>
 </resources>

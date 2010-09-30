@@ -134,14 +134,16 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
+        Log.d(LOG_NAME, "onDestroy()");
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
+        Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
+                Toast.LENGTH_SHORT).show();
     }
 
     public boolean stopService(Intent name) {
-        Log.d(LOG_NAME, "TrackRecordingService.stopService");
-        unregisterLocationListener();
+        Log.d(LOG_NAME, "stopService()");
         return super.stopService(name);
       }
 
@@ -168,12 +170,12 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void unregisterLocationListener() {
         if (locationManager == null) {
           Log.e(LOG_NAME,
-              "TrackRecordingService: Do not have any location manager.");
+              "locationManager is null");
           return;
         }
         locationManager.removeUpdates(this);
         Log.d(LOG_NAME,
-            "Location listener now unregistered w/ TrackRecordingService.");
+            "Location listener is unregistered");
       }
  
     void handleCommand(Intent intent) {
