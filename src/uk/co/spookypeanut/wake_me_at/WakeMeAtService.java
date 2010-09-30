@@ -28,6 +28,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         boolean.class};
     
     private double mRadius = -1.0;
+    private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
     private String mProvider = "";
     
@@ -202,13 +203,13 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onLocationChanged(Location location) {
-        double distanceAway = location.distanceTo(mFinalDestination);
+        mDistanceAway = location.distanceTo(mFinalDestination);
         String message = getText(R.string.notif_pre).toString() +
-                roundToDecimals(distanceAway, 2) +
+                roundToDecimals(mDistanceAway, 2) +
                 getText(R.string.notif_post).toString();
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(R.string.foreground_service_started, mNotification);
-        if (distanceAway < mRadius) {
+        if (mDistanceAway < mRadius) {
             soundAlarm();
         }
         
