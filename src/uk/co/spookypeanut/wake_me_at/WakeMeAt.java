@@ -30,6 +30,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 public class WakeMeAt extends Activity {
@@ -40,6 +41,7 @@ public class WakeMeAt extends Activity {
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
     private float mRadius = 0;
+    private String mLocProv = "";
 
 
     private OnClickListener mGetLocListener = new Button.OnClickListener() {
@@ -58,13 +60,14 @@ public class WakeMeAt extends Activity {
             Float radius = Float.valueOf(radiusBox.getText().toString());
             radiusChanged(radius);
             Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-            String locProv = locProvSpin.getSelectedItem().toString();
+            mLocProv = locProvSpin.getSelectedItem().toString();
+            locProvChanged(mLocProv);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
             intent.putExtra("latitude", mLatitude);
             intent.putExtra("longitude", mLongitude);
             intent.putExtra("radius", mRadius);
-            intent.putExtra("provider", locProv);
+            intent.putExtra("provider", mLocProv);
             startService(intent);
         }
     };
@@ -148,6 +151,31 @@ public class WakeMeAt extends Activity {
         mRadius = radius;
         TextView radText = (TextView)findViewById(R.id.radius);
         radText.setText(String.valueOf(radius));
+    }    
+    protected void loadLocProv() {
+        locProvChanged("", true);
+    }
+    
+    protected void locProvChanged(String locProv) {
+        locProvChanged(locProv, false);
+    }
+    protected void locProvChanged(String locProv, boolean load) {
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        if (load) {
+            locProv = settings.getString("locProv", "gps");
+        } else {
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putString("locProv", locProv);
+            editor.commit();
+        }
+        mLocProv = locProv;
+        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
+        SpinnerAdapter adapter = locProvSpin.getAdapter();
+        for(int i = 0; i < adapter.getCount(); i++) {
+                        if(adapter.getItem(i).equals(locProv)) {
+                            locProvSpin.setSelection(i);
+                        }
+                  }
     }
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
