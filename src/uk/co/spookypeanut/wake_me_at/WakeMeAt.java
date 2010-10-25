@@ -46,7 +46,7 @@ public class WakeMeAt extends Activity {
 
     private OnClickListener mGetLocListener = new Button.OnClickListener() {
         public void onClick(View v) {
-            Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
+            Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
             EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
             String searchAddr = searchAddrBox.getText().toString();
             

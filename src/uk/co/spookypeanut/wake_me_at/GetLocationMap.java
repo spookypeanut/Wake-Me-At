@@ -47,7 +47,7 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-public class GetLocation extends MapActivity
+public class GetLocationMap extends MapActivity
 implements LocationListener {
     MapView mapView;
     MapOverlay itemizedOverlay;
