@@ -34,7 +34,7 @@ import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
-public class WakeMeAt extends Activity {
+public class GetLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
@@ -44,16 +44,10 @@ public class WakeMeAt extends Activity {
     private float mRadius = 0;
     private String mLocProv = "";
 
-    private OnClickListener mGetLocListener = new Button.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
-            startActivityForResult(i, GETLOCMAP);
-        }
-    };
-    
+
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
-            Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
+            Intent i = new Intent(GetLocation.this.getApplication(), GetLocationMap.class);
             EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
             String searchAddr = searchAddrBox.getText().toString();
             
@@ -63,56 +57,17 @@ public class WakeMeAt extends Activity {
             startActivityForResult(i, GETLOCMAP);
         }
     };
-    private OnClickListener mStartListener = new OnClickListener() {
-        public void onClick(View v) {
-            EditText radiusBox = (EditText)findViewById(R.id.radius);
-            Float radius = Float.valueOf(radiusBox.getText().toString());
-            radiusChanged(radius);
-            Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-            mLocProv = locProvSpin.getSelectedItem().toString();
-            locProvChanged(mLocProv);
-            Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
-            intent.setClass(WakeMeAt.this, WakeMeAtService.class);
-            intent.putExtra("latitude", mLatitude);
-            intent.putExtra("longitude", mLongitude);
-            intent.putExtra("radius", mRadius);
-            intent.putExtra("provider", mLocProv);
-            startService(intent);
-        }
-    };
-    private OnClickListener mStopListener = new OnClickListener() {
-        public void onClick(View v) {
-            stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
-        }
-    };
+ 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.get_location);
 
         // Capture our button from layout
         Button button = (Button)findViewById(R.id.getLocationMapButton);
         // Register the onClick listener with the implementation above
         button.setOnClickListener(mGetLocMapListener);
-
-        // Capture our button from layout
-        button = (Button)findViewById(R.id.getLocationButton);
-        // Register the onClick listener with the implementation above
-        button.setOnClickListener(mGetLocListener);
-        
-        button = (Button)findViewById(R.id.startService);
-        button.setOnClickListener(mStartListener);
-
-        button = (Button)findViewById(R.id.stopService);
-        button.setOnClickListener(mStopListener);
-        //TODO add text changed listener for radius
-        
-        LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        Spinner s = (Spinner) findViewById(R.id.loc_provider);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tmpLM.getProviders(false));
-        s.setAdapter(spinnerArrayAdapter);
         
         loadLatLong();
-        loadRadius();
     }
 
     protected void loadLatLong() {
@@ -145,52 +100,7 @@ public class WakeMeAt extends Activity {
         longText.setText(String.valueOf(longitude));
     }
     
-    protected void loadRadius() {
-        radiusChanged(0, true);
-    }
-    
-    protected void radiusChanged(float radius) {
-        radiusChanged(radius, false);
-    }
-    
-    protected void radiusChanged(float radius, boolean load) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        if (load) {
-            radius = settings.getFloat("radius", (float) 0.0);
-        } else {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("radius", radius);
-            editor.commit();
-        }
-        mRadius = radius;
-        TextView radText = (TextView)findViewById(R.id.radius);
-        radText.setText(String.valueOf(radius));
-    }    
-    protected void loadLocProv() {
-        locProvChanged("", true);
-    }
-    
-    protected void locProvChanged(String locProv) {
-        locProvChanged(locProv, false);
-    }
-    protected void locProvChanged(String locProv, boolean load) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
-        if (load) {
-            locProv = settings.getString("locProv", "gps");
-        } else {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString("locProv", locProv);
-            editor.commit();
-        }
-        mLocProv = locProv;
-        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-        SpinnerAdapter adapter = locProvSpin.getAdapter();
-        for(int i = 0; i < adapter.getCount(); i++) {
-                        if(adapter.getItem(i).equals(locProv)) {
-                            locProvSpin.setSelection(i);
-                        }
-                  }
-    }
+
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCMAP) {
