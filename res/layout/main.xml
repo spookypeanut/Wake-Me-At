@@ -40,6 +40,11 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     
+        <Button android:id="@+id/getLocationMapButton"
+            android:text="@string/get_loc_map_button_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    
         <TextView android:id="@+id/searchLabel" 
               android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 

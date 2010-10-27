@@ -16,7 +16,9 @@
  
  <string name="app_name">Wake Me At</string>
  <string name="get_loc_button_name">Get location...</string>
+ <string name="get_loc_map_button_name">Get location from map...</string>
  <string name="map_name">Select location</string>
+ <string name="get_loc_layout_name">Select location</string>
  <string name="uselocationbutton">Use this</string>
  <string name="dontuselocationbutton">Try again</string>
 

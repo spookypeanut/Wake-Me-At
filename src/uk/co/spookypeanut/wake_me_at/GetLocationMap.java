@@ -56,7 +56,7 @@ implements LocationListener {
     @Override
     public void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        setContentView(R.layout.get_location);
+        setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
 

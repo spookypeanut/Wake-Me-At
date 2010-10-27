@@ -24,6 +24,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.ArrayAdapter;
@@ -34,7 +35,7 @@ import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 
 public class WakeMeAt extends Activity {
-    public static final int GETLOCATION = 1;
+    public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
     
@@ -44,14 +45,16 @@ public class WakeMeAt extends Activity {
     private String mLocProv = "";
 
 
-    private OnClickListener mGetLocListener = new Button.OnClickListener() {
+    private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
             EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
             String searchAddr = searchAddrBox.getText().toString();
             
-            i.putExtra("searchAddr", searchAddr); 
-            startActivityForResult(i, GETLOCATION);
+            i.putExtra("searchAddr", searchAddr);
+            Log.d(LOG_NAME, i.toString());
+            Log.d(LOG_NAME, searchAddr);
+            startActivityForResult(i, GETLOCMAP);
         }
     };
     private OnClickListener mStartListener = new OnClickListener() {
@@ -81,9 +84,9 @@ public class WakeMeAt extends Activity {
         setContentView(R.layout.main);
 
         // Capture our button from layout
-        Button button = (Button)findViewById(R.id.getLocationButton);
+        Button button = (Button)findViewById(R.id.getLocationMapButton);
         // Register the onClick listener with the implementation above
-        button.setOnClickListener(mGetLocListener);
+        button.setOnClickListener(mGetLocMapListener);
         
         button = (Button)findViewById(R.id.startService);
         button.setOnClickListener(mStartListener);
@@ -179,7 +182,7 @@ public class WakeMeAt extends Activity {
     }
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
-        if (requestCode == GETLOCATION) {
+        if (requestCode == GETLOCMAP) {
             String latLongString = data.getAction();
 
             String tempStrings[] = latLongString.split(",");
