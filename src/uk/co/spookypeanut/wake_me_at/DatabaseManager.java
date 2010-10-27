@@ -18,17 +18,16 @@ public class DatabaseManager
 	// a reference to the database used by this application/object
 	private SQLiteDatabase db;
  
-	// These constants are specific to the database.  They should be 
-	// changed to suit your needs.
-	private final String DB_NAME = "database_name";
+	private final String DB_NAME = "WakeMeAtDB";
 	private final int DB_VERSION = 1;
  
 	// These constants are specific to the database table.  They should be
 	// changed to suit your needs.
-	private final String TABLE_NAME = "database_table";
+	private final String TABLE_NAME = "Locations";
 	private final String TABLE_ROW_ID = "id";
-	private final String TABLE_ROW_ONE = "table_row_one";
-	private final String TABLE_ROW_TWO = "table_row_two";
+	private final String TABLE_ROW_NICK = "table_row_nick";
+	private final String TABLE_ROW_LAT = "table_row_lat";
+    private final String TABLE_ROW_LONG = "table_row_long";
  
 	public DatabaseManager(Context context)
 	{
@@ -53,12 +52,13 @@ public class DatabaseManager
 	 * @param rowStringOne the value for the row's first column
 	 * @param rowStringTwo the value for the row's second column 
 	 */
-	public void addRow(String rowStringOne, String rowStringTwo)
+	public void addRow(String rowNick, String rowLat, String rowLong)
 	{
 		// this is a key value pair holder used by android's SQLite functions
 		ContentValues values = new ContentValues();
-		values.put(TABLE_ROW_ONE, rowStringOne);
-		values.put(TABLE_ROW_TWO, rowStringTwo);
+		values.put(TABLE_ROW_NICK, rowNick);
+		values.put(TABLE_ROW_LAT, rowLat);
+        values.put(TABLE_ROW_LONG, rowLong);
  
 		// ask the database object to insert the new data 
 		try{db.insert(TABLE_NAME, null, values);}
@@ -101,12 +101,13 @@ public class DatabaseManager
 	 * @param rowStringOne the new value for the row's first column
 	 * @param rowStringTwo the new value for the row's second column 
 	 */ 
-	public void updateRow(long rowID, String rowStringOne, String rowStringTwo)
+	public void updateRow(long rowID, String rowNick, String rowLat, String rowLong)
 	{
 		// this is a key value pair holder used by android's SQLite functions
 		ContentValues values = new ContentValues();
-		values.put(TABLE_ROW_ONE, rowStringOne);
-		values.put(TABLE_ROW_TWO, rowStringTwo);
+	      values.put(TABLE_ROW_NICK, rowNick);
+	        values.put(TABLE_ROW_LAT, rowLat);
+	        values.put(TABLE_ROW_LONG, rowLong);
  
 		// ask the database object to update the database row of given rowID
 		try {db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowID, null);}
@@ -143,7 +144,8 @@ public class DatabaseManager
 			cursor = db.query
 			(
 					TABLE_NAME,
-					new String[] { TABLE_ROW_ID, TABLE_ROW_ONE, TABLE_ROW_TWO },
+					new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
+					               TABLE_ROW_LAT, TABLE_ROW_LONG },
 					TABLE_ROW_ID + "=" + rowID,
 					null, null, null, null, null
 			);
@@ -206,7 +208,8 @@ public class DatabaseManager
 			// ask the database object to create the cursor.
 			cursor = db.query(
 					TABLE_NAME,
-					new String[]{TABLE_ROW_ID, TABLE_ROW_ONE, TABLE_ROW_TWO},
+	                   new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
+                            TABLE_ROW_LAT, TABLE_ROW_LONG },
 					null, null, null, null, null
 			);
  
@@ -282,8 +285,9 @@ public class DatabaseManager
 										TABLE_NAME +
 										" (" +
 										TABLE_ROW_ID + " integer primary key autoincrement not null," +
-										TABLE_ROW_ONE + " text," +
-										TABLE_ROW_TWO + " text" +
+										TABLE_ROW_NICK + " text," +
+										TABLE_ROW_LAT + " text" +
+										  TABLE_ROW_LONG + " text" +
 										");";
 			// execute the query string to the database.
 			db.execSQL(newTableQueryString);
