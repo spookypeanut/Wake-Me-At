@@ -229,7 +229,7 @@ public class DatabaseManager
             " (" +
             TABLE_ROW_ID + " integer primary key autoincrement not null," +
             TABLE_ROW_NICK + " text," +
-            TABLE_ROW_LAT + " text" +
+            TABLE_ROW_LAT + " text," +
             TABLE_ROW_LONG + " text" +
             ");";
             // execute the query string to the database.
