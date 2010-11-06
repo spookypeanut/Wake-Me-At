@@ -41,6 +41,7 @@ public class GetLocation extends Activity {
     private float mRadius = 0;
     private String mLocProv = "";
 
+    DatabaseManager db;
 
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -58,13 +59,48 @@ public class GetLocation extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.get_location);
+        Log.d(LOG_NAME, "*************************************************************");
 
+        db = new DatabaseManager(this);
+        
+        Log.d(LOG_NAME, "*************************************************************");
+
+        db.addRow
+        (
+            "zero",
+            "0",
+            "0"
+        );
+
+        // collect the current row information from the database and
+        // store it in a two dimensional ArrayList
+        Log.d(LOG_NAME, "*************************************************************");
+        logOutArray();
+        Log.d(LOG_NAME, "*************************************************************");
+
+        
         // Capture our button from layout
         Button button = (Button)findViewById(R.id.getLocationMapButton);
         // Register the onClick listener with the implementation above
         button.setOnClickListener(mGetLocMapListener);
         
         loadLatLong();
+    }
+
+    private void logOutArray() {
+        ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
+
+        for (int position=0; position < data.size(); position++)
+        { 
+            ArrayList<Object> row = data.get(position);
+ 
+            
+            Log.d(LOG_NAME, row.get(0).toString() + ", " +
+                            row.get(1).toString() + ", " +
+                            row.get(2).toString() + ", " +
+                            row.get(3).toString());
+        }
+        
     }
 
     protected void loadLatLong() {
