@@ -17,6 +17,7 @@ public class DatabaseManager
 
     // a reference to the database used by this application/object
     private SQLiteDatabase db;
+    public static final String LOG_NAME = "WakeMeAt";
 
     private final String DB_NAME = "WakeMeAtDB";
     private final int DB_VERSION = 1;
@@ -45,9 +46,11 @@ public class DatabaseManager
         values.put(TABLE_ROW_NICK, rowNick);
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
-
+    
         // ask the database object to insert the new data 
-        try{db.insert(TABLE_NAME, null, values);}
+        try {
+            db.insert(TABLE_NAME, null, values);
+        }
         catch(Exception e)
         {
             Log.e("DB ERROR", e.toString());
@@ -118,6 +121,7 @@ public class DatabaseManager
                     rowArray.add(cursor.getLong(0));
                     rowArray.add(cursor.getString(1));
                     rowArray.add(cursor.getString(2));
+                    rowArray.add(cursor.getString(3));
                 }
                 while (cursor.moveToNext());
             }
@@ -170,6 +174,8 @@ public class DatabaseManager
                     dataList.add(cursor.getLong(0));
                     dataList.add(cursor.getString(1));
                     dataList.add(cursor.getString(2));
+                    dataList.add(cursor.getString(3));
+                    
 
                     dataArrays.add(dataList);
                 }
@@ -189,8 +195,6 @@ public class DatabaseManager
     }
 
 
-
-
     /**********************************************************************
      * THIS IS THE BEGINNING OF THE INTERNAL SQLiteOpenHelper SUBCLASS.
      * 
@@ -201,17 +205,6 @@ public class DatabaseManager
      * INDUSTRY STANDARD IS TO KEEP THIS CLASS IN A SEPARATE FILE.
      *********************************************************************/
 
-    /**
-     * This class is designed to check if there is a database that currently
-     * exists for the given program.  If the database does not exist, it creates
-     * one.  After the class ensures that the database exists, this class
-     * will open the database for use.  Most of this functionality will be
-     * handled by the SQLiteOpenHelper parent class.  The purpose of extending
-     * this class is to tell the class how to create (or update) the database.
-     * 
-     * @author Randall Mitchell
-     *
-     */
     private class CustomSQLiteOpenHelper extends SQLiteOpenHelper
     {
         public CustomSQLiteOpenHelper(Context context)
