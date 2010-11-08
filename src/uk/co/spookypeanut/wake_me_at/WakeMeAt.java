@@ -43,13 +43,6 @@ public class WakeMeAt extends Activity {
     private double mLongitude = 0.0;
     private float mRadius = 0;
     private String mLocProv = "";
-
-    private OnClickListener mGetLocListener = new Button.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocation.class);
-            startActivityForResult(i, GETLOCMAP);
-        }
-    };
     
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -94,10 +87,6 @@ public class WakeMeAt extends Activity {
         // Register the onClick listener with the implementation above
         button.setOnClickListener(mGetLocMapListener);
 
-        // Capture our button from layout
-        button = (Button)findViewById(R.id.getLocationButton);
-        // Register the onClick listener with the implementation above
-        button.setOnClickListener(mGetLocListener);
         
         button = (Button)findViewById(R.id.startService);
         button.setOnClickListener(mStartListener);
