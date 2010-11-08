@@ -18,6 +18,8 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import java.util.ArrayList;
+
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
@@ -43,6 +45,8 @@ public class WakeMeAt extends Activity {
     private double mLongitude = 0.0;
     private float mRadius = 0;
     private String mLocProv = "";
+    private DatabaseManager db;
+    private long mRowId;
     
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -79,6 +83,22 @@ public class WakeMeAt extends Activity {
         }
     };
     protected void onCreate(Bundle savedInstanceState) {
+        
+        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        db = new DatabaseManager(this);
+        Log.d(LOG_NAME, "Created db");
+
+        mRowId = settings.getLong("currRowId", (int) -1);
+        Log.d(LOG_NAME, "Row detected: " + mRowId);
+        if (mRowId == -1) {
+            mRowId = createDefaultRow();
+            SharedPreferences.Editor editor = settings.edit();
+            editor.putLong("currRowId", mRowId);
+            editor.commit();
+        }
+        Log.d(LOG_NAME, "Row created");
+        logOutArray();
+        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         
@@ -100,6 +120,27 @@ public class WakeMeAt extends Activity {
         
         loadLatLong();
         loadRadius();
+    }
+
+    private void logOutArray() {
+        ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
+        for (int position=0; position < data.size(); position++)
+        { 
+            ArrayList<Object> row = data.get(position);
+            Log.d(LOG_NAME, row.get(0).toString() + ", " +
+                            row.get(1).toString() + ", " +
+                            row.get(2).toString() + ", " +
+                            row.get(3).toString());
+        }
+    }
+
+    private long createDefaultRow() {
+        return db.addRow
+        (
+            "zero",
+            "10",
+            "20"
+        );
     }
 
     protected void loadLatLong() {
