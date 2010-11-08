@@ -39,7 +39,7 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
-    public void addRow(String rowNick, String rowLat, String rowLong)
+    public long addRow(String rowNick, String rowLat, String rowLong)
     {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
@@ -47,15 +47,18 @@ public class DatabaseManager
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
     
-        // ask the database object to insert the new data 
+        // ask the database object to insert the new data
+        long rowId;
         try {
-            db.insert(TABLE_NAME, null, values);
+            rowId = db.insert(TABLE_NAME, null, values);
+            return rowId;
         }
         catch(Exception e)
         {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
+        return -1;
     }
 
     public void deleteRow(long rowID)
