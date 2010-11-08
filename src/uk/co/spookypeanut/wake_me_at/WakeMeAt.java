@@ -81,10 +81,8 @@ public class WakeMeAt extends Activity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-
-        // Capture our button from layout
+        
         Button button = (Button)findViewById(R.id.getLocationMapButton);
-        // Register the onClick listener with the implementation above
         button.setOnClickListener(mGetLocMapListener);
 
         
@@ -125,9 +123,6 @@ public class WakeMeAt extends Activity {
         }
         mLatitude = latitude;
         mLongitude = longitude;
-//        String latLongString = latitude + "," + longitude;
-//        Toast.makeText(getApplicationContext(), latLongString,
-//                Toast.LENGTH_SHORT).show();
         TextView latText = (TextView)findViewById(R.id.latitude);
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(latitude));
