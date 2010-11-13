@@ -156,30 +156,18 @@ public class DatabaseManager
 
     public String getDatumS(long rowId, String column)
     {
-        // create an array list to store data from the database row.
-        // I would recommend creating a JavaBean compliant object 
-        // to store this data instead.  That way you can ensure
-        // data types are correct.
         Cursor cursor;
         String returnValue = "";
 
-        try
-        {
-            // this is a database call that creates a "cursor" object.
-            // the cursor object store the information collected from the
-            // database and is used to iterate through the data.
-            cursor = db.query
-            (
+        try {
+            cursor = db.query (
                     TABLE_NAME,
                     new String[] {column},
                             TABLE_ROW_ID + "=" + rowId,
                             null, null, null, null, null
             );
-
-            // move the pointer to position zero in the cursor.
             cursor.moveToFirst();
             returnValue = cursor.getString(0);
-            // let java know that you are through with the cursor.
             cursor.close();
         }
         catch (SQLException e) 
@@ -187,7 +175,6 @@ public class DatabaseManager
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
-
         return returnValue;
     }
 
