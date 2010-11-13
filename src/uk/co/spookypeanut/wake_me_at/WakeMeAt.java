@@ -125,6 +125,7 @@ public class WakeMeAt extends Activity {
     }
 
     private void logOutArray() {
+        Log.d(LOG_NAME, "Start of array log");
         ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
         for (int position=0; position < data.size(); position++)
         { 
@@ -134,6 +135,7 @@ public class WakeMeAt extends Activity {
                             row.get(2).toString() + ", " +
                             row.get(3).toString());
         }
+        Log.d(LOG_NAME, "End of array log");
     }
 
     private long createDefaultRow() {
