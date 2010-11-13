@@ -97,8 +97,7 @@ public class WakeMeAt extends Activity {
             editor.putLong("currRowId", mRowId);
             editor.commit();
         }
-        ArrayList<Object> currRowAsArray = db.getRowAsArray(mRowId);
-        Log.d(LOG_NAME, "Row: " + currRowAsArray.toString());
+        Log.d(LOG_NAME, "Nick: " + db.getNick(mRowId));
         
         logOutArray();
         
@@ -157,9 +156,8 @@ public class WakeMeAt extends Activity {
     protected void latLongChanged(double latitude, double longitude, boolean load) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (load) {
-            
-            latitude = settings.getFloat("latitude", (float) 0.0);
-            longitude = settings.getFloat("longitude", (float) 0.0);
+            latitude = db.getLatitude(mRowId);
+            longitude = db.getLongitude(mRowId);
         } else {
             SharedPreferences.Editor editor = settings.edit();
             editor.putFloat("latitude", (float) latitude);
