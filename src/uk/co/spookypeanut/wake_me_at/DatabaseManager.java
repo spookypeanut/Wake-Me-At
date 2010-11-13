@@ -89,7 +89,7 @@ public class DatabaseManager
         }
     }
 
-    public ArrayList<Object> getRowAsArray(long rowID)
+    public ArrayList<Object> getRowAsArray(long rowId)
     {
         // create an array list to store data from the database row.
         // I would recommend creating a JavaBean compliant object 
@@ -108,7 +108,7 @@ public class DatabaseManager
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG },
-                            TABLE_ROW_ID + "=" + rowID,
+                            TABLE_ROW_ID + "=" + rowId,
                             null, null, null, null, null
             );
 
