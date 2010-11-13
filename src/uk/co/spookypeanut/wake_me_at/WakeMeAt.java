@@ -161,10 +161,8 @@ public class WakeMeAt extends Activity {
             latitude = db.getLatitude(mRowId);
             longitude = db.getLongitude(mRowId);
         } else {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("latitude", (float) latitude);
-            editor.putFloat("longitude", (float) longitude);
-            editor.commit();
+            db.setLatitude(mRowId, Double.toString(latitude));
+            db.setLongitude(mRowId, Double.toString(longitude));
         }
         mLatitude = latitude;
         mLongitude = longitude;
