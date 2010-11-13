@@ -98,12 +98,24 @@ public class DatabaseManager
         }
     }
 
+    public void setNick(long rowId, String nick) {
+        setDatumS(rowId, TABLE_ROW_NICK, nick);
+    }
+
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
 
+    public void setLatitude(long rowId, String latitude) {
+        setDatumS(rowId, TABLE_ROW_LAT, latitude);
+    }
+    
     public double getLatitude(long rowId) {
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LAT));
+    }
+    
+    public void setLongitude(long rowId, String longitude) {
+        setDatumS(rowId, TABLE_ROW_LONG, longitude);
     }
     
     public double getLongitude(long rowId) {
