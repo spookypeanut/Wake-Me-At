@@ -69,7 +69,7 @@ public class DatabaseManager
         }
     }
 
-    public void updateRow(long rowID, String rowNick, String rowLat, String rowLong) {
+    public void updateRow(long rowId, String rowNick, String rowLat, String rowLong) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -78,7 +78,7 @@ public class DatabaseManager
 
         // ask the database object to update the database row of given rowID
         try {
-            db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowID, null);
+            db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
         }
         catch (Exception e) {
             Log.e("DB Error", e.toString());
