@@ -30,8 +30,7 @@ public class DatabaseManager
     private final String TABLE_ROW_LAT = "table_row_lat";
     private final String TABLE_ROW_LONG = "table_row_long";
 
-    public DatabaseManager(Context context)
-    {
+    public DatabaseManager(Context context) {
         this.context = context;
 
         // create or open the database
@@ -39,8 +38,7 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
-    public long addRow(String rowNick, String rowLat, String rowLong)
-    {
+    public long addRow(String rowNick, String rowLat, String rowLong) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -53,27 +51,25 @@ public class DatabaseManager
             rowId = db.insert(TABLE_NAME, null, values);
             return rowId;
         }
-        catch(Exception e)
-        {
+        catch(Exception e) {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
         return -1;
     }
 
-    public void deleteRow(long rowID)
-    {
+    public void deleteRow(long rowID) {
         // ask the database manager to delete the row of given id
-        try {db.delete(TABLE_NAME, TABLE_ROW_ID + "=" + rowID, null);}
-        catch (Exception e)
-        {
+        try {
+            db.delete(TABLE_NAME, TABLE_ROW_ID + "=" + rowID, null);
+        }
+        catch (Exception e) {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
     }
 
-    public void updateRow(long rowID, String rowNick, String rowLat, String rowLong)
-    {
+    public void updateRow(long rowID, String rowNick, String rowLat, String rowLong) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -81,9 +77,10 @@ public class DatabaseManager
         values.put(TABLE_ROW_LONG, rowLong);
 
         // ask the database object to update the database row of given rowID
-        try {db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowID, null);}
-        catch (Exception e)
-        {
+        try {
+            db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowID, null);
+        }
+        catch (Exception e) {
             Log.e("DB Error", e.toString());
             e.printStackTrace();
         }
@@ -99,10 +96,9 @@ public class DatabaseManager
     
     public double getLongitude(long rowId) {
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LONG));
-}
+    }
 
-    public ArrayList<Object> getRowAsArray(long rowId)
-    {
+    public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
         // I would recommend creating a JavaBean compliant object 
         // to store this data instead.  That way you can ensure
@@ -110,13 +106,11 @@ public class DatabaseManager
         ArrayList<Object> rowArray = new ArrayList<Object>();
         Cursor cursor;
 
-        try
-        {
+        try {
             // this is a database call that creates a "cursor" object.
             // the cursor object store the information collected from the
             // database and is used to iterate through the data.
-            cursor = db.query
-            (
+            cursor = db.query (
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG },
@@ -129,10 +123,8 @@ public class DatabaseManager
 
             // if there is data available after the cursor's pointer, add
             // it to the ArrayList that will be returned by the method.
-            if (!cursor.isAfterLast())
-            {
-                do
-                {
+            if (!cursor.isAfterLast()) {
+                do {
                     rowArray.add(cursor.getLong(0));
                     rowArray.add(cursor.getString(1));
                     rowArray.add(cursor.getString(2));
@@ -144,8 +136,7 @@ public class DatabaseManager
             // let java know that you are through with the cursor.
             cursor.close();
         }
-        catch (SQLException e) 
-        {
+        catch (SQLException e) {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
@@ -154,8 +145,7 @@ public class DatabaseManager
         return rowArray;
     }
 
-    public String getDatumS(long rowId, String column)
-    {
+    public String getDatumS(long rowId, String column) {
         Cursor cursor;
         String returnValue = "";
 
@@ -178,8 +168,7 @@ public class DatabaseManager
         return returnValue;
     }
 
-    public ArrayList<ArrayList<Object>> getAllRowsAsArrays()
-    {
+    public ArrayList<ArrayList<Object>> getAllRowsAsArrays() {
         // create an ArrayList that will hold all of the data collected from
         // the database.
         ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
@@ -189,8 +178,7 @@ public class DatabaseManager
         // database and is used to iterate through the data.
         Cursor cursor;
 
-        try
-        {
+        try {
             // ask the database object to create the cursor.
             cursor = db.query(
                     TABLE_NAME,
@@ -204,10 +192,8 @@ public class DatabaseManager
 
             // if there is data after the current cursor position, add it
             // to the ArrayList.
-            if (!cursor.isAfterLast())
-            {
-                do
-                {
+            if (!cursor.isAfterLast()) {
+                do {
                     ArrayList<Object> dataList = new ArrayList<Object>();
 
                     dataList.add(cursor.getLong(0));
@@ -222,8 +208,7 @@ public class DatabaseManager
                 while (cursor.moveToNext());
             }
         }
-        catch (SQLException e)
-        {
+        catch (SQLException e) {
             Log.e("DB Error", e.toString());
             e.printStackTrace();
         }
@@ -244,16 +229,13 @@ public class DatabaseManager
      * INDUSTRY STANDARD IS TO KEEP THIS CLASS IN A SEPARATE FILE.
      *********************************************************************/
 
-    private class CustomSQLiteOpenHelper extends SQLiteOpenHelper
-    {
-        public CustomSQLiteOpenHelper(Context context)
-        {
+    private class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
+        public CustomSQLiteOpenHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
         }
 
         @Override
-        public void onCreate(SQLiteDatabase db)
-        {
+        public void onCreate(SQLiteDatabase db) {
             // This string is used to create the database.  It should
             // be changed to suit your needs.
             String newTableQueryString = "create table " +
@@ -271,10 +253,9 @@ public class DatabaseManager
 
 
         @Override
-        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion)
-        {
+        public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             // NOTHING TO DO HERE. THIS IS THE ORIGINAL DATABASE VERSION.
-            // OTHERWISE, YOU WOULD SPECIFIY HOW TO UPGRADE THE DATABASE.
+            // OTHERWISE, YOU WOULD SPECIFY HOW TO UPGRADE THE DATABASE.
         }
     }
 }
