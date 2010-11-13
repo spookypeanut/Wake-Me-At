@@ -154,7 +154,7 @@ public class WakeMeAt extends Activity {
         latLongChanged(latitude, longitude, false);
     }
     
-    protected void latLongChanged(float latitude, float longitude, boolean load) {
+    protected void latLongChanged(double latitude, double longitude, boolean load) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (load) {
             
@@ -162,8 +162,8 @@ public class WakeMeAt extends Activity {
             longitude = settings.getFloat("longitude", (float) 0.0);
         } else {
             SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("latitude", latitude);
-            editor.putFloat("longitude", longitude);
+            editor.putFloat("latitude", (float) latitude);
+            editor.putFloat("longitude", (float) longitude);
             editor.commit();
         }
         mLatitude = latitude;
