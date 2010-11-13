@@ -85,6 +85,18 @@ public class DatabaseManager
             e.printStackTrace();
         }
     }
+    
+    public void setDatumS(long rowId, String column, String value) {
+        ContentValues values = new ContentValues();
+        values.put(column, value);
+        try {
+            db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
+        }
+        catch (Exception e) {
+            Log.e("DB Error", e.toString());
+            e.printStackTrace();
+        }
+    }
 
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
