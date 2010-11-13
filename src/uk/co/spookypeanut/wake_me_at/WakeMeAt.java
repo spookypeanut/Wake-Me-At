@@ -149,7 +149,7 @@ public class WakeMeAt extends Activity {
         latLongChanged(0, 0, true);
     }
     
-    protected void latLongChanged(float latitude, float longitude) {
+    protected void latLongChanged(double latitude, double longitude) {
         latLongChanged(latitude, longitude, false);
     }
     
@@ -226,9 +226,9 @@ public class WakeMeAt extends Activity {
             String tempStrings[] = latLongString.split(",");
             String latString = tempStrings[0];
             String longString = tempStrings[1];
-            float latFloat = Float.valueOf(latString.trim()).floatValue();
-            float longFloat = Float.valueOf(longString.trim()).floatValue();
-            latLongChanged(latFloat, longFloat);
+            double latDbl = Double.valueOf(latString.trim()).doubleValue();
+            double longDbl = Double.valueOf(longString.trim()).doubleValue();
+            latLongChanged(latDbl, longDbl);
         }
     }
 }
