@@ -98,8 +98,7 @@ public class WakeMeAt extends Activity {
             editor.commit();
         }
         Log.d(LOG_NAME, "Nick: " + db.getNick(mRowId));
-        
-        logOutArray();
+
         
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
@@ -156,7 +155,7 @@ public class WakeMeAt extends Activity {
     }
     
     protected void latLongChanged(double latitude, double longitude, boolean load) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
+        logOutArray();
         if (load) {
             latitude = db.getLatitude(mRowId);
             longitude = db.getLongitude(mRowId);
@@ -164,6 +163,7 @@ public class WakeMeAt extends Activity {
             db.setLatitude(mRowId, Double.toString(latitude));
             db.setLongitude(mRowId, Double.toString(longitude));
         }
+        logOutArray();
         mLatitude = latitude;
         mLongitude = longitude;
         TextView latText = (TextView)findViewById(R.id.latitude);
@@ -200,6 +200,7 @@ public class WakeMeAt extends Activity {
     protected void locProvChanged(String locProv) {
         locProvChanged(locProv, false);
     }
+    
     protected void locProvChanged(String locProv, boolean load) {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (load) {
