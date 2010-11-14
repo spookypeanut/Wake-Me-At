@@ -53,23 +53,18 @@ public class WakeMeAt extends Activity {
     private TextWatcher mRadiusWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
-            Log.d(LOG_NAME, "afterTextChanged");
             radiusChanged(Float.valueOf(s.toString()));
         }
 
         @Override
         public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {
-            // TODO Auto-generated method stub
-        }
+                int after) {}
 
         @Override
         public void onTextChanged(CharSequence s, int start, int before,
-                int count) {
-            Log.d(LOG_NAME, "onTextChanged");
-        }
+                int count) {}
     };
-    
+                
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
