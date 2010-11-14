@@ -85,7 +85,30 @@ public class DatabaseManager
             e.printStackTrace();
         }
     }
-    
+
+    public String getDatumS(long rowId, String column) {
+        Cursor cursor;
+        String returnValue = "";
+
+        try {
+            cursor = db.query (
+                    TABLE_NAME,
+                    new String[] {column},
+                            TABLE_ROW_ID + "=" + rowId,
+                            null, null, null, null, null
+            );
+            cursor.moveToFirst();
+            returnValue = cursor.getString(0);
+            cursor.close();
+        }
+        catch (SQLException e) 
+        {
+            Log.e("DB ERROR", e.toString());
+            e.printStackTrace();
+        }
+        return returnValue;
+    }
+
     public void setDatumS(long rowId, String column, String value) {
         ContentValues values = new ContentValues();
         values.put(column, value);
@@ -98,29 +121,30 @@ public class DatabaseManager
         }
     }
 
-    public void setNick(long rowId, String nick) {
-        setDatumS(rowId, TABLE_ROW_NICK, nick);
-    }
-
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
 
-    public void setLatitude(long rowId, String latitude) {
-        setDatumS(rowId, TABLE_ROW_LAT, latitude);
+    public void setNick(long rowId, String nick) {
+        setDatumS(rowId, TABLE_ROW_NICK, nick);
     }
     
     public double getLatitude(long rowId) {
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LAT));
     }
-    
+
+    public void setLatitude(long rowId, String latitude) {
+        setDatumS(rowId, TABLE_ROW_LAT, latitude);
+    }
+
+    public double getLongitude(long rowId) {
+        return Double.valueOf(getDatumS(rowId, TABLE_ROW_LONG));
+    }
+
     public void setLongitude(long rowId, String longitude) {
         setDatumS(rowId, TABLE_ROW_LONG, longitude);
     }
     
-    public double getLongitude(long rowId) {
-        return Double.valueOf(getDatumS(rowId, TABLE_ROW_LONG));
-    }
 
     public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
@@ -167,29 +191,6 @@ public class DatabaseManager
 
         // return the ArrayList containing the given row from the database.
         return rowArray;
-    }
-
-    public String getDatumS(long rowId, String column) {
-        Cursor cursor;
-        String returnValue = "";
-
-        try {
-            cursor = db.query (
-                    TABLE_NAME,
-                    new String[] {column},
-                            TABLE_ROW_ID + "=" + rowId,
-                            null, null, null, null, null
-            );
-            cursor.moveToFirst();
-            returnValue = cursor.getString(0);
-            cursor.close();
-        }
-        catch (SQLException e) 
-        {
-            Log.e("DB ERROR", e.toString());
-            e.printStackTrace();
-        }
-        return returnValue;
     }
 
     public ArrayList<ArrayList<Object>> getAllRowsAsArrays() {
