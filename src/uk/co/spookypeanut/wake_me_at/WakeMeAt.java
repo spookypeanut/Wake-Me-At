@@ -138,8 +138,7 @@ public class WakeMeAt extends Activity {
     }
 
     private long createDefaultRow() {
-        return db.addRow
-        (
+        return db.addRow (
             "zero",
             "10",
             "20"
