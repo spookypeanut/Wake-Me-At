@@ -115,12 +115,10 @@ public class WakeMeAt extends Activity {
             editor.putLong("currRowId", mRowId);
             editor.commit();
         }
-        Log.d(LOG_NAME, "Nick: " + db.getNick(mRowId));
 
-        
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        
+
         Button button = (Button)findViewById(R.id.getLocationMapButton);
         button.setOnClickListener(mGetLocMapListener);
         
