@@ -26,6 +26,8 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -48,6 +50,26 @@ public class WakeMeAt extends Activity {
     private DatabaseManager db;
     private long mRowId;
     
+    private TextWatcher mRadiusWatcher = new TextWatcher() {
+        @Override
+        public void afterTextChanged(Editable s) {
+            Log.d(LOG_NAME, "afterTextChanged");
+            radiusChanged(Float.valueOf(s.toString()));
+        }
+
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count,
+                int after) {
+            // TODO Auto-generated method stub
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before,
+                int count) {
+            Log.d(LOG_NAME, "onTextChanged");
+        }
+    };
+    
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
@@ -60,6 +82,7 @@ public class WakeMeAt extends Activity {
             startActivityForResult(i, GETLOCMAP);
         }
     };
+    
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
             EditText radiusBox = (EditText)findViewById(R.id.radius);
@@ -105,15 +128,16 @@ public class WakeMeAt extends Activity {
         
         Button button = (Button)findViewById(R.id.getLocationMapButton);
         button.setOnClickListener(mGetLocMapListener);
-
         
         button = (Button)findViewById(R.id.startService);
         button.setOnClickListener(mStartListener);
 
         button = (Button)findViewById(R.id.stopService);
         button.setOnClickListener(mStopListener);
-        //TODO add text changed listener for radius
         
+        EditText radiusBox = (EditText)findViewById(R.id.radius);
+        radiusBox.addTextChangedListener(mRadiusWatcher);
+
         LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tmpLM.getProviders(false));
@@ -173,22 +197,14 @@ public class WakeMeAt extends Activity {
     }
     
     protected void loadRadius() {
-        radiusChanged(0, true);
+        mRadius = db.getRadius(mRowId);
+        TextView radText = (TextView)findViewById(R.id.radius);
+        radText.setText(String.valueOf(mRadius));
     }
     
     protected void radiusChanged(float radius) {
-        radiusChanged(radius, false);
-    }
-    
-    protected void radiusChanged(float radius, boolean load) {
-        if (load) {
-            mRadius = db.getRadius(mRowId);
-        } else {
-            mRadius = radius;
-            db.setRadius(mRowId, radius);
-        }
-        TextView radText = (TextView)findViewById(R.id.radius);
-        radText.setText(String.valueOf(mRadius));
+        mRadius = radius;
+        db.setRadius(mRowId, radius);
     }
     
     protected void loadLocProv() {
