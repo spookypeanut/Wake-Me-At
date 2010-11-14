@@ -182,14 +182,15 @@ public class WakeMeAt extends Activity {
     
     protected void radiusChanged(float radius, boolean load) {
         if (load) {
-            db.getRadius(mRowId);
+            mRadius = db.getRadius(mRowId);
         } else {
+            mRadius = radius;
             db.setRadius(mRowId, radius);
         }
-        mRadius = radius;
         TextView radText = (TextView)findViewById(R.id.radius);
-        radText.setText(String.valueOf(radius));
-    }    
+        radText.setText(String.valueOf(mRadius));
+    }
+    
     protected void loadLocProv() {
         locProvChanged("", true);
     }
