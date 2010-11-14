@@ -20,8 +20,8 @@ public class DatabaseManager
     public static final String LOG_NAME = "WakeMeAt";
 
     private final String DB_NAME = "WakeMeAtDB";
-    private final int DB_VERSION = 1;
-
+    private final int DB_VERSION = 2;
+    
     // These constants are specific to the database table.  They should be
     // changed to suit your needs.
     private final String TABLE_NAME = "Locations";
@@ -270,6 +270,8 @@ public class DatabaseManager
             TABLE_ROW_NICK + " text," +
             TABLE_ROW_LAT + " text," +
             TABLE_ROW_LONG + " text" +
+//            TABLE_ROW_PROV + " text," +
+//           TABLE_ROW_RAD + " radius" +
             ");";
             // execute the query string to the database.
             db.execSQL(newTableQueryString);
@@ -278,8 +280,8 @@ public class DatabaseManager
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            // NOTHING TO DO HERE. THIS IS THE ORIGINAL DATABASE VERSION.
-            // OTHERWISE, YOU WOULD SPECIFY HOW TO UPGRADE THE DATABASE.
+            String upgradeMessage = "Upgrading db v" + oldVersion + " to v" + newVersion;
+            Log.d(LOG_NAME, upgradeMessage);
         }
     }
 }
