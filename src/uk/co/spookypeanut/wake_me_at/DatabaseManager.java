@@ -151,8 +151,8 @@ public class DatabaseManager
                 do {
                     rowArray.add(cursor.getLong(0));
                     rowArray.add(cursor.getString(1));
-                    rowArray.add(cursor.getString(2));
-                    rowArray.add(cursor.getString(3));
+                    rowArray.add(cursor.getDouble(2));
+                    rowArray.add(cursor.getDouble(3));
                 }
                 while (cursor.moveToNext());
             }
@@ -222,8 +222,8 @@ public class DatabaseManager
 
                     dataList.add(cursor.getLong(0));
                     dataList.add(cursor.getString(1));
-                    dataList.add(cursor.getString(2));
-                    dataList.add(cursor.getString(3));
+                    dataList.add(cursor.getDouble(2));
+                    dataList.add(cursor.getDouble(3));
                     
 
                     dataArrays.add(dataList);
@@ -267,9 +267,9 @@ public class DatabaseManager
             " (" +
             TABLE_ROW_ID + " integer primary key autoincrement not null," +
             // TODO: use proper data types: int for long / lat?
-            TABLE_ROW_NICK + " text," +
-            TABLE_ROW_LAT + " text," +
-            TABLE_ROW_LONG + " text" +
+            TABLE_ROW_NICK + " TEXT," +
+            TABLE_ROW_LAT + " DOUBLE," +
+            TABLE_ROW_LONG + " DOUBLE" +
 //            TABLE_ROW_PROV + " text," +
 //           TABLE_ROW_RAD + " radius" +
             ");";
