@@ -132,16 +132,17 @@ public class WakeMeAt extends Activity {
             Log.d(LOG_NAME, row.get(0).toString() + ", " +
                             row.get(1).toString() + ", " +
                             row.get(2).toString() + ", " +
-                            row.get(3).toString());
+                            row.get(3).toString() + ", " +
+                            row.get(4).toString() + ", " +
+                            row.get(5).toString());
         }
         Log.d(LOG_NAME, "End of array log");
     }
 
     private long createDefaultRow() {
         return db.addRow (
-            "zero",
-            "10",
-            "20"
+            "zero", 10.0, 20.0,
+            "network", (float) 1800.0
         );
     }
 
@@ -159,8 +160,8 @@ public class WakeMeAt extends Activity {
             latitude = db.getLatitude(mRowId);
             longitude = db.getLongitude(mRowId);
         } else {
-            db.setLatitude(mRowId, Double.toString(latitude));
-            db.setLongitude(mRowId, Double.toString(longitude));
+            db.setLatitude(mRowId, latitude);
+            db.setLongitude(mRowId, longitude);
         }
         logOutArray();
         mLatitude = latitude;
@@ -180,13 +181,10 @@ public class WakeMeAt extends Activity {
     }
     
     protected void radiusChanged(float radius, boolean load) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (load) {
-            radius = settings.getFloat("radius", (float) 0.0);
+            db.getRadius(mRowId);
         } else {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putFloat("radius", radius);
-            editor.commit();
+            db.setRadius(mRowId, radius);
         }
         mRadius = radius;
         TextView radText = (TextView)findViewById(R.id.radius);
@@ -201,13 +199,10 @@ public class WakeMeAt extends Activity {
     }
     
     protected void locProvChanged(String locProv, boolean load) {
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         if (load) {
-            locProv = settings.getString("locProv", "gps");
+            db.getProvider(mRowId);
         } else {
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putString("locProv", locProv);
-            editor.commit();
+            db.setProvider(mRowId, locProv);
         }
         mLocProv = locProv;
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);

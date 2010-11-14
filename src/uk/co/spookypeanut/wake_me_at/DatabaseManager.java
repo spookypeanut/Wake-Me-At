@@ -29,6 +29,8 @@ public class DatabaseManager
     private final String TABLE_ROW_NICK = "table_row_nick";
     private final String TABLE_ROW_LAT = "table_row_lat";
     private final String TABLE_ROW_LONG = "table_row_long";
+    private final String TABLE_ROW_PROV = "table_row_prov";
+    private final String TABLE_ROW_RADIUS = "table_row_radius";
 
     public DatabaseManager(Context context) {
         this.context = context;
@@ -38,12 +40,15 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
-    public long addRow(String rowNick, String rowLat, String rowLong) {
+    public long addRow(String rowNick, double rowLat, double rowLong,
+                       String rowProv, float rowRadius) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
+        values.put(TABLE_ROW_PROV, rowProv);
+        values.put(TABLE_ROW_RADIUS, rowRadius);
     
         // ask the database object to insert the new data
         long rowId;
@@ -69,13 +74,16 @@ public class DatabaseManager
         }
     }
 
-    public void updateRow(long rowId, String rowNick, String rowLat, String rowLong) {
+    public void updateRow(long rowId, String rowNick, double rowLat, double rowLong,
+                          String rowProv, float rowRadius) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
-
+        values.put(TABLE_ROW_PROV, rowProv);
+        values.put(TABLE_ROW_RADIUS, rowRadius);
+        
         // ask the database object to update the database row of given rowID
         try {
             db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
@@ -121,6 +129,14 @@ public class DatabaseManager
         }
     }
 
+    public void setDatumD(long rowId, String column, double value) {
+        setDatumS(rowId, column, Double.toString(value));
+    }
+
+    public void setDatumF(long rowId, String column, float value) {
+        setDatumS(rowId, column, Float.toString(value));
+    }
+
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
@@ -133,18 +149,32 @@ public class DatabaseManager
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LAT));
     }
 
-    public void setLatitude(long rowId, String latitude) {
-        setDatumS(rowId, TABLE_ROW_LAT, latitude);
+    public void setLatitude(long rowId, double latitude) {
+        setDatumD(rowId, TABLE_ROW_LAT, latitude);
     }
 
     public double getLongitude(long rowId) {
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LONG));
     }
 
-    public void setLongitude(long rowId, String longitude) {
-        setDatumS(rowId, TABLE_ROW_LONG, longitude);
+    public void setLongitude(long rowId, double longitude) {
+        setDatumD(rowId, TABLE_ROW_LONG, longitude);
     }
-    
+
+    public String getProvider(long rowId) {
+        return getDatumS(rowId, TABLE_ROW_PROV);
+    }
+
+    public void setProvider(long rowId, String provider) {
+        setDatumS(rowId, TABLE_ROW_PROV, provider);
+    }
+    public float getRadius(long rowId) {
+        return Float.valueOf(getDatumS(rowId, TABLE_ROW_RADIUS));
+    }
+
+    public void setRadius(long rowId, float radius) {
+        setDatumF(rowId, TABLE_ROW_RADIUS, radius);
+    }
 
     public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
@@ -161,7 +191,8 @@ public class DatabaseManager
             cursor = db.query (
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
-                            TABLE_ROW_LAT, TABLE_ROW_LONG },
+                            TABLE_ROW_LAT, TABLE_ROW_LONG,
+                            TABLE_ROW_PROV, TABLE_ROW_RADIUS },
                             TABLE_ROW_ID + "=" + rowId,
                             null, null, null, null, null
             );
@@ -177,6 +208,9 @@ public class DatabaseManager
                     rowArray.add(cursor.getString(1));
                     rowArray.add(cursor.getDouble(2));
                     rowArray.add(cursor.getDouble(3));
+                    rowArray.add(cursor.getString(4));
+                    rowArray.add(cursor.getFloat(5));
+
                 }
                 while (cursor.moveToNext());
             }
@@ -208,7 +242,8 @@ public class DatabaseManager
             cursor = db.query(
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
-                            TABLE_ROW_LAT, TABLE_ROW_LONG },
+                            TABLE_ROW_LAT, TABLE_ROW_LONG,
+                            TABLE_ROW_PROV, TABLE_ROW_RADIUS},
                             null, null, null, null, null
             );
 
@@ -225,6 +260,8 @@ public class DatabaseManager
                     dataList.add(cursor.getString(1));
                     dataList.add(cursor.getDouble(2));
                     dataList.add(cursor.getDouble(3));
+                    dataList.add(cursor.getString(4));
+                    dataList.add(cursor.getFloat(5));
                     
 
                     dataArrays.add(dataList);
@@ -270,9 +307,9 @@ public class DatabaseManager
             // TODO: use proper data types: int for long / lat?
             TABLE_ROW_NICK + " TEXT," +
             TABLE_ROW_LAT + " DOUBLE," +
-            TABLE_ROW_LONG + " DOUBLE" +
-//            TABLE_ROW_PROV + " text," +
-//           TABLE_ROW_RAD + " radius" +
+            TABLE_ROW_LONG + " DOUBLE," +
+            TABLE_ROW_PROV + " TEXT," +
+            TABLE_ROW_RADIUS + " FLOAT" +
             ");";
             // execute the query string to the database.
             db.execSQL(newTableQueryString);
