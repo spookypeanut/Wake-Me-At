@@ -31,12 +31,14 @@ import android.text.TextWatcher;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.AdapterView.OnItemSelectedListener;
 
 public class WakeMeAt extends Activity {
     public static final int GETLOCMAP = 1;
@@ -50,6 +52,16 @@ public class WakeMeAt extends Activity {
     private DatabaseManager db;
     private long mRowId;
     
+    private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent,
+                View view, int pos, long id) {
+            Log.d(LOG_NAME, "Selected loc prov");
+            locProvChanged(parent.getSelectedItem().toString());
+        }
+
+        public void onNothingSelected(AdapterView<?> parent) {}
+    };
+
     private TextWatcher mRadiusWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -135,9 +147,11 @@ public class WakeMeAt extends Activity {
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tmpLM.getProviders(false));
         s.setAdapter(spinnerArrayAdapter);
+        s.setOnItemSelectedListener(locProvListener);
         
         loadLatLong();
         loadRadius();
+        loadLocProv();
     }
 
     private void logOutArray() {
@@ -201,28 +215,20 @@ public class WakeMeAt extends Activity {
     }
     
     protected void loadLocProv() {
-        locProvChanged("", true);
-    }
-    
-    protected void locProvChanged(String locProv) {
-        locProvChanged(locProv, false);
-    }
-    
-    protected void locProvChanged(String locProv, boolean load) {
-        if (load) {
-            db.getProvider(mRowId);
-        } else {
-            db.setProvider(mRowId, locProv);
-        }
-        mLocProv = locProv;
+        mLocProv = db.getProvider(mRowId);
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
         SpinnerAdapter adapter = locProvSpin.getAdapter();
         for(int i = 0; i < adapter.getCount(); i++) {
-                        if(adapter.getItem(i).equals(locProv)) {
-                            locProvSpin.setSelection(i);
-                        }
-                  }
+            if(adapter.getItem(i).equals(mLocProv)) {
+                locProvSpin.setSelection(i);
+            }
+        }
     }
+
+    protected void locProvChanged(String locProv) {
+        db.setProvider(mRowId, locProv);
+    }
+
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCMAP) {
