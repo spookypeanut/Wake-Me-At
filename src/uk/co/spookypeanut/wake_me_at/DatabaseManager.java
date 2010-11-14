@@ -269,6 +269,7 @@ public class DatabaseManager
                 // move the cursor's pointer up one position.
                 while (cursor.moveToNext());
             }
+            cursor.close();
         }
         catch (SQLException e) {
             Log.e("DB Error", e.toString());
