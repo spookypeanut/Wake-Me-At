@@ -262,7 +262,6 @@ public class DatabaseManager
                     dataList.add(cursor.getDouble(3));
                     dataList.add(cursor.getString(4));
                     dataList.add(cursor.getFloat(5));
-                    
 
                     dataArrays.add(dataList);
                 }
@@ -305,7 +304,6 @@ public class DatabaseManager
             TABLE_NAME +
             " (" +
             TABLE_ROW_ID + " integer primary key autoincrement not null," +
-            // TODO: use proper data types: int for long / lat?
             TABLE_ROW_NICK + " TEXT," +
             TABLE_ROW_LAT + " DOUBLE," +
             TABLE_ROW_LONG + " DOUBLE," +
