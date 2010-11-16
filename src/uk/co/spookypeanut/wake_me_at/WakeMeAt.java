@@ -45,6 +45,7 @@ public class WakeMeAt extends Activity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
     
+    private String mNick = "New Location";
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
     private float mRadius = 0;
@@ -112,6 +113,11 @@ public class WakeMeAt extends Activity {
             stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
         }
     };
+    private OnClickListener mChangeNickListener = new OnClickListener() {
+        public void onClick(View v) {
+            
+        }
+    };
     protected void onCreate(Bundle savedInstanceState) {
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -149,6 +155,8 @@ public class WakeMeAt extends Activity {
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(locProvListener);
         
+        loadNick();
+        // TODO: add popup for entering nick
         loadLatLong();
         loadRadius();
         loadLocProv();
@@ -201,6 +209,12 @@ public class WakeMeAt extends Activity {
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(latitude));
         longText.setText(String.valueOf(longitude));
+    }
+    
+    protected void loadNick() {
+        mNick = db.getNick(mRowId);
+        Button nickButton = (Button)findViewById(R.id.nickButton);
+        nickButton.setText(mNick);
     }
     
     protected void loadRadius() {
