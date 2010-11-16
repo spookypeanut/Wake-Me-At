@@ -27,6 +27,15 @@
         android:orientation="vertical"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+        
+        <TextView android:id="@+id/nickLabel" 
+              android:layout_width="fill_parent" 
+              android:layout_height="wrap_content" 
+              android:text="Location name" />
+        <EditText android:id="@+id/nickBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+            
     
     <Spinner 
         android:id="@+id/loc_provider"
@@ -55,6 +64,7 @@
               android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 
               android:text="Radius (metres)" />
+
         <EditText android:id="@+id/radius"
             android:numeric="decimal"
             android:layout_width="match_parent"
