@@ -32,9 +32,11 @@
               android:layout_width="fill_parent" 
               android:layout_height="wrap_content" 
               android:text="Location name" />
-        <EditText android:id="@+id/nickBox"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+        <Button android:text="@+id/nickButton"
+             android:id="@+id/nickButton"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
+        
             
     
     <Spinner 
@@ -96,6 +98,6 @@
             android:text="@string/stop_button_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
-    </LinearLayout>
+</LinearLayout>
 
 </ScrollView>
