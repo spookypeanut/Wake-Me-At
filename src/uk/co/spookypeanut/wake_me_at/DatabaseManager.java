@@ -12,18 +12,14 @@ import android.util.Log;
 
 public class DatabaseManager
 {
-    // the Activity or Application that is creating an object from this class.
     Context context;
 
-    // a reference to the database used by this application/object
     private SQLiteDatabase db;
     public static final String LOG_NAME = "WakeMeAt";
 
     private final String DB_NAME = "WakeMeAtDB";
     private final int DB_VERSION = 2;
-    
-    // These constants are specific to the database table.  They should be
-    // changed to suit your needs.
+
     private final String TABLE_NAME = "Locations";
     private final String TABLE_ROW_ID = "id";
     private final String TABLE_ROW_NICK = "table_row_nick";
@@ -34,7 +30,6 @@ public class DatabaseManager
 
     public DatabaseManager(Context context) {
         this.context = context;
-
         // create or open the database
         CustomSQLiteOpenHelper helper = new CustomSQLiteOpenHelper(context);
         this.db = helper.getWritableDatabase();
@@ -49,8 +44,6 @@ public class DatabaseManager
         values.put(TABLE_ROW_LONG, rowLong);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
-    
-        // ask the database object to insert the new data
         long rowId;
         try {
             rowId = db.insert(TABLE_NAME, null, values);
@@ -64,7 +57,6 @@ public class DatabaseManager
     }
 
     public void deleteRow(long rowID) {
-        // ask the database manager to delete the row of given id
         try {
             db.delete(TABLE_NAME, TABLE_ROW_ID + "=" + rowID, null);
         }
@@ -83,8 +75,6 @@ public class DatabaseManager
         values.put(TABLE_ROW_LONG, rowLong);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
-        
-        // ask the database object to update the database row of given rowID
         try {
             db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
         }
@@ -185,9 +175,6 @@ public class DatabaseManager
         Cursor cursor;
 
         try {
-            // this is a database call that creates a "cursor" object.
-            // the cursor object store the information collected from the
-            // database and is used to iterate through the data.
             cursor = db.query (
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
@@ -196,8 +183,6 @@ public class DatabaseManager
                             TABLE_ROW_ID + "=" + rowId,
                             null, null, null, null, null
             );
-
-            // move the pointer to position zero in the cursor.
             cursor.moveToFirst();
 
             // if there is data available after the cursor's pointer, add
@@ -214,16 +199,12 @@ public class DatabaseManager
                 }
                 while (cursor.moveToNext());
             }
-
-            // let java know that you are through with the cursor.
             cursor.close();
         }
         catch (SQLException e) {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
-
-        // return the ArrayList containing the given row from the database.
         return rowArray;
     }
 
@@ -231,14 +212,9 @@ public class DatabaseManager
         // create an ArrayList that will hold all of the data collected from
         // the database.
         ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
-
-        // this is a database call that creates a "cursor" object.
-        // the cursor object store the information collected from the
-        // database and is used to iterate through the data.
         Cursor cursor;
 
         try {
-            // ask the database object to create the cursor.
             cursor = db.query(
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
@@ -247,7 +223,6 @@ public class DatabaseManager
                             null, null, null, null, null
             );
 
-            // move the cursor's pointer to position zero.
             cursor.moveToFirst();
 
             // if there is data after the current cursor position, add it
@@ -265,7 +240,6 @@ public class DatabaseManager
 
                     dataArrays.add(dataList);
                 }
-                // move the cursor's pointer up one position.
                 while (cursor.moveToNext());
             }
             cursor.close();
@@ -275,8 +249,6 @@ public class DatabaseManager
             e.printStackTrace();
         }
 
-        // return the ArrayList that holds the data collected from
-        // the database.
         return dataArrays;
     }
 
