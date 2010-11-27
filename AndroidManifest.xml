@@ -45,7 +45,7 @@
     <category android:name="android.intent.category.DEFAULT" />
 </intent-filter>
 </activity>
-<activity android:name="AlertDialogSamples"></activity>
+
 </application>
 
  <uses-permission android:name="android.permission.INTERNET" />
