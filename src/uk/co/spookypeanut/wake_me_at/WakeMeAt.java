@@ -21,7 +21,9 @@ package uk.co.spookypeanut.wake_me_at;
 import java.util.ArrayList;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
@@ -29,6 +31,7 @@ import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.AdapterView;
@@ -115,7 +118,10 @@ public class WakeMeAt extends Activity {
     };
     private OnClickListener mChangeNickListener = new OnClickListener() {
         public void onClick(View v) {
-            
+            Log.d(LOG_NAME, "mChangeNickListener.onClick()");
+            Intent i = new Intent(WakeMeAt.this.getApplication(), AlertDialogSamples.class);
+            startActivity(i);
+
         }
     };
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,7 +129,8 @@ public class WakeMeAt extends Activity {
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
         Log.d(LOG_NAME, "Created db");
-
+        Button button;
+        
         mRowId = settings.getLong("currRowId", (int) -1);
         Log.d(LOG_NAME, "Row detected: " + mRowId);
         if (mRowId == -1) {
@@ -137,7 +144,10 @@ public class WakeMeAt extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
 
-        Button button = (Button)findViewById(R.id.getLocationMapButton);
+        button = (Button)findViewById(R.id.nickButton);
+        button.setOnClickListener(mChangeNickListener);
+        
+        button = (Button)findViewById(R.id.getLocationMapButton);
         button.setOnClickListener(mGetLocMapListener);
         
         button = (Button)findViewById(R.id.startService);

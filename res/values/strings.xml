@@ -28,4 +28,6 @@
 <string name="loc_prov_spinner_label">Location Provider</string>
 <string name="notif_post">m away</string>
 <string name="foreground_service_stopped">Wake Me At service stopped</string>
+<string name="alert_dialog_cancel">Cancel</string>
+<string name="alert_dialog_ok">OK</string>
 </resources>
