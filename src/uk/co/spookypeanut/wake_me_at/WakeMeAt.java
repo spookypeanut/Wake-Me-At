@@ -68,12 +68,13 @@ public class WakeMeAt extends Activity {
                 .setView(textEntryView)
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-    
+                        nickChanged("this");
+                        logOutArray();
                     }
                 })
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-
+                        Log.d(LOG_NAME, "clicked negative");
                     }
                 })
                 .create();
@@ -260,6 +261,11 @@ public class WakeMeAt extends Activity {
     protected void radiusChanged(float radius) {
         mRadius = radius;
         db.setRadius(mRowId, radius);
+    }   
+    
+    protected void nickChanged(String nick) {
+        mNick = nick;
+        db.setNick(mRowId, nick);
     }
     
     protected void loadLocProv() {
