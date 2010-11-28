@@ -128,24 +128,11 @@ public class WakeMeAt extends Activity {
         }
     };
     protected void changedLatLong(double latitude, double longitude) {
-        changedLatLong(latitude, longitude, false);
-    }
-    protected void changedLatLong(double latitude, double longitude, boolean load) {
-        logOutArray();
-        if (load) {
-            latitude = db.getLatitude(mRowId);
-            longitude = db.getLongitude(mRowId);
-        } else {
-            db.setLatitude(mRowId, latitude);
-            db.setLongitude(mRowId, longitude);
-        }
-        logOutArray();
+        db.setLatitude(mRowId, latitude);
+        db.setLongitude(mRowId, longitude);
         mLatitude = latitude;
         mLongitude = longitude;
-        TextView latText = (TextView)findViewById(R.id.latitude);
-        TextView longText = (TextView)findViewById(R.id.longitude);
-        latText.setText(String.valueOf(latitude));
-        longText.setText(String.valueOf(longitude));
+        updateForm();
     }
 
     protected void changedLocProv(String locProv) {
@@ -155,6 +142,7 @@ public class WakeMeAt extends Activity {
     protected void changedNick(String nick) {
         mNick = nick;
         db.setNick(mRowId, nick);
+        updateForm();
     }
 
     protected void changedRadius(float radius) {
@@ -170,30 +158,42 @@ public class WakeMeAt extends Activity {
     }
     
     protected void loadLatLong() {
-        changedLatLong(0, 0, true);
+        mLatitude = db.getLatitude(mRowId);
+        mLongitude = db.getLongitude(mRowId);
+        updateForm();
     }
     
     protected void loadLocProv() {
         mLocProv = db.getProvider(mRowId);
+        updateForm();
+    }
+    
+    protected void updateForm() {
+        Button nickButton = (Button)findViewById(R.id.nickButton);
+        nickButton.setText(mNick);
+        TextView radText = (TextView)findViewById(R.id.radius);
+        radText.setText(String.valueOf(mRadius));
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
         SpinnerAdapter adapter = locProvSpin.getAdapter();
         for(int i = 0; i < adapter.getCount(); i++) {
             if(adapter.getItem(i).equals(mLocProv)) {
                 locProvSpin.setSelection(i);
             }
-        }
+        }        
+        TextView latText = (TextView)findViewById(R.id.latitude);
+        TextView longText = (TextView)findViewById(R.id.longitude);
+        latText.setText(String.valueOf(mLatitude));
+        longText.setText(String.valueOf(mLongitude));
     }
     
     protected void loadNick() {
         mNick = db.getNick(mRowId);
-        Button nickButton = (Button)findViewById(R.id.nickButton);
-        nickButton.setText(mNick);
+        updateForm();
     }
     
     protected void loadRadius() {
         mRadius = db.getRadius(mRowId);
-        TextView radText = (TextView)findViewById(R.id.radius);
-        radText.setText(String.valueOf(mRadius));
+        updateForm();
     }   
     
     private void logOutArray() {
