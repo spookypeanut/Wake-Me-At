@@ -68,7 +68,7 @@ public class WakeMeAt extends Activity {
                 .setView(textEntryView) 
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        nickChanged(nickBox.getText().toString());
+                        changedNick(nickBox.getText().toString());
                         logOutArray();
                     }
                 })
@@ -86,7 +86,7 @@ public class WakeMeAt extends Activity {
         public void onItemSelected(AdapterView<?> parent,
                 View view, int pos, long id) {
             Log.d(LOG_NAME, "Selected loc prov");
-            locProvChanged(parent.getSelectedItem().toString());
+            changedLocProv(parent.getSelectedItem().toString());
         }
 
         public void onNothingSelected(AdapterView<?> parent) {}
@@ -95,7 +95,7 @@ public class WakeMeAt extends Activity {
     private TextWatcher mRadiusWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
-            radiusChanged(Float.valueOf(s.toString()));
+            changedRadius(Float.valueOf(s.toString()));
         }
 
         @Override
@@ -124,10 +124,10 @@ public class WakeMeAt extends Activity {
         public void onClick(View v) {
             EditText radiusBox = (EditText)findViewById(R.id.radius);
             Float radius = Float.valueOf(radiusBox.getText().toString());
-            radiusChanged(radius);
+            changedRadius(radius);
             Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
             mLocProv = locProvSpin.getSelectedItem().toString();
-            locProvChanged(mLocProv);
+            changedLocProv(mLocProv);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
             intent.putExtra("latitude", mLatitude);
@@ -221,14 +221,14 @@ public class WakeMeAt extends Activity {
     }
 
     protected void loadLatLong() {
-        latLongChanged(0, 0, true);
+        changedLatLong(0, 0, true);
     }
     
-    protected void latLongChanged(double latitude, double longitude) {
-        latLongChanged(latitude, longitude, false);
+    protected void changedLatLong(double latitude, double longitude) {
+        changedLatLong(latitude, longitude, false);
     }
     
-    protected void latLongChanged(double latitude, double longitude, boolean load) {
+    protected void changedLatLong(double latitude, double longitude, boolean load) {
         logOutArray();
         if (load) {
             latitude = db.getLatitude(mRowId);
@@ -258,12 +258,12 @@ public class WakeMeAt extends Activity {
         radText.setText(String.valueOf(mRadius));
     }
     
-    protected void radiusChanged(float radius) {
+    protected void changedRadius(float radius) {
         mRadius = radius;
         db.setRadius(mRowId, radius);
     }   
     
-    protected void nickChanged(String nick) {
+    protected void changedNick(String nick) {
         mNick = nick;
         db.setNick(mRowId, nick);
     }
@@ -279,7 +279,7 @@ public class WakeMeAt extends Activity {
         }
     }
 
-    protected void locProvChanged(String locProv) {
+    protected void changedLocProv(String locProv) {
         db.setProvider(mRowId, locProv);
     }
 
@@ -293,7 +293,7 @@ public class WakeMeAt extends Activity {
             String longString = tempStrings[1];
             double latDbl = Double.valueOf(latString.trim()).doubleValue();
             double longDbl = Double.valueOf(longString.trim()).doubleValue();
-            latLongChanged(latDbl, longDbl);
+            changedLatLong(latDbl, longDbl);
         }
     }
 }
