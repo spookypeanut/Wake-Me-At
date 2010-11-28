@@ -57,31 +57,6 @@ public class WakeMeAt extends Activity {
     private DatabaseManager db;
     private long mRowId;
     
-    @Override
-    protected Dialog onCreateDialog(int type) {
-            LayoutInflater factory = LayoutInflater.from(this);
-            final View textEntryView = factory.inflate(R.layout.text_input, null);
-            final EditText nickBox = (EditText)textEntryView.findViewById(R.id.input_edit);
-            return new AlertDialog.Builder(WakeMeAt.this)
-                .setIcon(R.drawable.x)
-                .setTitle("blah")
-                .setView(textEntryView) 
-                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        changedNick(nickBox.getText().toString());
-                        logOutArray();
-                    }
-                })
-                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Log.d(LOG_NAME, "clicked negative");
-                    }
-                })
-                .create();
-    }
-        
-
-    
     private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
                 View view, int pos, long id) {
@@ -91,7 +66,9 @@ public class WakeMeAt extends Activity {
 
         public void onNothingSelected(AdapterView<?> parent) {}
     };
+        
 
+    
     private TextWatcher mRadiusWatcher = new TextWatcher() {
         @Override
         public void afterTextChanged(Editable s) {
@@ -106,7 +83,7 @@ public class WakeMeAt extends Activity {
         public void onTextChanged(CharSequence s, int start, int before,
                 int count) {}
     };
-                
+
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), GetLocationMap.class);
@@ -119,7 +96,7 @@ public class WakeMeAt extends Activity {
             startActivityForResult(i, GETLOCMAP);
         }
     };
-    
+                
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
             EditText radiusBox = (EditText)findViewById(R.id.radius);
@@ -137,6 +114,7 @@ public class WakeMeAt extends Activity {
             startService(intent);
         }
     };
+    
     private OnClickListener mStopListener = new OnClickListener() {
         public void onClick(View v) {
             stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
@@ -149,6 +127,105 @@ public class WakeMeAt extends Activity {
             monkey.show();
         }
     };
+    protected void changedLatLong(double latitude, double longitude) {
+        changedLatLong(latitude, longitude, false);
+    }
+    protected void changedLatLong(double latitude, double longitude, boolean load) {
+        logOutArray();
+        if (load) {
+            latitude = db.getLatitude(mRowId);
+            longitude = db.getLongitude(mRowId);
+        } else {
+            db.setLatitude(mRowId, latitude);
+            db.setLongitude(mRowId, longitude);
+        }
+        logOutArray();
+        mLatitude = latitude;
+        mLongitude = longitude;
+        TextView latText = (TextView)findViewById(R.id.latitude);
+        TextView longText = (TextView)findViewById(R.id.longitude);
+        latText.setText(String.valueOf(latitude));
+        longText.setText(String.valueOf(longitude));
+    }
+
+    protected void changedLocProv(String locProv) {
+        db.setProvider(mRowId, locProv);
+    }
+
+    protected void changedNick(String nick) {
+        mNick = nick;
+        db.setNick(mRowId, nick);
+    }
+
+    protected void changedRadius(float radius) {
+        mRadius = radius;
+        db.setRadius(mRowId, radius);
+    }
+    
+    private long createDefaultRow() {
+        return db.addRow (
+            "zero", 10.0, 20.0,
+            "network", (float) 1800.0
+        );
+    }
+    
+    protected void loadLatLong() {
+        changedLatLong(0, 0, true);
+    }
+    
+    protected void loadLocProv() {
+        mLocProv = db.getProvider(mRowId);
+        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
+        SpinnerAdapter adapter = locProvSpin.getAdapter();
+        for(int i = 0; i < adapter.getCount(); i++) {
+            if(adapter.getItem(i).equals(mLocProv)) {
+                locProvSpin.setSelection(i);
+            }
+        }
+    }
+    
+    protected void loadNick() {
+        mNick = db.getNick(mRowId);
+        Button nickButton = (Button)findViewById(R.id.nickButton);
+        nickButton.setText(mNick);
+    }
+    
+    protected void loadRadius() {
+        mRadius = db.getRadius(mRowId);
+        TextView radText = (TextView)findViewById(R.id.radius);
+        radText.setText(String.valueOf(mRadius));
+    }   
+    
+    private void logOutArray() {
+        Log.d(LOG_NAME, "Start of array log");
+        ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
+        for (int position=0; position < data.size(); position++)
+        { 
+            ArrayList<Object> row = data.get(position);
+            Log.d(LOG_NAME, row.get(0).toString() + ", " +
+                            row.get(1).toString() + ", " +
+                            row.get(2).toString() + ", " +
+                            row.get(3).toString() + ", " +
+                            row.get(4).toString() + ", " +
+                            row.get(5).toString());
+        }
+        Log.d(LOG_NAME, "End of array log");
+    }
+    
+    protected void onActivityResult (int requestCode,
+            int resultCode, Intent data) {
+        if (requestCode == GETLOCMAP) {
+            String latLongString = data.getAction();
+
+            String tempStrings[] = latLongString.split(",");
+            String latString = tempStrings[0];
+            String longString = tempStrings[1];
+            double latDbl = Double.valueOf(latString.trim()).doubleValue();
+            double longDbl = Double.valueOf(longString.trim()).doubleValue();
+            changedLatLong(latDbl, longDbl);
+        }
+    }
+
     protected void onCreate(Bundle savedInstanceState) {
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
@@ -197,103 +274,26 @@ public class WakeMeAt extends Activity {
         loadLocProv();
     }
 
-    private void logOutArray() {
-        Log.d(LOG_NAME, "Start of array log");
-        ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
-        for (int position=0; position < data.size(); position++)
-        { 
-            ArrayList<Object> row = data.get(position);
-            Log.d(LOG_NAME, row.get(0).toString() + ", " +
-                            row.get(1).toString() + ", " +
-                            row.get(2).toString() + ", " +
-                            row.get(3).toString() + ", " +
-                            row.get(4).toString() + ", " +
-                            row.get(5).toString());
-        }
-        Log.d(LOG_NAME, "End of array log");
-    }
-
-    private long createDefaultRow() {
-        return db.addRow (
-            "zero", 10.0, 20.0,
-            "network", (float) 1800.0
-        );
-    }
-
-    protected void loadLatLong() {
-        changedLatLong(0, 0, true);
-    }
-    
-    protected void changedLatLong(double latitude, double longitude) {
-        changedLatLong(latitude, longitude, false);
-    }
-    
-    protected void changedLatLong(double latitude, double longitude, boolean load) {
-        logOutArray();
-        if (load) {
-            latitude = db.getLatitude(mRowId);
-            longitude = db.getLongitude(mRowId);
-        } else {
-            db.setLatitude(mRowId, latitude);
-            db.setLongitude(mRowId, longitude);
-        }
-        logOutArray();
-        mLatitude = latitude;
-        mLongitude = longitude;
-        TextView latText = (TextView)findViewById(R.id.latitude);
-        TextView longText = (TextView)findViewById(R.id.longitude);
-        latText.setText(String.valueOf(latitude));
-        longText.setText(String.valueOf(longitude));
-    }
-    
-    protected void loadNick() {
-        mNick = db.getNick(mRowId);
-        Button nickButton = (Button)findViewById(R.id.nickButton);
-        nickButton.setText(mNick);
-    }
-    
-    protected void loadRadius() {
-        mRadius = db.getRadius(mRowId);
-        TextView radText = (TextView)findViewById(R.id.radius);
-        radText.setText(String.valueOf(mRadius));
-    }
-    
-    protected void changedRadius(float radius) {
-        mRadius = radius;
-        db.setRadius(mRowId, radius);
-    }   
-    
-    protected void changedNick(String nick) {
-        mNick = nick;
-        db.setNick(mRowId, nick);
-    }
-    
-    protected void loadLocProv() {
-        mLocProv = db.getProvider(mRowId);
-        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-        SpinnerAdapter adapter = locProvSpin.getAdapter();
-        for(int i = 0; i < adapter.getCount(); i++) {
-            if(adapter.getItem(i).equals(mLocProv)) {
-                locProvSpin.setSelection(i);
-            }
-        }
-    }
-
-    protected void changedLocProv(String locProv) {
-        db.setProvider(mRowId, locProv);
-    }
-
-    protected void onActivityResult (int requestCode,
-            int resultCode, Intent data) {
-        if (requestCode == GETLOCMAP) {
-            String latLongString = data.getAction();
-
-            String tempStrings[] = latLongString.split(",");
-            String latString = tempStrings[0];
-            String longString = tempStrings[1];
-            double latDbl = Double.valueOf(latString.trim()).doubleValue();
-            double longDbl = Double.valueOf(longString.trim()).doubleValue();
-            changedLatLong(latDbl, longDbl);
-        }
+    @Override
+    protected Dialog onCreateDialog(int type) {
+            LayoutInflater factory = LayoutInflater.from(this);
+            final View textEntryView = factory.inflate(R.layout.text_input, null);
+            final EditText nickBox = (EditText)textEntryView.findViewById(R.id.input_edit);
+            return new AlertDialog.Builder(WakeMeAt.this)
+                .setIcon(R.drawable.x)
+                .setTitle("blah")
+                .setView(textEntryView) 
+                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        changedNick(nickBox.getText().toString());
+                        logOutArray();
+                    }
+                })
+                .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Log.d(LOG_NAME, "clicked negative");
+                    }
+                })
+                .create();
     }
 }
