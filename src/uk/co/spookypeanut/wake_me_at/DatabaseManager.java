@@ -195,7 +195,6 @@ public class DatabaseManager
                     rowArray.add(cursor.getDouble(3));
                     rowArray.add(cursor.getString(4));
                     rowArray.add(cursor.getFloat(5));
-
                 }
                 while (cursor.moveToNext());
             }
@@ -225,8 +224,6 @@ public class DatabaseManager
     }
 
     public ArrayList<ArrayList<Object>> getAllRowsAsArrays() {
-        // create an ArrayList that will hold all of the data collected from
-        // the database.
         ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
         Cursor cursor;
 
@@ -238,11 +235,8 @@ public class DatabaseManager
                             TABLE_ROW_PROV, TABLE_ROW_RADIUS},
                             null, null, null, null, null
             );
-
             cursor.moveToFirst();
 
-            // if there is data after the current cursor position, add it
-            // to the ArrayList.
             if (!cursor.isAfterLast()) {
                 do {
                     ArrayList<Object> dataList = new ArrayList<Object>();
@@ -264,7 +258,6 @@ public class DatabaseManager
             Log.e("DB Error", e.toString());
             e.printStackTrace();
         }
-
         return dataArrays;
     }
 
@@ -286,8 +279,6 @@ public class DatabaseManager
 
         @Override
         public void onCreate(SQLiteDatabase db) {
-            // This string is used to create the database.  It should
-            // be changed to suit your needs.
             String newTableQueryString = "create table " +
             TABLE_NAME +
             " (" +
@@ -298,7 +289,6 @@ public class DatabaseManager
             TABLE_ROW_PROV + " TEXT," +
             TABLE_ROW_RADIUS + " FLOAT" +
             ");";
-            // execute the query string to the database.
             db.execSQL(newTableQueryString);
         }
 

@@ -213,7 +213,6 @@ public class EditLocation extends Activity {
         
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
-        Log.d(LOG_NAME, "Created db");
         Button button;
         
         mRowId = settings.getLong("currRowId", (int) -1);
