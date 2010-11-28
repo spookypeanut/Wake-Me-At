@@ -22,17 +22,28 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class WakeMeAt extends Activity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
-    
+
+    private OnClickListener mEditLocButton = new Button.OnClickListener() {
+        public void onClick(View v) {
+            Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+            Log.d(LOG_NAME, "About to start activity");
+            startActivity(i);
+        }
+    };
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         Log.d(LOG_NAME, "Start onCreate()");
         setContentView(R.layout.main);
-        Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-        Log.d(LOG_NAME, "About to start activity");
-        startActivity(i);
+        Button button;
+
+        button = (Button)findViewById(R.id.edit_loc_button);
+        button.setOnClickListener(mEditLocButton);
     }
 }

@@ -244,7 +244,7 @@ public class EditLocation extends Activity {
         }
 
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.main);
+        setContentView(R.layout.edit_location);
 
         button = (Button)findViewById(R.id.nickButton);
         button.setOnClickListener(mChangeNickListener);
