@@ -189,7 +189,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
             // The PendingIntent to launch our activity if the user selects this notification
             mIntentOnSelect = PendingIntent.getActivity(this, 0,
-                    new Intent(this, WakeMeAt.class), 0);
+                    new Intent(this, EditLocation.class), 0);
 
             // Set the info for the views that show in the notification panel.
             mNotification.setLatestEventInfo(this, getText(R.string.foreground_service_started),
@@ -224,7 +224,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         CharSequence contentTitle = "Approaching destination";
         CharSequence contentText = "Approaching destination" + mDistanceAway;
         
-        Intent notificationIntent = new Intent(this, WakeMeAt.class);
+        Intent notificationIntent = new Intent(this, EditLocation.class);
         PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
         mNotification.defaults |= Notification.DEFAULT_SOUND;
         mNotification.defaults |= Notification.DEFAULT_VIBRATE;
