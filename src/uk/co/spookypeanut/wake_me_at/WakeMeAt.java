@@ -59,16 +59,16 @@ public class WakeMeAt extends Activity {
     
     @Override
     protected Dialog onCreateDialog(int type) {
-            // This example shows how to add a custom layout to an AlertDialog
             LayoutInflater factory = LayoutInflater.from(this);
             final View textEntryView = factory.inflate(R.layout.text_input, null);
+            final EditText nickBox = (EditText)textEntryView.findViewById(R.id.input_edit);
             return new AlertDialog.Builder(WakeMeAt.this)
                 .setIcon(R.drawable.x)
                 .setTitle("blah")
-                .setView(textEntryView)
+                .setView(textEntryView) 
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        nickChanged("this");
+                        nickChanged(nickBox.getText().toString());
                         logOutArray();
                     }
                 })
