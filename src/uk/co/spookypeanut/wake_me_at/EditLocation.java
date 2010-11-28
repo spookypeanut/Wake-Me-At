@@ -18,8 +18,6 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
-import java.util.ArrayList;
-
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -195,22 +193,7 @@ public class EditLocation extends Activity {
         mRadius = db.getRadius(mRowId);
         updateForm();
     }   
-    
-    private void logOutArray() {
-        Log.d(LOG_NAME, "Start of array log");
-        ArrayList<ArrayList<Object>> data = db.getAllRowsAsArrays();
-        for (int position=0; position < data.size(); position++)
-        { 
-            ArrayList<Object> row = data.get(position);
-            Log.d(LOG_NAME, row.get(0).toString() + ", " +
-                            row.get(1).toString() + ", " +
-                            row.get(2).toString() + ", " +
-                            row.get(3).toString() + ", " +
-                            row.get(4).toString() + ", " +
-                            row.get(5).toString());
-        }
-        Log.d(LOG_NAME, "End of array log");
-    }
+
     
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
@@ -285,7 +268,7 @@ public class EditLocation extends Activity {
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         changedNick(nickBox.getText().toString());
-                        logOutArray();
+                        db.logOutArray();
                     }
                 })
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {

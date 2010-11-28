@@ -208,6 +208,22 @@ public class DatabaseManager
         return rowArray;
     }
 
+    public void logOutArray() {
+        Log.d(LOG_NAME, "Start of array log");
+        ArrayList<ArrayList<Object>> data = getAllRowsAsArrays();
+        for (int position=0; position < data.size(); position++)
+        { 
+            ArrayList<Object> row = data.get(position);
+            Log.d(LOG_NAME, row.get(0).toString() + ", " +
+                            row.get(1).toString() + ", " +
+                            row.get(2).toString() + ", " +
+                            row.get(3).toString() + ", " +
+                            row.get(4).toString() + ", " +
+                            row.get(5).toString());
+        }
+        Log.d(LOG_NAME, "End of array log");
+    }
+
     public ArrayList<ArrayList<Object>> getAllRowsAsArrays() {
         // create an ArrayList that will hold all of the data collected from
         // the database.
