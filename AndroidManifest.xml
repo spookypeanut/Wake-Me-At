@@ -12,36 +12,49 @@
   copy of the GNU General Public License along with Wake Me At, in the
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
- package="uk.co.spookypeanut.wake_me_at" android:versionCode="1"
- android:versionName="1.0">
- <application android:icon="@drawable/x" android:label="@string/app_name"
-  android:debuggable="true">
-  <uses-library android:name="com.google.android.maps" />
-  <activity android:label="@string/app_name" android:name="WakeMeAt">
-   <intent-filter>
-    <action android:name="android.intent.action.MAIN" />
-    <category android:name="android.intent.category.LAUNCHER" />
-   </intent-filter>
-  </activity>
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    package="uk.co.spookypeanut.wake_me_at"
+    android:versionCode="1"
+    android:versionName="1.0">
 
-  
- <service android:name="WakeMeAtService" android:label="WMAS" android:icon="@drawable/icon" android:permission="android.permission.ACCESS_FINE_LOCATION"></service>
-<activity android:icon="@drawable/x" android:name="GetLocationMap" android:label="@string/map_name">
-<intent-filter>
-<action android:name="android.intent.action.MAIN"></action>
-<action android:name="android.intent.action.PICK"></action>
-    <action android:name="android.intent.action.VIEW" />
-    <action android:name="android.intent.action.EDIT" />
-    <category android:name="android.intent.category.DEFAULT" />
-</intent-filter>
+<application
+    android:icon="@drawable/x"
+    android:label="@string/app_name"
+    android:debuggable="true">
+
+<uses-permission android:name="android.permission.INTERNET" />
+<uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+<uses-library android:name="com.google.android.maps" />
+
+<activity android:label="@string/app_name" android:name="WakeMeAt">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <category android:name="android.intent.category.LAUNCHER" />
+    </intent-filter>
 </activity>
 
-<activity android:name="EditLocation"></activity>
+<service
+    android:name="WakeMeAtService"
+    android:label="WMAS"
+    android:icon="@drawable/icon"
+    android:permission="android.permission.ACCESS_FINE_LOCATION" />
+    
+<activity
+    android:icon="@drawable/x"
+    android:name="GetLocationMap"
+    android:label="@string/map_name">
+    <intent-filter>
+        <action android:name="android.intent.action.MAIN" />
+        <action android:name="android.intent.action.PICK" />
+        <action android:name="android.intent.action.VIEW" />
+        <action android:name="android.intent.action.EDIT" />
+        <category android:name="android.intent.category.DEFAULT" />
+    </intent-filter>
+</activity>
+
+<activity android:name="EditLocation" />
 </application>
 
- <uses-permission android:name="android.permission.INTERNET" />
- <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-
-</manifest> 
+</manifest>
