@@ -18,6 +18,8 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import java.util.List;
+
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -244,8 +246,15 @@ public class EditLocation extends Activity {
         radiusBox.addTextChangedListener(mRadiusWatcher);
 
         LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
+        List<String> providers = tmpLM.getProviders(true);
+        if (providers.isEmpty()) {
+            Log.wtf(LOG_NAME, "How can there be no location providers!?");
+        }
+        Log.d(LOG_NAME, providers.toString());
+
+        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_dropdown_item, providers);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_dropdown_item, tmpLM.getProviders(false));
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(locProvListener);
         
