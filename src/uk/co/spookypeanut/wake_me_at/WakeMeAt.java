@@ -20,7 +20,6 @@ along with Wake Me At, in the file "COPYING".  If not, see
 
 import java.util.ArrayList;
 
-import android.app.Activity;
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -32,9 +31,7 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.LinearLayout.LayoutParams;
 
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -136,24 +133,7 @@ public class WakeMeAt extends ListActivity {
         }
 
         private Context mContext;
-        private String[] mTitles = 
-        {
-                "Henry IV (1)",   
-                "Henry V",
-                "Henry VIII",       
-                "Richard II",
-                "Richard III",
-                "Merchant of Venice",  
-                "Othello",
-                "King Lear"
-        };
-        
 
-        private String[] mDialogue = 
-        {
-                "So", "Hear", "I", "First",
-                "Now", "To", "Virtue", "Blow"
-        };
     }
     private class LocEntry extends LinearLayout {
         public LocEntry(Context context, String title, String words) {
