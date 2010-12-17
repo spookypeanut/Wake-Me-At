@@ -35,6 +35,11 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
+    public int getRowCount() {
+        ArrayList <ArrayList <Object>> allData = getAllRowsAsArrays();
+        return allData.size();
+    }
+    
     public long addRow(String rowNick, double rowLat, double rowLong,
                        String rowProv, float rowRadius) {
         // this is a key value pair holder used by android's SQLite functions

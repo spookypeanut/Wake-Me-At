@@ -52,18 +52,15 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
 
+        Log.d(LOG_NAME, "DatabaseManager");
         db = new DatabaseManager(this);
+        
+        Log.d(LOG_NAME, "setListAdaptor");
+        setListAdapter(new LocListAdapter(this));
+
         Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.main);
 
-        Log.d(LOG_NAME, "button");
-        Button button;
-
-        Log.d(LOG_NAME, "findViewById");
-//        ListView locationList = new ListView(this); //(ListView)findViewById(R.id.location_list);
-        
-        ArrayList<String> names;
-        ArrayList<Long> indices;
         ArrayList<ArrayList<Object>> allData = db.getAllRowsAsArrays();
         for (int position=0; position < allData.size(); position++)
         { 
@@ -77,13 +74,12 @@ public class WakeMeAt extends ListActivity {
                             row.get(5).toString());
         }
 
-        setListAdapter(new SpeechListAdapter(this));
-
-        button = (Button)findViewById(R.id.edit_loc_button);
-        button.setOnClickListener(mEditLocButton);
+//        Button button;
+    //    button = (Button)findViewById(R.id.edit_loc_button);
+   //     button.setOnClickListener(mEditLocButton);
     }
-    private class SpeechListAdapter extends BaseAdapter {
-        public SpeechListAdapter(Context context) {
+    private class LocListAdapter extends BaseAdapter {
+        public LocListAdapter(Context context) {
             mContext = context;
         }
 
@@ -94,12 +90,13 @@ public class WakeMeAt extends ListActivity {
          * @see android.widget.ListAdapter#getCount()
          */
         public int getCount() {
-            return mTitles.length;
+            return db.getRowCount();
+            
         }
 
         /**
          * Since the data comes from an array, just returning the index is
-         * sufficent to get at the data. If we were using a more complex data
+         * sufficient to get at the data. If we were using a more complex data
          * structure, we would return whatever object represents one row in the
          * list.
          * 
@@ -125,14 +122,14 @@ public class WakeMeAt extends ListActivity {
          *      android.view.ViewGroup)
          */
         public View getView(int position, View convertView, ViewGroup parent) {
-            SpeechView sv;
+            LocEntry sv;
             if (convertView == null) {
-                sv = new SpeechView(mContext, mTitles[position],
-                        mDialogue[position]);
+                sv = new LocEntry(mContext, db.getNick(position + 1),
+                        db.getProvider(position + 1));
             } else {
-                sv = (SpeechView) convertView;
-                sv.setTitle(mTitles[position]);
-                sv.setDialogue(mDialogue[position]);
+                sv = (LocEntry) convertView;
+                sv.setTitle(db.getNick(position + 1));
+                sv.setDialogue(db.getProvider(position + 1));
             }
 
             return sv;
@@ -158,8 +155,8 @@ public class WakeMeAt extends ListActivity {
                 "Now", "To", "Virtue", "Blow"
         };
     }
-    private class SpeechView extends LinearLayout {
-        public SpeechView(Context context, String title, String words) {
+    private class LocEntry extends LinearLayout {
+        public LocEntry(Context context, String title, String words) {
             super(context);
 
             this.setOrientation(VERTICAL);
