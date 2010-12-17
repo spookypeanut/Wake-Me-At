@@ -217,7 +217,10 @@ public class EditLocation extends Activity {
         db = new DatabaseManager(this);
         Button button;
         
-        mRowId = settings.getLong("currRowId", (int) -1);
+        Bundle extras = this.getIntent().getExtras();
+        int passedRowId = extras.getInt("rowid");
+        
+        mRowId = passedRowId;
         Log.d(LOG_NAME, "Row detected: " + mRowId);
         if (mRowId == -1) {
             mRowId = createDefaultRow();

@@ -31,12 +31,14 @@ import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.TextView;
 
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
     private DatabaseManager db;
+
 
     private OnClickListener mEditLocButton = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -45,6 +47,15 @@ public class WakeMeAt extends ListActivity {
             startActivity(i);
         }
     };
+    
+    protected void onListItemClick (ListView l, View v, int position, long id) {
+        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
+        Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+        i.putExtra("rowid", position + 1);
+        Log.d(LOG_NAME, "About to start activity");
+        startActivity(i);
+    }
+    
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
