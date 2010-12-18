@@ -272,16 +272,22 @@ public class EditLocation extends Activity {
             LayoutInflater factory = LayoutInflater.from(this);
             final View textEntryView = factory.inflate(R.layout.text_input, null);
             final EditText nickBox = (EditText)textEntryView.findViewById(R.id.input_edit);
+            String title = "";
+            DialogInterface.OnClickListener positiveListener = null;
+            switch (type) {
+                case 0:
+                    title = "Location name";
+                    positiveListener = new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            changedNick(nickBox.getText().toString());
+                            db.logOutArray();
+                        }
+                    };
+            }
             return new AlertDialog.Builder(EditLocation.this)
-                .setIcon(R.drawable.x)
-                .setTitle("blah")
+                .setTitle(title)
                 .setView(textEntryView) 
-                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        changedNick(nickBox.getText().toString());
-                        db.logOutArray();
-                    }
-                })
+                .setPositiveButton(R.string.alert_dialog_ok, positiveListener)
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Log.d(LOG_NAME, "clicked negative");
