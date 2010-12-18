@@ -29,8 +29,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.text.Editable;
-import android.text.TextWatcher;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -48,6 +46,10 @@ public class EditLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
+    
+    public static final int NICKDIALOG = 0;
+    public static final int RADIUSDIALOG = 1;
+    
     private DatabaseManager db;
     private long mRowId;
     
@@ -66,23 +68,6 @@ public class EditLocation extends Activity {
 
         public void onNothingSelected(AdapterView<?> parent) {}
     };
-        
-
-    
-    private TextWatcher mRadiusWatcher = new TextWatcher() {
-        @Override
-        public void afterTextChanged(Editable s) {
-            changedRadius(Float.valueOf(s.toString()));
-        }
-
-        @Override
-        public void beforeTextChanged(CharSequence s, int start, int count,
-                int after) {}
-
-        @Override
-        public void onTextChanged(CharSequence s, int start, int before,
-                int count) {}
-    };
 
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
@@ -99,8 +84,8 @@ public class EditLocation extends Activity {
                 
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
-            EditText radiusBox = (EditText)findViewById(R.id.radius);
-            Float radius = Float.valueOf(radiusBox.getText().toString());
+            Button radiusButton = (Button)findViewById(R.id.radiusButton);
+            Float radius = Float.valueOf(radiusButton.getText().toString());
             changedRadius(radius);
             Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
             mLocProv = locProvSpin.getSelectedItem().toString();
@@ -122,8 +107,13 @@ public class EditLocation extends Activity {
     };
     private OnClickListener mChangeNickListener = new OnClickListener() {
         public void onClick(View v) {
-            Log.d(LOG_NAME, "mChangeNickListener.onClick()");
-            Dialog monkey = onCreateDialog(0);
+            Dialog monkey = onCreateDialog(NICKDIALOG);
+            monkey.show();
+        }
+    };
+    private OnClickListener mChangeRadiusListener = new OnClickListener() {
+        public void onClick(View v) {
+            Dialog monkey = onCreateDialog(RADIUSDIALOG);
             monkey.show();
         }
     };
@@ -148,6 +138,7 @@ public class EditLocation extends Activity {
     protected void changedRadius(float radius) {
         mRadius = radius;
         db.setRadius(mRowId, radius);
+        updateForm();
     }
     
     private long createDefaultRow() {
@@ -171,7 +162,7 @@ public class EditLocation extends Activity {
     protected void updateForm() {
         Button nickButton = (Button)findViewById(R.id.nickButton);
         nickButton.setText(mNick);
-        TextView radText = (TextView)findViewById(R.id.radius);
+        Button radText = (Button)findViewById(R.id.radiusButton);
         radText.setText(String.valueOf(mRadius));
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
         SpinnerAdapter adapter = locProvSpin.getAdapter();
@@ -192,6 +183,7 @@ public class EditLocation extends Activity {
     }
     
     protected void loadRadius() {
+        Log.d(LOG_NAME, "loadRadius()");
         mRadius = db.getRadius(mRowId);
         updateForm();
     }   
@@ -245,8 +237,8 @@ public class EditLocation extends Activity {
         button = (Button)findViewById(R.id.stopService);
         button.setOnClickListener(mStopListener);
         
-        EditText radiusBox = (EditText)findViewById(R.id.radius);
-        radiusBox.addTextChangedListener(mRadiusWatcher);
+        Button radiusBox = (Button)findViewById(R.id.radiusButton);
+        radiusBox.setOnClickListener(mChangeRadiusListener);
 
         LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
         List<String> providers = tmpLM.getProviders(true);
@@ -271,7 +263,7 @@ public class EditLocation extends Activity {
     protected Dialog onCreateDialog(int type) {
             LayoutInflater factory = LayoutInflater.from(this);
             final View textEntryView = factory.inflate(R.layout.text_input, null);
-            final EditText nickBox = (EditText)textEntryView.findViewById(R.id.input_edit);
+            final EditText inputBox = (EditText)textEntryView.findViewById(R.id.input_edit);
             String title = "";
             DialogInterface.OnClickListener positiveListener = null;
             switch (type) {
@@ -279,7 +271,15 @@ public class EditLocation extends Activity {
                     title = "Location name";
                     positiveListener = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
-                            changedNick(nickBox.getText().toString());
+                            changedNick(inputBox.getText().toString());
+                            db.logOutArray();
+                        }
+                    };
+                case 1:
+                    title = "Radius";
+                    positiveListener = new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            changedRadius(Float.valueOf(inputBox.getText().toString()));
                             db.logOutArray();
                         }
                     };

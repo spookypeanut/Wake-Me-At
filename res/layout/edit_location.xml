@@ -67,11 +67,10 @@
               android:layout_height="wrap_content" 
               android:text="Radius (metres)" />
 
-        <EditText android:id="@+id/radius"
-            android:numeric="decimal"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/radiusLabel"/>
+        <Button android:text="@+id/radiusButton"
+             android:id="@+id/radiusButton"
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content" />
             
         <TextView
             android:id="@+id/latitude"
