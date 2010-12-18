@@ -78,13 +78,13 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
 
-        Log.d(LOG_NAME, "DatabaseManager");
+        //Log.d(LOG_NAME, "DatabaseManager");
         db = new DatabaseManager(this);
         
-        Log.d(LOG_NAME, "setListAdaptor");
+        //Log.d(LOG_NAME, "setListAdaptor");
         setListAdapter(new LocListAdapter(this));
 
-        Log.d(LOG_NAME, "setContentView");
+        //Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.wake_me_at);
     }
     private class LocListAdapter extends BaseAdapter {
