@@ -99,7 +99,7 @@ public class WakeMeAt extends ListActivity {
         setListAdapter(new LocListAdapter(this));
 
         Log.d(LOG_NAME, "setContentView");
-        setContentView(R.layout.main);
+        setContentView(R.layout.ly_wake_me_at);
 
         ArrayList<ArrayList<Object>> allData = db.getAllRowsAsArrays();
         for (int position=0; position < allData.size(); position++)
