@@ -27,6 +27,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.View.OnClickListener;
@@ -54,6 +55,29 @@ public class WakeMeAt extends ListActivity {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mn_wake_me_at, menu);
         return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        // Handle item selection
+        switch (item.getItemId()) {
+        case R.id.mn_new_loc:
+            newLocation();
+            return true;
+        case R.id.mn_quit:
+            Log.wtf(LOG_NAME, "Unimplemented");
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
+    protected void newLocation () {
+        Log.d(LOG_NAME, "newLocation()");
+        Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+        i.putExtra("rowid", -1);
+        Log.d(LOG_NAME, "About to start activity");
+        startActivity(i);
     }
     
     protected void onListItemClick (ListView l, View v, int position, long id) {

@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:id="@+id/new_loc"
-          android:icon="@android:drawable/ic_menu_close_clear_cancel"
+    <item android:id="@+id/mn_new_loc"
+          android:icon="@android:drawable/ic_menu_add"
           android:title="@string/mn_new_loc" />
-    <item android:id="@+id/quit"
+    <item android:id="@+id/mn_quit"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
           android:title="@string/mn_quit" />
 </menu>
