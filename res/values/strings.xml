@@ -30,4 +30,6 @@
 <string name="foreground_service_stopped">Wake Me At service stopped</string>
 <string name="alert_dialog_cancel">Cancel</string>
 <string name="alert_dialog_ok">OK</string>
+<string name="mn_quit">Quit</string>
+<string name="mn_new_loc">New location</string>
 </resources>
