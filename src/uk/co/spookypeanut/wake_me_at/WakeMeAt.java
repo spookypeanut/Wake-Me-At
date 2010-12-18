@@ -85,7 +85,7 @@ public class WakeMeAt extends ListActivity {
         setListAdapter(new LocListAdapter(this));
 
         Log.d(LOG_NAME, "setContentView");
-        setContentView(R.layout.ly_wake_me_at);
+        setContentView(R.layout.wake_me_at);
     }
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
