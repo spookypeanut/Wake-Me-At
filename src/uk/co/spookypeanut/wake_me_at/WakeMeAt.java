@@ -18,8 +18,6 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-import java.util.ArrayList;
-
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
@@ -30,9 +28,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.View.OnClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -41,15 +37,6 @@ public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
     private DatabaseManager db;
-
-
-    private OnClickListener mEditLocButton = new Button.OnClickListener() {
-        public void onClick(View v) {
-            Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-            Log.d(LOG_NAME, "About to start activity");
-            startActivity(i);
-        }
-    };
     
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -73,18 +60,17 @@ public class WakeMeAt extends ListActivity {
     }
     
     protected void newLocation () {
-        Log.d(LOG_NAME, "newLocation()");
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
         i.putExtra("rowid", -1);
-        Log.d(LOG_NAME, "About to start activity");
+        //Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
     }
     
     protected void onListItemClick (ListView l, View v, int position, long id) {
-        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
+        //Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
         i.putExtra("rowid", position + 1);
-        Log.d(LOG_NAME, "About to start activity");
+        //Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
     }
     
@@ -100,67 +86,25 @@ public class WakeMeAt extends ListActivity {
 
         Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.ly_wake_me_at);
-
-        ArrayList<ArrayList<Object>> allData = db.getAllRowsAsArrays();
-        for (int position=0; position < allData.size(); position++)
-        { 
-            ArrayList<Object> row = allData.get(position);
-            
-            Log.d(LOG_NAME, row.get(0).toString() + ", " +
-                            row.get(1).toString() + ", " +
-                            row.get(2).toString() + ", " +
-                            row.get(3).toString() + ", " +
-                            row.get(4).toString() + ", " +
-                            row.get(5).toString());
-        }
-
-//        Button button;
-    //    button = (Button)findViewById(R.id.edit_loc_button);
-   //     button.setOnClickListener(mEditLocButton);
     }
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
             mContext = context;
         }
 
-        /**
-         * The number of items in the list is determined by the number of speeches
-         * in our array.
-         * 
-         * @see android.widget.ListAdapter#getCount()
-         */
         public int getCount() {
             return db.getRowCount();
             
         }
 
-        /**
-         * Since the data comes from an array, just returning the index is
-         * sufficient to get at the data. If we were using a more complex data
-         * structure, we would return whatever object represents one row in the
-         * list.
-         * 
-         * @see android.widget.ListAdapter#getItem(int)
-         */
         public Object getItem(int position) {
             return position;
         }
 
-        /**
-         * Use the array index as a unique id.
-         * 
-         * @see android.widget.ListAdapter#getItemId(int)
-         */
         public long getItemId(int position) {
             return position;
         }
 
-        /**
-         * Make a SpeechView to hold each row.
-         * 
-         * @see android.widget.ListAdapter#getView(int, android.view.View,
-         *      android.view.ViewGroup)
-         */
         public View getView(int position, View convertView, ViewGroup parent) {
             LocEntry sv;
             if (convertView == null) {
@@ -198,16 +142,10 @@ public class WakeMeAt extends ListActivity {
                     LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
         }
 
-        /**
-         * Convenience method to set the title of a SpeechView
-         */
         public void setTitle(String title) {
             mTitle.setText(title);
         }
 
-        /**
-         * Convenience method to set the dialogue of a SpeechView
-         */
         public void setDialogue(String words) {
             mDialogue.setText(words);
         }
@@ -215,6 +153,4 @@ public class WakeMeAt extends ListActivity {
         private TextView mTitle;
         private TextView mDialogue;
     }
-    
-
 }
