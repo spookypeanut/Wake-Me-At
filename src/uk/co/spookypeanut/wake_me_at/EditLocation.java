@@ -268,7 +268,7 @@ public class EditLocation extends Activity {
             String title = "";
             DialogInterface.OnClickListener positiveListener = null;
             switch (type) {
-                case 0:
+                case NICKDIALOG:
                     title = "Location name";
                     positiveListener = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
@@ -276,7 +276,8 @@ public class EditLocation extends Activity {
                             db.logOutArray();
                         }
                     };
-                case 1:
+                break;
+                case RADIUSDIALOG:
                     title = "Radius";
                     inputBox.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     positiveListener = new DialogInterface.OnClickListener() {
@@ -285,6 +286,9 @@ public class EditLocation extends Activity {
                             db.logOutArray();
                         }
                     };
+                break;
+                default:
+                    Log.wtf(LOG_NAME, "Invalid dialog type " + type);
             }
             return new AlertDialog.Builder(EditLocation.this)
                 .setTitle(title)
