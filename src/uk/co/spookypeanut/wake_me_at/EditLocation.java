@@ -192,7 +192,7 @@ public class EditLocation extends Activity {
     
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
-        if (requestCode == GETLOCMAP) {
+        if (requestCode == GETLOCMAP && data != null) {
             String latLongString = data.getAction();
 
             String tempStrings[] = latLongString.split(",");
