@@ -63,7 +63,7 @@ public class EditLocation extends Activity {
     private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
                 View view, int pos, long id) {
-            Log.d(LOG_NAME, "Selected loc prov");
+            Log.d(LOG_NAME, "Selected loc prov: " + parent.getSelectedItem().toString());
             changedLocProv(parent.getSelectedItem().toString());
         }
 
@@ -127,6 +127,7 @@ public class EditLocation extends Activity {
     }
 
     protected void changedLocProv(String locProv) {
+        mLocProv = locProv;
         db.setProvider(mRowId, locProv);
     }
 
