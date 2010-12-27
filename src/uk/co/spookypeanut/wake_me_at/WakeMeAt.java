@@ -23,13 +23,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -37,6 +37,8 @@ public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static final String LOG_NAME = "WakeMeAt";
     private DatabaseManager db;
+    private LayoutInflater mInflater;
+
     
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -67,32 +69,37 @@ public class WakeMeAt extends ListActivity {
     }
     
     protected void onListItemClick (ListView l, View v, int position, long id) {
-        //Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
+        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
         i.putExtra("rowid", position + 1);
-        //Log.d(LOG_NAME, "About to start activity");
+        Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
     }
     
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
+        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-        //Log.d(LOG_NAME, "DatabaseManager");
+        Log.d(LOG_NAME, "DatabaseManager");
         db = new DatabaseManager(this);
         
-        //Log.d(LOG_NAME, "setListAdaptor");
+        Log.d(LOG_NAME, "setListAdaptor");
         setListAdapter(new LocListAdapter(this));
 
-        //Log.d(LOG_NAME, "setContentView");
+        Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.wake_me_at);
+        
+
+        Log.d(LOG_NAME, "End onCreate()");
     }
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
-            mContext = context;
+            Log.d(LOG_NAME, "LocListAdapter constructor");
         }
 
         public int getCount() {
+            Log.d(LOG_NAME, "getCount()");
             return db.getRowCount();
             
         }
@@ -106,51 +113,25 @@ public class WakeMeAt extends ListActivity {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            LocEntry sv;
-            if (convertView == null) {
-                sv = new LocEntry(mContext, db.getNick(position + 1),
-                        db.getProvider(position + 1));
+            Log.d(LOG_NAME, "getView(" + position + ")");
+            View row;
+            
+            if (null == convertView) {
+                Log.d(LOG_NAME, "is null");
+                row = mInflater.inflate(R.layout.wma_list_entry, null);
             } else {
-                sv = (LocEntry) convertView;
-                sv.setTitle(db.getNick(position + 1));
-                sv.setDialogue(db.getProvider(position + 1));
+                Log.d(LOG_NAME, "not null");
+                row = convertView;
             }
-
-            return sv;
+            Log.d(LOG_NAME, "row = " + row.toString());
+            
+            TextView tv = (TextView) row.findViewById(R.id.locListName);
+            tv.setText(db.getNick(position + 1));
+            
+            tv = (TextView) row.findViewById(R.id.locListDesc);
+            tv.setText(db.getProvider(position + 1));
+            Log.d(LOG_NAME, "end getView(" + position + ")");
+            return row;
         }
-
-        private Context mContext;
-
-    }
-    private class LocEntry extends LinearLayout {
-        public LocEntry(Context context, String title, String words) {
-            super(context);
-
-            this.setOrientation(VERTICAL);
-
-            // Here we build the child views in code. They could also have
-            // been specified in an XML file.
-
-            mTitle = new TextView(context);
-            mTitle.setText(title);
-            addView(mTitle, new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-
-            mDialogue = new TextView(context);
-            mDialogue.setText(words);
-            addView(mDialogue, new LinearLayout.LayoutParams(
-                    LayoutParams.MATCH_PARENT, LayoutParams.WRAP_CONTENT));
-        }
-
-        public void setTitle(String title) {
-            mTitle.setText(title);
-        }
-
-        public void setDialogue(String words) {
-            mDialogue.setText(words);
-        }
-
-        private TextView mTitle;
-        private TextView mDialogue;
     }
 }
