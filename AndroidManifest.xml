@@ -24,7 +24,8 @@
 <application
     android:icon="@drawable/x"
     android:label="@string/app_name"
-    android:debuggable="true">
+    android:debuggable="true"
+    android:theme="@style/MainStyle">
 
 <uses-library android:name="com.google.android.maps" />
 
@@ -54,8 +55,7 @@
     </intent-filter>
 </activity>
 
-<activity android:name="EditLocation"
- android:theme="@style/EditLocStyle">
+<activity android:name="EditLocation">
  </activity>
 </application>
 
