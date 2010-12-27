@@ -249,9 +249,12 @@ public class EditLocation extends Activity {
         Log.d(LOG_NAME, providers.toString());
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_dropdown_item, providers);
+                android.R.layout.simple_spinner_item, providers);
+
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         s.setAdapter(spinnerArrayAdapter);
+        
         s.setOnItemSelectedListener(locProvListener);
         
         loadNick();
