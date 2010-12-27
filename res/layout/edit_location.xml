@@ -57,6 +57,7 @@
      android:text="@string/loc_prov_spinner_label" />
     <Spinner android:id="@+id/loc_provider"
      android:layout_width="fill_parent" android:layout_height="wrap_content"
+     android:drawSelectorOnTop="true"
      android:prompt="@string/loc_prov_spinner_label" />
    </TableRow>
 
