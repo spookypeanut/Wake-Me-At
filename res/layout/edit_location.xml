@@ -82,7 +82,7 @@
 
   </TableLayout>
   <TableLayout android:layout_width="fill_parent"
-   android:layout_height="wrap_content">
+   android:layout_height="wrap_content"  android:stretchColumns="0,1">
 
    <TableRow>
     <Button android:id="@+id/startService" android:text="@string/start_button_name"
