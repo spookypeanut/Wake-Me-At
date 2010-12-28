@@ -43,6 +43,7 @@
     android:permission="android.permission.ACCESS_FINE_LOCATION" />
     
 <activity
+    android:theme="@android:style/Theme.Dialog"
     android:icon="@drawable/x"
     android:name="GetLocationMap"
     android:label="@string/map_name">
