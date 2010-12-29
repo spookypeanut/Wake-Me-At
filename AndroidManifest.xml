@@ -25,7 +25,7 @@
     android:icon="@drawable/x"
     android:label="@string/app_name"
     android:debuggable="true"
-    android:theme="@style/MainStyle">
+    android:theme="@android:style/Theme.Light">
 
 <uses-library android:name="com.google.android.maps" />
 
@@ -43,6 +43,7 @@
     android:permission="android.permission.ACCESS_FINE_LOCATION" />
     
 <activity
+    android:theme="@android:style/Theme.Dialog"
     android:icon="@drawable/x"
     android:name="GetLocationMap"
     android:label="@string/map_name">
