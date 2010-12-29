@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -34,6 +35,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.GestureDetector;
 import android.view.MotionEvent;
 import android.view.GestureDetector.OnGestureListener;
@@ -47,8 +49,11 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
+//@SuppressWarnings("unused")
 public class GetLocationMap extends MapActivity
 implements LocationListener {
+    public static final String PREFS_NAME = "WakeMeAtPrefs";
+    public static final String LOG_NAME = "WakeMeAt";
     MapView mapView;
     MapOverlay itemizedOverlay;
     GeoPoint destination;
@@ -59,6 +64,7 @@ implements LocationListener {
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
+        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         Bundle extras = this.getIntent().getExtras();
         String searchAddr = extras.getString("searchAddr").trim();
@@ -185,6 +191,19 @@ implements LocationListener {
         // TODO Auto-generated method stub
 
     }
+    
+    @Override
+    public boolean onSearchRequested() {
+        Log.d(LOG_NAME, "Searching");
+        Bundle appDataBundle = null;
+        
+        // Now call the Activity member function that invokes the Search Manager UI.
+        startSearch(null, false, appDataBundle, false); 
+        
+        // Returning true indicates that we did launch the search, instead of blocking it.
+        return true;
+    }
+    
     public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
         private GestureDetector gestureDetector;
         private MapView mapView;
@@ -224,6 +243,7 @@ implements LocationListener {
             }
             return false;
         }
+        
 
         @Override
         public void onLongPress(MotionEvent event) {
