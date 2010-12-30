@@ -44,6 +44,7 @@ public class SearchList extends ListActivity {
     
     @Override
     public void onNewIntent(final Intent newIntent) {
+        Log.d(LOG_NAME, "onNewIntent");
         super.onNewIntent(newIntent);
         
         // get and process search query here
@@ -69,27 +70,34 @@ public class SearchList extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        Log.d(LOG_NAME, "inflater done");
+
+        // get and process search query here
+        final Intent queryIntent = getIntent();
+        final String queryAction = queryIntent.getAction();
+        Log.d(LOG_NAME, "queryIntent: " + queryIntent.toString() + ", queryAction: " + queryAction);
+        mResults = getSearchLocations(queryIntent.getStringExtra(SearchManager.QUERY));
 
         Log.d(LOG_NAME, "setListAdaptor");
         setListAdapter(new SearchListAdapter(this));
-
+        
         Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.search_list);
 
-        Bundle extras = this.getIntent().getExtras();
-        String searchAddr = extras.getString("searchAddr").trim();
-
-        mResults = getSearchLocations(searchAddr);
-        
         Log.d(LOG_NAME, "End onCreate()");
     }
+    
     private List<Address> getSearchLocations(String address) {
+        Log.d(LOG_NAME, "getSearchLocations");
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         List<Address> locations = null;
         try {
             locations = geoCoder.getFromLocationName(address, 5);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        for (int i = 0; i < locations.size(); i++) {
+            Log.d(LOG_NAME, "Location " + i + ": " + locations.get(i).toString());
         }
         return locations;
 

@@ -195,7 +195,7 @@ implements LocationListener {
         appDataBundle.putString("demo_key", "nothing");
 
         // Now call the Activity member function that invokes the Search Manager UI.
-        startSearch("london", false, appDataBundle, false); 
+        startSearch(null, false, appDataBundle, false);
         
         // Returning true indicates that we did launch the search, instead of blocking it.
         return true;
