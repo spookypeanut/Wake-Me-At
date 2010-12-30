@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.ListActivity;
+import android.app.SearchManager;
 import android.content.Context;
 import android.content.Intent;
 import android.location.Address;
@@ -41,6 +42,20 @@ public class SearchList extends ListActivity {
     private LayoutInflater mInflater;
     private List<Address> mResults;
     
+    @Override
+    public void onNewIntent(final Intent newIntent) {
+        super.onNewIntent(newIntent);
+        
+        // get and process search query here
+        final Intent queryIntent = getIntent();
+        final String queryAction = queryIntent.getAction();
+        if (Intent.ACTION_SEARCH.equals(queryAction)) {
+            Log.d(LOG_NAME, "query");
+        }
+        else {
+            Log.d(LOG_NAME, "no query");
+        }
+    }
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         Intent i = new Intent(SearchList.this.getApplication(), EditLocation.class);
@@ -49,6 +64,7 @@ public class SearchList extends ListActivity {
         //startActivity(i);
     }
     
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);

@@ -32,4 +32,7 @@
 <string name="alert_dialog_ok">OK</string>
 <string name="mn_quit">Quit</string>
 <string name="mn_new_loc">New location</string>
+<string name="search_label">Label</string>
+<string name="search_hint">Hint</string>
+<string name="search_prompt">Prompt</string>
 </resources>

@@ -191,9 +191,11 @@ implements LocationListener {
     public boolean onSearchRequested() {
         Log.d(LOG_NAME, "Searching");
         Bundle appDataBundle = null;
-        
+        appDataBundle = new Bundle();
+        appDataBundle.putString("demo_key", "nothing");
+
         // Now call the Activity member function that invokes the Search Manager UI.
-        startSearch(null, false, appDataBundle, false); 
+        startSearch("london", false, appDataBundle, false); 
         
         // Returning true indicates that we did launch the search, instead of blocking it.
         return true;
