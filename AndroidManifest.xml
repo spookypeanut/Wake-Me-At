@@ -63,6 +63,7 @@
 
 <activity
     android:icon="@drawable/x"
+    android:theme="@android:style/Theme.Dialog"
     android:name=".SearchList"
     android:label="@string/search_label">
     <intent-filter>
