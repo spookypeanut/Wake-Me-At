@@ -35,6 +35,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 public class SearchList extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -123,6 +124,7 @@ public class SearchList extends ListActivity {
         public View getView(int position, View convertView, ViewGroup parent) {
             Log.d(LOG_NAME, "getView(" + position + ")");
             View row;
+            Address result = mResults.get(position);
             
             if (null == convertView) {
                 Log.d(LOG_NAME, "is null");
@@ -131,7 +133,12 @@ public class SearchList extends ListActivity {
                 Log.d(LOG_NAME, "not null");
                 row = convertView;
             }
-            Log.d(LOG_NAME, "row = " + row.toString());
+            TextView tv = (TextView) row.findViewById(R.id.searchListLine0);
+            tv.setText(result.getAddressLine(0));
+            tv = (TextView) row.findViewById(R.id.searchListLine1);
+            tv.setText(result.getAddressLine(1));
+            tv = (TextView) row.findViewById(R.id.searchListLine2);
+            tv.setText(result.getAddressLine(2));
             
             Log.d(LOG_NAME, "end getView(" + position + ")");
             return row;

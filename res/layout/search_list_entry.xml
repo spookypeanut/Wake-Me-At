@@ -16,7 +16,16 @@
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
  android:layout_width="fill_parent" android:layout_height="fill_parent"
  android:orientation="vertical">
-  <TextView android:id="@+id/searchListName"
+  <TextView android:id="@+id/searchListLine0"
   android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Location name" android:textSize="15sp"/>
+  android:text="Line0" android:textSize="15sp"/>
+  <TextView android:id="@+id/searchListLine1"
+  android:layout_height="wrap_content" android:layout_width="wrap_content"
+  android:text="Line1" android:textSize="15sp"/>
+  <TextView android:id="@+id/searchListLine2"
+  android:layout_height="wrap_content" android:layout_width="wrap_content"
+  android:text="Line2" android:textSize="15sp"/>
+  <TextView android:id="@+id/searchListDist"
+  android:layout_height="wrap_content" android:layout_width="wrap_content"
+  android:text="0m away" android:textSize="10sp"/>
  </LinearLayout>
