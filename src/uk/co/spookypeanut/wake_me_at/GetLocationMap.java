@@ -147,25 +147,6 @@ implements LocationListener {
     protected boolean isRouteDisplayed() {
         return false;
     }
-    /**
-     * @see android.app.Activity#onResume()
-     */
-    @Override
-    public void onResume() {
-        super.onResume();
-    }
-
-    /**
-     * @param icicle
-     */
-    public void onPause(Bundle icicle) {
-        super.onPause();
-    }
-
-    @Override
-    public void onSaveInstanceState(Bundle icicle) {
-        super.onSaveInstanceState(icicle);
-    }
 
     @Override
     public void onLocationChanged(Location location) {
