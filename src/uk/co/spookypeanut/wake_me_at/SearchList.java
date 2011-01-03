@@ -42,6 +42,7 @@ public class SearchList extends ListActivity {
     public final String LOG_NAME = "WakeMe@";
     private LayoutInflater mInflater;
     private List<Address> mResults;
+    private Intent mPredecessor;
     
     @Override
     public void onNewIntent(final Intent newIntent) {
@@ -58,12 +59,15 @@ public class SearchList extends ListActivity {
             Log.d(LOG_NAME, "no query");
         }
     }
+    
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
-        Intent i = new Intent(SearchList.this.getApplication(), EditLocation.class);
-        i.putExtra("rowid", position + 1);
-        Log.d(LOG_NAME, "About to start activity");
-        //startActivity(i);
+        Intent i = new Intent();
+        Address destination = mResults.get(position);
+        setResult(RESULT_OK, i.setAction(destination.getLatitude() / 1E6 + "," +
+                                         destination.getLongitude() / 1E6));
+        Log.d(LOG_NAME, "About to finish activity");
+        finish();
     }
     
     @Override

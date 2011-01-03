@@ -73,12 +73,10 @@ public class EditLocation extends Activity {
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
             Intent i = new Intent(EditLocation.this.getApplication(), GetLocationMap.class);
-            EditText searchAddrBox = (EditText)findViewById(R.id.searchAddrBox);
-            String searchAddr = searchAddrBox.getText().toString();
             
-            i.putExtra("searchAddr", searchAddr);
+            i.putExtra("latitude", mLatitude);
+            i.putExtra("longitude", mLongitude);
             Log.d(LOG_NAME, i.toString());
-            Log.d(LOG_NAME, searchAddr);
             startActivityForResult(i, GETLOCMAP);
         }
     };

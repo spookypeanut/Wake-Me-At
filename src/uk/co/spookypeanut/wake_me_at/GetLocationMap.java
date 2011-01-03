@@ -55,11 +55,12 @@ implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = "WakeMe@";
     MapView mapView;
-    MapOverlay itemizedOverlay;
-    GeoPoint destination;
+    MapOverlay mItemizedOverlay;
+    GeoPoint mDest;
 
     @Override
     public void onCreate(Bundle icicle) {
+        Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
@@ -67,30 +68,29 @@ implements LocationListener {
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         Bundle extras = this.getIntent().getExtras();
-        String searchAddr = extras.getString("searchAddr").trim();
+        double latitude = extras.getDouble("latitude");
+        double longitude = extras.getDouble("longitude");
 
-        List<Overlay> mapOverlays = mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
-        itemizedOverlay = new MapOverlay(drawable, this);
+        mItemizedOverlay = new MapOverlay(drawable, this);
 
-        if (searchAddr.length() == 0) {
-            Toast.makeText(getApplicationContext(),
-                    "No search terms, using current location",
-                    Toast.LENGTH_SHORT).show();
-            destination = getCurrentLocation(true);
-        } else {
-            Toast.makeText(getApplicationContext(),
-                    "Searching for \"" + searchAddr + "\"",
-                    Toast.LENGTH_SHORT).show();
-            destination = getSearchLocation(searchAddr, true);
-        }
-        OverlayItem destinationOverlay = new OverlayItem(destination,
-                                            "Wake Me Here",
-                                            "Location To Set Off Alarm");
-        itemizedOverlay.addOverlay(destinationOverlay);
-        mapOverlays.add(itemizedOverlay);
+        moveMapTo(latitude, longitude);
     }
 
+    private void moveMapTo(double latitude, double longitude) {
+        List<Overlay> mapOverlays = mapView.getOverlays();
+        GeoPoint returnValue = new GeoPoint((int) (latitude * 1E6), 
+                                            (int) (longitude * 1E6));
+        OverlayItem destinationOverlay = new OverlayItem(returnValue,
+                "Wake Me Here",
+                "Location To Set Off Alarm");
+        mItemizedOverlay.addOverlay(destinationOverlay);
+        mapOverlays.add(mItemizedOverlay);
+
+        MapController mc = mapView.getController();
+        mc.animateTo(returnValue);
+    }
+    
     private GeoPoint getSearchLocation(String address, boolean moveMap) {
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         GeoPoint returnValue = new GeoPoint(0,0);
@@ -112,7 +112,8 @@ implements LocationListener {
         }
         return returnValue;
 
-    }    
+    }
+
     private GeoPoint getCurrentLocation(boolean moveMap) {
         GeoPoint returnValue = new GeoPoint(0,0);
         LocationManager locMan;
@@ -179,6 +180,19 @@ implements LocationListener {
         return true;
     }
     
+    protected void onActivityResult (int requestCode,
+            int resultCode, Intent data) {
+        Log.d(LOG_NAME, "onActivityResult(" + requestCode + ", " + resultCode + ", " + data.toString());
+            String latLongString = data.getAction();
+
+            String tempStrings[] = latLongString.split(",");
+            String latString = tempStrings[0];
+            String longString = tempStrings[1];
+            double latDbl = Double.valueOf(latString.trim()).doubleValue();
+            double longDbl = Double.valueOf(longString.trim()).doubleValue();
+        
+    }
+
     public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
         private GestureDetector gestureDetector;
         private MapView mapView;
@@ -218,12 +232,11 @@ implements LocationListener {
             }
             return false;
         }
-        
 
         @Override
         public void onLongPress(MotionEvent event) {
             Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
-            destination = mapView.getProjection().fromPixels(
+            mDest = mapView.getProjection().fromPixels(
                     (int) event.getX(),
                     (int) event.getY());
 
@@ -232,8 +245,8 @@ implements LocationListener {
             List<Address> addresses = null;
             try {
                 addresses = geoCoder.getFromLocation(
-                        destination.getLatitudeE6()  / 1E6, 
-                        destination.getLongitudeE6() / 1E6, 1);
+                        mDest.getLatitudeE6()  / 1E6, 
+                        mDest.getLongitudeE6() / 1E6, 1);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -253,8 +266,8 @@ implements LocationListener {
                         int which) {
                     Intent i = new Intent();
                     setResult(RESULT_OK, i.setAction(
-                                             destination.getLatitudeE6() / 1E6 + "," +
-                                             destination.getLongitudeE6() / 1E6));
+                                             mDest.getLatitudeE6() / 1E6 + "," +
+                                             mDest.getLongitudeE6() / 1E6));
                     finish();
                 }
             });
