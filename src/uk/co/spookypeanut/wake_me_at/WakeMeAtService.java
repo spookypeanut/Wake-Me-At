@@ -19,7 +19,8 @@ import android.widget.Toast;
 
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
-    static final String LOG_NAME = "WakeMeAt";
+    public final String LOG_NAME = "WakeMe@";
+
     private static final int ALARMNOTIFY_ID = 1;
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {

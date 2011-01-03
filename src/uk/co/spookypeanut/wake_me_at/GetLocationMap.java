@@ -53,7 +53,7 @@ import com.google.android.maps.OverlayItem;
 public class GetLocationMap extends MapActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public static final String LOG_NAME = "WakeMeAt";
+    public final String LOG_NAME = "WakeMe@";
     MapView mapView;
     MapOverlay itemizedOverlay;
     GeoPoint destination;

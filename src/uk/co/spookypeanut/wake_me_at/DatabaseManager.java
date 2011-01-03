@@ -12,10 +12,10 @@ import android.util.Log;
 
 public class DatabaseManager
 {
-    Context context;
-
     private SQLiteDatabase db;
-    public static final String LOG_NAME = "WakeMeAt";
+    // TODO: Why can't I refer to R.string here?
+    public final String LOG_NAME = "WakeMe@"; 
+//    public final String LOG_NAME = (String) WakeMeAt.getContext().getText(R.string.app_name_nospaces);
 
     private final String DB_NAME = "WakeMeAtDB";
     private final int DB_VERSION = 2;
@@ -28,9 +28,11 @@ public class DatabaseManager
     private final String TABLE_ROW_PROV = "table_row_prov";
     private final String TABLE_ROW_RADIUS = "table_row_radius";
 
+    Context context;
+
+
     public DatabaseManager(Context context) {
         this.context = context;
-        // create or open the database
         CustomSQLiteOpenHelper helper = new CustomSQLiteOpenHelper(context);
         this.db = helper.getWritableDatabase();
     }

@@ -14,7 +14,9 @@
  -->
 <resources>
  
- <string name="app_name">Wake Me At</string>
+ <string name="app_name">Wake Me @</string>
+ <string name="app_name_nospaces">WakeMe@</string>
+ 
  <string name="get_loc_button_name">Get location...</string>
  <string name="get_loc_map_button_name">Get location from map...</string>
  <string name="map_name">Select location</string>

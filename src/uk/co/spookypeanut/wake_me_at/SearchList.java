@@ -39,7 +39,7 @@ import android.widget.TextView;
 
 public class SearchList extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public static final String LOG_NAME = "WakeMeAt";
+    public final String LOG_NAME = "WakeMe@";
     private LayoutInflater mInflater;
     private List<Address> mResults;
     

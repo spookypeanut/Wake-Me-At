@@ -35,7 +35,7 @@ import android.widget.TextView;
 
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public static final String LOG_NAME = "WakeMeAt";
+    public final String LOG_NAME = "WakeMe@";
     private DatabaseManager db;
     private LayoutInflater mInflater;
 
