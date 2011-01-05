@@ -29,6 +29,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -59,7 +60,12 @@ public class WakeMeAt extends ListActivity {
         default:
             return super.onOptionsItemSelected(item);
         }
-    }
+    }    
+ 
+    protected boolean onLongListItemClick(View v, int pos, long id) { 
+          Log.d(LOG_NAME, "onLongListItemClick id=" + id ); 
+          return true;
+    } 
     
     protected void newLocation () {
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
@@ -89,7 +95,14 @@ public class WakeMeAt extends ListActivity {
 
         Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.wake_me_at);
-        
+
+        ListView lv = getListView(); 
+        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() { 
+            @Override 
+            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) { 
+                return onLongListItemClick(v, pos, id); 
+            } 
+        }); 
 
         Log.d(LOG_NAME, "End onCreate()");
     }
