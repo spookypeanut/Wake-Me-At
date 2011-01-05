@@ -23,13 +23,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextMenu;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.AdapterView;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -40,6 +41,7 @@ public class WakeMeAt extends ListActivity {
     private DatabaseManager db;
     private LayoutInflater mInflater;
 
+    public static final int MN_CONTEXT_DELETE = 0;
     
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -60,12 +62,7 @@ public class WakeMeAt extends ListActivity {
         default:
             return super.onOptionsItemSelected(item);
         }
-    }    
- 
-    protected boolean onLongListItemClick(View v, int pos, long id) { 
-          Log.d(LOG_NAME, "onLongListItemClick id=" + id ); 
-          return true;
-    } 
+    }
     
     protected void newLocation () {
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
@@ -80,6 +77,15 @@ public class WakeMeAt extends ListActivity {
         i.putExtra("rowId", (long) position + 1);
         Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
+    }
+    
+    @Override
+    public void onCreateContextMenu(ContextMenu menu, View v,
+                                    ContextMenuInfo menuInfo) {
+      super.onCreateContextMenu(menu, v, menuInfo);
+      Log.d(LOG_NAME, "onCreateContextMenu");
+      MenuInflater inflater = getMenuInflater();
+      inflater.inflate(R.menu.mn_context_wake_me_at, menu);
     }
     
     protected void onCreate(Bundle savedInstanceState) {
@@ -97,12 +103,7 @@ public class WakeMeAt extends ListActivity {
         setContentView(R.layout.wake_me_at);
 
         ListView lv = getListView(); 
-        lv.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() { 
-            @Override 
-            public boolean onItemLongClick(AdapterView<?> av, View v, int pos, long id) { 
-                return onLongListItemClick(v, pos, id); 
-            } 
-        }); 
+        registerForContextMenu(lv);
 
         Log.d(LOG_NAME, "End onCreate()");
     }
