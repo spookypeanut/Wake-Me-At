@@ -1,9 +1,12 @@
 http://developer.android.com/index.html
     list4.java
+
+http://www.stackoverflow.com/
 http://groups.google.com/group/android-developers/
+http://www.anotherandroidblog.com/
+http://www.anddev.org/
 
 https://github.com/rux/colouredpaper
-http://www.anotherandroidblog.com/
 http://feedspeak.googlecode.com
 http://androiddrawableexplorer.appspot.com/
 http://moonblink.googlecode.com/
