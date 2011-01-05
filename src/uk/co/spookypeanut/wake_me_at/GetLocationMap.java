@@ -69,7 +69,8 @@ implements LocationListener {
     GeoPoint mDest;
     LayoutInflater mInflater;
     private List<Address> mResults;
-
+    Dialog mResultsDialog;
+    
     @Override
     public void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
@@ -194,20 +195,20 @@ implements LocationListener {
     
     private void resultsDialog(String searchTerm) {
         mResults = getSearchLocations(searchTerm);
-        Dialog dialog = new Dialog(mContext);
-        dialog.setContentView(R.layout.search_list);
+        mResultsDialog = new Dialog(mContext);
+        mResultsDialog.setContentView(R.layout.search_list);
         Log.d(LOG_NAME, "content view is set");
 
-        ListView list = (ListView) dialog.findViewById(R.id.result_list);
+        ListView list = (ListView) mResultsDialog.findViewById(R.id.result_list);
         Log.d(LOG_NAME, "using list " + list.toString());
         list.setAdapter(new SearchListAdapter(this));
         list.setOnItemClickListener(mResultClickListener);
         Log.d(LOG_NAME, "adapter is set");
 
-        dialog.setTitle("Location");
+        mResultsDialog.setTitle("Location");
         
         Log.d(LOG_NAME, "About to show dialog");
-        dialog.show();
+        mResultsDialog.show();
         Log.d(LOG_NAME, "Dialog shown");
     }
     
@@ -232,11 +233,11 @@ implements LocationListener {
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
             Log.d(LOG_NAME, "onItemClick(" + parent + ", " + view + ", " + position + ", " + id + ")");
-//          Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-//          i.putExtra("rowid", position + 1);
-//          Log.d(LOG_NAME, "About to start activity");
-//          startActivity(i);
-            
+            double latitude = mResults.get(position).getLatitude();
+            double longitude = mResults.get(position).getLongitude();
+            moveMapTo(latitude, longitude);
+            Log.d(LOG_NAME, "dialog is " + view.getContext().toString() + "");
+            mResultsDialog.dismiss();
         }
     };
     
