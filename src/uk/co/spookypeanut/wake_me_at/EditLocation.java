@@ -52,8 +52,8 @@ public class EditLocation extends Activity {
     public static final int RADIUSDIALOG = 1;
     
     private DatabaseManager db;
+
     private long mRowId;
-    
     private String mNick = "New Location";
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
@@ -91,6 +91,7 @@ public class EditLocation extends Activity {
             changedLocProv(mLocProv);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(EditLocation.this, WakeMeAtService.class);
+            intent.putExtra("rowId", mRowId);
             intent.putExtra("latitude", mLatitude);
             intent.putExtra("longitude", mLongitude);
             intent.putExtra("radius", mRadius);
@@ -205,15 +206,14 @@ public class EditLocation extends Activity {
     }
 
     protected void onCreate(Bundle savedInstanceState) {
-        
+        Log.d(LOG_NAME, "EditLocation.onCreate");
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
         Button button;
         
         Bundle extras = this.getIntent().getExtras();
-        int passedRowId = extras.getInt("rowid");
+        mRowId = extras.getLong("rowId");
         
-        mRowId = passedRowId;
         Log.d(LOG_NAME, "Row detected: " + mRowId);
         if (mRowId == -1) {
             mRowId = createDefaultRow();

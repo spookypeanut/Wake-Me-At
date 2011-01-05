@@ -28,6 +28,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
+    private long mRowId;
     private double mRadius = -1.0;
     private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
@@ -91,6 +92,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
 
+
         try {
             mStartForeground = getClass().getMethod("startForeground",
                     mStartForegroundSignature);
@@ -112,6 +114,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "onStartCommand()");
         Bundle extras = intent.getExtras();
 
+        mRowId = extras.getLong("rowId");
         mFinalDestination.setLatitude(extras.getDouble("latitude"));
         mFinalDestination.setLongitude(extras.getDouble("longitude"));
         mRadius = extras.getFloat("radius");
@@ -189,8 +192,9 @@ public class WakeMeAtService extends Service implements LocationListener {
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            mIntentOnSelect = PendingIntent.getActivity(this, 0,
-                    new Intent(this, EditLocation.class), 0);
+            Intent i = new Intent(this, EditLocation.class);
+            i.putExtra("rowId", mRowId);
+            mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
             mNotification.setLatestEventInfo(this, getText(R.string.foreground_service_started),

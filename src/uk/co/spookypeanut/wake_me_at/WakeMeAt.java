@@ -71,7 +71,7 @@ public class WakeMeAt extends ListActivity {
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-        i.putExtra("rowid", position + 1);
+        i.putExtra("rowId", (long) position + 1);
         Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
     }
