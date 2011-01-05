@@ -42,7 +42,6 @@ public class SearchList extends ListActivity {
     public final String LOG_NAME = "WakeMe@";
     private LayoutInflater mInflater;
     private List<Address> mResults;
-    private Intent mPredecessor;
     
     @Override
     public void onNewIntent(final Intent newIntent) {
