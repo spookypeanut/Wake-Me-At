@@ -64,15 +64,6 @@
      android:prompt="@string/loc_prov_spinner_label" />
    </TableRow>
 
-
-   <TableRow>
-    <TextView android:id="@+id/searchLabel"
-     android:layout_width="fill_parent" android:layout_height="wrap_content"
-     android:text="Search..." />
-    <EditText android:id="@+id/searchAddrBox"
-     android:layout_width="match_parent" android:layout_height="wrap_content"
-     android:layout_below="@id/searchLabel" />
-   </TableRow>
    <TableRow>
     <TextView android:id="@+id/radiusLabel"
      android:layout_width="fill_parent" android:layout_height="wrap_content"

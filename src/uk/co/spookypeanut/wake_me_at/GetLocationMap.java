@@ -23,6 +23,7 @@ import java.util.List;
 import java.util.Locale;
 
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,9 +38,17 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
+import android.view.LayoutInflater;
 import android.view.MotionEvent;
+import android.view.View;
+import android.view.ViewGroup;
 import android.view.GestureDetector.OnGestureListener;
+import android.widget.AdapterView;
+import android.widget.BaseAdapter;
+import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -55,13 +64,18 @@ implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = "WakeMe@";
     MapView mapView;
+    Context mContext;
     MapOverlay mItemizedOverlay;
     GeoPoint mDest;
+    LayoutInflater mInflater;
+    private List<Address> mResults;
 
     @Override
     public void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
+        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mContext = this;
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
@@ -74,10 +88,24 @@ implements LocationListener {
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
 
-        moveMapTo(latitude, longitude);
+        moveDestinationTo(latitude, longitude);
     }
 
-    private void moveMapTo(double latitude, double longitude) {
+    @Override
+    public void onNewIntent(Intent intent) {
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    private void handleIntent(Intent intent) {
+        setIntent(intent);
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+          String query = intent.getStringExtra(SearchManager.QUERY);
+          resultsDialog(query);
+        }
+    }
+    
+    private void moveDestinationTo(double latitude, double longitude) {
         List<Overlay> mapOverlays = mapView.getOverlays();
         GeoPoint returnValue = new GeoPoint((int) (latitude * 1E6), 
                                             (int) (longitude * 1E6));
@@ -86,33 +114,21 @@ implements LocationListener {
                 "Location To Set Off Alarm");
         mItemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(mItemizedOverlay);
+        moveMapTo(returnValue);
+    }
 
+    private void moveMapTo(double latitude, double longitude) {
+        GeoPoint location = new GeoPoint((int) (latitude * 1E6), 
+                                            (int) (longitude * 1E6));
+        moveMapTo(location);
+    }
+
+    private void moveMapTo(GeoPoint location) {
         MapController mc = mapView.getController();
-        mc.animateTo(returnValue);
+        mc.animateTo(location);
     }
     
-    private GeoPoint getSearchLocation(String address, boolean moveMap) {
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
-        GeoPoint returnValue = new GeoPoint(0,0);
-        try {
-            List<Address> locations = geoCoder.getFromLocationName(
-                    address, 5);
-            if (locations.size() > 0) {
-                returnValue = new GeoPoint(
-                        (int) (locations.get(0).getLatitude() * 1E6), 
-                        (int) (locations.get(0).getLongitude() * 1E6));
-                //         mapView.invalidate();
-            }    
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (moveMap) {
-            MapController mc = mapView.getController(); 
-            mc.animateTo(returnValue);
-        }
-        return returnValue;
-
-    }
+        
 
     private GeoPoint getCurrentLocation(boolean moveMap) {
         GeoPoint returnValue = new GeoPoint(0,0);
@@ -172,25 +188,99 @@ implements LocationListener {
     @Override
     public boolean onSearchRequested() {
         Log.d(LOG_NAME, "Searching");
-
-        // Now call the Activity member function that invokes the Search Manager UI.
         startSearch(null, false, null, false);
-        
-        // Returning true indicates that we did launch the search, instead of blocking it.
         return true;
     }
     
-    protected void onActivityResult (int requestCode,
-            int resultCode, Intent data) {
-        Log.d(LOG_NAME, "onActivityResult(" + requestCode + ", " + resultCode + ", " + data.toString());
-            String latLongString = data.getAction();
+    private void resultsDialog(String searchTerm) {
+        mResults = getSearchLocations(searchTerm);
+        Dialog dialog = new Dialog(mContext);
+        dialog.setContentView(R.layout.search_list);
+        Log.d(LOG_NAME, "content view is set");
 
-            String tempStrings[] = latLongString.split(",");
-            String latString = tempStrings[0];
-            String longString = tempStrings[1];
-            double latDbl = Double.valueOf(latString.trim()).doubleValue();
-            double longDbl = Double.valueOf(longString.trim()).doubleValue();
+        ListView list = (ListView) dialog.findViewById(R.id.result_list);
+        Log.d(LOG_NAME, "using list " + list.toString());
+        list.setAdapter(new SearchListAdapter(this));
+        list.setOnItemClickListener(mResultClickListener);
+        Log.d(LOG_NAME, "adapter is set");
+
+        dialog.setTitle("Location");
         
+        Log.d(LOG_NAME, "About to show dialog");
+        dialog.show();
+        Log.d(LOG_NAME, "Dialog shown");
+    }
+    
+    private List<Address> getSearchLocations(String address) {
+        Log.d(LOG_NAME, "getSearchLocations");
+        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
+        List<Address> locations = null;
+        try {
+            locations = geoCoder.getFromLocationName(address, 5);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        for (int i = 0; i < locations.size(); i++) {
+            Log.d(LOG_NAME, "Location " + i + ": " + locations.get(i).toString());
+        }
+        return locations;
+
+    }
+    
+    private OnItemClickListener mResultClickListener = new AdapterView.OnItemClickListener() {
+        @Override
+        public void onItemClick(AdapterView<?> parent, View view, int position,
+                long id) {
+            Log.d(LOG_NAME, "onItemClick(" + parent + ", " + view + ", " + position + ", " + id + ")");
+//          Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+//          i.putExtra("rowid", position + 1);
+//          Log.d(LOG_NAME, "About to start activity");
+//          startActivity(i);
+            
+        }
+    };
+    
+    private class SearchListAdapter extends BaseAdapter {
+        public SearchListAdapter(Context context) {
+            Log.d(LOG_NAME, "LocListAdapter constructor");
+        }
+
+        public int getCount() {
+            Log.d(LOG_NAME, "getCount()");
+            return mResults.size();
+        }
+
+        public Object getItem(int position) {
+            return position;
+        }
+
+        public long getItemId(int position) {
+            return position;
+        }
+
+        public View getView(int position, View convertView, ViewGroup parent) {
+            Log.d(LOG_NAME, "getView(" + position + ")");
+            View row;
+            
+            if (null == convertView) {
+                Log.d(LOG_NAME, "is null");
+                row = mInflater.inflate(R.layout.search_list_entry, null);
+            } else {
+                Log.d(LOG_NAME, "not null");
+                row = convertView;
+            }
+            Address result = mResults.get(position);
+            TextView tv = (TextView) row.findViewById(R.id.searchListLine0);
+            tv.setText(result.getAddressLine(0));
+            tv = (TextView) row.findViewById(R.id.searchListLine1);
+            tv.setText(result.getAddressLine(1));
+            tv = (TextView) row.findViewById(R.id.searchListLine2);
+            tv.setText(result.getAddressLine(2));
+            
+            Log.d(LOG_NAME, "end getView(" + position + ")");
+            
+            return row;
+        }
     }
 
     public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {

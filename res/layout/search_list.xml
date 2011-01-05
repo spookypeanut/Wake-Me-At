@@ -22,7 +22,7 @@
     android:layout_width="wrap_content"
     android:layout_height="wrap_content">
     <ListView 
-        android:id="@android:id/list"
+        android:id="@+id/result_list"
         android:layout_width="fill_parent"
         android:layout_height="fill_parent" />
 </LinearLayout>
