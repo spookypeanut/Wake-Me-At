@@ -39,6 +39,9 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -66,6 +69,7 @@ implements LocationListener {
     Context mContext;
     MapOverlay mItemizedOverlay;
     GeoPoint mDest;
+    double mOrigLat, mOrigLong;
     LayoutInflater mInflater;
     private List<Address> mResults;
     Dialog mResultsDialog;
@@ -82,13 +86,13 @@ implements LocationListener {
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
 
         Bundle extras = this.getIntent().getExtras();
-        double latitude = extras.getDouble("latitude");
-        double longitude = extras.getDouble("longitude");
+        mOrigLat = extras.getDouble("latitude");
+        mOrigLong = extras.getDouble("longitude");
 
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
 
-        moveDestinationTo(latitude, longitude);
+        moveDestinationTo(mOrigLat, mOrigLong);
     }
 
     @Override
@@ -124,12 +128,35 @@ implements LocationListener {
     }
 
     private void moveMapTo(GeoPoint location) {
-        MapController mc = mapView.getController();
-        mc.animateTo(location);
+        if (location != null) {
+            Log.d(LOG_NAME, "moving to " + location.getLatitudeE6() + ", " + location.getLongitudeE6());
+            MapController mc = mapView.getController();
+            mc.animateTo(location);
+        } else {
+            Log.e(LOG_NAME, "Location to move to was null");
+        }
     }
     
-        
-
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mn_get_location_map, menu);
+        return true;
+    }
+    
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+        case R.id.mn_orig_loc:
+            moveMapTo(mOrigLat, mOrigLong);
+            return true;
+        case R.id.mn_search:
+            onSearchRequested();
+            return true;
+        default:
+            return super.onOptionsItemSelected(item);
+        }
+    }
+    
     private GeoPoint getCurrentLocation(boolean moveMap) {
         GeoPoint returnValue = new GeoPoint(0,0);
         LocationManager locMan;
