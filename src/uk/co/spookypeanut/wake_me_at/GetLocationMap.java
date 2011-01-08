@@ -159,6 +159,9 @@ implements LocationListener {
         case R.id.mn_search:
             onSearchRequested();
             return true;
+        case R.id.mn_curr_loc:
+            moveMapTo(getCurrentLocation());
+            return true;
         case R.id.mn_satellite:
             toggleMapMode();
             return true;
@@ -167,7 +170,7 @@ implements LocationListener {
         }
     }
     
-    private GeoPoint getCurrentLocation(boolean moveMap) {
+    private GeoPoint getCurrentLocation() {
         GeoPoint returnValue = new GeoPoint(0,0);
         LocationManager locMan;
         locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
@@ -189,10 +192,7 @@ implements LocationListener {
         }
         returnValue = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
                 (int) (currentLocation.getLongitude() * 1E6));
-        if (moveMap) {
-            MapController mc = mapView.getController(); 
-            mc.animateTo(returnValue);
-        }
+
         locMan.removeUpdates(this);
         return returnValue;
     }
