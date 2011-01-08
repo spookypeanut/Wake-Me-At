@@ -34,6 +34,7 @@ import android.view.ContextMenu.ContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -41,8 +42,6 @@ public class WakeMeAt extends ListActivity {
     private DatabaseManager db;
     private LayoutInflater mInflater;
 
-    public static final int MN_CONTEXT_DELETE = 0;
-    
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mn_wake_me_at, menu);
@@ -66,7 +65,7 @@ public class WakeMeAt extends ListActivity {
     
     protected void newLocation () {
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-        i.putExtra("rowid", -1);
+        i.putExtra("rowId", -1);
         //Log.d(LOG_NAME, "About to start activity");
         startActivity(i);
     }
