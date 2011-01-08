@@ -73,6 +73,7 @@ implements LocationListener {
     LayoutInflater mInflater;
     private List<Address> mResults;
     Dialog mResultsDialog;
+    boolean mSatellite = false;
     
     @Override
     public void onCreate(Bundle icicle) {
@@ -84,7 +85,7 @@ implements LocationListener {
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
-
+        mapView.setSatellite(mSatellite);
         Bundle extras = this.getIntent().getExtras();
         mOrigLat = extras.getDouble("latitude");
         mOrigLong = extras.getDouble("longitude");
@@ -107,6 +108,12 @@ implements LocationListener {
           String query = intent.getStringExtra(SearchManager.QUERY);
           resultsDialog(query);
         }
+    }
+    
+    private void toggleMapMode() {
+        // TODO: Switch the name on the menu too
+        mSatellite = !mSatellite;
+        mapView.setSatellite(mSatellite);
     }
     
     private void moveDestinationTo(double latitude, double longitude) {
@@ -151,6 +158,9 @@ implements LocationListener {
             return true;
         case R.id.mn_search:
             onSearchRequested();
+            return true;
+        case R.id.mn_satellite:
+            toggleMapMode();
             return true;
         default:
             return super.onOptionsItemSelected(item);
