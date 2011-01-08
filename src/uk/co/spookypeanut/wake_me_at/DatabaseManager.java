@@ -165,6 +165,7 @@ public class DatabaseManager
     public void setProvider(long rowId, String provider) {
         setDatumS(rowId, TABLE_ROW_PROV, provider);
     }
+    
     public float getRadius(long rowId) {
         return Float.valueOf(getDatumS(rowId, TABLE_ROW_RADIUS));
     }
@@ -173,6 +174,36 @@ public class DatabaseManager
         setDatumF(rowId, TABLE_ROW_RADIUS, radius);
     }
 
+    public ArrayList<Long> getIdsAsList() {
+        ArrayList<Long> returnList = new ArrayList<Long>();
+        Cursor cursor;
+
+        try {
+            cursor = db.query (
+                    TABLE_NAME,
+                    new String[] {TABLE_ROW_ID},
+                    null, null, null,
+                    null, null, null
+            );
+            cursor.moveToFirst();
+
+            // if there is data available after the cursor's pointer, add
+            // it to the ArrayList that will be returned by the method.
+            if (!cursor.isAfterLast()) {
+                do {
+                    returnList.add(cursor.getLong(0));
+                }
+                while (cursor.moveToNext());
+            }
+            cursor.close();
+        }
+        catch (SQLException e) {
+            Log.e("DB ERROR", e.toString());
+            e.printStackTrace();
+        }
+        return returnList;
+    }
+    
     public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
         // I would recommend creating a JavaBean compliant object 
