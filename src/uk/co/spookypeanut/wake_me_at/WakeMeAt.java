@@ -41,6 +41,7 @@ public class WakeMeAt extends ListActivity {
     public final String LOG_NAME = "WakeMe@";
     private DatabaseManager db;
     private LayoutInflater mInflater;
+    private LocListAdapter mLocListAdapter;
 
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -50,10 +51,9 @@ public class WakeMeAt extends ListActivity {
     
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle item selection
         switch (item.getItemId()) {
         case R.id.mn_new_loc:
-            newLocation();
+            mLocListAdapter.addItem();
             return true;
         case R.id.mn_quit:
             Log.wtf(LOG_NAME, "Unimplemented");
@@ -63,12 +63,6 @@ public class WakeMeAt extends ListActivity {
         }
     }
     
-    protected void newLocation () {
-        Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-        i.putExtra("rowId", -1);
-        //Log.d(LOG_NAME, "About to start activity");
-        startActivity(i);
-    }
     
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
@@ -93,12 +87,20 @@ public class WakeMeAt extends ListActivity {
       switch (item.getItemId()) {
       case R.id.mn_delete_loc:
           Log.d(LOG_NAME, "Delete item selected: " + info.position);
+          mLocListAdapter.deleteItem(info.position);
         return true;
       case R.id.mn_start:
         return true;
       default:
         return super.onContextItemSelected(item);
       }
+    }
+    
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mLocListAdapter.notifyDataSetChanged();
+        
     }
     
     protected void onCreate(Bundle savedInstanceState) {
@@ -117,6 +119,8 @@ public class WakeMeAt extends ListActivity {
 
         ListView lv = getListView(); 
         registerForContextMenu(lv);
+        
+        mLocListAdapter = (LocListAdapter) getListAdapter();
 
         Log.d(LOG_NAME, "End onCreate()");
     }
@@ -124,7 +128,18 @@ public class WakeMeAt extends ListActivity {
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
         }
-
+        
+        public void deleteItem(int position) {
+            db.deleteRow(getListAdapter().getItemId(position));
+            this.notifyDataSetChanged();
+        }
+        
+        public void addItem() {
+            Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+            i.putExtra("rowId", (long) -1);
+            startActivity(i);
+        }
+        
         public int getCount() {
             Log.d(LOG_NAME, "getCount()");
             return db.getRowCount();
@@ -132,15 +147,17 @@ public class WakeMeAt extends ListActivity {
         }
 
         public Object getItem(int position) {
-            return position;
+            Log.d(LOG_NAME, "this.getItem(position).toString();");
+            return getItemId(position);
         }
 
         public long getItemId(int position) {
-            return position;
+            return db.getIdsAsList().get(position);
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "getView(" + position + ")");
+            long id = db.getIdsAsList().get(position);
+            Log.d(LOG_NAME, "getView(" + id + ")");
             View row;
             
             if (null == convertView) {
@@ -153,11 +170,11 @@ public class WakeMeAt extends ListActivity {
             Log.d(LOG_NAME, "row = " + row.toString());
             
             TextView tv = (TextView) row.findViewById(R.id.locListName);
-            tv.setText(db.getNick(position + 1));
+            tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
-            tv.setText(db.getProvider(position + 1));
-            Log.d(LOG_NAME, "end getView(" + position + ")");
+            tv.setText(db.getProvider(id));
+            Log.d(LOG_NAME, "end getView(" + id + ")");
             return row;
         }
     }
