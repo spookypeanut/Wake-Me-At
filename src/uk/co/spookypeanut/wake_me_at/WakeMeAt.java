@@ -87,6 +87,20 @@ public class WakeMeAt extends ListActivity {
       inflater.inflate(R.menu.mn_context_wake_me_at, menu);
     }
     
+    @Override
+    public boolean onContextItemSelected(MenuItem item) {
+      AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
+      switch (item.getItemId()) {
+      case R.id.mn_delete_loc:
+          Log.d(LOG_NAME, "Delete item selected: " + info.position);
+        return true;
+      case R.id.mn_start:
+        return true;
+      default:
+        return super.onContextItemSelected(item);
+      }
+    }
+    
     protected void onCreate(Bundle savedInstanceState) {
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
