@@ -1,6 +1,6 @@
 Alarm pops open a separate intent
-Menu on map:
-    Allow switching to satellite view
-    Get current location
-    Search
-    
+A "tracking" view
+    - point the direction
+    - countdown distance
+    - allow switching location provider
+    - display destination, radius, etc
