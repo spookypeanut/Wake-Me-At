@@ -1,3 +1,6 @@
 Alarm pops open a separate intent
-Allow switching to satellite view
-Pop up a list of alternatives when searching
+Menu on map:
+    Allow switching to satellite view
+    Get current location
+    Search
+    
