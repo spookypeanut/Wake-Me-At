@@ -13,9 +13,7 @@ import android.util.Log;
 public class DatabaseManager
 {
     private SQLiteDatabase db;
-    // TODO: Why can't I refer to R.string here?
-    public final String LOG_NAME = "WakeMe@"; 
-//    public final String LOG_NAME = (String) WakeMeAt.getContext().getText(R.string.app_name_nospaces);
+    public final String LOG_NAME = WakeMeAt.LOG_NAME;
 
     private final String DB_NAME = "WakeMeAtDB";
     private final int DB_VERSION = 2;

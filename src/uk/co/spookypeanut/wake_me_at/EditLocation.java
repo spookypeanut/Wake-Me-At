@@ -46,7 +46,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class EditLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = "WakeMe@";
+    public final String LOG_NAME = WakeMeAt.LOG_NAME;
     
     public static final int NICKDIALOG = 0;
     public static final int RADIUSDIALOG = 1;

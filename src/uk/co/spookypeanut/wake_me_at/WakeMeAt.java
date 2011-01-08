@@ -38,11 +38,11 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = "WakeMe@";
+    public static String LOG_NAME;
     private DatabaseManager db;
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
-
+    
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mn_wake_me_at, menu);
@@ -104,6 +104,8 @@ public class WakeMeAt extends ListActivity {
     }
     
     protected void onCreate(Bundle savedInstanceState) {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);

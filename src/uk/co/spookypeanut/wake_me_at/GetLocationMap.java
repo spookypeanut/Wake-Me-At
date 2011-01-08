@@ -47,7 +47,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.android.maps.GeoPoint;
@@ -62,7 +61,7 @@ import com.google.android.maps.OverlayItem;
 public class GetLocationMap extends MapActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = "WakeMe@";
+    public final String LOG_NAME = WakeMeAt.LOG_NAME;
     MapView mapView;
     Context mContext;
     MapOverlay mItemizedOverlay;
