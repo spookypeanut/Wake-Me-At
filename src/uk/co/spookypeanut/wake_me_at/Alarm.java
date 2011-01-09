@@ -104,7 +104,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
         "end of wakeup message ID");
         
-        mTts.speak(getText(R.string.alarmTitle).toString(), TextToSpeech.QUEUE_FLUSH, myHashAlarm);
+        // mTts.speak(getText(R.string.alarmTitle).toString(), TextToSpeech.QUEUE_FLUSH, myHashAlarm);
     }
     
 
