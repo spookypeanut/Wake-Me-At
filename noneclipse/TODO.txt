@@ -4,3 +4,8 @@ A "tracking" view
     - countdown distance
     - allow switching location provider
     - display destination, radius, etc
+Multiple location services at once
+    - indication on main list if it's running
+Edit location:
+    - big indicator of if a service is running
+    - stop button only enabled if service running (and vv)
