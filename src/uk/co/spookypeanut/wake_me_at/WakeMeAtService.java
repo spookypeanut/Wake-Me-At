@@ -230,11 +230,10 @@ public class WakeMeAtService extends Service implements LocationListener {
         mDistanceAway = location.distanceTo(mFinalDestination);
         
         // message is, e.g. You are 200m from Welwyn North
-        String message = getText(R.string.notif_a).toString() +
-                roundToDecimals(mDistanceAway, 2) +
-                getText(R.string.unit).toString() +
-                getText(R.string.notif_b).toString() + 
-                mNick;
+        String message = String.format(getString(R.string.notif_full),
+                            roundToDecimals(mDistanceAway, 2),
+                            getText(R.string.unit).toString(),
+                            mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mDistanceAway < mRadius) {
