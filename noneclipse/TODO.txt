@@ -6,6 +6,9 @@ A "tracking" view
     - display destination, radius, etc
 Multiple location services at once
     - indication on main list if it's running
-Edit location:
-    - big indicator of if a service is running
-    - stop button only enabled if service running (and vv)
+    Edit location:
+        - big indicator of if a service is running
+        - stop button only enabled if service running (and vv)
+Change icon
+Enable different units
+    - have different magnitudes (e.g. km, miles, etc)
