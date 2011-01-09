@@ -105,8 +105,8 @@ public class WakeMeAt extends ListActivity {
     
     protected void onCreate(Bundle savedInstanceState) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
-
         Log.d(LOG_NAME, "Start onCreate()");
+
         super.onCreate(savedInstanceState);
         
         UnitConverter myconverter = new UnitConverter();
@@ -149,13 +149,11 @@ public class WakeMeAt extends ListActivity {
         }
         
         public int getCount() {
-            Log.d(LOG_NAME, "getCount()");
             return db.getRowCount();
             
         }
 
         public Object getItem(int position) {
-            Log.d(LOG_NAME, "this.getItem(position).toString();");
             return getItemId(position);
         }
 
@@ -165,24 +163,21 @@ public class WakeMeAt extends ListActivity {
 
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
-            Log.d(LOG_NAME, "getView(" + id + ")");
+            //Log.d(LOG_NAME, "getView(" + id + ")");
             View row;
             
             if (null == convertView) {
-                Log.d(LOG_NAME, "is null");
                 row = mInflater.inflate(R.layout.wma_list_entry, null);
             } else {
-                Log.d(LOG_NAME, "not null");
                 row = convertView;
             }
-            Log.d(LOG_NAME, "row = " + row.toString());
+            //Log.d(LOG_NAME, "row = " + row.toString());
             
             TextView tv = (TextView) row.findViewById(R.id.locListName);
             tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
             tv.setText(db.getProvider(id));
-            Log.d(LOG_NAME, "end getView(" + id + ")");
             return row;
         }
     }
