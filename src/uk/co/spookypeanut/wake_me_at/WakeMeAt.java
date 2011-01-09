@@ -42,6 +42,7 @@ public class WakeMeAt extends ListActivity {
     private DatabaseManager db;
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
+    private Context mContext;
     
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -90,6 +91,8 @@ public class WakeMeAt extends ListActivity {
           mLocListAdapter.deleteItem(info.position);
         return true;
       case R.id.mn_start:
+          mLocListAdapter.startService(info.position);
+
         return true;
       default:
         return super.onContextItemSelected(item);
@@ -108,12 +111,8 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
 
         super.onCreate(savedInstanceState);
-        
-        UnitConverter uc = new UnitConverter(this, 1);
-        Log.d(LOG_NAME, "2 m to ft: " + uc.out(2));
-        Log.d(LOG_NAME, ".1m to ft: " + uc.out(.1));
+        mContext = this;
 
-        
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         Log.d(LOG_NAME, "DatabaseManager");
@@ -135,6 +134,13 @@ public class WakeMeAt extends ListActivity {
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
+        }
+        
+        public void startService(int position) {
+            Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
+            intent.setClass(WakeMeAt.this, WakeMeAtService.class);
+            intent.putExtra("rowId", getListAdapter().getItemId(position));
+            mContext.startService(intent);
         }
         
         public void deleteItem(int position) {
