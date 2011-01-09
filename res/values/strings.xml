@@ -18,17 +18,23 @@
  <string name="app_name_nospaces">WakeMe@</string>
  
  <string name="get_loc_button_name">Get location...</string>
- <string name="get_loc_map_button_name">Get location from map...</string>
+ <string name="get_loc_map_button_name">Find location...</string>
  <string name="map_name">Select location</string>
  <string name="get_loc_layout_name">Select location</string>
+ 
  <string name="uselocationbutton">Use this</string>
  <string name="dontuselocationbutton">Try again</string>
 
-<string name="foreground_service_started">Wake Me At service started</string>
-<string name="notif_pre">You are&#160;</string><string name="start_button_name">Start Service</string>
+<string name="start_button_name">Start Service</string>
 <string name="stop_button_name">Stop Service</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
-<string name="notif_post">m away</string>
+
+<string name="notif_a">You are&#160;</string>
+<string name="notif_b">&#160;away from&#160;</string>
+
+<string name="unit">m</string>
+
+<string name="foreground_service_started">Wake Me At service started</string>
 <string name="foreground_service_stopped">Wake Me At service stopped</string>
 <string name="alert_dialog_cancel">Cancel</string>
 <string name="alert_dialog_ok">OK</string>
@@ -41,8 +47,6 @@
 <string name="mn_orig_loc">Original Location</string>
 <string name="mn_curr_loc">My Location</string>
 <string name="mn_search">Search</string>
-
-
 
 <string name="search_label">WakeMe@ Search</string>
 <string name="search_hint">Search map</string>
