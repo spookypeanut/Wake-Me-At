@@ -28,11 +28,13 @@ public class WakeMeAtService extends Service implements LocationListener {
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
     
+    private DatabaseManager db;
+    
     private long mRowId;
-    private double mRadius = -1.0;
+    private double mRadius;
     private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
-    private String mProvider = "";
+    private String mProvider;
     
     private LocationManager locationManager;
     private NotificationManager mNM;
@@ -90,6 +92,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        db = new DatabaseManager(this);
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
@@ -108,10 +111,10 @@ public class WakeMeAtService extends Service implements LocationListener {
         Bundle extras = intent.getExtras();
 
         mRowId = extras.getLong("rowId");
-        mFinalDestination.setLatitude(extras.getDouble("latitude"));
-        mFinalDestination.setLongitude(extras.getDouble("longitude"));
-        mRadius = extras.getFloat("radius");
-        mProvider = extras.getString("provider");
+        mFinalDestination.setLatitude(db.getLatitude(mRowId));
+        mFinalDestination.setLongitude(db.getLongitude(mRowId));
+        mRadius = db.getRadius(mRowId);
+        mProvider = db.getProvider(mRowId);
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         Log.d(LOG_NAME,
             "Passed latlong: " + mFinalDestination.getLatitude() +

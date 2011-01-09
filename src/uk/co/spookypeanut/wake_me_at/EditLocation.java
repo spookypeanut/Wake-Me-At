@@ -92,10 +92,6 @@ public class EditLocation extends Activity {
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(EditLocation.this, WakeMeAtService.class);
             intent.putExtra("rowId", mRowId);
-            intent.putExtra("latitude", mLatitude);
-            intent.putExtra("longitude", mLongitude);
-            intent.putExtra("radius", mRadius);
-            intent.putExtra("provider", mLocProv);
             startService(intent);
         }
     };
