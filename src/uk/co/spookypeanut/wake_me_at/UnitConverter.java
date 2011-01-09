@@ -18,29 +18,65 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-import java.util.HashMap;
-import java.util.Map;
-
 import android.content.Context;
+import android.content.res.Resources;
 
 public class UnitConverter
 {
-    Map <String, Double> mValues = new HashMap<String, Double>();
-    Map <String, String> mAbbrev = new HashMap<String, String>();
+    Context mContext;
+    Resources mRes;
     
-    public UnitConverter() {
+    int mUnit;
 
-        
-        String unit = "Metres";
-        mValues.put(unit, 1.0);
-        mAbbrev.put(unit, "m");
-        
-        unit = "Feet";
-        mValues.put(unit, 0.3048);
-        mAbbrev.put(unit, "ft");
+    String[] mNames;
+    double[] mValues;
+    String[] mAbbrevs;
+    
+    String mName;
+    double mValue;
+    String mAbbrev;
+    
+    static final int DP = 2;
+    
+    private double[] stringArrayToDoubleArray(String[] inputArray) {
+        double[] returnArray = new double[inputArray.length];
+        int i;
+        for(i=0; i < inputArray.length; i++) {
+            returnArray[i] = Double.valueOf(inputArray[i]);
+        }
+        return returnArray;
     }
     
-    public double convert(double value, String sourceUnit, String destUnit) {
-        return value * mValues.get(sourceUnit) / mValues.get(destUnit);
+    public UnitConverter(Context context, int unit) {
+        this.mContext = context;
+        mRes = mContext.getResources();
+
+        mNames = mRes.getStringArray(R.array.unit_names);
+        mValues = stringArrayToDoubleArray(mRes.getStringArray(R.array.unit_values));
+        mAbbrevs = mRes.getStringArray(R.array.unit_abbrevs);
+
+        switchUnit(unit);
+    }
+    
+    public String out(double value) {
+        // 0 is always metres (used internally)
+        return "" + roundToDecimals(convert(value, 0, mUnit), DP) + mAbbrev;
+    }
+    
+    public void switchUnit(int unit) {
+        mUnit = unit;
+
+        mName = mNames[unit];
+        mValue = mValues[unit];
+        mAbbrev = mAbbrevs[unit];
+    }
+    
+    public static double roundToDecimals(double d, int c) {
+        int temp = (int) (d * Math.pow(10, c));
+        return (double) temp / Math.pow(10, c);
+    }
+    
+    public double convert(double value, int sourceUnit, int destUnit) {
+        return value * mValues[sourceUnit] / mValues[destUnit];
     }
 }
