@@ -201,8 +201,10 @@ public class EditLocation extends Activity {
         }
     }
 
-    protected void onCreate(Bundle savedInstanceState) {
+    protected void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "EditLocation.onCreate");
+        super.onCreate(icicle);
+
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
         Button button;
@@ -219,7 +221,6 @@ public class EditLocation extends Activity {
             editor.commit();
         }
 
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.edit_location);
 
         button = (Button)findViewById(R.id.nickButton);
