@@ -56,7 +56,7 @@ public class WakeMeAt extends ListActivity {
             mLocListAdapter.addItem();
             return true;
         case R.id.mn_quit:
-            Log.wtf(LOG_NAME, "Unimplemented");
+            finish();
             return true;
         default:
             return super.onOptionsItemSelected(item);
