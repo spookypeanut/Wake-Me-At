@@ -22,6 +22,11 @@ public class WakeMeAtService extends Service implements LocationListener {
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
 
     private static final int ALARMNOTIFY_ID = 1;
+    
+    private final int SMALLALERT = 1;
+    private final int BIGALERT = 2;
+    
+    private final int ALARMTYPE = SMALLALERT;
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
@@ -31,6 +36,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private DatabaseManager db;
     
     private long mRowId;
+    private String mNick;
     private double mRadius;
     private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
@@ -111,6 +117,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Bundle extras = intent.getExtras();
 
         mRowId = extras.getLong("rowId");
+        mNick = db.getNick(mRowId);
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
         mRadius = db.getRadius(mRowId);
@@ -203,9 +210,13 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         mDistanceAway = location.distanceTo(mFinalDestination);
-        String message = getText(R.string.notif_pre).toString() +
+        
+        // message is, e.g. You are 200m from Welwyn North
+        String message = getText(R.string.notif_a).toString() +
                 roundToDecimals(mDistanceAway, 2) +
-                getText(R.string.notif_post).toString();
+                getText(R.string.unit).toString() +
+                getText(R.string.notif_b).toString() + 
+                mNick;
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mDistanceAway < mRadius) {
@@ -214,17 +225,21 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
 
     public void soundAlarm() {
-        Context context = getApplicationContext();
-        CharSequence contentTitle = "Approaching destination";
-        CharSequence contentText = "Approaching destination" + mDistanceAway;
-        
-        Intent notificationIntent = new Intent(this, EditLocation.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-        mNotification.defaults |= Notification.DEFAULT_SOUND;
-        mNotification.defaults |= Notification.DEFAULT_VIBRATE;
-        
-        mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-        mNM.notify(ALARMNOTIFY_ID, mNotification);
+        if (ALARMTYPE == SMALLALERT) {
+            Context context = getApplicationContext();
+            CharSequence contentTitle = "Approaching destination";
+            CharSequence contentText = "Approaching destination" + mDistanceAway;
+            
+            Intent notificationIntent = new Intent(this, EditLocation.class);
+            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+            mNotification.defaults |= Notification.DEFAULT_SOUND;
+            mNotification.defaults |= Notification.DEFAULT_VIBRATE;
+            
+            mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+            mNM.notify(ALARMNOTIFY_ID, mNotification);
+        } else if (ALARMTYPE == BIGALERT) {
+            
+        }
     }
     
     public static double roundToDecimals(double d, int c) {
