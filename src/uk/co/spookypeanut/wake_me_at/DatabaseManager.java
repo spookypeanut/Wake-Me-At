@@ -43,7 +43,8 @@ public class DatabaseManager
     private final String TABLE_ROW_LONG = "table_row_long";
     private final String TABLE_ROW_PROV = "table_row_prov";
     private final String TABLE_ROW_RADIUS = "table_row_radius";
-
+    private final String TABLE_ROW_UNIT = "table_row_unit";
+    
     Context context;
 
 
@@ -59,7 +60,7 @@ public class DatabaseManager
     }
     
     public long addRow(String rowNick, double rowLat, double rowLong,
-                       String rowProv, float rowRadius) {
+                       String rowProv, float rowRadius, int rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -67,6 +68,7 @@ public class DatabaseManager
         values.put(TABLE_ROW_LONG, rowLong);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
+        values.put(TABLE_ROW_UNIT, rowUnit);
         long rowId;
         try {
             rowId = db.insert(TABLE_NAME, null, values);
@@ -90,7 +92,7 @@ public class DatabaseManager
     }
 
     public void updateRow(long rowId, String rowNick, double rowLat, double rowLong,
-                          String rowProv, float rowRadius) {
+                          String rowProv, float rowRadius, int rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -98,6 +100,7 @@ public class DatabaseManager
         values.put(TABLE_ROW_LONG, rowLong);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
+        values.put(TABLE_ROW_UNIT, rowUnit);
         try {
             db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
         }
@@ -150,6 +153,10 @@ public class DatabaseManager
         setDatumS(rowId, column, Float.toString(value));
     }
 
+    public void setDatumI(long rowId, String column, int value) {
+        setDatumS(rowId, column, Integer.toString(value));
+    }
+    
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
@@ -189,6 +196,15 @@ public class DatabaseManager
     public void setRadius(long rowId, float radius) {
         setDatumF(rowId, TABLE_ROW_RADIUS, radius);
     }
+
+    public int getUnit(long rowId) {
+        return Integer.valueOf(getDatumS(rowId, TABLE_ROW_UNIT));
+    }
+
+    public void setUnit(long rowId, int unit) {
+        setDatumI(rowId, TABLE_ROW_UNIT, unit);
+    }
+
 
     public ArrayList<Long> getIdsAsList() {
         ArrayList<Long> returnList = new ArrayList<Long>();
@@ -233,7 +249,8 @@ public class DatabaseManager
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG,
-                            TABLE_ROW_PROV, TABLE_ROW_RADIUS },
+                            TABLE_ROW_PROV, TABLE_ROW_RADIUS,
+                            TABLE_ROW_UNIT},
                             TABLE_ROW_ID + "=" + rowId,
                             null, null, null, null, null
             );
@@ -286,7 +303,8 @@ public class DatabaseManager
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG,
-                            TABLE_ROW_PROV, TABLE_ROW_RADIUS},
+                            TABLE_ROW_PROV, TABLE_ROW_RADIUS,
+                            TABLE_ROW_UNIT},
                             null, null, null, null, null
             );
             cursor.moveToFirst();
@@ -341,7 +359,8 @@ public class DatabaseManager
             TABLE_ROW_LAT + " DOUBLE," +
             TABLE_ROW_LONG + " DOUBLE," +
             TABLE_ROW_PROV + " TEXT," +
-            TABLE_ROW_RADIUS + " FLOAT" +
+            TABLE_ROW_RADIUS + " FLOAT," +
+            TABLE_ROW_UNIT + " INTEGER" +
             ");";
             db.execSQL(newTableQueryString);
         }
