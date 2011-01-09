@@ -22,7 +22,7 @@
     <item android:id="@+id/mn_new_loc"
           android:icon="@android:drawable/ic_menu_add"
           android:title="@string/mn_new_loc" />
-    <item android:id="@+id/mn_quit"
+    <item android:id="@+id/mn_stop_all"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
-          android:title="@string/mn_quit" />
+          android:title="@string/mn_stop_all" />
 </menu>

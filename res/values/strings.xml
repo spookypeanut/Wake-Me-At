@@ -41,6 +41,7 @@
 <string name="mn_new_loc">New location</string>
 <string name="mn_quit">Quit</string>
 
+<string name="mn_stop_all">Cancel alarm</string>
 <string name="mn_map">Map Mode</string>
 <string name="mn_satellite">Satellite Mode</string>
 <string name="mn_orig_loc">Original Location</string>

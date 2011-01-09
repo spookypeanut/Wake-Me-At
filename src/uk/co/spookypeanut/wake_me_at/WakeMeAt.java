@@ -55,8 +55,8 @@ public class WakeMeAt extends ListActivity {
         case R.id.mn_new_loc:
             mLocListAdapter.addItem();
             return true;
-        case R.id.mn_quit:
-            finish();
+        case R.id.mn_stop_all:
+            stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
             return true;
         default:
             return super.onOptionsItemSelected(item);
