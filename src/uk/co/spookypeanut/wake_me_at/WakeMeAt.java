@@ -108,6 +108,12 @@ public class WakeMeAt extends ListActivity {
 
         Log.d(LOG_NAME, "Start onCreate()");
         super.onCreate(savedInstanceState);
+        
+        UnitConverter myconverter = new UnitConverter();
+        Log.d(LOG_NAME, "2 feet to metres: " + myconverter.convert(2, "Feet", "Metres"));
+        Log.d(LOG_NAME, "2 metres to feet: " + myconverter.convert(2, "Metres", "Feet"));
+
+        
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         Log.d(LOG_NAME, "DatabaseManager");
