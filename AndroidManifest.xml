@@ -45,6 +45,9 @@
 <activity android:name="EditLocation">
  </activity>
 
+<activity android:name="Alarm">
+ </activity>
+ 
 <activity
     android:theme="@android:style/Theme.Dialog"
     android:icon="@drawable/x"

@@ -44,7 +44,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private final int SMALLALERT = 1;
     private final int BIGALERT = 2;
     
-    private final int ALARMTYPE = SMALLALERT;
+    private final int ALARMTYPE = BIGALERT;
 
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
@@ -261,7 +261,9 @@ public class WakeMeAtService extends Service implements LocationListener {
             mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
             mNM.notify(ALARMNOTIFY_ID, mNotification);
         } else if (ALARMTYPE == BIGALERT) {
-            
+            Intent i = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+            i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            startActivity(i);
         }
     }
     // TODO: Really, this should be in the unit converter (it should just pass a string back)

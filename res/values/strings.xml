@@ -48,6 +48,8 @@
 <string name="mn_curr_loc">My Location</string>
 <string name="mn_search">Search</string>
 
+<string name="alarmTitle">Destination approaching</string>
+
 <string name="search_label">WakeMe@ Search</string>
 <string name="search_hint">Search map</string>
 <string name="search_prompt">Say a location name</string>
