@@ -22,6 +22,9 @@
       <TextView android:id="@+id/alarmTitle"
      android:layout_height="wrap_content" android:layout_width="wrap_content"
      android:text="@string/alarmTitle" />
+     <ImageView android:id="@+id/alarmMainImage"
+     android:layout_height="wrap_content" android:layout_width="wrap_content"
+     android:src="@drawable/at" />
  
  </LinearLayout>
 </ScrollView>
