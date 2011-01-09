@@ -283,7 +283,6 @@ implements LocationListener {
         }
 
         public int getCount() {
-            Log.d(LOG_NAME, "getCount()");
             return mResults.size();
         }
 
@@ -296,14 +295,12 @@ implements LocationListener {
         }
 
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "getView(" + position + ")");
+            //Log.d(LOG_NAME, "getView(" + position + ")");
             View row;
             
             if (null == convertView) {
-                Log.d(LOG_NAME, "is null");
                 row = mInflater.inflate(R.layout.search_list_entry, null);
             } else {
-                Log.d(LOG_NAME, "not null");
                 row = convertView;
             }
             Address result = mResults.get(position);
@@ -313,8 +310,7 @@ implements LocationListener {
             tv.setText(result.getAddressLine(1));
             tv = (TextView) row.findViewById(R.id.searchListLine2);
             tv.setText(result.getAddressLine(2));
-            
-            Log.d(LOG_NAME, "end getView(" + position + ")");
+           
             
             return row;
         }
