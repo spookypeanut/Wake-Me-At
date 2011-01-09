@@ -52,6 +52,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         boolean.class};
     
     private DatabaseManager db;
+    private UnitConverter uc;
     
     private long mRowId;
     private String mNick;
@@ -59,6 +60,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
     private String mProvider;
+    private int mUnit;
     
     private LocationManager locationManager;
     private NotificationManager mNM;
@@ -140,6 +142,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
         mRadius = db.getRadius(mRowId);
         mProvider = db.getProvider(mRowId);
+        mUnit = db.getUnit(mRowId);
+        
+        uc = new UnitConverter(this, mUnit);
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         Log.d(LOG_NAME,
             "Passed latlong: " + mFinalDestination.getLatitude() +
@@ -224,15 +229,16 @@ public class WakeMeAtService extends Service implements LocationListener {
     public IBinder onBind(Intent intent) {
         return null;
     }
-
+    
     @Override
     public void onLocationChanged(Location location) {
         mDistanceAway = location.distanceTo(mFinalDestination);
         
         // message is, e.g. You are 200m from Welwyn North
         String message = String.format(getString(R.string.notif_full),
-                            roundToDecimals(mDistanceAway, 2),
-                            getText(R.string.unit).toString(),
+                // TODO: this should be a string from UnitConverter
+                            roundToDecimals(uc.toUnit(mDistanceAway), 2),
+                            uc.getAbbrev(),
                             mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
@@ -258,7 +264,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             
         }
     }
-    
+    // TODO: Really, this should be in the unit converter (it should just pass a string back)
     public static double roundToDecimals(double d, int c) {
         int temp = (int) (d * Math.pow(10, c));
         return (double) temp / Math.pow(10, c);

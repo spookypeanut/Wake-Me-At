@@ -58,9 +58,21 @@ public class UnitConverter
         switchUnit(unit);
     }
     
+    public String getAbbrev() {
+        return mAbbrev;
+    }
+    
+    public double toMetres(double value) {
+        return convert(value, mUnit, 0);
+    }
+    
+    public double toUnit(double value) {
+        return convert(value, 0, mUnit);
+    }
+    
     public String out(double value) {
         // 0 is always metres (used internally)
-        return "" + roundToDecimals(convert(value, 0, mUnit), DP) + mAbbrev;
+        return "" + roundToDecimals(toUnit(value), DP) + mAbbrev;
     }
     
     public void switchUnit(int unit) {

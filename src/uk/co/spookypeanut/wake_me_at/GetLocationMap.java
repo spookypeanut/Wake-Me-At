@@ -74,6 +74,8 @@ implements LocationListener {
     private List<Address> mResults;
     Dialog mResultsDialog;
     boolean mSatellite = false;
+    Location mCurrLoc;
+    UnitConverter uc;
     
     @Override
     public void onCreate(Bundle icicle) {
@@ -81,6 +83,7 @@ implements LocationListener {
         super.onCreate(icicle);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
+        uc = new UnitConverter(this, 0);
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
@@ -160,7 +163,8 @@ implements LocationListener {
             onSearchRequested();
             return true;
         case R.id.mn_curr_loc:
-            moveMapTo(getCurrentLocation());
+            Location here = getCurrentLocation();
+            moveMapTo(here.getLatitude(), here.getLongitude());
             return true;
         case R.id.mn_satellite:
             toggleMapMode();
@@ -170,8 +174,14 @@ implements LocationListener {
         }
     }
     
-    private GeoPoint getCurrentLocation() {
-        GeoPoint returnValue = new GeoPoint(0,0);
+    private GeoPoint locationToGeoPoint(Location location) {
+        GeoPoint returnValue = new GeoPoint((int) (location.getLatitude() * 1E6), 
+                                            (int) (location.getLongitude() * 1E6));
+        return returnValue;
+    }
+    
+    private Location getCurrentLocation() {
+        Location currentLocation = new Location("");
         LocationManager locMan;
         locMan = (LocationManager) getSystemService(LOCATION_SERVICE);
         locMan.requestLocationUpdates(LocationManager.GPS_PROVIDER,
@@ -179,22 +189,20 @@ implements LocationListener {
         String provider = locMan.getBestProvider(new Criteria(), true);
         if (provider == null) {
             // TODO: do this properly 
-            return returnValue;
+            return currentLocation;
         }
         if(!locMan.isProviderEnabled(provider)){
             // TODO: do this properly 
-            return returnValue;
+            return currentLocation;
         }
-        Location currentLocation = locMan.getLastKnownLocation(provider);
+        currentLocation = locMan.getLastKnownLocation(provider);
+        locMan.removeUpdates(this);
+
         if(currentLocation == null){
             // TODO: do this properly 
-            return returnValue;
+            return currentLocation;
         }
-        returnValue = new GeoPoint((int) (currentLocation.getLatitude() * 1E6), 
-                (int) (currentLocation.getLongitude() * 1E6));
-
-        locMan.removeUpdates(this);
-        return returnValue;
+        return currentLocation;
     }
 
     @Override
@@ -280,6 +288,7 @@ implements LocationListener {
     private class SearchListAdapter extends BaseAdapter {
         public SearchListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
+            mCurrLoc = getCurrentLocation();
         }
 
         public int getCount() {
@@ -310,6 +319,11 @@ implements LocationListener {
             tv.setText(result.getAddressLine(1));
             tv = (TextView) row.findViewById(R.id.searchListLine2);
             tv.setText(result.getAddressLine(2));
+            tv = (TextView) row.findViewById(R.id.searchListDist);
+            Location resultAsLoc = new Location("");
+            resultAsLoc.setLatitude(result.getLatitude());
+            resultAsLoc.setLongitude(result.getLongitude());
+            tv.setText(uc.out(mCurrLoc.distanceTo(resultAsLoc)) + " away");
            
             
             return row;
