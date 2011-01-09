@@ -3,8 +3,10 @@ http://developer.android.com/index.html
 
 http://www.stackoverflow.com/
 http://groups.google.com/group/android-developers/
-http://www.anotherandroidblog.com/
 http://www.anddev.org/
+
+http://www.anotherandroidblog.com/2010/08/04/android-database-tutorial/
+http://www.tutorialforandroid.com/2009/09/using-official-texttospeech-in-android.html
 
 https://github.com/rux/colouredpaper
 http://feedspeak.googlecode.com
