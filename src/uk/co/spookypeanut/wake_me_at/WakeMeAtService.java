@@ -91,8 +91,6 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
 
-
-
         try {
             mStartForeground = getClass().getMethod("startForeground",
                     mStartForegroundSignature);
@@ -102,11 +100,6 @@ public class WakeMeAtService extends Service implements LocationListener {
             // Running on an older platform.
             mStartForeground = mStopForeground = null;
         }
-
-    }
-
-    @Override
-    public void onStart(Intent intent, int startId) {
     }
 
     @Override
@@ -146,11 +139,6 @@ public class WakeMeAtService extends Service implements LocationListener {
                 Toast.LENGTH_SHORT).show();
     }
 
-    public boolean stopService(Intent name) {
-        Log.d(LOG_NAME, "stopService()");
-        return super.stopService(name);
-      }
-
     public void registerLocationListener() {
         Log.d(LOG_NAME, "registerLocationListener()");
         if (locationManager == null) {
@@ -180,7 +168,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         locationManager.removeUpdates(this);
         Log.d(LOG_NAME,
             "Location listener is unregistered");
-      }
+    }
  
     void handleCommand(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
@@ -201,7 +189,6 @@ public class WakeMeAtService extends Service implements LocationListener {
                            text, mIntentOnSelect);
             
             startForegroundCompat(ALARMNOTIFY_ID, mNotification);
-            
         }
     }
     
@@ -221,7 +208,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         if (mDistanceAway < mRadius) {
             soundAlarm();
         }
-        
     }
 
     public void soundAlarm() {
@@ -236,30 +222,25 @@ public class WakeMeAtService extends Service implements LocationListener {
         
         mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
-
     }
+    
     public static double roundToDecimals(double d, int c) {
-        int temp=(int)((d*Math.pow(10,c)));
-        return (((double)temp)/Math.pow(10,c));
-        }
+        int temp = (int) (d * Math.pow(10, c));
+        return (double) temp / Math.pow(10, c);
+    }
     
     @Override
     public void onProviderDisabled(String provider) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void onProviderEnabled(String provider) {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
-        
     }
-    
-
 }
