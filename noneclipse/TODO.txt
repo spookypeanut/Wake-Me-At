@@ -1,4 +1,9 @@
 Alarm pops open a separate intent
+    - distance away
+    - snooze
+    - edit location
+    - cancel alarm
+    - main window
 A "tracking" view
     - point the direction
     - countdown distance
