@@ -18,34 +18,21 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Locale;
 
 import android.app.Activity;
-import android.app.AlertDialog;
-import android.app.Dialog;
-import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
-import android.location.LocationManager;
+import android.media.AudioManager;
 import android.os.Bundle;
-import android.text.InputType;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.AdapterView;
-import android.widget.ArrayAdapter;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.Spinner;
-import android.widget.SpinnerAdapter;
-import android.widget.TextView;
-import android.widget.AdapterView.OnItemSelectedListener;
 
-public class Alarm extends Activity {
+public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    private final int MY_DATA_CHECK_CODE = 1;
     
     private DatabaseManager db;
     private long mRowId;
@@ -57,14 +44,73 @@ public class Alarm extends Activity {
     private String mLocProv;
     private int mUnit;
 
+    private TextToSpeech mTts;
+    
     @Override
     protected void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
         
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+        
         setContentView(R.layout.alarm);
+        
+        
         
         db = new DatabaseManager(this);
         
+    }
+    
+    protected void onActivityResult(
+            int requestCode, int resultCode, Intent data) {
+        if (requestCode == MY_DATA_CHECK_CODE) {
+            if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
+                // success, create the TTS instance
+                Log.d(LOG_NAME, "text to speech present");
+                mTts = new TextToSpeech(this, this);
+                Locale loc = new Locale("en", "","");
+                if(mTts.isLanguageAvailable(loc) >= TextToSpeech.LANG_AVAILABLE){
+                    mTts.setLanguage(loc);
+                }
+                mTts.setOnUtteranceCompletedListener(this);
+            } else {
+                // missing data, install it
+                Intent installIntent = new Intent();
+                installIntent.setAction(
+                    TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                startActivity(installIntent);
+            }
+
+            Log.d(LOG_NAME, "end of onActivityResult");
+        }
+    }
+    
+    @Override
+    public void onUtteranceCompleted(String uttId) {
+        Log.d(LOG_NAME, "finished speaking");
+        if (uttId == "end of wakeup message ID") {
+            Log.d(LOG_NAME, "finished speaking");
+        } 
+    }
+    
+    @Override
+    public void onInit(int status) {
+        Log.d(LOG_NAME, "Alarm.onInit(" + status + ")");
+        HashMap<String, String> myHashAlarm = new HashMap<String, String>();
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
+                String.valueOf(AudioManager.STREAM_ALARM));
+        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
+        "end of wakeup message ID");
+        
+        mTts.speak(getText(R.string.alarmTitle).toString(), TextToSpeech.QUEUE_FLUSH, myHashAlarm);
+    }
+    
+
+    @Override
+    protected void onDestroy() {
+      super.onDestroy();
+      mTts.shutdown();
     }
 }
