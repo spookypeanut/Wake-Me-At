@@ -71,6 +71,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         button = (Button)findViewById(R.id.alarmButtonEdit);
         button.setOnClickListener(mEditLocation);
         
+        button = (Button)findViewById(R.id.alarmButtonMain);
+        button.setOnClickListener(mMainWindow);
+        
     }
     
     @Override
@@ -142,6 +145,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private OnClickListener mStopService = new Button.OnClickListener() {
         public void onClick(View v) {
             stopService();
+            finish();
+        }
+    };
+    
+    private OnClickListener mMainWindow = new Button.OnClickListener() {
+        public void onClick(View v) {
+            stopService();
+            Intent i = new Intent(Alarm.this.getApplication(), WakeMeAt.class);
+            startActivity(i);
             finish();
         }
     };
