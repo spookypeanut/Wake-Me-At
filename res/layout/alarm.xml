@@ -27,9 +27,9 @@
    android:text="@string/alarmButtonStop" android:gravity="center" />
   <LinearLayout android:orientation="horizontal"
    android:layout_height="wrap_content" android:layout_width="wrap_content">
-   <Button android:id="@+id/alarmButtonSnooze"
+   <!-- <Button android:id="@+id/alarmButtonSnooze"
     android:layout_height="wrap_content" android:layout_width="wrap_content"
-    android:text="@string/alarmButtonSnooze" />
+    android:text="@string/alarmButtonSnooze" />-->
    <Button android:id="@+id/alarmButtonMain"
     android:layout_height="wrap_content" android:layout_width="wrap_content"
     android:text="@string/alarmButtonMain" />
