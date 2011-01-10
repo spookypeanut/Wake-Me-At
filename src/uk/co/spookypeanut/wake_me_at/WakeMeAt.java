@@ -44,6 +44,7 @@ public class WakeMeAt extends ListActivity {
     private LocListAdapter mLocListAdapter;
     private Context mContext;
     
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mn_wake_me_at, menu);
@@ -64,7 +65,7 @@ public class WakeMeAt extends ListActivity {
         }
     }
     
-    
+    @Override
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
@@ -106,6 +107,7 @@ public class WakeMeAt extends ListActivity {
         
     }
     
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         Log.d(LOG_NAME, "Start onCreate()");
@@ -131,6 +133,7 @@ public class WakeMeAt extends ListActivity {
 
         Log.d(LOG_NAME, "End onCreate()");
     }
+    
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
