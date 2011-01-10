@@ -263,6 +263,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         } else if (ALARMTYPE == BIGALERT) {
             Intent i = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            i.putExtra("rowId", mRowId);
             startActivity(i);
         }
     }

@@ -57,6 +57,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+        
+        Bundle extras = this.getIntent().getExtras();
+        mRowId = extras.getLong("rowId");
 
         db = new DatabaseManager(this);
         
@@ -65,6 +68,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Button button = (Button)findViewById(R.id.alarmButtonStop);
         button.setOnClickListener(mStopService);
         
+        button = (Button)findViewById(R.id.alarmButtonEdit);
+        button.setOnClickListener(mEditLocation);
         
     }
     
@@ -120,9 +125,23 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
       mTts.shutdown();
     }
     
+    private void stopService() {
+        stopService(new Intent(Alarm.this, WakeMeAtService.class));
+    }
+    
+    private OnClickListener mEditLocation = new Button.OnClickListener() {
+        public void onClick(View v) {
+            stopService();
+            Intent i = new Intent(Alarm.this.getApplication(), EditLocation.class);
+            i.putExtra("rowId", mRowId);
+            startActivity(i);
+            finish();
+        }
+    };
+    
     private OnClickListener mStopService = new Button.OnClickListener() {
         public void onClick(View v) {
-            stopService(new Intent(Alarm.this, WakeMeAtService.class));
+            stopService();
             finish();
         }
     };
