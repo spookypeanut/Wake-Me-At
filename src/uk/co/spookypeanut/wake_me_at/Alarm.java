@@ -28,6 +28,9 @@ import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
 
 public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -54,15 +57,18 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+
+        db = new DatabaseManager(this);
         
         setContentView(R.layout.alarm);
         
+        Button button = (Button)findViewById(R.id.alarmButtonStop);
+        button.setOnClickListener(mStopService);
         
-        
-        db = new DatabaseManager(this);
         
     }
     
+    @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
         if (requestCode == MY_DATA_CHECK_CODE) {
@@ -113,4 +119,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
       super.onDestroy();
       mTts.shutdown();
     }
+    
+    private OnClickListener mStopService = new Button.OnClickListener() {
+        public void onClick(View v) {
+            stopService(new Intent(Alarm.this, WakeMeAtService.class));
+            finish();
+        }
+    };
 }
