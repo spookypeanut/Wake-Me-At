@@ -49,6 +49,10 @@
 <string name="mn_search">Search</string>
 
 <string name="alarmTitle">Approaching destination</string>
+<string name="alarmButtonStop">Cancel Alarm</string>
+<string name="alarmButtonMain">Location List</string>
+<string name="alarmButtonSnooze">Snooze (30s)</string>
+<string name="alarmButtonEdit">Edit Location</string>
 
 <string name="search_label">WakeMe@ Search</string>
 <string name="search_hint">Search map</string>

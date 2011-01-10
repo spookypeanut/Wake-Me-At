@@ -12,19 +12,30 @@
   copy of the GNU General Public License along with Wake Me At, in the
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
- 
 
- 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="wrap_content" android:layout_height="wrap_content">
+ android:layout_width="fill_parent" android:layout_height="fill_parent">
  <LinearLayout android:orientation="vertical"
-  android:layout_width="wrap_content" android:layout_height="wrap_content">
-      <TextView android:id="@+id/alarmTitle"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="@string/alarmTitle" />
-     <ImageView android:id="@+id/alarmMainImage"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:src="@drawable/at" />
- 
+  android:layout_width="fill_parent" android:layout_height="fill_parent">
+  <TextView android:id="@+id/alarmTitle" android:layout_height="wrap_content"
+   android:layout_width="wrap_content" android:text="@string/alarmTitle" />
+  <ImageView android:id="@+id/alarmMainImage"
+   android:layout_height="wrap_content" android:layout_width="wrap_content"
+   android:src="@drawable/at" />
+  <Button android:id="@+id/alarmButtonStop"
+   android:layout_height="wrap_content" android:layout_width="fill_parent"
+   android:text="@string/alarmButtonStop" android:gravity="center" />
+  <LinearLayout android:orientation="horizontal"
+   android:layout_height="wrap_content" android:layout_width="wrap_content">
+   <Button android:id="@+id/alarmButtonSnooze"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonSnooze" />
+   <Button android:id="@+id/alarmButtonMain"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonMain" />
+   <Button android:id="@+id/alarmButtonEdit"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonEdit" />
+  </LinearLayout>
  </LinearLayout>
 </ScrollView>
