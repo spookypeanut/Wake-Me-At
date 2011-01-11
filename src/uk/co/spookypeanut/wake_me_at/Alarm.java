@@ -36,8 +36,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
     private final int MY_DATA_CHECK_CODE = 1;
+    private final String POST_UTTERANCE = "WMAPostUtterance";
     
     private DatabaseManager db;
+    private UnitConverter uc;
     private long mRowId;
     
     private String mNick;
@@ -54,14 +56,22 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
         
-        Intent checkIntent = new Intent();
-        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
-        
         Bundle extras = this.getIntent().getExtras();
         mRowId = extras.getLong("rowId");
 
         db = new DatabaseManager(this);
+        mNick = db.getNick(mRowId);
+        mLatitude = db.getLatitude(mRowId);
+        mLongitude = db.getLongitude(mRowId);
+        mRadius = db.getRadius(mRowId);
+        mLocProv = db.getProvider(mRowId);
+        mUnit = db.getUnit(mRowId);
+        
+        uc = new UnitConverter(this, mUnit);
+
+        Intent checkIntent = new Intent();
+        checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
+        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
         
         setContentView(R.layout.alarm);
         
@@ -104,7 +114,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     public void onUtteranceCompleted(String uttId) {
         Log.d(LOG_NAME, "finished speaking");
-        if (uttId == "end of wakeup message ID") {
+        if (uttId == POST_UTTERANCE) {
             Log.d(LOG_NAME, "finished speaking");
         } 
     }
@@ -116,9 +126,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
                 String.valueOf(AudioManager.STREAM_ALARM));
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-        "end of wakeup message ID");
-        
-        // mTts.speak(getText(R.string.alarmTitle).toString(), TextToSpeech.QUEUE_FLUSH, myHashAlarm);
+        POST_UTTERANCE);
+        String speech = String.format(getString(R.string.alarmSpeech),
+                                      1234, uc.getName(), mNick);
+        mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
     }
     
 

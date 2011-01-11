@@ -58,6 +58,11 @@ public class UnitConverter
         switchUnit(unit);
     }
     
+    
+    public String getName() {
+        return mName;
+    }
+    
     public String getAbbrev() {
         return mAbbrev;
     }
