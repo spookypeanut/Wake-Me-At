@@ -53,6 +53,7 @@
 <string name="alarmButtonMain">Location List</string>
 <string name="alarmButtonSnooze">Snooze (30s)</string>
 <string name="alarmButtonEdit">Edit Location</string>
+<string name="alarmSpeech">You are %1$d %2$s from %3$s</string>
 
 <string name="search_label">WakeMe@ Search</string>
 <string name="search_hint">Search map</string>
