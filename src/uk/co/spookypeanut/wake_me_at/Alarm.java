@@ -98,7 +98,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 if(mTts.isLanguageAvailable(loc) >= TextToSpeech.LANG_AVAILABLE){
                     mTts.setLanguage(loc);
                 }
-                mTts.setOnUtteranceCompletedListener(this);
             } else {
                 // missing data, install it
                 Intent installIntent = new Intent();
@@ -122,11 +121,14 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     public void onInit(int status) {
         Log.d(LOG_NAME, "Alarm.onInit(" + status + ")");
+        if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
+            Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
+        }
         HashMap<String, String> myHashAlarm = new HashMap<String, String>();
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
-                String.valueOf(AudioManager.STREAM_ALARM));
+                        String.valueOf(AudioManager.STREAM_ALARM));
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-        POST_UTTERANCE);
+                        POST_UTTERANCE);
         String speech = String.format(getString(R.string.alarmSpeech),
                                       1234, uc.getName(), mNick);
         mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
