@@ -35,7 +35,7 @@ import android.widget.Button;
 public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    private final int MY_DATA_CHECK_CODE = 1;
+    private final int TTS_REQUEST_CODE = 1;
     private final String POST_UTTERANCE = "WMAPostUtterance";
     
     private DatabaseManager db;
@@ -71,7 +71,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
-        startActivityForResult(checkIntent, MY_DATA_CHECK_CODE);
+        startActivityForResult(checkIntent, TTS_REQUEST_CODE);
         
         setContentView(R.layout.alarm);
         
@@ -89,7 +89,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
-        if (requestCode == MY_DATA_CHECK_CODE) {
+        if (requestCode == TTS_REQUEST_CODE) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 // success, create the TTS instance
                 Log.d(LOG_NAME, "text to speech present");
