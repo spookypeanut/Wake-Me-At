@@ -66,11 +66,12 @@ public class UnitConverter
     private Unit getFromAbbrev(String abbrev) {
         for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
             Unit currUnit = i.next();
-            if (currUnit.getAbbrev() == abbrev) {
+            String currAbbrev = currUnit.getAbbrev();
+            if (currAbbrev.equals(abbrev)) {
                 return currUnit;
             }
         }
-        Log.wtf(LOG_NAME, "The unit " + abbrev + " was not found");
+        Log.wtf(LOG_NAME, "The unit \"" + abbrev + "\" was not found");
         return null;
     }
     
