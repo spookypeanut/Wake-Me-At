@@ -355,6 +355,10 @@ public class DatabaseManager
             db.execSQL(newTableQueryString);
         }
 
+        @Override
+        public synchronized void close() {
+            db.close();
+        }
 
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
