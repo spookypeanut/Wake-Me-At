@@ -76,6 +76,10 @@ public class WakeMeAt extends ListActivity {
                                     ContextMenuInfo menuInfo) {
       super.onCreateContextMenu(menu, v, menuInfo);
       Log.d(LOG_NAME, "onCreateContextMenu");
+      AdapterContextMenuInfo myInfo = (AdapterContextMenuInfo) menuInfo;
+
+      long id = myInfo.id;
+      menu.setHeaderTitle(db.getNick(id));
       MenuInflater inflater = getMenuInflater();
       inflater.inflate(R.menu.mn_context_wake_me_at, menu);
     }
