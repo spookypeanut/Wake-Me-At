@@ -289,7 +289,8 @@ public class DatabaseManager
                             row.get(2).toString() + ", " +
                             row.get(3).toString() + ", " +
                             row.get(4).toString() + ", " +
-                            row.get(5).toString());
+                            row.get(5).toString() + ", " +
+                            row.get(6).toString());
         }
         Log.d(LOG_NAME, "End of array log");
     }
@@ -319,6 +320,7 @@ public class DatabaseManager
                     dataList.add(cursor.getDouble(3));
                     dataList.add(cursor.getString(4));
                     dataList.add(cursor.getFloat(5));
+                    dataList.add(cursor.getString(6));
 
                     dataArrays.add(dataList);
                 }
