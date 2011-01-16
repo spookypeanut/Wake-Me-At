@@ -18,6 +18,7 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import java.util.ArrayList;
 import java.util.List;
 
 import android.app.Activity;
@@ -52,6 +53,7 @@ public class EditLocation extends Activity {
     public static final int RADIUSDIALOG = 1;
     
     private DatabaseManager db;
+    private UnitConverter uc;
 
     private long mRowId;
     private String mNick = "New Location";
@@ -251,8 +253,20 @@ public class EditLocation extends Activity {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         s.setAdapter(spinnerArrayAdapter);
-        
-        s.setOnItemSelectedListener(locProvListener);
+       
+        uc = new UnitConverter(this, "m");
+        ArrayList<String> units = uc.getAbbrevList();
+        if (units.isEmpty()) {
+            Log.wtf(LOG_NAME, "How can there be no units!?");
+        }
+        Log.d(LOG_NAME, units.toString());
+
+        spinnerArrayAdapter = new ArrayAdapter<String>(this,
+                android.R.layout.simple_spinner_item, units);
+
+        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        s = (Spinner) findViewById(R.id.unitList);
+        s.setAdapter(spinnerArrayAdapter);
         
         loadNick();
         loadLatLong();

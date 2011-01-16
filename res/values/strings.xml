@@ -30,6 +30,7 @@
 <string name="start_button_name">Activate alarm</string>
 <string name="stop_button_name">Cancel alarm</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
+<string name="unitListPrompt">Unit</string>
 
 <string name="notif_full">You are %1$s away from %2$s</string>
 

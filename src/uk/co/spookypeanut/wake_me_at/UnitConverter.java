@@ -63,6 +63,15 @@ public class UnitConverter
         switchUnit(unit);
     }
     
+    public ArrayList<String> getAbbrevList() {
+        ArrayList<String> returnList = new ArrayList<String>();
+        for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
+            Unit currUnit = i.next();
+            returnList.add(currUnit.getAbbrev());
+        }
+        return returnList;
+    }
+    
     private Unit getFromAbbrev(String abbrev) {
         for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
             Unit currUnit = i.next();
