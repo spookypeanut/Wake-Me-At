@@ -34,7 +34,7 @@ public class UnitConverter
     private final int SYSTEM_IMPERIAL = 2;
     
     // Number of decimal places to round to
-    static final int DP = 2;
+    static final int DP = 1;
     
     // The value that determines which unit in a unit system will be used
     private final double LARGESTNUM = 500;
