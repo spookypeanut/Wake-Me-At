@@ -8,11 +8,15 @@ A "tracking" view
     - countdown distance
     - allow switching location provider
     - display destination, radius, etc
+Edit location:
+    - switching of units
+Main view:
+    - Title
+    - title of context menu
+    - Map on context menu
 Multiple location services at once
     - indication on main list if it's running
     Edit location:
         - big indicator of if a service is running
         - stop button only enabled if service running (and vv)
 Change icon
-Enable different units
-    - have different magnitudes (e.g. km, miles, etc)
