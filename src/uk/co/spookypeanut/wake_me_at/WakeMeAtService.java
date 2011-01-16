@@ -236,9 +236,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         
         // message is, e.g. You are 200m from Welwyn North
         String message = String.format(getString(R.string.notif_full),
-                // TODO: this should be a string from UnitConverter
-                            roundToDecimals(uc.toUnit(mDistanceAway), 2),
-                            uc.getAbbrev(),
+                            uc.out(mDistanceAway),
                             mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);

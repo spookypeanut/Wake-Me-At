@@ -29,7 +29,7 @@
 <string name="stop_button_name">Cancel alarm</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
 
-<string name="notif_full">You are %1$.1f%2$s away from %3$s</string>
+<string name="notif_full">You are %1$s away from %2$s</string>
 
 <string name="unit">m</string>
 
