@@ -17,6 +17,8 @@
  <string name="app_name">WakeMe@</string>
  <string name="app_name_nospaces">WakeMe@</string>
  
+ <string name="mainTitle">WakeMe@ Location List</string>
+ 
  <string name="get_loc_button_name">Get location...</string>
  <string name="get_loc_map_button_name">Find location...</string>
  <string name="map_name">Select location</string>
@@ -30,8 +32,6 @@
 <string name="loc_prov_spinner_label">Location Provider</string>
 
 <string name="notif_full">You are %1$s away from %2$s</string>
-
-<string name="unit">m</string>
 
 <string name="foreground_service_started">WakeMe@ alarm activated</string>
 <string name="foreground_service_stopped">WakeMe@ alarm cancelled</string>
