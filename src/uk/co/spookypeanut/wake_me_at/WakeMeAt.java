@@ -68,10 +68,7 @@ public class WakeMeAt extends ListActivity {
     @Override
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
-        Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-        i.putExtra("rowId", (long) position + 1);
-        Log.d(LOG_NAME, "About to start activity");
-        startActivity(i);
+        mLocListAdapter.editLocation(position);
     }
     
     @Override
@@ -172,6 +169,13 @@ public class WakeMeAt extends ListActivity {
             return db.getIdsAsList().get(position);
         }
 
+        public void editLocation(int position) {
+            Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
+            i.putExtra("rowId", getItemId(position));
+            Log.d(LOG_NAME, "About to start activity");
+            startActivity(i);
+        }
+        
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
             //Log.d(LOG_NAME, "getView(" + id + ")");
