@@ -47,7 +47,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private double mLongitude;
     private float mRadius;
     private String mLocProv;
-    private int mUnit;
+    private String mUnit;
 
     private TextToSpeech mTts;
     

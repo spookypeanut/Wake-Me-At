@@ -83,7 +83,7 @@ implements LocationListener {
         super.onCreate(icicle);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
-        uc = new UnitConverter(this, 0);
+        uc = new UnitConverter(this, "m");
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);

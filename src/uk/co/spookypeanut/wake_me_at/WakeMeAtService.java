@@ -60,7 +60,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private double mDistanceAway = -1.0;
     private Location mFinalDestination = new Location("");
     private String mProvider;
-    private int mUnit;
+    private String mUnit;
     
     private LocationManager locationManager;
     private NotificationManager mNM;

@@ -18,24 +18,32 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
+import java.util.Arrays;
+import java.util.Iterator;
+import java.util.List;
+
 import android.content.Context;
 import android.content.res.Resources;
+import android.util.Log;
 
 public class UnitConverter
 {
+    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+
     Context mContext;
     Resources mRes;
-    
-    int mUnit;
 
-    String[] mNames;
-    double[] mValues;
-    String[] mAbbrevs;
     
-    String mName;
-    double mValue;
-    String mAbbrev;
+    private final List <Unit> mUnitList =
+            Arrays.asList(
+                new Unit("metre", "m", 1, "km", null),
+                new Unit("foot", "ft", 0.3048, "mi", null),
+                new Unit("kilometre", "km", 1000, null, "m"),
+                new Unit("mile", "mi", 1609.344, null, "ft"));
+
+    Unit mUnit;
     
+    // Number of decimal places to round to
     static final int DP = 2;
     
     private double[] stringArrayToDoubleArray(String[] inputArray) {
@@ -47,45 +55,49 @@ public class UnitConverter
         return returnArray;
     }
     
-    public UnitConverter(Context context, int unit) {
+    public UnitConverter(Context context, String unitAbbrev) {
+        Unit unit = getFromAbbrev(unitAbbrev);
         this.mContext = context;
         mRes = mContext.getResources();
-
-        mNames = mRes.getStringArray(R.array.unit_names);
-        mValues = stringArrayToDoubleArray(mRes.getStringArray(R.array.unit_values));
-        mAbbrevs = mRes.getStringArray(R.array.unit_abbrevs);
 
         switchUnit(unit);
     }
     
+    private Unit getFromAbbrev(String abbrev) {
+        for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
+            Unit currUnit = i.next();
+            if (currUnit.getAbbrev() == abbrev) {
+                return currUnit;
+            }
+        }
+        Log.wtf(LOG_NAME, "The unit " + abbrev + " was not found");
+        return null;
+    }
     
     public String getName() {
-        return mName;
+        return mUnit.getName();
     }
     
     public String getAbbrev() {
-        return mAbbrev;
+        return mUnit.getAbbrev();
     }
     
     public double toMetres(double value) {
-        return convert(value, mUnit, 0);
+        return convert(value, mUnit, getFromAbbrev("m"));
     }
     
     public double toUnit(double value) {
-        return convert(value, 0, mUnit);
+        return convert(value, getFromAbbrev("m"), mUnit);
     }
     
     public String out(double value) {
         // 0 is always metres (used internally)
-        return "" + roundToDecimals(toUnit(value), DP) + mAbbrev;
+        double rawValue = roundToDecimals(toUnit(value), DP);
+        return "" + roundToDecimals(toUnit(value), DP) + mUnit.getAbbrev();
     }
     
-    public void switchUnit(int unit) {
+    public void switchUnit(Unit unit) {
         mUnit = unit;
-
-        mName = mNames[unit];
-        mValue = mValues[unit];
-        mAbbrev = mAbbrevs[unit];
     }
     
     public static double roundToDecimals(double d, int c) {
@@ -93,7 +105,35 @@ public class UnitConverter
         return (double) temp / Math.pow(10, c);
     }
     
-    public double convert(double value, int sourceUnit, int destUnit) {
-        return value * mValues[sourceUnit] / mValues[destUnit];
+    public double convert(double value, Unit sourceUnit, Unit destUnit) {
+        return value * sourceUnit.getValue() / destUnit.getValue();
+    }
+    
+    public class Unit {
+        String mName;
+        String mAbbrev;
+        double mValue;
+        String mBigger;
+        String mSmaller;
+        
+        public Unit(String name, String abbrev, double value, String bigger, String smaller) {
+            mName = name;
+            mAbbrev = abbrev;
+            mValue = value;
+            mBigger = bigger;
+            mSmaller = smaller;
+        }
+        
+        public String getName() {
+            return mName;
+        }
+        
+        public String getAbbrev() {
+            return mAbbrev;
+        }
+        
+        public double getValue() {
+            return mValue;
+        }
     }
 }
