@@ -333,17 +333,7 @@ public class DatabaseManager
         return dataArrays;
     }
 
-
-    /**********************************************************************
-     * THIS IS THE BEGINNING OF THE INTERNAL SQLiteOpenHelper SUBCLASS.
-     * 
-     * I MADE THIS CLASS INTERNAL SO I CAN COPY A SINGLE FILE TO NEW APPS 
-     * AND MODIFYING IT - ACHIEVING DATABASE FUNCTIONALITY.  ALSO, THIS WAY 
-     * I DO NOT HAVE TO SHARE CONSTANTS BETWEEN TWO FILES AND CAN
-     * INSTEAD MAKE THEM PRIVATE AND/OR NON-STATIC.  HOWEVER, I THINK THE
-     * INDUSTRY STANDARD IS TO KEEP THIS CLASS IN A SEPARATE FILE.
-     *********************************************************************/
-
+    
     private class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
         public CustomSQLiteOpenHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
@@ -371,5 +361,6 @@ public class DatabaseManager
             String upgradeMessage = "Upgrading db v" + oldVersion + " to v" + newVersion;
             Log.d(LOG_NAME, upgradeMessage);
         }
+        
     }
 }
