@@ -67,7 +67,7 @@
    <TableRow>
     <TextView android:id="@+id/radiusLabel"
      android:layout_width="fill_parent" android:layout_height="wrap_content"
-     android:text="Radius (metres)" />
+     android:text="Radius" />
 
     <LinearLayout android:orientation="horizontal"
   android:layout_width="fill_parent" android:layout_height="wrap_content">
