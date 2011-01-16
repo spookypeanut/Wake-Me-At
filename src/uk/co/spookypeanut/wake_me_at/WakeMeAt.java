@@ -130,7 +130,9 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
-
+        UnitConverter uc = new UnitConverter(this, "ft");
+        Log.d(LOG_NAME, "50000m in feet: " + uc.out(50000));
+        db.logOutArray();
         Log.d(LOG_NAME, "End onCreate()");
     }
     
