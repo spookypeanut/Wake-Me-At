@@ -10,11 +10,9 @@ A "tracking" view
     - display destination, radius, etc
 Edit location:
     - Pop up description if none exists
+    - Pop up map if no location exists
     - Pass description to search box
-    - switching of units
 Main view:
-    - Title
-    - title of context menu
     - Map on context menu
 Multiple location services at once
     - indication on main list if it's running

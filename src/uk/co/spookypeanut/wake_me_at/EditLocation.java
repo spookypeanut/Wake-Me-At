@@ -61,6 +61,7 @@ public class EditLocation extends Activity {
     private double mLongitude = 0.0;
     private float mRadius = 0;
     private String mLocProv = "";
+    private String mUnit = "";
 
     private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
@@ -68,7 +69,15 @@ public class EditLocation extends Activity {
             Log.d(LOG_NAME, "Selected loc prov: " + parent.getSelectedItem().toString());
             changedLocProv(parent.getSelectedItem().toString());
         }
+        public void onNothingSelected(AdapterView<?> parent) {}
+    };
 
+    private OnItemSelectedListener unitListener =  new OnItemSelectedListener() {
+        public void onItemSelected(AdapterView<?> parent,
+                View view, int pos, long id) {
+            Log.d(LOG_NAME, "Selected unit: " + parent.getSelectedItem().toString());
+            changedUnit(parent.getSelectedItem().toString());
+        }
         public void onNothingSelected(AdapterView<?> parent) {}
     };
 
@@ -88,8 +97,17 @@ public class EditLocation extends Activity {
             Button radiusButton = (Button)findViewById(R.id.radiusButton);
             Float radius = Float.valueOf(radiusButton.getText().toString());
             changedRadius(radius);
+            Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
+            mUnit = unitSpin.getSelectedItem().toString();
+            changedUnit(mUnit);
             Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
+            Log.d(LOG_NAME, "locProvSpin got");
+            if (null == locProvSpin.getSelectedItem()) {
+                Log.d(LOG_NAME, "locProvSpin.getSelectedItem() is null");
+            }
+
             mLocProv = locProvSpin.getSelectedItem().toString();
+            Log.d(LOG_NAME, "locProvSpin selected item got");
             changedLocProv(mLocProv);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(EditLocation.this, WakeMeAtService.class);
@@ -124,10 +142,18 @@ public class EditLocation extends Activity {
     }
 
     protected void changedLocProv(String locProv) {
+        Log.d(LOG_NAME, "changedLocProv");
         mLocProv = locProv;
         db.setProvider(mRowId, locProv);
     }
 
+    protected void changedUnit(String unit) {
+        Log.d(LOG_NAME, "changedUnit");
+        mUnit = unit;
+        db.setUnit(mRowId, unit);
+        Log.d(LOG_NAME, "end changedUnit");
+    }
+    
     protected void changedNick(String nick) {
         mNick = nick;
         db.setNick(mRowId, nick);
@@ -170,7 +196,14 @@ public class EditLocation extends Activity {
             if(adapter.getItem(i).equals(mLocProv)) {
                 locProvSpin.setSelection(i);
             }
-        }        
+        }
+        Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
+        adapter = unitSpin.getAdapter();
+        for(int i = 0; i < adapter.getCount(); i++) {
+            if(adapter.getItem(i).equals(mUnit)) {
+                unitSpin.setSelection(i);
+            }
+        }
         TextView latText = (TextView)findViewById(R.id.latitude);
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(mLatitude));
@@ -187,7 +220,12 @@ public class EditLocation extends Activity {
         mRadius = db.getRadius(mRowId);
         updateForm();
     }   
-
+    
+    protected void loadUnit() {
+        Log.d(LOG_NAME, "loadUnit()");
+        mUnit = db.getUnit(mRowId);
+        updateForm();
+    }   
     
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
@@ -253,6 +291,7 @@ public class EditLocation extends Activity {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         s.setAdapter(spinnerArrayAdapter);
+        s.setOnItemSelectedListener(locProvListener);
        
         uc = new UnitConverter(this, "m");
         ArrayList<String> units = uc.getAbbrevList();
@@ -267,6 +306,8 @@ public class EditLocation extends Activity {
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         s = (Spinner) findViewById(R.id.unitList);
         s.setAdapter(spinnerArrayAdapter);
+        s.setOnItemSelectedListener(unitListener);
+
         
         loadNick();
         loadLatLong();
