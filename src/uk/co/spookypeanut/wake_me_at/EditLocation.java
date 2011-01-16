@@ -101,13 +101,7 @@ public class EditLocation extends Activity {
             mUnit = unitSpin.getSelectedItem().toString();
             changedUnit(mUnit);
             Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-            Log.d(LOG_NAME, "locProvSpin got");
-            if (null == locProvSpin.getSelectedItem()) {
-                Log.d(LOG_NAME, "locProvSpin.getSelectedItem() is null");
-            }
-
             mLocProv = locProvSpin.getSelectedItem().toString();
-            Log.d(LOG_NAME, "locProvSpin selected item got");
             changedLocProv(mLocProv);
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(EditLocation.this, WakeMeAtService.class);
@@ -313,6 +307,7 @@ public class EditLocation extends Activity {
         loadLatLong();
         loadRadius();
         loadLocProv();
+        loadUnit();
     }
 
     @Override
