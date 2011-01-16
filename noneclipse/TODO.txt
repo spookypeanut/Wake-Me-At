@@ -9,6 +9,8 @@ A "tracking" view
     - allow switching location provider
     - display destination, radius, etc
 Edit location:
+    - Pop up description if none exists
+    - Pass description to search box
     - switching of units
 Main view:
     - Title
