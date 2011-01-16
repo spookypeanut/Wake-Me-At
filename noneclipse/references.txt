@@ -1,9 +1,10 @@
 http://developer.android.com/index.html
     list4.java
-
 http://www.stackoverflow.com/
 http://groups.google.com/group/android-developers/
 http://www.anddev.org/
+http://download.oracle.com/javase/1.5.0/docs/guide/language/
+http://javahowto.blogspot.com/
 
 http://www.anotherandroidblog.com/2010/08/04/android-database-tutorial/
 http://www.tutorialforandroid.com/2009/09/using-official-texttospeech-in-android.html
