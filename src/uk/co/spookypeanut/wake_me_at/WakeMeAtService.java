@@ -240,7 +240,7 @@ public class WakeMeAtService extends Service implements LocationListener {
                             mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
-        if (mDistanceAway < mRadius) {
+        if (mDistanceAway < uc.toMetres(mRadius)) {
             soundAlarm();
         }
     }
