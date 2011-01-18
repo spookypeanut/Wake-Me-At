@@ -209,7 +209,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             CharSequence text = getText(R.string.foreground_service_started);
 
             // Set the icon, scrolling text and timestamp
-            mNotification = new Notification(R.drawable.x, text,
+            mNotification = new Notification(R.drawable.icon, text,
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification

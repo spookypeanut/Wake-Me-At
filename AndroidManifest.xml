@@ -22,7 +22,7 @@
 <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
 <application
-    android:icon="@drawable/x"
+    android:icon="@drawable/icon"
     android:label="@string/app_name"
     android:debuggable="true"
     android:theme="@android:style/Theme.Light">
@@ -50,7 +50,7 @@
  
 <activity
     android:theme="@android:style/Theme.Dialog"
-    android:icon="@drawable/x"
+    android:icon="@drawable/icon"
     android:name=".GetLocationMap"
     android:label="@string/map_name"
     android:launchMode="singleTop">
