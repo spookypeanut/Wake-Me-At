@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.LocationListener;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -32,7 +33,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 
-public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
+public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener, LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
     private final int TTS_REQUEST_CODE = 1;
@@ -170,4 +171,28 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             finish();
         }
     };
+
+    @Override
+    public void onLocationChanged(Location location) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+        // TODO Auto-generated method stub
+        
+    }
 }
