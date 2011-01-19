@@ -23,6 +23,7 @@ import java.util.Locale;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.location.Location;
 import android.location.LocationListener;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -43,12 +44,17 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private UnitConverter uc;
     private long mRowId;
     
+    private Location mFinalDestination = new Location("");
+    
     private String mNick;
     private double mLatitude;
     private double mLongitude;
     private float mRadius;
     private String mLocProv;
     private String mUnit;
+    
+    private double mMetresAway;
+    private String mUnitsAway;
 
     private TextToSpeech mTts;
     
@@ -59,9 +65,13 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         
         Bundle extras = this.getIntent().getExtras();
         mRowId = extras.getLong("rowId");
+        mMetresAway = extras.getDouble("metresAway");
 
         db = new DatabaseManager(this);
         mNick = db.getNick(mRowId);
+        mFinalDestination.setLatitude(db.getLatitude(mRowId));
+        mFinalDestination.setLongitude(db.getLongitude(mRowId));
+
         mLatitude = db.getLatitude(mRowId);
         mLongitude = db.getLongitude(mRowId);
         mRadius = db.getRadius(mRowId);
@@ -130,8 +140,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                         String.valueOf(AudioManager.STREAM_ALARM));
         myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
                         POST_UTTERANCE);
+        Log.d(LOG_NAME, "Format is " + getString(R.string.alarmSpeech));
         String speech = String.format(getString(R.string.alarmSpeech),
-                                      1234, uc.getName(), mNick);
+                                      uc.outSpeech(mMetresAway), mNick);
         mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
     }
     

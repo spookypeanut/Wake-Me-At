@@ -109,6 +109,16 @@ public class UnitConverter
         return String.format("%." + DP + "f%s", outValue, outAbbrev);
     }
     
+    public String outSpeech(double value) {
+        // 0 is always metres (used internally)
+        Unit bestUnit = getBestUnit(value);
+        double outValue = convert(value, mMetreUnit, bestUnit);
+        // TODO Use plurals
+        String outName = bestUnit.getName();
+        
+        return String.format("%." + DP + "f %s", outValue, outName);
+    }
+    
     public void switchUnit(Unit unit) {
         mUnit = unit;
     }

@@ -57,7 +57,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private long mRowId;
     private String mNick;
     private double mRadius;
-    private double mDistanceAway = -1.0;
+    private double mMetresAway = -1.0;
     private Location mFinalDestination = new Location("");
     private String mProvider;
     private String mUnit;
@@ -232,15 +232,16 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onLocationChanged(Location location) {
-        mDistanceAway = location.distanceTo(mFinalDestination);
+        mMetresAway = location.distanceTo(mFinalDestination);
+        // TODO: Check if alarm is already running
         
         // message is, e.g. You are 200m from Welwyn North
         String message = String.format(getString(R.string.notif_full),
-                            uc.out(mDistanceAway),
+                            uc.out(mMetresAway),
                             mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
-        if (mDistanceAway < uc.toMetres(mRadius)) {
+        if (mMetresAway < uc.toMetres(mRadius)) {
             soundAlarm();
         }
     }
@@ -249,7 +250,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         if (ALARMTYPE == SMALLALERT) {
             Context context = getApplicationContext();
             CharSequence contentTitle = "Approaching destination";
-            CharSequence contentText = "Approaching destination" + mDistanceAway;
+            CharSequence contentText = "Approaching destination" + mMetresAway;
             
             Intent notificationIntent = new Intent(this, EditLocation.class);
             PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
@@ -262,6 +263,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             Intent i = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
             i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             i.putExtra("rowId", mRowId);
+            i.putExtra("metresAway", mMetresAway);
             startActivity(i);
         }
     }
