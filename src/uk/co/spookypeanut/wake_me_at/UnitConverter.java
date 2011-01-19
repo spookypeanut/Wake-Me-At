@@ -43,14 +43,14 @@ public class UnitConverter
     Resources mRes;
     
     // Metre is a special unit, as it's the one that's used internally
-    private final Unit mMetreUnit = new Unit("metre", "m", 1, SYSTEM_METRIC);
+    private final Unit mMetreUnit = new Unit("metre", "m", 1, SYSTEM_METRIC, "metres");
     
     private final List <Unit> mUnitList = 
             Arrays.asList(
                 mMetreUnit,
-                new Unit("foot", "ft", 0.3048, SYSTEM_IMPERIAL),
-                new Unit("kilometre", "km", 1000, SYSTEM_METRIC),
-                new Unit("mile", "mi", 1609.344, SYSTEM_IMPERIAL));
+                new Unit("foot", "ft", 0.3048, SYSTEM_IMPERIAL, "feet"),
+                new Unit("kilometre", "km", 1000, SYSTEM_METRIC, "kilometres"),
+                new Unit("mile", "mi", 1609.344, SYSTEM_IMPERIAL, "miles"));
 
     Unit mUnit;
     
@@ -113,8 +113,7 @@ public class UnitConverter
         // 0 is always metres (used internally)
         Unit bestUnit = getBestUnit(value);
         double outValue = convert(value, mMetreUnit, bestUnit);
-        // TODO Use plurals
-        String outName = bestUnit.getName();
+        String outName = bestUnit.getPlural();
         
         return String.format("%." + DP + "f %s", outValue, outName);
     }
@@ -178,16 +177,22 @@ public class UnitConverter
         String mAbbrev;
         double mValue;
         int mSystem;
+        String mPlural;
         
-        public Unit(String name, String abbrev, double value, int system) {
+        public Unit(String name, String abbrev, double value, int system, String plural) {
             mName = name;
             mAbbrev = abbrev;
             mValue = value;
             mSystem = system;
+            mPlural = plural;
         }
         
         public String getName() {
             return mName;
+        }
+        
+        public String getPlural() {
+            return mPlural;
         }
         
         public String getAbbrev() {
