@@ -14,41 +14,52 @@
  -->
 <resources>
  
+ <!-- GLOBAL -->
  <string name="app_name">WakeMe@</string>
  <string name="app_name_nospaces">WakeMe@</string>
  
+ <!-- WAKEME@ MAIN -->
  <string name="mainTitle">WakeMe@ Location List</string>
+
+<string name="mn_new_loc">New location</string>
+<string name="mn_quit">Quit</string>
+
+<string name="mn_stop_all">Cancel alarm</string>
  
+<!-- EDIT LOCATION -->
  <string name="get_loc_button_name">Get location...</string>
  <string name="get_loc_map_button_name">Find location...</string>
- <string name="map_name">Select location</string>
- <string name="get_loc_layout_name">Select location</string>
- 
- <string name="uselocationbutton">Use this</string>
- <string name="dontuselocationbutton">Try again</string>
 
 <string name="start_button_name">Activate alarm</string>
 <string name="stop_button_name">Cancel alarm</string>
 <string name="loc_prov_spinner_label">Location Provider</string>
 <string name="unitListPrompt">Unit</string>
 
-<string name="notif_full">You are %1$s away from %2$s</string>
-
+<!-- WAKEME@ SERVICE -->
 <string name="foreground_service_started">WakeMe@ alarm activated</string>
 <string name="foreground_service_stopped">WakeMe@ alarm cancelled</string>
 <string name="alert_dialog_cancel">Cancel</string>
 <string name="alert_dialog_ok">OK</string>
 
-<string name="mn_new_loc">New location</string>
-<string name="mn_quit">Quit</string>
+<string name="notif_full">You are %1$s away from %2$s</string>
 
-<string name="mn_stop_all">Cancel alarm</string>
+<!-- GET LOCATION MAP -->
+ <string name="map_name">Select location</string>
+ <string name="get_loc_layout_name">Select location</string>
+ <string name="uselocationbutton">Use this</string>
+ <string name="dontuselocationbutton">Try again</string>
+
 <string name="mn_map">Map Mode</string>
 <string name="mn_satellite">Satellite Mode</string>
 <string name="mn_orig_loc">Original Location</string>
 <string name="mn_curr_loc">My Location</string>
 <string name="mn_search">Search</string>
 
+<string name="search_label">WakeMe@ Search</string>
+<string name="search_hint">Search map</string>
+<string name="search_prompt">Say a location name</string>
+
+<!-- ALARM -->
 <string name="alarmTitle">Approaching destination</string>
 <string name="alarmButtonStop">Cancel Alarm</string>
 <string name="alarmButtonMain">Location List</string>
@@ -56,7 +67,4 @@
 <string name="alarmButtonEdit">Edit Location</string>
 <string name="alarmSpeech">You are %1$s from %2$s</string>
 
-<string name="search_label">WakeMe@ Search</string>
-<string name="search_hint">Search map</string>
-<string name="search_prompt">Say a location name</string>
 </resources>
