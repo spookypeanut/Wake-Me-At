@@ -267,11 +267,6 @@ public class WakeMeAtService extends Service implements LocationListener {
             startActivity(i);
         }
     }
-    // TODO: Really, this should be in the unit converter (it should just pass a string back)
-    public static double roundToDecimals(double d, int c) {
-        int temp = (int) (d * Math.pow(10, c));
-        return (double) temp / Math.pow(10, c);
-    }
     
     @Override
     public void onProviderDisabled(String provider) {
