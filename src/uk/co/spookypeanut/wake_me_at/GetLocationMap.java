@@ -390,30 +390,31 @@ implements LocationListener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            String address = "";
+            String dialogMsg = "Latitude / Longitude:\n";
+            dialogMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6 + "\n";
             if (addresses != null && addresses.size() > 0) 
             {
                 for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
-                    address += addresses.get(0).getAddressLine(i) + "\n";
-                
-                dialog.setMessage(address);
-                dialog.setCancelable(true);
-                dialog.setPositiveButton(R.string.uselocationbutton,
-                        new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog,
-                            int which) {
-                        Intent i = new Intent();
-                        setResult(RESULT_OK, i.setAction(
-                                mDest.getLatitudeE6() / 1E6 + "," +
-                                mDest.getLongitudeE6() / 1E6));
-                        finish();
-                    }
-                });
-                dialog.setNegativeButton(R.string.dontuselocationbutton, null);
-                dialog.show();
+                    dialogMsg += addresses.get(0).getAddressLine(i) + "\n";
             } else {
                 Log.wtf(LOG_NAME, "GeoCoder returned null");
+                dialogMsg += "(Address retrieval failed: no data connection?)";
             }
+            dialog.setMessage(dialogMsg);
+            dialog.setCancelable(true);
+            dialog.setPositiveButton(R.string.uselocationbutton,
+                    new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog,
+                        int which) {
+                    Intent i = new Intent();
+                    setResult(RESULT_OK, i.setAction(
+                            mDest.getLatitudeE6() / 1E6 + "," +
+                            mDest.getLongitudeE6() / 1E6));
+                    finish();
+                }
+            });
+            dialog.setNegativeButton(R.string.dontuselocationbutton, null);
+            dialog.show();
         }
 
         @Override
