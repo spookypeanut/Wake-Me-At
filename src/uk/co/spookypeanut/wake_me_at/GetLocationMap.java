@@ -179,12 +179,6 @@ implements LocationListener {
         }
     }
     
-    private GeoPoint locationToGeoPoint(Location location) {
-        GeoPoint returnValue = new GeoPoint((int) (location.getLatitude() * 1E6), 
-                                            (int) (location.getLongitude() * 1E6));
-        return returnValue;
-    }
-    
     private Location getCurrentLocation() {
         Location currentLocation = new Location("");
         LocationManager locMan;
