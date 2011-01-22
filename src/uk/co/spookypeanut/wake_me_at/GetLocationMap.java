@@ -164,7 +164,12 @@ implements LocationListener {
             return true;
         case R.id.mn_curr_loc:
             Location here = getCurrentLocation();
-            moveMapTo(here.getLatitude(), here.getLongitude());
+            if (here != null) {
+                moveMapTo(here.getLatitude(), here.getLongitude());
+            } else {
+                Log.e(LOG_NAME, "Location inaccessible");
+            }
+            
             return true;
         case R.id.mn_satellite:
             toggleMapMode();
@@ -188,10 +193,12 @@ implements LocationListener {
                 1000, 2, this);
         String provider = locMan.getBestProvider(new Criteria(), true);
         if (provider == null) {
+            Log.wtf(LOG_NAME, "Provider is null");
             // TODO: do this properly 
             return currentLocation;
         }
         if(!locMan.isProviderEnabled(provider)){
+            Log.wtf(LOG_NAME, "Provider is disabled");
             // TODO: do this properly 
             return currentLocation;
         }
@@ -199,6 +206,7 @@ implements LocationListener {
         locMan.removeUpdates(this);
 
         if(currentLocation == null){
+            Log.wtf(LOG_NAME, "Return value from getLastKnownLocation is null");
             // TODO: do this properly 
             return currentLocation;
         }
@@ -380,6 +388,7 @@ implements LocationListener {
             AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
             dialog.setTitle("Location");
             List<Address> addresses = null;
+            Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
             try {
                 addresses = geoCoder.getFromLocation(
                         mDest.getLatitudeE6()  / 1E6, 
@@ -388,28 +397,29 @@ implements LocationListener {
                 e.printStackTrace();
             }
             String address = "";
-            if (addresses.size() > 0) 
+            if (addresses != null && addresses.size() > 0) 
             {
-                for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); 
-                        i++)
+                for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
                     address += addresses.get(0).getAddressLine(i) + "\n";
+                
+                dialog.setMessage(address);
+                dialog.setCancelable(true);
+                dialog.setPositiveButton(R.string.uselocationbutton,
+                        new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog,
+                            int which) {
+                        Intent i = new Intent();
+                        setResult(RESULT_OK, i.setAction(
+                                mDest.getLatitudeE6() / 1E6 + "," +
+                                mDest.getLongitudeE6() / 1E6));
+                        finish();
+                    }
+                });
+                dialog.setNegativeButton(R.string.dontuselocationbutton, null);
+                dialog.show();
+            } else {
+                Log.wtf(LOG_NAME, "GeoCoder returned null");
             }
-
-            dialog.setMessage(address);
-            dialog.setCancelable(true);
-            dialog.setPositiveButton(R.string.uselocationbutton,
-                    new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,
-                        int which) {
-                    Intent i = new Intent();
-                    setResult(RESULT_OK, i.setAction(
-                                             mDest.getLatitudeE6() / 1E6 + "," +
-                                             mDest.getLongitudeE6() / 1E6));
-                    finish();
-                }
-            });
-            dialog.setNegativeButton(R.string.dontuselocationbutton, null);
-            dialog.show();
         }
 
         @Override
