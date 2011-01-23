@@ -24,7 +24,6 @@ import java.util.Locale;
 import android.app.Activity;
 import android.content.Intent;
 import android.location.Location;
-import android.location.LocationListener;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
