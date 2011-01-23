@@ -61,6 +61,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     private Location mFinalDestination = new Location("");
     private String mProvider;
     private String mUnit;
+    
+    private boolean mAlarm;
 
     private Intent mAlarmIntent;
     
@@ -121,6 +123,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
+        mAlarm = false;
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
@@ -215,8 +218,11 @@ public class WakeMeAtService extends Service implements LocationListener {
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            Intent i = new Intent(this, EditLocation.class);
+            Intent i = new Intent(this, Alarm.class);
             i.putExtra("rowId", mRowId);
+            i.putExtra("metresAway", mMetresAway);
+            i.putExtra("alarm", mAlarm);
+            
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
@@ -248,6 +254,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
 
     public void soundAlarm() {
+        mAlarm = true;
         if (ALARMTYPE == SMALLALERT) {
             Context context = getApplicationContext();
             CharSequence contentTitle = "Approaching destination";
@@ -269,6 +276,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             }
             mAlarmIntent.putExtra("rowId", mRowId);
             mAlarmIntent.putExtra("metresAway", mMetresAway);
+            mAlarmIntent.putExtra("alarm", true);
             
             startActivity(mAlarmIntent);
         }

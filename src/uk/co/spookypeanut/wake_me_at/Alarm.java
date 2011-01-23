@@ -48,6 +48,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private String mNick;
     private String mUnit;
+    private boolean mAlarm;
     
     private double mMetresAway;
 
@@ -102,7 +103,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 uc.out(mMetresAway), mNick);
         Log.v(LOG_NAME, message);
         tv.setText(message);
-        speak();
+        if (mAlarm) speak();
 
     }
     
@@ -120,12 +121,19 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
     }
     
+    private void startAlarm() {
+        mAlarm = true;
+    }
+    
     @Override
     protected void onNewIntent(Intent intent) {
         Log.v(LOG_NAME, "onNewIntent(" + intent.toString());
         Bundle extras = intent.getExtras();
         rowChanged(extras.getLong("rowId"));
         distanceChanged(extras.getDouble("metresAway"));
+        if (extras.getBoolean("alarm")) {
+            startAlarm();
+        }
     }
     
     @Override
@@ -171,7 +179,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
         }
-        speak();
+        if (mAlarm) speak();
     }
 
     @Override
