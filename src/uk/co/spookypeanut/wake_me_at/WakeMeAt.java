@@ -94,7 +94,9 @@ public class WakeMeAt extends ListActivity {
         return true;
       case R.id.mn_start:
           mLocListAdapter.startService(info.position);
-
+        return true;
+      case R.id.mn_edit_loc:
+          mLocListAdapter.editLocation(info.position);
         return true;
       default:
         return super.onContextItemSelected(item);
