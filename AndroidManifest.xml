@@ -46,7 +46,8 @@
 <activity android:name="EditLocation">
  </activity>
 
-<activity android:name="Alarm">
+<activity android:name="Alarm"
+    android:launchMode="singleInstance">
  </activity>
  
 <activity
