@@ -32,6 +32,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -57,18 +58,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
         
-        Bundle extras = this.getIntent().getExtras();
-        mRowId = extras.getLong("rowId");
-        mMetresAway = extras.getDouble("metresAway");
-
         db = new DatabaseManager(this);
-        mNick = db.getNick(mRowId);
-        mFinalDestination.setLatitude(db.getLatitude(mRowId));
-        mFinalDestination.setLongitude(db.getLongitude(mRowId));
-
-        mUnit = db.getUnit(mRowId);
-        
-        uc = new UnitConverter(this, mUnit);
 
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -84,7 +74,58 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         
         button = (Button)findViewById(R.id.alarmButtonMain);
         button.setOnClickListener(mMainWindow);
+
+        onNewIntent(this.getIntent());
+    }
+    
+    private void rowChanged(long rowId) {
+        Log.v(LOG_NAME, "Alarm.rowChanged(" + rowId + ")");
+        mRowId = rowId;
+        mNick = db.getNick(mRowId);
+        mFinalDestination.setLatitude(db.getLatitude(mRowId));
+        mFinalDestination.setLongitude(db.getLongitude(mRowId));
+
+        mUnit = db.getUnit(mRowId);
         
+        uc = new UnitConverter(this, mUnit);
+    }
+    
+    private void distanceChanged(double distance) {
+        Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
+        mMetresAway = distance;
+        Log.v(LOG_NAME, "" + R.id.alarmMessageTextView);
+        TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
+        Log.v(LOG_NAME, tv.toString());
+        Log.v(LOG_NAME, uc.out(mMetresAway));
+        Log.v(LOG_NAME, mNick);
+        String message = String.format(getString(R.string.alarmMessage),
+                uc.out(mMetresAway), mNick);
+        Log.v(LOG_NAME, message);
+        tv.setText(message);
+        speak();
+
+    }
+    
+    private void speak() {
+        if (mTts != null) {
+            HashMap<String, String> myHashAlarm = new HashMap<String, String>();
+            myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
+                            String.valueOf(AudioManager.STREAM_ALARM));
+            myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
+                            POST_UTTERANCE);
+            Log.d(LOG_NAME, "Format is " + getString(R.string.alarmSpeech));
+            String speech = String.format(getString(R.string.alarmSpeech),
+                                          uc.outSpeech(mMetresAway), mNick);
+            mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
+        }
+    }
+    
+    @Override
+    protected void onNewIntent(Intent intent) {
+        Log.v(LOG_NAME, "onNewIntent(" + intent.toString());
+        Bundle extras = intent.getExtras();
+        rowChanged(extras.getLong("rowId"));
+        distanceChanged(extras.getDouble("metresAway"));
     }
     
     @Override
@@ -130,15 +171,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
         }
-        HashMap<String, String> myHashAlarm = new HashMap<String, String>();
-        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
-                        String.valueOf(AudioManager.STREAM_ALARM));
-        myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
-                        POST_UTTERANCE);
-        Log.d(LOG_NAME, "Format is " + getString(R.string.alarmSpeech));
-        String speech = String.format(getString(R.string.alarmSpeech),
-                                      uc.outSpeech(mMetresAway), mNick);
-        mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
+        speak();
     }
 
     @Override
