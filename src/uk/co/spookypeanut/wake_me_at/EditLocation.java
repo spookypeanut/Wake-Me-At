@@ -87,6 +87,7 @@ public class EditLocation extends Activity {
             
             i.putExtra("latitude", mLatitude);
             i.putExtra("longitude", mLongitude);
+            i.putExtra("nick", mNick);
             Log.d(LOG_NAME, i.toString());
             startActivityForResult(i, GETLOCMAP);
         }

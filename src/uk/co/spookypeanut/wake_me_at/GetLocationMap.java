@@ -69,6 +69,7 @@ implements LocationListener {
     Context mContext;
     MapOverlay mItemizedOverlay;
     GeoPoint mDest;
+    String mNick;
     double mOrigLat, mOrigLong;
     LayoutInflater mInflater;
     private List<Address> mResults;
@@ -81,6 +82,7 @@ implements LocationListener {
     public void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
+        
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
         uc = new UnitConverter(this, "m");
@@ -92,6 +94,7 @@ implements LocationListener {
         Bundle extras = this.getIntent().getExtras();
         mOrigLat = extras.getDouble("latitude");
         mOrigLong = extras.getDouble("longitude");
+        mNick = extras.getString("nick");
 
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
@@ -235,7 +238,7 @@ implements LocationListener {
     @Override
     public boolean onSearchRequested() {
         Log.d(LOG_NAME, "Searching");
-        startSearch(null, false, null, false);
+        startSearch(mNick, true, null, false);
         return true;
     }
     
