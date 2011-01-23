@@ -1,16 +1,14 @@
 http://developer.android.com/index.html
-    list4.java
 http://www.stackoverflow.com/
 http://groups.google.com/group/android-developers/
 http://www.anddev.org/
 http://download.oracle.com/javase/1.5.0/docs/guide/language/
 http://javahowto.blogspot.com/
 
-http://www.anotherandroidblog.com/2010/08/04/android-database-tutorial/
-http://www.tutorialforandroid.com/2009/09/using-official-texttospeech-in-android.html
-
-https://github.com/rux/colouredpaper
-http://feedspeak.googlecode.com
-http://androiddrawableexplorer.appspot.com/
-http://moonblink.googlecode.com/
-https://github.com/sudar/android-samples/tree/master/Week2HomeWork
+0001 http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
+0002 http://androiddrawableexplorer.appspot.com/
+0003 http://www.tutorialforandroid.com/2009/09/using-official-texttospeech-in-android.html
+0004 http://www.anotherandroidblog.com/2010/08/04/android-database-tutorial/
+0005 https://github.com/sudar/android-samples/tree/master/Week2HomeWork
+0006 http://moonblink.googlecode.com/
+0007 http://developer.android.com/resources/samples/ApiDemos/src/com/example/android/apis/view/List4.html

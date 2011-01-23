@@ -17,6 +17,7 @@
     along with Wake Me At, in the file "COPYING".  If not, see 
     <http://www.gnu.org/licenses/>.
 -->
+<!-- REF#0002 -->
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mn_new_loc"

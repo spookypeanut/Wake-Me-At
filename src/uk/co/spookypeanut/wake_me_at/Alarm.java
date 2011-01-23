@@ -125,6 +125,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     @Override
     public void onInit(int status) {
+        // REF#0003
         Log.d(LOG_NAME, "Alarm.onInit(" + status + ")");
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");

@@ -330,6 +330,7 @@ public class EditLocation extends Activity {
                 break;
                 case RADIUSDIALOG:
                     title = "Radius";
+                    // REF#0006
                     inputBox.setInputType(InputType.TYPE_CLASS_NUMBER | InputType.TYPE_NUMBER_FLAG_DECIMAL);
                     positiveListener = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {

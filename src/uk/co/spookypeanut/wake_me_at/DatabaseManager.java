@@ -18,6 +18,8 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
+// REF#0004
+
 import java.util.ArrayList;
 
 import android.content.ContentValues;

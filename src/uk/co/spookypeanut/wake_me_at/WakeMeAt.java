@@ -139,6 +139,7 @@ public class WakeMeAt extends ListActivity {
     }
     
     private class LocListAdapter extends BaseAdapter {
+        // REF#0007
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
         }
