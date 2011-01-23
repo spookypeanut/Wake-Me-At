@@ -207,7 +207,6 @@ public class WakeMeAtService extends Service implements LocationListener {
  
     void handleCommand(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
-            Log.v(LOG_NAME, "handleCommand(" + intent.toString());
             // In this sample, we'll use the same text for the ticker and the expanded notification
             CharSequence text = getText(R.string.foreground_service_started);
 
@@ -216,9 +215,8 @@ public class WakeMeAtService extends Service implements LocationListener {
                     System.currentTimeMillis());
 
             // The PendingIntent to launch our activity if the user selects this notification
-            Intent i = new Intent(this, Tracking.class);
+            Intent i = new Intent(this, EditLocation.class);
             i.putExtra("rowId", mRowId);
-            i.putExtra("metresAway", mMetresAway);
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
