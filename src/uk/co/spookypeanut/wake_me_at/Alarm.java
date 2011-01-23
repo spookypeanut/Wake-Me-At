@@ -46,14 +46,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private Location mFinalDestination = new Location("");
     
     private String mNick;
-    private double mLatitude;
-    private double mLongitude;
-    private float mRadius;
-    private String mLocProv;
     private String mUnit;
     
     private double mMetresAway;
-    private String mUnitsAway;
 
     private TextToSpeech mTts;
     
@@ -71,10 +66,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
 
-        mLatitude = db.getLatitude(mRowId);
-        mLongitude = db.getLongitude(mRowId);
-        mRadius = db.getRadius(mRowId);
-        mLocProv = db.getProvider(mRowId);
         mUnit = db.getUnit(mRowId);
         
         uc = new UnitConverter(this, mUnit);
@@ -144,7 +135,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                                       uc.outSpeech(mMetresAway), mNick);
         mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
     }
-    
 
     @Override
     protected void onDestroy() {
