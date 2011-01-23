@@ -234,9 +234,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onLocationChanged(Location location) {
+        Log.v(LOG_NAME, "onLocationChanged()");
         mMetresAway = location.distanceTo(mFinalDestination);
-        // TODO: Check if alarm is already running
-        
         // message is, e.g. You are 200m from Welwyn North
         String message = String.format(getString(R.string.notif_full),
                             uc.out(mMetresAway),
@@ -244,13 +243,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mMetresAway < uc.toMetres(mRadius)) {
-            if (mAlarmIntent == null) {
-                soundAlarm();
-            } else {
-                Log.d(LOG_NAME, "Changing the distance away");
-                mAlarmIntent.putExtra("metresAway", mMetresAway);
-            }
-            
+            soundAlarm();
         }
     }
 
@@ -271,6 +264,8 @@ public class WakeMeAtService extends Service implements LocationListener {
             if (mAlarmIntent == null) {
                 mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
                 mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            } else {
+                Log.d(LOG_NAME, "Changing the distance away");
             }
             mAlarmIntent.putExtra("rowId", mRowId);
             mAlarmIntent.putExtra("metresAway", mMetresAway);
