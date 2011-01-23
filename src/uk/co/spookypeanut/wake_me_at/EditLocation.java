@@ -164,8 +164,8 @@ public class EditLocation extends Activity {
     private long createDefaultRow() {
         // TODO: move all strings / constants out to R
         return db.addRow (
-            "zero", 10.0, 20.0,
-            "network", (float) 1800.0, "m"
+            "", 1000.0, 1000.0,
+            "network", (float) 1.80, "km"
         );
     }
     
@@ -206,7 +206,13 @@ public class EditLocation extends Activity {
     }
     
     protected void loadNick() {
+        Log.v(LOG_NAME, "loadNick()");
         mNick = db.getNick(mRowId);
+        if (mNick.equals("")) {
+            Log.v(LOG_NAME, "Nick is empty");
+            Dialog monkey = onCreateDialog(NICKDIALOG);
+            monkey.show();
+        }
         updateForm();
     }
     
@@ -303,7 +309,6 @@ public class EditLocation extends Activity {
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(unitListener);
 
-        
         loadNick();
         loadLatLong();
         loadRadius();
