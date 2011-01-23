@@ -1,8 +1,8 @@
 Alarm pops open a separate intent
     - noise
     - vibration
-    - distance away
-    - snooze
+    - distance away (tracked)
+    - snooze?
 A "tracking" view
     - point the direction
     - countdown distance
