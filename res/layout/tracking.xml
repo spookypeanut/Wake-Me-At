@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+ <!--
+  This file is part of Wake Me At. Wake Me At is the legal property of
+  its developer, Henry Bush (spookypeanut). Wake Me At is free software:
+  you can redistribute it and/or modify it under the terms of the GNU
+  General Public License as published by the Free Software Foundation,
+  either version 3 of the License, or (at your option) any later
+  version. Wake Me At is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
+  General Public License for more details. You should have received a
+  copy of the GNU General Public License along with Wake Me At, in the
+  file "COPYING". If not, see <http://www.gnu.org/licenses/>.
+ -->
+
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+ android:layout_width="fill_parent" android:layout_height="fill_parent">
+ <LinearLayout android:orientation="vertical"
+  android:layout_width="fill_parent" android:layout_height="fill_parent">
+  <TextView android:id="@+id/alarmTitle" android:layout_height="wrap_content"
+   android:layout_width="wrap_content" android:text="@string/alarmTitle" />
+  <ImageView android:id="@+id/alarmMainImage"
+   android:layout_height="wrap_content" android:layout_width="wrap_content"
+   android:src="@drawable/icon" />
+   <TextView android:id="@+id/alarmMessageTextView" android:layout_height="wrap_content"
+   android:layout_width="wrap_content" android:text="empty message" />
+  <Button android:id="@+id/alarmButtonStop"
+   android:layout_height="wrap_content" android:layout_width="fill_parent"
+   android:text="@string/alarmButtonStop" android:gravity="center" />
+  <LinearLayout android:orientation="horizontal"
+   android:layout_height="wrap_content" android:layout_width="wrap_content">
+   <!-- <Button android:id="@+id/alarmButtonSnooze"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonSnooze" />-->
+   <Button android:id="@+id/alarmButtonMain"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonMain" />
+   <Button android:id="@+id/alarmButtonEdit"
+    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:text="@string/alarmButtonEdit" />
+  </LinearLayout>
+ </LinearLayout>
+</ScrollView>

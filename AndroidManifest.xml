@@ -48,6 +48,9 @@
 <activity android:name="Alarm"
     android:launchMode="singleTask" /> <!-- REF#0001 -->
  
+<activity android:name="Tracking"
+    android:launchMode="singleTask" />
+    
 <activity
     android:theme="@android:style/Theme.Dialog"
     android:icon="@drawable/icon"
