@@ -11,7 +11,6 @@ A "tracking" view
 Edit location:
     - Pop up description if none exists
     - Pop up map if no location exists
-    - Pass description to search box
 Main view:
     - Map on context menu
 Multiple location services at once
