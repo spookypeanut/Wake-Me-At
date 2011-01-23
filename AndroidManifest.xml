@@ -43,12 +43,10 @@
     </intent-filter>
 </activity>
 
-<activity android:name="EditLocation">
- </activity>
+<activity android:name="EditLocation" />
 
 <activity android:name="Alarm"
-    android:launchMode="singleInstance">
- </activity>
+    android:launchMode="singleTask" /> 
  
 <activity
     android:theme="@android:style/Theme.Dialog"
