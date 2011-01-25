@@ -2,13 +2,11 @@ Alarm:
     - noise
     - vibration
     - snooze?
+    - broadcast receiver for distance
 Tracking:
     - point the direction
     - allow switching location provider
     - display destination, radius, etc
-Edit location:
-    - Pop up description if none exists
-    - Pop up map if no location exists
 Main view:
     - Distance away?
     - Map on context menu
