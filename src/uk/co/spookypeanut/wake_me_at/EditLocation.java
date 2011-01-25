@@ -51,6 +51,7 @@ public class EditLocation extends Activity {
     
     public static final int NICKDIALOG = 0;
     public static final int RADIUSDIALOG = 1;
+    private boolean mDialogOpen = false;
     
     private DatabaseManager db;
     private UnitConverter uc;
@@ -83,16 +84,24 @@ public class EditLocation extends Activity {
 
     private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
         public void onClick(View v) {
+            getLoc();
+        }
+    };
+    
+    private void getLoc() {
+        if (mDialogOpen == false) {
             Intent i = new Intent(EditLocation.this.getApplication(), GetLocationMap.class);
-            
             i.putExtra("latitude", mLatitude);
             i.putExtra("longitude", mLongitude);
             i.putExtra("nick", mNick);
             Log.d(LOG_NAME, i.toString());
             startActivityForResult(i, GETLOCMAP);
+        } else {
+            Log.w(LOG_NAME, "Dialog open, skipping location map");
         }
-    };
-                
+        
+    }
+    
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
             Button radiusButton = (Button)findViewById(R.id.radiusButton);
@@ -172,6 +181,9 @@ public class EditLocation extends Activity {
     protected void loadLatLong() {
         mLatitude = db.getLatitude(mRowId);
         mLongitude = db.getLongitude(mRowId);
+        if (mLatitude == 1000 && mLongitude == 1000) {
+            getLoc();
+        }
         updateForm();
     }
     
@@ -318,6 +330,7 @@ public class EditLocation extends Activity {
 
     @Override
     protected Dialog onCreateDialog(int type) {
+        if (mDialogOpen == false) {
             LayoutInflater factory = LayoutInflater.from(this);
             final View textEntryView = factory.inflate(R.layout.text_input, null);
             final EditText inputBox = (EditText)textEntryView.findViewById(R.id.input_edit);
@@ -329,7 +342,8 @@ public class EditLocation extends Activity {
                     positiveListener = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             changedNick(inputBox.getText().toString());
-                            db.logOutArray();
+                            mDialogOpen = false;
+                            loadLatLong();
                         }
                     };
                 break;
@@ -341,12 +355,14 @@ public class EditLocation extends Activity {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             changedRadius(Float.valueOf(inputBox.getText().toString()));
                             db.logOutArray();
+                            mDialogOpen = false;
                         }
                     };
                 break;
                 default:
                     Log.wtf(LOG_NAME, "Invalid dialog type " + type);
             }
+            mDialogOpen = true;
             return new AlertDialog.Builder(EditLocation.this)
                 .setTitle(title)
                 .setView(textEntryView) 
@@ -354,8 +370,13 @@ public class EditLocation extends Activity {
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         Log.d(LOG_NAME, "clicked negative");
+                        mDialogOpen = false;
                     }
                 })
                 .create();
+        } else {
+            Log.w(LOG_NAME, "Dialog already open, skipping");
+            return null;
+        }
     }
 }
