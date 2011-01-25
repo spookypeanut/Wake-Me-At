@@ -18,13 +18,18 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.location.Location;
 import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
@@ -42,6 +47,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private DatabaseManager db;
     private UnitConverter uc;
+    private MediaPlayer mMediaPlayer;
     private long mRowId;
     
     private Location mFinalDestination = new Location("");
@@ -60,6 +66,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         super.onCreate(icicle);
         
         db = new DatabaseManager(this);
+        mMediaPlayer = new MediaPlayer();
 
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -123,6 +130,46 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private void startAlarm() {
         mAlarm = true;
+        speak();
+        if (mMediaPlayer.isPlaying() == false) {
+            startRingtone();
+        }
+    }
+    
+    private boolean startRingtone() {
+        mMediaPlayer.reset();
+        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
+        try {
+            mMediaPlayer.setDataSource(this, alert);
+        } catch (IllegalArgumentException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IllegalStateException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+        if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+                   mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                   mMediaPlayer.setLooping(true);
+                   try {
+                    mMediaPlayer.prepare();
+                } catch (IllegalStateException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                } catch (IOException e) {
+                    // TODO Auto-generated catch block
+                    e.printStackTrace();
+                }
+                   mMediaPlayer.start();
+        }
+        return true;
     }
     
     @Override
@@ -179,9 +226,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
         }
-        if (mAlarm) speak();
+        if (mAlarm) startAlarm();
     }
-
+    
     @Override
     protected void onDestroy() {
       db.close();
@@ -192,6 +239,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void stopService() {
+        Log.d(LOG_NAME, "Alarm.stopService()");
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+        }
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
     
