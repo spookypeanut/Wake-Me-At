@@ -184,10 +184,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onDestroy() {
-      super.onDestroy();
+      db.close();
       if (mTts != null) {
           mTts.shutdown();
       }
+      super.onDestroy();
     }
     
     private void stopService() {

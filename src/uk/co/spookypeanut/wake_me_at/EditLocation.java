@@ -379,4 +379,10 @@ public class EditLocation extends Activity {
             return null;
         }
     }
+    
+    @Override
+    protected void onDestroy() {
+        db.close();
+        super.onDestroy();
+    }
 }

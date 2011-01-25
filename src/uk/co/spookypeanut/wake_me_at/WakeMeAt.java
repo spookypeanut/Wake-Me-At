@@ -111,6 +111,12 @@ public class WakeMeAt extends ListActivity {
     }
     
     @Override
+    protected void onDestroy() {
+        db.close();
+        super.onDestroy();
+    }
+    
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         Log.d(LOG_NAME, "Start onCreate()");

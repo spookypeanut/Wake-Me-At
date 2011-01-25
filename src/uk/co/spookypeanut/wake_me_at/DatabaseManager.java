@@ -280,6 +280,10 @@ public class DatabaseManager
         return rowArray;
     }
 
+    public void close() {
+        db.close();
+    }
+    
     public void logOutArray() {
         Log.d(LOG_NAME, "Start of array log");
         ArrayList<ArrayList<Object>> data = getAllRowsAsArrays();
