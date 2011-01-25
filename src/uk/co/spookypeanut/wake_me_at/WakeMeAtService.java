@@ -250,9 +250,22 @@ public class WakeMeAtService extends Service implements LocationListener {
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mMetresAway < uc.toMetres(mRadius)) {
             soundAlarm();
-        }
+        } 
+        updateAlarm();
     }
 
+    public void updateAlarm () {
+        if (mAlarmIntent == null) {
+            mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+            mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            Log.d(LOG_NAME, "Changing the distance away");
+        }
+        mAlarmIntent.putExtra("rowId", mRowId);
+        mAlarmIntent.putExtra("metresAway", mMetresAway);
+        mAlarmIntent.putExtra("alarm", mAlarm);
+    }
+    
     public void soundAlarm() {
         mAlarm = true;
         if (ALARMTYPE == SMALLALERT) {
@@ -274,10 +287,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             } else {
                 Log.d(LOG_NAME, "Changing the distance away");
             }
-            mAlarmIntent.putExtra("rowId", mRowId);
-            mAlarmIntent.putExtra("metresAway", mMetresAway);
-            mAlarmIntent.putExtra("alarm", true);
-            
+            updateAlarm();
             startActivity(mAlarmIntent);
         }
     }
