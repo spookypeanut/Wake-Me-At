@@ -41,11 +41,6 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     private static final int ALARMNOTIFY_ID = 1;
     
-    private final int SMALLALERT = 1;
-    private final int BIGALERT = 2;
-    
-    private final int ALARMTYPE = BIGALERT;
-
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
@@ -268,28 +263,14 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     public void soundAlarm() {
         mAlarm = true;
-        if (ALARMTYPE == SMALLALERT) {
-            Context context = getApplicationContext();
-            CharSequence contentTitle = "Approaching destination";
-            CharSequence contentText = "Approaching destination" + mMetresAway;
-            
-            Intent notificationIntent = new Intent(this, EditLocation.class);
-            PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
-            mNotification.defaults |= Notification.DEFAULT_SOUND;
-            mNotification.defaults |= Notification.DEFAULT_VIBRATE;
-            
-            mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
-            mNM.notify(ALARMNOTIFY_ID, mNotification);
-        } else if (ALARMTYPE == BIGALERT) {
-            if (mAlarmIntent == null) {
-                mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
-                mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            } else {
-                Log.d(LOG_NAME, "Changing the distance away");
-            }
-            updateAlarm();
-            startActivity(mAlarmIntent);
+        if (mAlarmIntent == null) {
+            mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+            mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        } else {
+            Log.d(LOG_NAME, "Changing the distance away");
         }
+        updateAlarm();
+        startActivity(mAlarmIntent);
     }
     
     @Override
