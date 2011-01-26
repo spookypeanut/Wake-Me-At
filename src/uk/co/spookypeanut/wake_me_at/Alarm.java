@@ -132,11 +132,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mAlarm = true;
         speak();
         if (mMediaPlayer.isPlaying() == false) {
-            startRingtone();
+            startAlarmtone();
         }
     }
     
-    private boolean startRingtone() {
+    private boolean startAlarmtone() {
         mMediaPlayer.reset();
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
         try {
