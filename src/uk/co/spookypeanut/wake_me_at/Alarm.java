@@ -31,6 +31,7 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
@@ -48,6 +49,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private DatabaseManager db;
     private UnitConverter uc;
     private MediaPlayer mMediaPlayer;
+    private Vibrator mVibrator;
+    
     private long mRowId;
     
     private Location mFinalDestination = new Location("");
@@ -67,6 +70,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         
         db = new DatabaseManager(this);
         mMediaPlayer = new MediaPlayer();
+        mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
@@ -129,8 +133,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void startAlarm() {
+        long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
         mAlarm = true;
         speak();
+        mVibrator.vibrate(pattern, 0);
         if (mMediaPlayer.isPlaying() == false) {
             startAlarmtone();
         }
@@ -244,6 +250,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             mMediaPlayer.stop();
             mMediaPlayer.release();
         }
+        mVibrator.cancel();
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
     
