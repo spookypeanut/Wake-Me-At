@@ -1,18 +1,22 @@
 Alarm:
-    - noise
-    - vibration
-    - snooze?
+    - noise & vibration should stop with service
     - broadcast receiver for distance
 Tracking:
     - point the direction
     - allow switching location provider
     - display destination, radius, etc
 Main view:
+    - indication if it's running
+Edit location:
+    - big indicator of if a service is running
+    - stop button only enabled if service running (and vv)
+
+
+Post alpha:
+Multiple location services at once
+Lower-res icons
+Main view:
     - Distance away?
     - Map on context menu
-Multiple location services at once
-    - indication on main list if it's running
-    Edit location:
-        - big indicator of if a service is running
-        - stop button only enabled if service running (and vv)
-Lower-res icons
+Tracking:
+    - Map (with radius)
