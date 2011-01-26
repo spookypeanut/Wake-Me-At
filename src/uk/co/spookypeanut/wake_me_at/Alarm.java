@@ -142,6 +142,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
     }
     
+    private void stopAlarm() {
+        if (mMediaPlayer != null) {
+            mMediaPlayer.stop();
+            mMediaPlayer.release();
+        }
+        mVibrator.cancel();
+        mTts.stop();
+    }
+    
     private boolean startAlarmtone() {
         mMediaPlayer.reset();
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
@@ -184,8 +193,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Bundle extras = intent.getExtras();
         rowChanged(extras.getLong("rowId"));
         distanceChanged(extras.getDouble("metresAway"));
-        if (extras.getBoolean("alarm")) {
+        if (extras.getBoolean("alarm") == true) {
             startAlarm();
+        } else if (extras.getBoolean("alarm") == false) {
+            stopAlarm();
         }
     }
     
@@ -246,11 +257,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private void stopService() {
         Log.d(LOG_NAME, "Alarm.stopService()");
-        if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
-            mMediaPlayer.release();
-        }
-        mVibrator.cancel();
+        stopAlarm();
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
     
