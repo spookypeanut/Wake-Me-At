@@ -23,8 +23,10 @@ import java.util.HashMap;
 import java.util.Locale;
 
 import android.app.Activity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -45,6 +47,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
     private final int TTS_REQUEST_CODE = 27;
     private final String POST_UTTERANCE = "WMAPostUtterance";
+    // TODO: Set this globally
+    private final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
     
     private DatabaseManager db;
     private UnitConverter uc;
@@ -214,6 +218,20 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             stopAlarm();
         }
     }
+    @Override
+    protected void onResume() { 
+        super.onResume();
+        IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
+        this.registerReceiver(this.mReceiver, filter);
+        Log.d(LOG_NAME, "Registered receiver");
+    }
+    
+    @Override
+    protected void onPause() {
+        this.unregisterReceiver(this.mReceiver);
+        Log.d(LOG_NAME, "Unregistered receiver");
+        super.onPause();
+    }
     
     @Override
     protected void onActivityResult(
@@ -301,4 +319,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             finish();
         }
     };
+    
+    public BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_NAME, "Received broadcast");
+        }
+   };
 }

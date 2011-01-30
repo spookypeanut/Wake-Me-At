@@ -38,6 +38,9 @@ import android.widget.Toast;
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    // TODO: Set this globally
+    private final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
+
 
     private static final int ALARMNOTIFY_ID = 1;
     
@@ -250,27 +253,26 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
 
     public void updateAlarm () {
-        if (mAlarmIntent == null) {
-            mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
-            mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        } else {
-            Log.d(LOG_NAME, "Changing the distance away");
+        Log.d(LOG_NAME, "Changing the distance away");
+        if (mAlarmIntent == null || mAlarmIntent.getClass() != null) {
+            mAlarmIntent = new Intent(BROADCAST_UPDATE);
         }
         mAlarmIntent.putExtra("rowId", mRowId);
         mAlarmIntent.putExtra("metresAway", mMetresAway);
         mAlarmIntent.putExtra("alarm", mAlarm);
+        Log.d(LOG_NAME, "Sending broadcast");
+        sendBroadcast(mAlarmIntent);
     }
     
     public void soundAlarm() {
-        mAlarm = true;
         if (mAlarmIntent == null) {
             mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
             mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-        } else {
-            Log.d(LOG_NAME, "Changing the distance away");
+            startActivity(mAlarmIntent);
+            // TODO: this is a hacky way to do it
+            mAlarmIntent = null;
         }
         updateAlarm();
-        startActivity(mAlarmIntent);
     }
     
     @Override
