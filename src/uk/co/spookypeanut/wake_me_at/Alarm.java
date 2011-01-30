@@ -149,11 +149,19 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private void stopAlarm() {
         if (mMediaPlayer != null) {
-            mMediaPlayer.stop();
+            try {
+                mMediaPlayer.stop();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            }
             mMediaPlayer.release();
         }
-        mVibrator.cancel();
-        mTts.stop();
+        if (mVibrator != null) {
+            mVibrator.cancel();
+        }
+        if (mTts != null) {
+            mTts.stop();
+        }
     }
     
     private boolean startAlarmtone() {
