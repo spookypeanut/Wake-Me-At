@@ -55,7 +55,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
     
-    private boolean mVibrateOn = false;
+    private boolean mVibrateOn = true;
     private boolean mNoiseOn = false;
     //TODO: Should I ignore all tts stuff if this is off? Probably
     private boolean mSpeechOn = false;
@@ -148,6 +148,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void startAlarm() {
+        Log.v(LOG_NAME, "Starting alarm");
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
         mAlarm = true;
         if (mSpeechOn) speak();
@@ -214,10 +215,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.v(LOG_NAME, "onNewIntent(" + intent.toString());
+        Log.v(LOG_NAME, "Alarm.onNewIntent(" + intent.toString());
         Bundle extras = intent.getExtras();
         rowChanged(extras.getLong("rowId"));
         distanceChanged(extras.getDouble("metresAway"));
+        Log.v(LOG_NAME, "About to start / stop alarm: " + extras.getBoolean("alarm"));
         if (extras.getBoolean("alarm") == true) {
             startAlarm();
         } else if (extras.getBoolean("alarm") == false) {
@@ -332,6 +334,13 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
             distanceChanged(extras.getDouble("metresAway"));
+            if (extras.getBoolean("cancelAlarm")) {
+                stopAlarm();
+                return;
+            }
+            if (extras.getBoolean("alarm") == true) {
+                startAlarm();
+            }
         }
    };
 }

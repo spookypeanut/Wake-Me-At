@@ -173,6 +173,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
+        mAlarmIntent.putExtra("cancelAlarm", 1);
         db.close();
     }
 
@@ -266,9 +267,13 @@ public class WakeMeAtService extends Service implements LocationListener {
     }
     
     public void soundAlarm() {
+        mAlarm = true;
         if (mAlarmIntent == null) {
             mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
             mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            mAlarmIntent.putExtra("rowId", mRowId);
+            mAlarmIntent.putExtra("metresAway", mMetresAway);
+            mAlarmIntent.putExtra("alarm", mAlarm);
             startActivity(mAlarmIntent);
             // TODO: this is a hacky way to do it
             mAlarmIntent = null;
