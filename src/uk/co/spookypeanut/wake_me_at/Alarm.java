@@ -51,6 +51,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
     
+    private boolean mVibrateOn = false;
+    private boolean mNoiseOn = false;
+    //TODO: Should I ignore all tts stuff if this is off? Probably
+    private boolean mSpeechOn = false;
+    
     private long mRowId;
     
     private Location mFinalDestination = new Location("");
@@ -114,7 +119,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 uc.out(mMetresAway), mNick);
         Log.v(LOG_NAME, message);
         tv.setText(message);
-        if (mAlarm) speak();
+        if (mAlarm && mSpeechOn) speak();
 
     }
     
@@ -135,9 +140,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void startAlarm() {
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
         mAlarm = true;
-        speak();
-        mVibrator.vibrate(pattern, 0);
-        if (mMediaPlayer.isPlaying() == false) {
+        if (mSpeechOn) speak();
+        if (mVibrateOn) mVibrator.vibrate(pattern, 0);
+        if (mNoiseOn && (mMediaPlayer.isPlaying() == false)) {
             startAlarmtone();
         }
     }
