@@ -1,5 +1,6 @@
 Alarm:
     - noise & vibration should stop with service
+    - noise should be headphones only if headphones plugged in
     - broadcast receiver for distance
 Tracking:
     - point the direction
