@@ -117,10 +117,16 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.v(LOG_NAME, "" + R.id.alarmMessageTextView);
         TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
         Log.v(LOG_NAME, tv.toString());
+        Log.v(LOG_NAME, "" + mMetresAway);
         Log.v(LOG_NAME, uc.out(mMetresAway));
         Log.v(LOG_NAME, mNick);
-        String message = String.format(getString(R.string.alarmMessage),
-                uc.out(mMetresAway), mNick);
+        String message;
+        if (mMetresAway < 0) {
+            message = "Awaiting first location fix";
+        } else {
+            message = String.format(getString(R.string.alarmMessage),
+                    uc.out(mMetresAway), mNick);
+        }
         Log.v(LOG_NAME, message);
         tv.setText(message);
         if (mAlarm && mSpeechOn) speak();
@@ -324,6 +330,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
+            Bundle extras = intent.getExtras();
+            distanceChanged(extras.getDouble("metresAway"));
         }
    };
 }
