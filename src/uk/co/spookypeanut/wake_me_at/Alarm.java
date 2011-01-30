@@ -195,6 +195,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
+                    Log.d(LOG_NAME, "Headset: " + audioManager.isWiredHeadsetOn());
+                    Log.d(LOG_NAME, "Speakerphone: " + audioManager.isSpeakerphoneOn());
                    mMediaPlayer.start();
         }
         return true;
