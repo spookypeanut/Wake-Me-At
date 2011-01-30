@@ -1,5 +1,6 @@
-http://developer.android.com/index.html
+http://developer.android.com/
 http://www.stackoverflow.com/
+
 http://groups.google.com/group/android-developers/
 http://www.anddev.org/
 http://download.oracle.com/javase/1.5.0/docs/guide/language/
