@@ -159,6 +159,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void stopAlarm() {
+        Log.v(LOG_NAME, "Alarm.stopAlarm");
         if (mMediaPlayer != null) {
             try {
                 mMediaPlayer.stop();
@@ -217,9 +218,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     protected void onNewIntent(Intent intent) {
         Log.v(LOG_NAME, "Alarm.onNewIntent(" + intent.toString());
         Bundle extras = intent.getExtras();
+        Log.v(LOG_NAME, "About to start / stop alarm: " + extras.getBoolean("alarm"));
+        if (extras.getBoolean("cancelAlarm")) {
+            Log.v(LOG_NAME, "Cancel received");
+            stopAlarm();
+            finish();
+            return;
+        }
         rowChanged(extras.getLong("rowId"));
         distanceChanged(extras.getDouble("metresAway"));
-        Log.v(LOG_NAME, "About to start / stop alarm: " + extras.getBoolean("alarm"));
         if (extras.getBoolean("alarm") == true) {
             startAlarm();
         } else if (extras.getBoolean("alarm") == false) {
@@ -333,11 +340,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
-            distanceChanged(extras.getDouble("metresAway"));
             if (extras.getBoolean("cancelAlarm")) {
                 stopAlarm();
+                finish();
                 return;
             }
+            distanceChanged(extras.getDouble("metresAway"));
             if (extras.getBoolean("alarm") == true) {
                 startAlarm();
             }

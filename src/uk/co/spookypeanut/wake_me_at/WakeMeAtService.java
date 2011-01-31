@@ -167,13 +167,13 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onDestroy() {
-        Log.d(LOG_NAME, "onDestroy()");
+        Log.d(LOG_NAME, "WakeMeAtService.onDestroy()");
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
-        mAlarmIntent.putExtra("cancelAlarm", 1);
+        cancelAlarm();
         db.close();
     }
 
@@ -266,18 +266,27 @@ public class WakeMeAtService extends Service implements LocationListener {
         sendStickyBroadcast(mAlarmIntent);
     }
     
+    public void cancelAlarm() {
+        Log.d(LOG_NAME, "WakeMeAtService.cancelAlarm");
+        mAlarm = false;
+        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+        alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        alarmIntent.putExtra("rowId", mRowId);
+        alarmIntent.putExtra("metresAway", mMetresAway);
+        alarmIntent.putExtra("alarm", mAlarm);
+        alarmIntent.putExtra("cancelAlarm", true);
+        
+        startActivity(alarmIntent);
+    }
+    
     public void soundAlarm() {
         mAlarm = true;
-        if (mAlarmIntent == null) {
-            mAlarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
-            mAlarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            mAlarmIntent.putExtra("rowId", mRowId);
-            mAlarmIntent.putExtra("metresAway", mMetresAway);
-            mAlarmIntent.putExtra("alarm", mAlarm);
-            startActivity(mAlarmIntent);
-            // TODO: this is a hacky way to do it
-            mAlarmIntent = null;
-        }
+        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+        alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        alarmIntent.putExtra("rowId", mRowId);
+        alarmIntent.putExtra("metresAway", mMetresAway);
+        alarmIntent.putExtra("alarm", mAlarm);
+        startActivity(alarmIntent);
         updateAlarm();
     }
     
