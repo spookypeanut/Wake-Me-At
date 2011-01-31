@@ -263,7 +263,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mAlarmIntent.putExtra("metresAway", mMetresAway);
         mAlarmIntent.putExtra("alarm", mAlarm);
         Log.d(LOG_NAME, "Sending broadcast");
-        sendBroadcast(mAlarmIntent);
+        sendStickyBroadcast(mAlarmIntent);
     }
     
     public void soundAlarm() {
