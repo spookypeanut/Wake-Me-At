@@ -56,7 +56,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private Vibrator mVibrator;
     
     private boolean mVibrateOn = true;
-    private boolean mNoiseOn = false;
+    private boolean mNoiseOn = true;
     //TODO: Should I ignore all tts stuff if this is off? Probably
     private boolean mSpeechOn = false;
     
@@ -209,6 +209,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 }
                     Log.d(LOG_NAME, "Headset: " + audioManager.isWiredHeadsetOn());
                     Log.d(LOG_NAME, "Speakerphone: " + audioManager.isSpeakerphoneOn());
+                    // REF#0008
+                    audioManager.requestAudioFocus(null, AudioManager.STREAM_ALARM,
+                            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
                    mMediaPlayer.start();
         }
         return true;
