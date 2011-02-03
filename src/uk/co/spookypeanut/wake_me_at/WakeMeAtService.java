@@ -173,7 +173,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
-        cancelAlarm();
         db.close();
     }
 
@@ -273,8 +272,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
-        alarmIntent.putExtra("alarm", mAlarm);
-        alarmIntent.putExtra("cancelAlarm", true);
         
         startActivity(alarmIntent);
     }
@@ -285,7 +282,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
-        alarmIntent.putExtra("alarm", mAlarm);
         startActivity(alarmIntent);
         updateAlarm();
     }
