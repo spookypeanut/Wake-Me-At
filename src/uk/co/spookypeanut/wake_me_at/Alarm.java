@@ -78,7 +78,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         super.onCreate(icicle);
         
         db = new DatabaseManager(this);
-        mMediaPlayer = new MediaPlayer();
         mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 
         Intent checkIntent = new Intent();
@@ -154,9 +153,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
         if (mNoiseOn) {
-            try {
-                assert mMediaPlayer.isPlaying() == true;
-            } catch (IllegalStateException e) {
+            if (mMediaPlayer == null) {
                 Log.d(LOG_NAME, "Alarm not playing, starting it");
                 startAlarmtone();
             }
@@ -172,6 +169,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 e.printStackTrace();
             }
             mMediaPlayer.release();
+            mMediaPlayer = null;
         }
         if (mVibrator != null) {
             mVibrator.cancel();
@@ -182,7 +180,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private boolean startAlarmtone() {
-        mMediaPlayer.reset();
+        Log.d(LOG_NAME, "Alarm.startAlarmtone()");
+        mMediaPlayer = new MediaPlayer();
         Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
         try {
             mMediaPlayer.setDataSource(this, alert);
