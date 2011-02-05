@@ -48,8 +48,10 @@ public class UnitConverter
     private final List <Unit> mUnitList = 
             Arrays.asList(
                 mMetreUnit,
-                new Unit("foot", "ft", 0.3048, SYSTEM_IMPERIAL, "feet"),
                 new Unit("kilometre", "km", 1000, SYSTEM_METRIC, "kilometres"),
+                
+                new Unit("foot", "ft", 0.3048, SYSTEM_IMPERIAL, "feet"),
+                new Unit("yard", "yd", 0.9144, SYSTEM_IMPERIAL, "yards"),
                 new Unit("mile", "mi", 1609.344, SYSTEM_IMPERIAL, "miles"));
 
     Unit mUnit;
