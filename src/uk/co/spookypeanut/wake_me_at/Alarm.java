@@ -252,7 +252,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         stopAlarm();
         super.onPause();
     }
-    
+
+    @Override
+    public void onBackPressed() {
+        Log.d(LOG_NAME, "Disallowing pressing back");
+    }
+
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
