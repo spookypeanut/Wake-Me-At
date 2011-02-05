@@ -173,7 +173,12 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
+        mRowId = -1;
+        mAlarm = false;
+        mMetresAway = -1;
+        updateAlarm();
         db.close();
+        super.onDestroy();
     }
 
     public void registerLocationListener() {
