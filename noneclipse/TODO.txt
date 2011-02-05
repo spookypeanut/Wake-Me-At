@@ -9,7 +9,6 @@ Main view:
     - indication if it's running
 Edit location:
     - big indicator of if a service is running
-    - stop button only enabled if service running (and vv)
 
 
 Post alpha:

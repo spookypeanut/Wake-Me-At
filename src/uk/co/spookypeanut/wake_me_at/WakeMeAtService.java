@@ -60,7 +60,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private String mProvider;
     private String mUnit;
     
-    private boolean mAlarm;
+    private boolean mAlarm = false;
 
     private Intent mAlarmIntent;
     
@@ -121,7 +121,6 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onCreate() {
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
-        mAlarm = false;
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
@@ -158,10 +157,13 @@ public class WakeMeAtService extends Service implements LocationListener {
         registerLocationListener();
         
         handleCommand(intent);
-        // We want this service to continue running until it is explicitly
-        // stopped, so return sticky.
+        updateAlarm();
+
         Toast.makeText(getApplicationContext(), R.string.foreground_service_started,
                 Toast.LENGTH_SHORT).show();
+        
+        // We want this service to continue running until it is explicitly
+        // stopped, so return sticky.
         return START_STICKY;
     }
 

@@ -97,9 +97,18 @@ public class EditLocation extends Activity {
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
+            long broadcastRowId = extras.getLong("rowId");
+            serviceRunning(broadcastRowId == mRowId);
         }
    };
-    
+   
+   private void serviceRunning (boolean isThisRow) {
+       Button button = (Button)findViewById(R.id.startService);
+       button.setEnabled(!isThisRow);
+
+       button = (Button)findViewById(R.id.stopService);
+       button.setEnabled(isThisRow);
+   }
    
    @Override
    protected void onPause() {
