@@ -24,9 +24,11 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -48,6 +50,8 @@ public class EditLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    
+    public static final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
     
     public static final int NICKDIALOG = 0;
     public static final int RADIUSDIALOG = 1;
@@ -88,6 +92,30 @@ public class EditLocation extends Activity {
         }
     };
     
+    public BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_NAME, "Received broadcast");
+            Bundle extras = intent.getExtras();
+        }
+   };
+    
+   
+   @Override
+   protected void onPause() {
+       this.unregisterReceiver(this.mReceiver);
+       Log.d(LOG_NAME, "Unregistered receiver");
+       super.onPause();
+   }
+   
+   @Override
+   protected void onResume() { 
+       super.onResume();
+       IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
+       this.registerReceiver(this.mReceiver, filter);
+       Log.d(LOG_NAME, "Registered receiver");
+   }
+
     private void getLoc() {
         if (mDialogOpen == false) {
             Intent i = new Intent(EditLocation.this.getApplication(), GetLocationMap.class);
@@ -379,6 +407,8 @@ public class EditLocation extends Activity {
             return null;
         }
     }
+    
+
     
     @Override
     protected void onDestroy() {
