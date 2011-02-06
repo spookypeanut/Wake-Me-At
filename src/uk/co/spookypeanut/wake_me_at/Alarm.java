@@ -27,6 +27,14 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -54,6 +62,27 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private UnitConverter uc;
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
+    private SensorManager mSensorManager;
+    
+    private SampleView mView;
+    private float[] mValues;
+    
+    private final SensorEventListener mListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
+            mValues = event.values;
+            if (mView != null) {
+                mView.invalidate(); 
+            }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
+            
+        }
+    };
     
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
@@ -96,6 +125,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         
         button = (Button)findViewById(R.id.alarmButtonMain);
         button.setOnClickListener(mMainWindow);
+        
+        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
+        mView = new SampleView(this);
+
 
         onNewIntent(this.getIntent());
     }
@@ -250,6 +283,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mAlarm == true) {
             startAlarm();
         }
+        Sensor mMagneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mSensorManager.registerListener(mListener, mMagneto, SensorManager.SENSOR_DELAY_GAME);
     }
     
     @Override
@@ -364,4 +399,54 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             }
         }
    };
+   private class SampleView extends View {
+       private Paint   mPaint = new Paint();
+       private Path    mPath = new Path();
+       private boolean mAnimate;
+       private long    mNextTime;
+
+       public SampleView(Context context) {
+           super(context);
+
+           // Construct a wedge-shaped path
+           mPath.moveTo(0, -50);
+           mPath.lineTo(-20, 60);
+           mPath.lineTo(0, 50);
+           mPath.lineTo(20, 60);
+           mPath.close();
+       }
+   
+       @Override protected void onDraw(Canvas canvas) {
+           Paint paint = mPaint;
+
+           canvas.drawColor(Color.WHITE);
+           
+           paint.setAntiAlias(true);
+           paint.setColor(Color.BLACK);
+           paint.setStyle(Paint.Style.FILL);
+
+           int w = canvas.getWidth();
+           int h = canvas.getHeight();
+           int cx = w / 2;
+           int cy = h / 2;
+
+           canvas.translate(cx, cy);
+           if (mValues != null) {            
+               canvas.rotate(-mValues[0]);
+           }
+           canvas.drawPath(mPath, mPaint);
+       }
+   
+       @Override
+       protected void onAttachedToWindow() {
+           mAnimate = true;
+           super.onAttachedToWindow();
+       }
+       
+       @Override
+       protected void onDetachedFromWindow() {
+           mAnimate = false;
+           super.onDetachedFromWindow();
+       }
+   }
 }
