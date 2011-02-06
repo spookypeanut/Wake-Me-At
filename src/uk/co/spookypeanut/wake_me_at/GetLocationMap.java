@@ -95,6 +95,11 @@ implements LocationListener {
         Bundle extras = this.getIntent().getExtras();
         mOrigLat = extras.getDouble("latitude");
         mOrigLong = extras.getDouble("longitude");
+        if (mOrigLat == 1000 && mOrigLong == 1000) {
+            Location currLoc = getCurrentLocation();
+            mOrigLat = currLoc.getLatitude();
+            mOrigLong = currLoc.getLongitude();
+        }
         mNick = extras.getString("nick");
 
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
@@ -382,6 +387,7 @@ implements LocationListener {
 
         @Override
         public void onLongPress(MotionEvent event) {
+            // TODO: this doesn't show, need to thread it http://developer.android.com/guide/appendix/faq/commontasks.html#threading
             Toast.makeText(getApplicationContext(), R.string.long_press_toast,
                     Toast.LENGTH_SHORT).show();
 
