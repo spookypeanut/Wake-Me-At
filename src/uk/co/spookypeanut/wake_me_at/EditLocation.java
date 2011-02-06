@@ -45,6 +45,7 @@ import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.ToggleButton;
 import android.widget.AdapterView.OnItemSelectedListener;
 
 public class EditLocation extends Activity {
@@ -104,6 +105,9 @@ public class EditLocation extends Activity {
    };
    
    private void serviceRunning (boolean isThisRow) {
+       ToggleButton tg = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
+       tg.setChecked(isThisRow);
+       
        Button button = (Button)findViewById(R.id.startService);
        button.setEnabled(!isThisRow);
 
@@ -142,27 +146,28 @@ public class EditLocation extends Activity {
     
     private OnClickListener mStartListener = new OnClickListener() {
         public void onClick(View v) {
-            Button radiusButton = (Button)findViewById(R.id.radiusButton);
-            Float radius = Float.valueOf(radiusButton.getText().toString());
-            changedRadius(radius);
-            Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
-            mUnit = unitSpin.getSelectedItem().toString();
-            changedUnit(mUnit);
-            Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-            mLocProv = locProvSpin.getSelectedItem().toString();
-            changedLocProv(mLocProv);
-            Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
-            intent.setClass(EditLocation.this, WakeMeAtService.class);
-            intent.putExtra("rowId", mRowId);
-            startService(intent);
+            startService();
         }
     };
     
     private OnClickListener mStopListener = new OnClickListener() {
         public void onClick(View v) {
-            stopService(new Intent(EditLocation.this, WakeMeAtService.class));
+            stopService();
         }
     };
+    
+    private OnClickListener mRunningListener = new OnClickListener() {
+        public void onClick(View v) {
+            Log.d(LOG_NAME, "mRunningListener, v = " + v);
+            ToggleButton tg = (ToggleButton) v;
+            if (tg.isChecked()) {
+                startService();
+            } else {
+                stopService();
+            }
+        }
+    };
+    
     private OnClickListener mChangeNickListener = new OnClickListener() {
         public void onClick(View v) {
             Dialog monkey = onCreateDialog(NICKDIALOG);
@@ -175,6 +180,27 @@ public class EditLocation extends Activity {
             monkey.show();
         }
     };
+    
+    private void startService () {
+        Button radiusButton = (Button)findViewById(R.id.radiusButton);
+        Float radius = Float.valueOf(radiusButton.getText().toString());
+        changedRadius(radius);
+        Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
+        mUnit = unitSpin.getSelectedItem().toString();
+        changedUnit(mUnit);
+        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
+        mLocProv = locProvSpin.getSelectedItem().toString();
+        changedLocProv(mLocProv);
+        Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
+        intent.setClass(EditLocation.this, WakeMeAtService.class);
+        intent.putExtra("rowId", mRowId);
+        startService(intent);
+    }
+    
+    private void stopService() {
+        stopService(new Intent(EditLocation.this, WakeMeAtService.class));
+    }
+    
     protected void changedLatLong(double latitude, double longitude) {
         db.setLatitude(mRowId, latitude);
         db.setLongitude(mRowId, longitude);
@@ -327,6 +353,10 @@ public class EditLocation extends Activity {
 
         button = (Button)findViewById(R.id.stopService);
         button.setOnClickListener(mStopListener);
+        button.setEnabled(false);
+        
+        ToggleButton tb = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
+        tb.setOnClickListener(mRunningListener);
         
         Button radiusBox = (Button)findViewById(R.id.radiusButton);
         radiusBox.setOnClickListener(mChangeRadiusListener);
