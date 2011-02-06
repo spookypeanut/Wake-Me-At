@@ -24,8 +24,12 @@ import java.util.Iterator;
 import java.util.List;
 
 import android.content.Context;
-import android.content.res.Resources;
 import android.util.Log;
+
+/**
+ * A class that is set to a particular unit type, that facilitates the conversion between units
+ * @author spookypeanut
+ */
 
 public class UnitConverter
 {
@@ -40,7 +44,6 @@ public class UnitConverter
     private final double LARGESTNUM = 500;
 
     Context mContext;
-    Resources mRes;
     
     // Metre is a special unit, as it's the one that's used internally
     private final Unit mMetreUnit = new Unit("metre", "m", 1, SYSTEM_METRIC, "metres");
@@ -56,15 +59,19 @@ public class UnitConverter
 
     Unit mUnit;
     
-    
+    /**
+     * Unit converter constructor
+     * @param unitAbbrev The abbreviation of the unit to initialize to
+     */
     public UnitConverter(Context context, String unitAbbrev) {
         Unit unit = getFromAbbrev(unitAbbrev);
-        this.mContext = context;
-        mRes = mContext.getResources();
-
         switchUnit(unit);
     }
     
+    /**
+     * Get the list of unit abbreviations
+     * @return The list
+     */
     public ArrayList<String> getAbbrevList() {
         ArrayList<String> returnList = new ArrayList<String>();
         for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
@@ -74,6 +81,11 @@ public class UnitConverter
         return returnList;
     }
     
+    /**
+     * Get a unit object from its abbreviation
+     * @param abbrev The abbreviation of the required unit
+     * @return The unit object
+     */
     private Unit getFromAbbrev(String abbrev) {
         for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
             Unit currUnit = i.next();
@@ -86,22 +98,45 @@ public class UnitConverter
         return null;
     }
     
+    /**
+     * Get the name of the current unit
+     * @return The name of the unit
+     */
     public String getName() {
         return mUnit.getName();
     }
     
+    /**
+     * Get the abbreviation of the current unit
+     * @return The abbreviation of the unit
+     */
     public String getAbbrev() {
         return mUnit.getAbbrev();
     }
     
+    /**
+     * Convert a value in the current unit to metres
+     * @param value The value to convert to metres
+     * @return The value in metres
+     */
     public double toMetres(double value) {
         return convert(value, mUnit, getFromAbbrev("m"));
     }
     
+    /**
+     * Convert a value in metres to the current unit
+     * @param value The value to convert to the current unit
+     * @return The value in the current unit
+     */
     public double toUnit(double value) {
         return convert(value, getFromAbbrev("m"), mUnit);
     }
     
+    /**
+     * A string representation of a value, including the unit abbreviation
+     * @param value The value to convert to a string
+     * @return A string in the form "100.2yd"
+     */
     public String out(double value) {
         // 0 is always metres (used internally)
         Unit bestUnit = getBestUnit(value);
@@ -111,6 +146,12 @@ public class UnitConverter
         return String.format("%." + DP + "f%s", outValue, outAbbrev);
     }
     
+    /**
+     * A string representation of a value, ready to be spoken
+     * Similar to out(), but designed to be sent to text-to-speech
+     * @param value The value to convert to a string
+     * @return A string in the form "100.2 yards"
+     */
     public String outSpeech(double value) {
         // 0 is always metres (used internally)
         Unit bestUnit = getBestUnit(value);
@@ -120,19 +161,41 @@ public class UnitConverter
         return String.format("%." + DP + "f %s", outValue, outName);
     }
     
+    /**
+     * Switch the objects current unit
+     * @param unit The unit to switch to
+     */
     public void switchUnit(Unit unit) {
         mUnit = unit;
     }
     
+    /**
+     * Method for rounding a double to a given number of decimal places
+     * @param d The value to round
+     * @param c The number of decimal places
+     * @return The rounded value, as a double
+     */
     public static double roundToDecimals(double d, int c) {
         int temp = (int) (d * Math.pow(10, c));
         return (double) temp / Math.pow(10, c);
     }
     
+    /**
+     * A generic unit converter
+     * @param value The value to convert to another unit
+     * @param sourceUnit The source unit for the conversion
+     * @param destUnit The destination unit for the conversion
+     * @return The value in the desired unit
+     */
     public double convert(double value, Unit sourceUnit, Unit destUnit) {
         return value * sourceUnit.getValue() / destUnit.getValue();
     }
     
+    /**
+     * Return a list of unit objects that are in a given unit system
+     * @param system An int value of the desired unit system
+     * @return A list of unit objects in the given system
+     */
     private ArrayList<Unit> unitsFromSystem(int system) {
         ArrayList<Unit> returnList = new ArrayList<Unit>();
         for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
@@ -145,7 +208,13 @@ public class UnitConverter
         return returnList;
     }
     
+    /**
+     * Get the best unit for a human-readable description of a given value 
+     * @param srcValue Value to fine unit for, in metres
+     * @return A unit object of the best unit to use
+     */
     private Unit getBestUnit(double srcValue) {
+        Log.d(LOG_NAME, "getBestUnit(" + srcValue + ")");
         Unit currBestUnit = null;
         double currBestValue = 0;
         int system = mUnit.getSystem();
@@ -174,6 +243,11 @@ public class UnitConverter
         return currBestUnit;
     }
     
+    /**
+     * An object to represent a unit
+     * @author spookypeanut
+     *
+     */
     public class Unit {
         String mName;
         String mAbbrev;
@@ -181,6 +255,14 @@ public class UnitConverter
         int mSystem;
         String mPlural;
         
+        /**
+         * Constructor
+         * @param name The name of the unit for use in selecting it (eg foot)
+         * @param abbrev The abbreviation of the unit
+         * @param value The number of metres in this unit
+         * @param system The unit system that this unit is in (imperial, metric, etc)
+         * @param plural The plural of the unit (eg feet)
+         */
         public Unit(String name, String abbrev, double value, int system, String plural) {
             mName = name;
             mAbbrev = abbrev;
@@ -189,22 +271,42 @@ public class UnitConverter
             mPlural = plural;
         }
         
+        /**
+         * Get the name of the unit
+         * @return The name of the unit
+         */
         public String getName() {
             return mName;
         }
         
+        /**
+         * Get the plural of the unit
+         * @return The plural of the unit
+         */
         public String getPlural() {
             return mPlural;
         }
         
+        /**
+         * Get the abbreviation of the unit
+         * @return The abbreviation of the unit
+         */
         public String getAbbrev() {
             return mAbbrev;
         }
         
+        /**
+         * Get the number of metres in the unit
+         * @return The number of metres in the unit
+         */
         public double getValue() {
             return mValue;
         }
         
+        /**
+         * Get the system that the unit is in
+         * @return The system that the unit is in
+         */
         public int getSystem() {
             return mSystem;
         }
