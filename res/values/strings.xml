@@ -44,6 +44,7 @@
 <string name="notif_full">You are %1$s away from %2$s</string>
 
 <!-- GET LOCATION MAP -->
+ <string name="open_map_toast">Long press on the map to select a location</string>
  <string name="map_name">Select location</string>
  <string name="get_loc_layout_name">Select location</string>
  <string name="uselocationbutton">Use this</string>
@@ -58,6 +59,8 @@
 <string name="search_label">WakeMe@ Search</string>
 <string name="search_hint">Search map</string>
 <string name="search_prompt">Say a location name</string>
+
+ <string name="long_press_toast">Loading location information...</string>
 
 <!-- ALARM -->
 <string name="alarmTitle">Approaching destination</string>

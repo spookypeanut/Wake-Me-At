@@ -50,6 +50,7 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.android.maps.GeoPoint;
@@ -99,6 +100,10 @@ implements LocationListener {
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
 
+        Toast.makeText(getApplicationContext(), R.string.open_map_toast,
+                Toast.LENGTH_SHORT).show();
+        
+        //TODO: Go to current loc if bad lat/long
         moveDestinationTo(mOrigLat, mOrigLong);
     }
 
@@ -377,6 +382,9 @@ implements LocationListener {
 
         @Override
         public void onLongPress(MotionEvent event) {
+            Toast.makeText(getApplicationContext(), R.string.long_press_toast,
+                    Toast.LENGTH_SHORT).show();
+
             Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
             mDest = mapView.getProjection().fromPixels(
                     (int) event.getX(),
