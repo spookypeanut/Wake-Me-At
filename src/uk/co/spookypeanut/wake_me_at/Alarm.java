@@ -76,7 +76,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     protected void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
-        
+
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
+
         db = new DatabaseManager(this);
         mVibrator = (Vibrator) getSystemService(VIBRATOR_SERVICE);
 

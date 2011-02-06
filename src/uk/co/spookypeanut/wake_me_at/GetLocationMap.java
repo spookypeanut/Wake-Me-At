@@ -35,6 +35,7 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.GestureDetector;
@@ -83,7 +84,9 @@ implements LocationListener {
     public void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
-        
+
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
+
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
         uc = new UnitConverter(this, "m");

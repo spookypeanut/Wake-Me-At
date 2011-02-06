@@ -6,7 +6,6 @@ Tracking:
     - display destination, radius, etc
 Main view:
     - indication if it's running
-    - volume controls alarm when in app
 Edit location:
     - big indicator of if a service is running
 

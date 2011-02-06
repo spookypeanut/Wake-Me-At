@@ -21,6 +21,7 @@ along with Wake Me At, in the file "COPYING".  If not, see
 import android.app.ListActivity;
 import android.content.Context;
 import android.content.Intent;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -122,8 +123,10 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
 
         super.onCreate(savedInstanceState);
-        mContext = this;
 
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
+
+        mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         Log.d(LOG_NAME, "DatabaseManager");

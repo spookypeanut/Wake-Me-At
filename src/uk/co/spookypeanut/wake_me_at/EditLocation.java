@@ -31,6 +31,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.LocationManager;
+import android.media.AudioManager;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -294,6 +295,8 @@ public class EditLocation extends Activity {
     protected void onCreate(Bundle icicle) {
         Log.d(LOG_NAME, "EditLocation.onCreate");
         super.onCreate(icicle);
+
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
