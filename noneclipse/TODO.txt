@@ -1,12 +1,12 @@
 Alarm:
-    - noise & vibration should stop with service
-    - noise should be headphones only if headphones plugged in
+    - noise should be headphones only if headphones plugged in (is it possible?)
 Tracking:
     - point the direction
     - allow switching location provider
     - display destination, radius, etc
 Main view:
     - indication if it's running
+    - volume controls alarm when in app
 Edit location:
     - big indicator of if a service is running
 
@@ -19,3 +19,4 @@ Main view:
     - Map on context menu
 Tracking:
     - Map (with radius)
+Crescendo alarm
