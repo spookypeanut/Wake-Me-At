@@ -6,8 +6,6 @@ Tracking:
     - display destination, radius, etc
 Main view:
     - indication if it's running
-Edit location:
-    - big indicator of if a service is running
 
 
 Post alpha:
