@@ -102,6 +102,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private void rowChanged(long rowId) {
         Log.v(LOG_NAME, "Alarm.rowChanged(" + rowId + ")");
+        db.logOutArray();
+        // TODO: Some issue here: it seems to not be changing the rowid when activating a second alarm  
         mRowId = rowId;
         mNick = db.getNick(mRowId);
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
