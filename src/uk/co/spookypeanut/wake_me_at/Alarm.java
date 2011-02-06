@@ -198,10 +198,13 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             // TODO Auto-generated catch block
             e.printStackTrace();
         }
+        // TODO Something tells me there's a simpler way to set off alarms...
         final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        if (audioManager.getStreamVolume(AudioManager.STREAM_ALARM) != 0) {
+        int alarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        if (alarmVolume != 0) {
                     Log.d(LOG_NAME, "About to set stream type");
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+                    mMediaPlayer.setVolume(alarmVolume, alarmVolume);
                     Log.d(LOG_NAME, "About to set looping");
                     mMediaPlayer.setLooping(true);
                     try {
