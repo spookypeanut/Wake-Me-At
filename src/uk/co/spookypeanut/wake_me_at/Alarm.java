@@ -63,10 +63,23 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
     private SensorManager mSensorManager;
-    
+    private TextToSpeech mTts;
+
     private SampleView mView;
     private float[] mValues;
+
+    private boolean mVibrateOn = true;
+    private boolean mNoiseOn = true;
+    private boolean mSpeechOn = false;
     
+    private long mRowId;
+    private Location mFinalDestination = new Location("");
+    private String mNick;
+    private String mUnit;
+    private boolean mAlarm;
+    
+    private double mMetresAway;
+
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
@@ -82,23 +95,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             // TODO Auto-generated method stub
         }
     };
-    
-    private boolean mVibrateOn = true;
-    private boolean mNoiseOn = true;
-    //TODO: Should I ignore all tts stuff if this is off? Probably
-    private boolean mSpeechOn = false;
-    
-    private long mRowId;
-    
-    private Location mFinalDestination = new Location("");
-    
-    private String mNick;
-    private String mUnit;
-    private boolean mAlarm;
-    
-    private double mMetresAway;
-
-    private TextToSpeech mTts;
     
     @Override
     protected void onCreate(Bundle icicle) {
