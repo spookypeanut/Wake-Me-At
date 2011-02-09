@@ -192,6 +192,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             try {
                 Log.d(LOG_NAME, "Stopping media player");
                 final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+                //REF#0009
                 audioManager.abandonAudioFocus(null);
                 mMediaPlayer.stop();
             } catch (IllegalStateException e) {
