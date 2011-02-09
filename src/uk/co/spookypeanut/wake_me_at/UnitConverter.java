@@ -214,7 +214,7 @@ public class UnitConverter
      * @return A unit object of the best unit to use
      */
     private Unit getBestUnit(double srcValue) {
-        Log.d(LOG_NAME, "getBestUnit(" + srcValue + ")");
+//        Log.d(LOG_NAME, "getBestUnit(" + srcValue + ")");
         Unit currBestUnit = null;
         double currBestValue = 0;
         int system = mUnit.getSystem();
@@ -222,13 +222,12 @@ public class UnitConverter
         double destValue;
         for (Iterator<Unit> i = unitList.iterator(); i.hasNext();) {
             Unit currUnit = i.next();
-            Log.d(LOG_NAME, "Testing unit " + currUnit.getAbbrev());
             if (currBestUnit == null) {
                 currBestUnit = currUnit;
                 currBestValue = convert(srcValue, mMetreUnit, currUnit);
                 continue;
             }
-            Log.d(LOG_NAME, "Best unit so far: " + currBestUnit.getAbbrev());
+            //Log.d(LOG_NAME, "Best unit so far: " + currBestUnit.getAbbrev());
             destValue = convert(srcValue, mMetreUnit, currUnit);
             if ((destValue < LARGESTNUM) && (destValue > currBestValue || currBestValue > LARGESTNUM)) {
                     currBestUnit = currUnit;
@@ -239,7 +238,7 @@ public class UnitConverter
             Log.wtf(LOG_NAME, "No best unit found");
             Log.d(LOG_NAME, "unit = " + mUnit.getAbbrev() + ", value = " + srcValue);
         }
-        Log.d(LOG_NAME, "Best unit: " + currBestUnit.getAbbrev());
+//        Log.d(LOG_NAME, "Best unit for " + srcValue + ": " + currBestUnit.getAbbrev());
         return currBestUnit;
     }
     

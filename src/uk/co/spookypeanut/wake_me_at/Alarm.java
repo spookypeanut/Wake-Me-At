@@ -70,7 +70,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
+            //Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
             mValues = event.values;
             if (mView != null) {
                 mView.invalidate(); 
@@ -80,7 +80,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         @Override
         public void onAccuracyChanged(Sensor sensor, int accuracy) {
             // TODO Auto-generated method stub
-            
         }
     };
     
@@ -150,12 +149,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void distanceChanged(double distance) {
         Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
-        Log.v(LOG_NAME, "" + R.id.alarmMessageTextView);
         TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
-        Log.v(LOG_NAME, tv.toString());
-        Log.v(LOG_NAME, "" + mMetresAway);
-        Log.v(LOG_NAME, uc.out(mMetresAway));
-        Log.v(LOG_NAME, mNick);
         String message;
         if (mMetresAway < 0) {
             message = "Awaiting first location fix";
@@ -184,21 +178,20 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void startAlarm() {
-        Log.v(LOG_NAME, "Starting alarm");
+        //Log.v(LOG_NAME, "Alarm.startAlarm");
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
         mAlarm = true;
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
         if (mNoiseOn) {
             if (mMediaPlayer == null) {
-                Log.d(LOG_NAME, "Alarm not playing, starting it");
                 startAlarmtone();
             }
         }
     }
     
     private void stopAlarm() {
-        Log.v(LOG_NAME, "Alarm.stopAlarm");
+        //Log.v(LOG_NAME, "Alarm.stopAlarm");
         if (mMediaPlayer != null) {
             try {
                 mMediaPlayer.stop();
