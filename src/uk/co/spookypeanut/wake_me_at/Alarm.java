@@ -299,7 +299,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.v(LOG_NAME, "onActivityResult(" +
                 requestCode + ", " +
                 resultCode + ", ");
-        if (requestCode == TTS_REQUEST_CODE) {
+        if (requestCode == TTS_REQUEST_CODE && mSpeechOn == true) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 // success, create the TTS instance
                 Log.d(LOG_NAME, "text to speech present");
