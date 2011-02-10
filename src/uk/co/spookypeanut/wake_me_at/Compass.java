@@ -19,10 +19,15 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Color;
 import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+//REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public Compass(Context context) {
         super(context);
@@ -35,6 +40,14 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     protected void onFinishInflate() {
         getHolder().addCallback(this);
+    }
+    
+    //REF#0011
+    @Override
+    protected void onDraw(Canvas canvas) {
+        Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
+        canvas.drawColor(Color.BLACK);
+        canvas.drawBitmap(_scratch, 10, 10, null);
     }
     
     /* (non-Javadoc)
