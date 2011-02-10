@@ -19,14 +19,24 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.content.Context;
+import android.util.AttributeSet;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-class Panel extends SurfaceView implements SurfaceHolder.Callback {
-    public Panel(Context context) {
+class Compass extends SurfaceView implements SurfaceHolder.Callback {
+    public Compass(Context context) {
         super(context);
     }
 
+    public Compass(Context context, AttributeSet attributeSet) {
+        super(context, attributeSet);
+    }
+    
+    @Override
+    protected void onFinishInflate() {
+        getHolder().addCallback(this);
+    }
+    
     /* (non-Javadoc)
      * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
      */
