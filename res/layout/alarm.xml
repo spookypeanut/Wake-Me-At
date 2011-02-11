@@ -38,7 +38,7 @@
     android:text="@string/alarmButtonEdit" />
   </LinearLayout>
       <uk.co.spookypeanut.wake_me_at.Compass
-               android:id="@+id/compassSurface"
+        android:id="@+id/compassSurface"
         android:gravity="top"
         android:keepScreenOn="true"
         android:layout_weight="1"

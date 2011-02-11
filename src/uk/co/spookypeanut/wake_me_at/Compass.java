@@ -19,22 +19,41 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Path;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 //REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
+    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+
+    private Paint mPaint = new Paint();
+    private Path mPath = new Path();
+
+    private float[] mValues = {(float)10.0, (float)10.0, (float)10.0};
+    
     public Compass(Context context) {
         super(context);
+        prepareArrow();
     }
 
     public Compass(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        prepareArrow();
+    }
+    
+    private void prepareArrow() {
+        // Construct a wedge-shaped path
+        mPath.moveTo(0, -50);
+        mPath.lineTo(-20, 60);
+        mPath.lineTo(0, 50);
+        mPath.lineTo(20, 60);
+        mPath.close();
     }
     
     @Override
@@ -45,9 +64,26 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     //REF#0011
     @Override
     protected void onDraw(Canvas canvas) {
-        Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.icon);
-        canvas.drawColor(Color.BLACK);
-        canvas.drawBitmap(_scratch, 10, 10, null);
+        super.onDraw(canvas);
+        Log.d(LOG_NAME, "Compass.onDraw");
+        //Paint paint = mPaint;
+
+        //paint.setColor(Color.RED);
+        canvas.drawColor(Color.BLUE);
+        
+        /*paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
+
+        int w = canvas.getWidth();
+        int h = canvas.getHeight();
+        int cx = w / 2;
+        int cy = h / 2;
+
+        canvas.translate(cx, cy);
+        if (mValues != null) {            
+            canvas.rotate(-mValues[0]);
+        }
+        canvas.drawPath(mPath, mPaint);*/
     }
     
     /* (non-Javadoc)
