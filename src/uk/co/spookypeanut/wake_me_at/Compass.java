@@ -28,6 +28,7 @@ import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
+
 //REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
@@ -35,8 +36,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
 
+    private CompassThread mThread;
+
     private float[] mValues = {(float)10.0, (float)10.0, (float)10.0};
-    
+
     public Compass(Context context) {
         super(context);
         prepareArrow();
@@ -46,7 +49,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attributeSet);
         prepareArrow();
     }
-    
+
     private void prepareArrow() {
         // Construct a wedge-shaped path
         mPath.moveTo(0, -50);
@@ -55,12 +58,12 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mPath.lineTo(20, 60);
         mPath.close();
     }
-    
+
     @Override
     protected void onFinishInflate() {
         getHolder().addCallback(this);
     }
-    
+
     //REF#0011
     @Override
     protected void onDraw(Canvas canvas) {
@@ -70,22 +73,22 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
         //paint.setColor(Color.RED);
         canvas.drawColor(Color.BLUE);
-        
+
         /*paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.FILL);
+       paint.setStyle(Paint.Style.FILL);
 
-        int w = canvas.getWidth();
-        int h = canvas.getHeight();
-        int cx = w / 2;
-        int cy = h / 2;
+       int w = canvas.getWidth();
+       int h = canvas.getHeight();
+       int cx = w / 2;
+       int cy = h / 2;
 
-        canvas.translate(cx, cy);
-        if (mValues != null) {            
-            canvas.rotate(-mValues[0]);
-        }
-        canvas.drawPath(mPath, mPaint);*/
+       canvas.translate(cx, cy);
+       if (mValues != null) {            
+           canvas.rotate(-mValues[0]);
+       }
+       canvas.drawPath(mPath, mPaint);*/
     }
-    
+
     /* (non-Javadoc)
      * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
      */
@@ -93,7 +96,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
             int height) {
         // TODO Auto-generated method stub
-        
+
     }
 
     /* (non-Javadoc)
@@ -102,7 +105,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         // TODO Auto-generated method stub
-        
+
     }
 
     /* (non-Javadoc)
@@ -111,7 +114,42 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         // TODO Auto-generated method stub
-        
+
     }
-    
+
+    class CompassThread extends Thread {
+        private SurfaceHolder _surfaceHolder;
+        private Compass _panel;
+        private boolean _run = false;
+
+        public CompassThread(SurfaceHolder surfaceHolder, Compass panel) {
+            _surfaceHolder = surfaceHolder;
+            _panel = panel;
+        }
+
+        public void setRunning(boolean run) {
+            _run = run;
+        }
+
+        @Override
+        public void run() {
+            Canvas c;
+            while (_run) {
+                c = null;
+                try {
+                    c = _surfaceHolder.lockCanvas(null);
+                    synchronized (_surfaceHolder) {
+                        _panel.onDraw(c);
+                    }
+                } finally {
+                    // do this in a finally so that if an exception is thrown
+                    // during the above, we don't leave the Surface in an
+                    // inconsistent state
+                    if (c != null) {
+                        _surfaceHolder.unlockCanvasAndPost(c);
+                    }
+                }
+            }
+        }
+    }
 }
