@@ -127,8 +127,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         button.setOnClickListener(mMainWindow);
         
         mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
-//        mView = new SampleView(this);
-
 
         onNewIntent(this.getIntent());
     }
