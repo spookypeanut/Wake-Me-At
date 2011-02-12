@@ -257,6 +257,25 @@ implements LocationListener {
     
     private void resultsDialog(String searchTerm) {
         mResults = getSearchLocations(searchTerm);
+        
+        if (mResults == null) {
+            Dialog badConnectionDlg = new AlertDialog.Builder(mContext)
+                .setTitle("No data connection")
+                .setPositiveButton(R.string.alert_dialog_retry, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        // TODO: How can I retry?
+                    }
+                })
+                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int whichButton) {
+                        Log.d(LOG_NAME, "clicked negative");
+                    }
+                })
+                .create();
+          
+            badConnectionDlg.show();
+            return;
+        }
         mResultsDialog = new Dialog(mContext);
         mResultsDialog.setContentView(R.layout.search_list);
         Log.d(LOG_NAME, "content view is set");
@@ -282,6 +301,10 @@ implements LocationListener {
             locations = geoCoder.getFromLocationName(address, 5);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+        if (locations == null) {
+            Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
+            return null;
         }
         for (int i = 0; i < locations.size(); i++) {
             Log.d(LOG_NAME, "Location " + i + ": " + locations.get(i).toString());
