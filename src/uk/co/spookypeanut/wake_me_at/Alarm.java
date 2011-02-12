@@ -84,22 +84,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean mAlarm;
     
     private double mMetresAway;
-
-    private final SensorEventListener mListener = new SensorEventListener() {
-        @Override
-        public void onSensorChanged(SensorEvent event) {
-            //Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
-            mValues = event.values;
-//            if (mView != null) {
-  //              mView.invalidate(); 
-    //        }
-        }
-
-        @Override
-        public void onAccuracyChanged(Sensor sensor, int accuracy) {
-            // TODO Auto-generated method stub
-        }
-    };
     
     @Override
     protected void onCreate(Bundle icicle) {
@@ -125,8 +109,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         
         button = (Button)findViewById(R.id.alarmButtonMain);
         button.setOnClickListener(mMainWindow);
-        
-        mSensorManager = (SensorManager)getSystemService(Context.SENSOR_SERVICE);
 
         onNewIntent(this.getIntent());
     }
@@ -279,8 +261,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mAlarm == true) {
             startAlarm();
         }
-        Sensor mMagneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(mListener, mMagneto, SensorManager.SENSOR_DELAY_GAME);
     }
     
     @Override

@@ -23,6 +23,10 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
 import android.os.Handler;
 import android.os.Message;
 import android.util.AttributeSet;
@@ -39,6 +43,8 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private Path mPath = new Path();
 
     private CompassThread mThread;
+    
+    private SensorManager mSensorManager;
     private int mLayoutWidth, mLayoutHeight;
     private SurfaceView mSurfaceView;
 
@@ -53,7 +59,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attributeSet);
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
-        
+        mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
         prepareArrow();
 
         // create thread only; it's started in surfaceCreated()
@@ -65,6 +71,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         });
     }
 
+    
     private void prepareArrow() {
         // Construct a wedge-shaped path
         mPath.moveTo(0, -50);
@@ -74,6 +81,22 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mPath.close();
     }
 
+    private final SensorEventListener mListener = new SensorEventListener() {
+        @Override
+        public void onSensorChanged(SensorEvent event) {
+            //Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
+            mValues = event.values;
+//            if (mView != null) {
+  //              mView.invalidate(); 
+    //        }
+        }
+
+        @Override
+        public void onAccuracyChanged(Sensor sensor, int accuracy) {
+            // TODO Auto-generated method stub
+        }
+    };
+    
     //REF#0011, REF#0012
     @Override
     protected void onDraw(Canvas canvas) {
@@ -103,7 +126,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
             int height) {
         // TODO Auto-generated method stub
-
     }
 
     /* (non-Javadoc)
@@ -118,6 +140,9 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mLayoutWidth = mSurfaceView.getWidth();
         mLayoutHeight = mSurfaceView.getHeight();
         Log.d(LOG_NAME, "SurfaceView is " + mLayoutWidth + "x" + mLayoutHeight);
+        
+        Sensor mMagneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mSensorManager.registerListener(mListener, mMagneto, SensorManager.SENSOR_DELAY_GAME);
     }
 
     /* (non-Javadoc)
