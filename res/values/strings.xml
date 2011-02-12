@@ -17,6 +17,9 @@
  <!-- GLOBAL -->
  <string name="app_name">WakeMe@</string>
  <string name="app_name_nospaces">WakeMe@</string>
+<string name="alert_dialog_cancel">Cancel</string>
+<string name="alert_dialog_ok">OK</string>
+<string name="alert_dialog_retry">Retry</string>
  
  <!-- WAKEME@ MAIN -->
  <string name="mainTitle">WakeMe@ Location List</string>
@@ -38,8 +41,7 @@
 <!-- WAKEME@ SERVICE -->
 <string name="foreground_service_started">WakeMe@ alarm activated</string>
 <string name="foreground_service_stopped">WakeMe@ alarm cancelled</string>
-<string name="alert_dialog_cancel">Cancel</string>
-<string name="alert_dialog_ok">OK</string>
+
 
 <string name="notif_full">You are %1$s away from %2$s</string>
 
