@@ -39,6 +39,8 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private Path mPath = new Path();
 
     private CompassThread mThread;
+    private int mLayoutWidth, mLayoutHeight;
+    private SurfaceView mSurfaceView;
 
     private float[] mValues = {(float)10.0, (float)10.0, (float)10.0};
 
@@ -72,29 +74,26 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mPath.close();
     }
 
-    //REF#0011
+    //REF#0011, REF#0012
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        Log.d(LOG_NAME, "Compass.onDraw");
-        //Paint paint = mPaint;
+        Paint paint = mPaint;
 
-        //paint.setColor(Color.RED);
-        canvas.drawColor(Color.BLUE);
+        canvas.drawColor(Color.WHITE);
+        paint.setColor(Color.BLACK);
 
-        /*paint.setAntiAlias(true);
-       paint.setStyle(Paint.Style.FILL);
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
 
-       int w = canvas.getWidth();
-       int h = canvas.getHeight();
-       int cx = w / 2;
-       int cy = h / 2;
+        int cx = mLayoutWidth / 2;
+        int cy = mLayoutHeight / 2;
 
-       canvas.translate(cx, cy);
-       if (mValues != null) {            
-           canvas.rotate(-mValues[0]);
-       }
-       canvas.drawPath(mPath, mPaint);*/
+        canvas.translate(cx, cy);
+        if (mValues != null) {
+            canvas.rotate(-mValues[0]);
+        }
+        canvas.drawPath(mPath, mPaint);
     }
 
     /* (non-Javadoc)
@@ -114,8 +113,11 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public void surfaceCreated(SurfaceHolder holder) {
         mThread.setRunning(true);
         mThread.start();
-        // TODO Auto-generated method stub
-
+        
+        mSurfaceView = (SurfaceView) findViewById(R.id.compassSurface);
+        mLayoutWidth = mSurfaceView.getWidth();
+        mLayoutHeight = mSurfaceView.getHeight();
+        Log.d(LOG_NAME, "SurfaceView is " + mLayoutWidth + "x" + mLayoutHeight);
     }
 
     /* (non-Javadoc)
@@ -136,7 +138,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     class CompassThread extends Thread {
         private SurfaceHolder mSurfaceHolder;
-        private Compass mCompass;
         private boolean mRun = false;
 
         public CompassThread(SurfaceHolder surfaceHolder, Context context,
@@ -144,11 +145,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             mSurfaceHolder = surfaceHolder;
         }
         
-/*        public CompassThread(SurfaceHolder surfaceHolder, Compass panel) {
-            mSurfaceHolder = surfaceHolder;
-            mCompass = panel;
-        }
-*/
         public void setRunning(boolean run) {
             mRun = run;
         }
