@@ -35,10 +35,14 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 
+
 //REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
 
+    private final float RADTODEGREES = (float) (180.0 / 3.14159265);
+
+    
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
 
@@ -48,7 +52,13 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private int mLayoutWidth, mLayoutHeight;
     private SurfaceView mSurfaceView;
 
-    private float[] mValues = {(float)10.0, (float)10.0, (float)10.0};
+    private float[] mOriValues = {(float)10.0, (float)10.0, (float)10.0};
+    
+    private float[] mGravity = new float[3];
+    private float[] mGeoMag = new float[3];
+    private float[] mRotMatrix = new float[16];
+    private float[] mInclMatrix = new float[16];
+
 
     public Compass(Context context) {
         super(context);
@@ -57,6 +67,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     public Compass(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        Log.d(LOG_NAME, "Compass constructor");
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
@@ -84,11 +95,29 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private final SensorEventListener mListener = new SensorEventListener() {
         @Override
         public void onSensorChanged(SensorEvent event) {
-            //Log.d(LOG_NAME, "sensorChanged (" + event.values[0] + ", " + event.values[1] + ", " + event.values[2] + ")");
-            mValues = event.values;
-//            if (mView != null) {
-  //              mView.invalidate(); 
-    //        }
+            boolean sensorReady = false;
+            //Log.d(LOG_NAME, "Compass.onSensorChanged, " + event.sensor.getType());
+
+            switch (event.sensor.getType()) {
+            case Sensor.TYPE_MAGNETIC_FIELD:
+                mGeoMag = event.values.clone();
+                sensorReady = true;
+                break;
+            case Sensor.TYPE_ACCELEROMETER:
+                mGravity = event.values.clone();
+                sensorReady = true;
+                break;
+            }   
+
+            if (sensorReady && mGeoMag != null && mGravity != null) {
+                //Log.d(LOG_NAME, "All values present");
+                sensorReady = false;
+
+                SensorManager.getRotationMatrix(mRotMatrix, mInclMatrix, mGravity, mGeoMag);
+                SensorManager.getOrientation(mRotMatrix, mOriValues);
+                Log.d(LOG_NAME, mOriValues[0] + ", " + mOriValues[1] + ", " + mOriValues[2]);
+            }
+
         }
 
         @Override
@@ -113,8 +142,8 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         int cy = mLayoutHeight / 2;
 
         canvas.translate(cx, cy);
-        if (mValues != null) {
-            canvas.rotate(-mValues[0]);
+        if (mOriValues != null) {
+            canvas.rotate(-mOriValues[0] * RADTODEGREES);
         }
         canvas.drawPath(mPath, mPaint);
     }
@@ -141,8 +170,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mLayoutHeight = mSurfaceView.getHeight();
         Log.d(LOG_NAME, "SurfaceView is " + mLayoutWidth + "x" + mLayoutHeight);
         
-        Sensor mMagneto = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(mListener, mMagneto, SensorManager.SENSOR_DELAY_GAME);
+        Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
+        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_GAME);
+        sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_GAME);
     }
 
     /* (non-Javadoc)
