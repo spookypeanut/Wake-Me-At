@@ -3,7 +3,6 @@ http://www.stackoverflow.com/
 
 http://groups.google.com/group/android-developers/
 http://www.anddev.org/
-http://download.oracle.com/javase/1.5.0/docs/guide/language/
 http://javahowto.blogspot.com/
 
 0001 http://developer.android.com/guide/topics/manifest/activity-element.html#lmode
@@ -17,3 +16,4 @@ http://javahowto.blogspot.com/
 0009 http://csipsimple.googlecode.com/
 0010 http://sandblaster.googlecode.com, http://www.google.com/codesearch/p?hl=en#wwwhDaGVY8w/trunk/src/com/loganh/sandblaster/SandSurface.java&q=%22extends%20surfaceview%22&d=1
 0011 http://www.droidnova.com/playing-with-graphics-in-android-part-i,147.html
+0012 http://developer.android.com/resources/samples/LunarLander/index.html
