@@ -23,6 +23,8 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
+import android.os.Handler;
+import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.SurfaceHolder;
@@ -47,7 +49,18 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     public Compass(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        SurfaceHolder holder = getHolder();
+        holder.addCallback(this);
+        
         prepareArrow();
+
+        // create thread only; it's started in surfaceCreated()
+        mThread = new CompassThread(holder, context, new Handler() {
+            @Override
+            public void handleMessage(Message m) {
+                Log.d(LOG_NAME, "CompassThread.handleMessage");
+            }
+        });
     }
 
     private void prepareArrow() {
@@ -57,11 +70,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mPath.lineTo(0, 50);
         mPath.lineTo(20, 60);
         mPath.close();
-    }
-
-    @Override
-    protected void onFinishInflate() {
-        getHolder().addCallback(this);
     }
 
     //REF#0011
@@ -104,6 +112,8 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
+        mThread.setRunning(true);
+        mThread.start();
         // TODO Auto-generated method stub
 
     }
@@ -113,40 +123,52 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
-        // TODO Auto-generated method stub
-
+        boolean retry = true;
+        mThread.setRunning(false);
+        while (retry) {
+            try {
+                mThread.join();
+                retry = false;
+            } catch (InterruptedException e) {
+            }
+        }
     }
 
     class CompassThread extends Thread {
-        private SurfaceHolder _surfaceHolder;
-        private Compass _panel;
-        private boolean _run = false;
+        private SurfaceHolder mSurfaceHolder;
+        private Compass mCompass;
+        private boolean mRun = false;
 
-        public CompassThread(SurfaceHolder surfaceHolder, Compass panel) {
-            _surfaceHolder = surfaceHolder;
-            _panel = panel;
+        public CompassThread(SurfaceHolder surfaceHolder, Context context,
+                Handler handler) {
+            mSurfaceHolder = surfaceHolder;
         }
-
+        
+/*        public CompassThread(SurfaceHolder surfaceHolder, Compass panel) {
+            mSurfaceHolder = surfaceHolder;
+            mCompass = panel;
+        }
+*/
         public void setRunning(boolean run) {
-            _run = run;
+            mRun = run;
         }
 
         @Override
         public void run() {
             Canvas c;
-            while (_run) {
+            while (mRun) {
                 c = null;
                 try {
-                    c = _surfaceHolder.lockCanvas(null);
-                    synchronized (_surfaceHolder) {
-                        _panel.onDraw(c);
+                    c = mSurfaceHolder.lockCanvas(null);
+                    synchronized (mSurfaceHolder) {
+                        onDraw(c);
                     }
                 } finally {
                     // do this in a finally so that if an exception is thrown
                     // during the above, we don't leave the Surface in an
                     // inconsistent state
                     if (c != null) {
-                        _surfaceHolder.unlockCanvasAndPost(c);
+                        mSurfaceHolder.unlockCanvasAndPost(c);
                     }
                 }
             }
