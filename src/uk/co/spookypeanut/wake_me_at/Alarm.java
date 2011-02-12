@@ -27,14 +27,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Canvas;
-import android.graphics.Color;
-import android.graphics.Paint;
-import android.graphics.Path;
-import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
-import android.hardware.SensorManager;
 import android.location.Location;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -44,10 +36,7 @@ import android.os.Bundle;
 import android.os.Vibrator;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.util.AttributeSet;
 import android.util.Log;
-import android.view.SurfaceHolder;
-import android.view.SurfaceView;
 import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
@@ -65,13 +54,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private UnitConverter uc;
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
-    private SensorManager mSensorManager;
     private TextToSpeech mTts;
     
     public Compass mCompass;
-
-  //  private SampleView mView;
-    private float[] mValues;
 
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
