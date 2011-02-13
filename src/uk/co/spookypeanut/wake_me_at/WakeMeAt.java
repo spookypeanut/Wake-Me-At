@@ -19,8 +19,11 @@ along with Wake Me At, in the file "COPYING".  If not, see
 */
 
 import android.app.ListActivity;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
@@ -46,6 +49,8 @@ public class WakeMeAt extends ListActivity {
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
     private Context mContext;
+    
+    private long mRowId;
     
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
@@ -107,10 +112,17 @@ public class WakeMeAt extends ListActivity {
     }
     
     @Override
+    protected void onPause() {
+        this.unregisterReceiver(this.mReceiver);
+        super.onPause();
+    }
+    
+    @Override
     protected void onResume() {
         super.onResume();
         mLocListAdapter.notifyDataSetChanged();
-        
+        IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
+        this.registerReceiver(this.mReceiver, filter);
     }
     
     @Override
@@ -146,6 +158,16 @@ public class WakeMeAt extends ListActivity {
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
         Log.d(LOG_NAME, "End onCreate()");
+    }
+    
+    private void rowChanged(long newRowId) {
+        mRowId = newRowId;
+        TextView tv = (TextView) findViewById(R.id.mainTitle);
+        if (newRowId >= 0) {
+            tv.setBackgroundColor(Color.RED);
+        } else {
+            tv.setBackgroundColor(Color.WHITE);
+        }
     }
     
     private class LocListAdapter extends BaseAdapter {
@@ -212,4 +234,15 @@ public class WakeMeAt extends ListActivity {
             return row;
         }
     }
+    
+    public BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            Log.d(LOG_NAME, "Received broadcast");
+            Bundle extras = intent.getExtras();
+            if (mRowId != extras.getLong("rowId")) {
+                rowChanged(extras.getLong("rowId"));
+            }
+        }
+   };
 }

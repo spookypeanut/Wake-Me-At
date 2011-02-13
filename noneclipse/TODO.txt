@@ -1,8 +1,6 @@
 Alarm:
     - noise should be headphones only if headphones plugged in (is it possible?)
     - allow switching location provider
-Main view:
-    - indication if it's running
 
 Post alpha:
 warning if location is old
