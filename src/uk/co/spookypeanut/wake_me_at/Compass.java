@@ -180,6 +180,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
+        mSensorManager.unregisterListener(mListener);
         boolean retry = true;
         mThread.setRunning(false);
         while (retry) {
