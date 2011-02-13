@@ -18,6 +18,9 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
+import java.math.BigDecimal;
+import java.math.MathContext;
+import java.math.RoundingMode;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
@@ -39,6 +42,7 @@ public class UnitConverter
     
     // Number of decimal places to round to
     static final int DP = 1;
+    static final int SF = 2;
     
     // The value that determines which unit in a unit system will be used
     private final double LARGESTNUM = 500;
@@ -133,6 +137,32 @@ public class UnitConverter
     }
     
     /**
+     * Convert a double to a certain number of significant figures
+     * REF#0013
+     * @param value The value to convert
+     * @param significant The number of significant figures to use
+     * @return The string with the desired formatting
+     */
+    public static String formatToSignificant(double value,
+            int significant)
+         {
+            MathContext mathContext = new MathContext(significant,
+               RoundingMode.DOWN);
+            BigDecimal bigDecimal = new BigDecimal(value,
+               mathContext);
+            return bigDecimal.toPlainString();
+         } 
+    
+    /**
+     * The "standard" method for rounding
+     * @param value The value to round
+     * @return String containing the rounded value
+     */
+    private static String round(double value) {
+        return formatToSignificant(value, SF);
+    }
+    
+    /**
      * A string representation of a value, including the unit abbreviation
      * @param value The value to convert to a string
      * @return A string in the form "100.2yd"
@@ -143,7 +173,7 @@ public class UnitConverter
         double outValue = convert(value, mMetreUnit, bestUnit);
         String outAbbrev = bestUnit.getAbbrev();
         
-        return String.format("%." + DP + "f%s", outValue, outAbbrev);
+        return String.format("%s%s", round(outValue), outAbbrev);
     }
     
     /**
@@ -158,7 +188,7 @@ public class UnitConverter
         double outValue = convert(value, mMetreUnit, bestUnit);
         String outName = bestUnit.getPlural();
         
-        return String.format("%." + DP + "f %s", outValue, outName);
+        return String.format("%s%s", round(outValue), outName);
     }
     
     /**
@@ -167,17 +197,6 @@ public class UnitConverter
      */
     public void switchUnit(Unit unit) {
         mUnit = unit;
-    }
-    
-    /**
-     * Method for rounding a double to a given number of decimal places
-     * @param d The value to round
-     * @param c The number of decimal places
-     * @return The rounded value, as a double
-     */
-    public static double roundToDecimals(double d, int c) {
-        int temp = (int) (d * Math.pow(10, c));
-        return (double) temp / Math.pow(10, c);
     }
     
     /**
