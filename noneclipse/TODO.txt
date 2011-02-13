@@ -1,14 +1,14 @@
 Alarm:
     - noise should be headphones only if headphones plugged in (is it possible?)
-Tracking:
-    - point the direction
+    - back blocked only when alarming
     - allow switching location provider
     - display destination, radius, etc
 Main view:
     - indication if it's running
-
+2dp to 2sf
 
 Post alpha:
+warning if location is old
 Multiple location services at once
 Lower-res icons
 Main view:
@@ -16,4 +16,7 @@ Main view:
     - Map on context menu
 Tracking:
     - Map (with radius)
+Edit location:
+    - presets (train, walking, etc)
+    - advanced settings
 Crescendo alarm
