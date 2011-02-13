@@ -256,7 +256,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     public void onBackPressed() {
-        Log.d(LOG_NAME, "Disallowing pressing back");
+        if (! mAlarm) {
+            super.onBackPressed();
+        } else {
+            Log.d(LOG_NAME, "Disallowing pressing back");
+        }
     }
 
     @Override

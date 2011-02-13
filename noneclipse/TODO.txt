@@ -1,6 +1,5 @@
 Alarm:
     - noise should be headphones only if headphones plugged in (is it possible?)
-    - back blocked only when alarming
     - allow switching location provider
     - display destination, radius, etc
 Main view:
