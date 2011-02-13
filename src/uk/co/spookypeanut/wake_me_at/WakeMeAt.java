@@ -40,6 +40,8 @@ import android.widget.AdapterView.AdapterContextMenuInfo;
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static String LOG_NAME;
+    public static String BROADCAST_UPDATE;
+    
     private DatabaseManager db;
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
@@ -120,6 +122,7 @@ public class WakeMeAt extends ListActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         Log.d(LOG_NAME, "Start onCreate()");
 
         super.onCreate(savedInstanceState);

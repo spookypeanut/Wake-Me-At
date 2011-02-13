@@ -39,7 +39,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
     // TODO: Set this globally
-    private final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
+    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
 
 
     private static final int ALARMNOTIFY_ID = 1;

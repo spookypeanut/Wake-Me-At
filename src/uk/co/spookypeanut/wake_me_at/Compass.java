@@ -44,7 +44,7 @@ import android.view.SurfaceView;
 //REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    private final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
+    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
 
     private final float RADTODEGREES = (float) (180.0 / 3.14159265);
 

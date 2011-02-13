@@ -48,7 +48,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private final int TTS_REQUEST_CODE = 27;
     private final String POST_UTTERANCE = "WMAPostUtterance";
     // TODO: Set this globally
-    private final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
+    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
     
     private DatabaseManager db;
     private UnitConverter uc;
