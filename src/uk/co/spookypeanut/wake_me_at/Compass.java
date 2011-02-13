@@ -19,6 +19,8 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -139,12 +141,17 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
         int cx = mLayoutWidth / 2;
         int cy = mLayoutHeight / 2;
-
+        
         canvas.translate(cx, cy);
         if (mOriValues != null) {
             canvas.rotate(-mOriValues[0] * RADTODEGREES);
         }
-        canvas.drawPath(mPath, mPaint);
+        
+        Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.compass);
+        Bitmap scaled = Bitmap.createScaledBitmap(_scratch, 200, 200, true);
+        canvas.drawBitmap(scaled, -cx, -cy, null);
+        
+        //canvas.drawPath(mPath, mPaint);
     }
 
     /* (non-Javadoc)
