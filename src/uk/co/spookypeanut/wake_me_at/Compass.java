@@ -115,7 +115,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
                 SensorManager.getRotationMatrix(mRotMatrix, mInclMatrix, mGravity, mGeoMag);
                 SensorManager.getOrientation(mRotMatrix, mOriValues);
-                Log.d(LOG_NAME, mOriValues[0] + ", " + mOriValues[1] + ", " + mOriValues[2]);
             }
 
         }
