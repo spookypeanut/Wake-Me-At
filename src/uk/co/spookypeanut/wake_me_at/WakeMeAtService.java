@@ -56,6 +56,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private String mNick;
     private double mRadius;
     private double mMetresAway = -1.0;
+    private Location mCurrLocation = new Location("");
     private Location mFinalDestination = new Location("");
     private String mProvider;
     private String mUnit;
@@ -247,6 +248,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         Log.v(LOG_NAME, "onLocationChanged()");
+        mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
         // message is, e.g. You are 200m from Welwyn North
         String message = String.format(getString(R.string.notif_full),
@@ -268,6 +270,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         mAlarmIntent.putExtra("rowId", mRowId);
         mAlarmIntent.putExtra("metresAway", mMetresAway);
         mAlarmIntent.putExtra("alarm", mAlarm);
+        mAlarmIntent.putExtra("currLat", mCurrLocation.getLatitude());
+        mAlarmIntent.putExtra("currLong", mCurrLocation.getLongitude());
         Log.d(LOG_NAME, "Sending broadcast");
         sendStickyBroadcast(mAlarmIntent);
     }
