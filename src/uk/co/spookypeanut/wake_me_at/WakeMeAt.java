@@ -142,8 +142,6 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
-
-        db.logOutArray();
         Log.d(LOG_NAME, "End onCreate()");
     }
     
