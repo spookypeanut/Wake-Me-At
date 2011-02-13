@@ -161,6 +161,7 @@ public class WakeMeAt extends ListActivity {
     }
     
     private void rowChanged(long newRowId) {
+        Log.d(LOG_NAME, "rowChanged(" + newRowId + ")");
         mRowId = newRowId;
         TextView tv = (TextView) findViewById(R.id.mainTitle);
         if (newRowId >= 0) {
@@ -168,6 +169,7 @@ public class WakeMeAt extends ListActivity {
         } else {
             tv.setBackgroundColor(Color.WHITE);
         }
+        mLocListAdapter.notifyDataSetChanged();
     }
     
     private class LocListAdapter extends BaseAdapter {
@@ -216,7 +218,7 @@ public class WakeMeAt extends ListActivity {
         
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
-            //Log.d(LOG_NAME, "getView(" + id + ")");
+            //Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
             View row;
             
             if (null == convertView) {
@@ -224,9 +226,15 @@ public class WakeMeAt extends ListActivity {
             } else {
                 row = convertView;
             }
+            if (id == mRowId) {
+                row.setBackgroundColor(Color.RED);
+            } else {
+                row.setBackgroundColor(Color.WHITE);
+            }
             //Log.d(LOG_NAME, "row = " + row.toString());
             
             TextView tv = (TextView) row.findViewById(R.id.locListName);
+            //Log.d(LOG_NAME, "Nick: " + db.getNick(id));
             tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
