@@ -55,8 +55,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
     private TextToSpeech mTts;
-    
-    public Compass mCompass;
 
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
