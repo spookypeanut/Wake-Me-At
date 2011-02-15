@@ -163,12 +163,6 @@ public class WakeMeAt extends ListActivity {
     private void rowChanged(long newRowId) {
         Log.d(LOG_NAME, "rowChanged(" + newRowId + ")");
         mRowId = newRowId;
-        TextView tv = (TextView) findViewById(R.id.mainTitle);
-        if (newRowId >= 0) {
-            tv.setBackgroundColor(Color.RED);
-        } else {
-            tv.setBackgroundColor(Color.WHITE);
-        }
         mLocListAdapter.notifyDataSetChanged();
     }
     
