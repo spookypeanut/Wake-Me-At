@@ -225,10 +225,8 @@ public class WakeMeAt extends ListActivity {
             } else {
                 row.setBackgroundColor(Color.TRANSPARENT);
             }
-            //Log.d(LOG_NAME, "row = " + row.toString());
             
             TextView tv = (TextView) row.findViewById(R.id.locListName);
-            //Log.d(LOG_NAME, "Nick: " + db.getNick(id));
             tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
