@@ -223,7 +223,7 @@ public class WakeMeAt extends ListActivity {
             if (id == mRowId) {
                 row.setBackgroundColor(Color.RED);
             } else {
-                row.setBackgroundColor(Color.WHITE);
+                row.setBackgroundColor(Color.TRANSPARENT);
             }
             //Log.d(LOG_NAME, "row = " + row.toString());
             
