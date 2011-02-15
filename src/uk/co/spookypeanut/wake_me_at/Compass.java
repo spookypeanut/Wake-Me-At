@@ -99,10 +99,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     
     private void prepareArrow() {
         // Construct a wedge-shaped path
-        mPath.moveTo(0, -50);
-        mPath.lineTo(-20, 60);
-        mPath.lineTo(0, 50);
-        mPath.lineTo(20, 60);
+        mPath.moveTo(0, -40);
+        mPath.lineTo(-5, 40);
+        mPath.lineTo(0, 30);
+        mPath.lineTo(5, 40);
         mPath.close();
     }
 
@@ -146,17 +146,11 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = mPaint;
 
         canvas.drawColor(Color.WHITE);
-        paint.setColor(Color.BLACK);
-
-        paint.setAntiAlias(true);
-        paint.setStyle(Paint.Style.FILL);
 
         int cx = mLayoutWidth / 2;
         int cy = mLayoutHeight / 2;
         
         canvas.translate(cx, cy);
-        
-        canvas.save();
         
         float northRotation = 0;
         if (mOriValues != null) {
@@ -170,6 +164,11 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         
         float bearing = mCurrLoc.bearingTo(mDestLoc);
         canvas.rotate(bearing);
+
+        paint.setColor(Color.RED);
+
+        paint.setAntiAlias(true);
+        paint.setStyle(Paint.Style.FILL);
 
         canvas.drawPath(mPath, mPaint);
     }
