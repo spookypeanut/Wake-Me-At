@@ -64,7 +64,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private Location mFinalDestination = new Location("");
     private String mNick;
     private String mUnit;
-    private boolean mAlarm;
+    private boolean mAlarmSounding;
     
     private double mMetresAway;
     
@@ -123,7 +123,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
         Log.v(LOG_NAME, message);
         tv.setText(message);
-        if (mAlarm && mSpeechOn) speak();
+        if (mAlarmSounding && mSpeechOn) speak();
 
     }
     
@@ -144,7 +144,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void startAlarm() {
         //Log.v(LOG_NAME, "Alarm.startAlarm");
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
-        mAlarm = true;
+        mAlarmSounding = true;
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
         if (mNoiseOn) {
@@ -241,7 +241,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
         Log.d(LOG_NAME, "Registered receiver");
-        if (mAlarm == true) {
+        if (mAlarmSounding == true) {
             startAlarm();
         }
     }
@@ -256,7 +256,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     public void onBackPressed() {
-        if (! mAlarm) {
+        if (! mAlarmSounding) {
             super.onBackPressed();
         } else {
             Log.d(LOG_NAME, "Disallowing pressing back");
@@ -306,7 +306,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
         }
-        if (mAlarm) startAlarm();
+        if (mAlarmSounding) startAlarm();
     }
     
     @Override
@@ -320,14 +320,16 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private void stopService() {
         Log.d(LOG_NAME, "Alarm.stopService()");
-        mAlarm = false;
+        mAlarmSounding = false;
         stopAlarm();
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
     
     private OnClickListener mEditLocation = new Button.OnClickListener() {
         public void onClick(View v) {
-            stopService();
+            if (mAlarmSounding) {
+                stopService();
+            }
             Intent i = new Intent(Alarm.this.getApplication(), EditLocation.class);
             i.putExtra("rowId", mRowId);
             startActivity(i);
@@ -344,7 +346,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     private OnClickListener mMainWindow = new Button.OnClickListener() {
         public void onClick(View v) {
-            stopService();
+            if (mAlarmSounding) {
+                stopService();
+            }
             Intent i = new Intent(Alarm.this.getApplication(), WakeMeAt.class);
             startActivity(i);
             finish();
