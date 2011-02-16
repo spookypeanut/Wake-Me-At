@@ -1,8 +1,6 @@
 Alarm:
     - noise should be headphones only if headphones plugged in (is it possible?)
     - allow switching location provider
-WakeMeAt:
-    - tapping / long tapping a location doesn't highlight it any more
 
 Post alpha:
 Cancelling alarm is slow
