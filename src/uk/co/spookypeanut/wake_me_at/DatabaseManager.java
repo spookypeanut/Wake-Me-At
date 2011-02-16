@@ -30,6 +30,14 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
+/**
+ * @author spookypeanut
+ * Handle the database used in WakeMe@
+ */
+/**
+ * @author spookypeanut
+ *
+ */
 public class DatabaseManager
 {
     private SQLiteDatabase db;
@@ -50,17 +58,34 @@ public class DatabaseManager
     Context context;
 
 
+    /** Constructor
+     * @param context The context that the db is being handled in
+     */
     public DatabaseManager(Context context) {
         this.context = context;
         CustomSQLiteOpenHelper helper = new CustomSQLiteOpenHelper(context);
         this.db = helper.getWritableDatabase();
     }
 
+    /** 
+     * Get the number of rows in the db
+     * @return Rows in db
+     */
     public int getRowCount() {
         ArrayList <ArrayList <Object>> allData = getAllRowsAsArrays();
         return allData.size();
     }
     
+    /**
+     * Add a new row to the db
+     * @param rowNick The nickname of the location
+     * @param rowLat The latitude of the location
+     * @param rowLong The longitude of the location
+     * @param rowProv The location provider (gps, network, etc) of the location
+     * @param rowRadius The distance away from the location to alert the user
+     * @param rowUnit The units of rowRadius
+     * @return The rowId of the newly created row
+     */
     public long addRow(String rowNick, double rowLat, double rowLong,
                        String rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
@@ -83,6 +108,10 @@ public class DatabaseManager
         return -1;
     }
 
+    /**
+     * Delete a row from the db
+     * @param rowID The row to delete
+     */
     public void deleteRow(long rowID) {
         try {
             db.delete(TABLE_NAME, TABLE_ROW_ID + "=" + rowID, null);
@@ -93,6 +122,17 @@ public class DatabaseManager
         }
     }
 
+    
+    /**
+     * Change the entry for a given row in the database
+     * @param rowId The id in the database of the row to change
+     * @param rowNick The new nickname for the location
+     * @param rowLat The new latitude for the location
+     * @param rowLong The new longitude for the location
+     * @param rowProv The new location provider for the location
+     * @param rowRadius The new distance away to alert the user
+     * @param rowUnit The units that rowRadius is in
+     */
     public void updateRow(long rowId, String rowNick, double rowLat, double rowLong,
                           String rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
