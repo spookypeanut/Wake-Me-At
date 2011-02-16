@@ -89,7 +89,11 @@ public class WakeMeAt extends ListActivity {
       long id = myInfo.id;
       menu.setHeaderTitle(db.getNick(id));
       MenuInflater inflater = getMenuInflater();
-      inflater.inflate(R.menu.mn_context_wake_me_at, menu);
+      if (id == mRowId) {
+          inflater.inflate(R.menu.mn_context_running_wake_me_at, menu);
+      } else {
+          inflater.inflate(R.menu.mn_context_wake_me_at, menu);
+      }
     }
     
     @Override
@@ -102,6 +106,9 @@ public class WakeMeAt extends ListActivity {
         return true;
       case R.id.mn_start:
           mLocListAdapter.startService(info.position);
+        return true;
+      case R.id.mn_stop:
+          stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
         return true;
       case R.id.mn_edit_loc:
           mLocListAdapter.editLocation(info.position);
