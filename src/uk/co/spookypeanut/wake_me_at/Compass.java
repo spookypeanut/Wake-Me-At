@@ -18,6 +18,8 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
+import java.lang.Thread.State;
+
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -52,7 +54,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
 
-    private CompassThread mThread;
+    private CompassThread mThread = null;
     private Context mContext;
     
     private SensorManager mSensorManager;
@@ -88,12 +90,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mCurrLoc = new Location("");
         mDestLoc = new Location("");
         // create thread only; it's started in surfaceCreated()
-        mThread = new CompassThread(holder, context, new Handler() {
-            @Override
-            public void handleMessage(Message m) {
-                Log.d(LOG_NAME, "CompassThread.handleMessage");
-            }
-        });
+
     }
 
     
@@ -187,9 +184,20 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
      */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
-        mThread.setRunning(true);
-        mThread.start();
+        if (mThread == null) {
+            mThread = new CompassThread(holder, mContext, new Handler() {
+                @Override
+                public void handleMessage(Message m) {
+                    Log.d(LOG_NAME, "CompassThread.handleMessage");
+                }
+            });
+        }
         
+        mThread.setRunning(true);
+        Log.d(LOG_NAME, "Before start, mThread.getState(): " + mThread.getState());
+        mThread.start();
+        Log.d(LOG_NAME, "After start, mThread.getState(): " + mThread.getState());
+
         mSurfaceView = (SurfaceView) findViewById(R.id.compassSurface);
         mLayoutWidth = mSurfaceView.getWidth();
         mLayoutHeight = mSurfaceView.getHeight();
@@ -214,7 +222,11 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         Log.d(LOG_NAME, "Unregistered receiver");
         mSensorManager.unregisterListener(mListener);
         boolean retry = true;
+        Log.d(LOG_NAME, "Before setRunning(false), mThread.getState(): " + mThread.getState());
+
         mThread.setRunning(false);
+        Log.d(LOG_NAME, "After setRunning(false), mThread.getState(): " + mThread.getState());
+
         while (retry) {
             try {
                 mThread.join();
@@ -222,6 +234,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             } catch (InterruptedException e) {
             }
         }
+        Log.d(LOG_NAME, "After mThread.join(), mThread.getState(): " + mThread.getState());
+        CompassThread limbo = mThread;
+        mThread = null;
+        limbo.interrupt();
     }
 
     class CompassThread extends Thread {
