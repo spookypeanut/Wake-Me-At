@@ -66,5 +66,30 @@
     <meta-data android:name="android.app.searchable"
                android:resource="@xml/searchable"/>
 </activity>
+
+        <activity android:name=".Shortcuts"
+                  android:label="@string/shortcuts">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+
+        </activity>
+
+        <!-- It is recommended that you use an activity-alias to provide the "CREATE_SHORTCUT" -->
+        <!-- intent-filter.  This gives you a way to set the text (and optionally the -->
+        <!-- icon) that will be seen in the launcher's create-shortcut user interface. -->
+
+        <activity-alias android:name=".CreateShortcuts"
+            android:targetActivity=".Shortcuts"
+            android:label="@string/sample_shortcuts">
+
+            <!--  This intent-filter allows your shortcuts to be created in the launcher. -->
+            <intent-filter>
+                <action android:name="android.intent.action.CREATE_SHORTCUT" />
+            </intent-filter>
+
+        </activity-alias>
+        
+
 </application>
 </manifest>
