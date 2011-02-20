@@ -35,6 +35,8 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+// REF#0014
+
 public class Shortcuts extends ListActivity {
     private static String LOG_NAME = WakeMeAt.LOG_NAME;
     public static String BROADCAST_UPDATE;
@@ -44,12 +46,11 @@ public class Shortcuts extends ListActivity {
     private LocListAdapter mLocListAdapter;
     private DatabaseManager db;
 
-    private long mRowId;
-
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position
                 + ", " + id + ")");
+        createShortcut(mLocListAdapter.getItemId(position));
     }
 
     public void shortcutList() {
@@ -73,8 +74,7 @@ public class Shortcuts extends ListActivity {
     
     public void createShortcut(long rowId) {
         db.logOutArray();
-        Log.d(LOG_NAME, "Shortcuts.setupShortcut");
-        Toast.makeText(this, "Creating", Toast.LENGTH_SHORT);
+        Log.d(LOG_NAME, "Shortcuts.createShortcut");
         
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
@@ -88,9 +88,10 @@ public class Shortcuts extends ListActivity {
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
         setResult(RESULT_OK, intent);
+        finish();
     }
 
-    public void startService(int rowId) {
+    public void startService(long rowId) {
         Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
         intent.setClass(Shortcuts.this, WakeMeAtService.class);
         intent.putExtra("rowId", rowId);
@@ -118,8 +119,12 @@ public class Shortcuts extends ListActivity {
         // an informative
         // display.
         Log.d(LOG_NAME, "Shortcuts.onCreate");
-        Toast.makeText(this, "Not creating", Toast.LENGTH_SHORT);
-        startService(1);
+        Toast myToast = Toast.makeText(this, "Not creating", Toast.LENGTH_SHORT);
+        myToast.show();
+        Bundle extras = intent.getExtras();
+        long rowId = extras.getLong(ROWID_KEY);
+        
+        startService(rowId);
         finish();
     }
 
@@ -151,11 +156,6 @@ public class Shortcuts extends ListActivity {
                 row = mInflater.inflate(R.layout.shortcuts_list_entry, null);
             } else {
                 row = convertView;
-            }
-            if (id == mRowId) {
-                row.setBackgroundColor(Color.RED);
-            } else {
-                row.setBackgroundColor(Color.TRANSPARENT);
             }
 
             TextView tv = (TextView) row.findViewById(R.id.locListName);
