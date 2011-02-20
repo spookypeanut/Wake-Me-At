@@ -18,8 +18,6 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
-import java.lang.Thread.State;
-
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
