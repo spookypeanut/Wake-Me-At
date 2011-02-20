@@ -77,7 +77,7 @@
 
 
 <!-- SHORTCUTS -->
-<string name="shortcuts">strings.shortcuts</string>
-<string name="sample_shortcuts">strings.sample_shortcuts</string>
-<string name="shortcut_name">string.shortcut_name</string>
+<string name="shortcuts">This should never be displayed</string>
+<string name="sample_shortcuts">WakeMe@ location</string>
+<string name="shortcut_name">WakeMe@ %1$s</string>
 </resources>

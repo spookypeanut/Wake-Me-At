@@ -31,7 +31,6 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 // REF#0014
 
@@ -42,7 +41,7 @@ public class Shortcuts extends ListActivity {
     private static final String ROWID_KEY = "uk.co.spookypeanut.wake_me_at.Shortcuts";
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
-    private DatabaseManager db;
+    private DatabaseManager db = null;
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -78,9 +77,12 @@ public class Shortcuts extends ListActivity {
         shortcutIntent.setClassName(this, this.getClass().getName());
         shortcutIntent.putExtra(ROWID_KEY, rowId);
         
+        String nick = db.getNick(rowId);
+        
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
-        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME, getString(R.string.shortcut_name));
+        intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
+                        String.format(getString(R.string.shortcut_name), nick));
         Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
                 this,  R.drawable.icon);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
@@ -89,8 +91,12 @@ public class Shortcuts extends ListActivity {
         finish();
     }
 
-    public void startService(long rowId) {
-
+    @Override
+    protected void onDestroy() {
+        if (db != null) {
+            db.close();
+        }
+        super.onDestroy();
     }
     
     @Override
@@ -108,8 +114,6 @@ public class Shortcuts extends ListActivity {
             return;
         }
 
-        Toast myToast = Toast.makeText(this, "Not creating", Toast.LENGTH_SHORT);
-        myToast.show();
         Bundle extras = intent.getExtras();
         long rowId = extras.getLong(ROWID_KEY);
         
@@ -125,20 +129,22 @@ public class Shortcuts extends ListActivity {
             Log.d(LOG_NAME, "LocListAdapter constructor");
         }
 
-
+        @Override
         public int getCount() {
             return db.getRowCount();
-
         }
 
+        @Override
         public Object getItem(int position) {
             return getItemId(position);
         }
 
+        @Override
         public long getItemId(int position) {
             return db.getIdsAsList().get(position);
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
             // Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
