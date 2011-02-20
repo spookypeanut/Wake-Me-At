@@ -38,7 +38,6 @@ import android.widget.Toast;
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    // TODO: Set this globally
     private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
 
 
@@ -140,6 +139,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Bundle extras = intent.getExtras();
 
         mRowId = extras.getLong("rowId");
+        Log.d(LOG_NAME, "row Id for alarm is " + mRowId);
         mNick = db.getNick(mRowId);
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
