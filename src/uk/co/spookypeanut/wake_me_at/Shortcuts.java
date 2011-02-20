@@ -20,10 +20,8 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import android.app.ListActivity;
-import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Color;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
@@ -92,39 +90,33 @@ public class Shortcuts extends ListActivity {
     }
 
     public void startService(long rowId) {
-        Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
-        intent.setClass(Shortcuts.this, WakeMeAtService.class);
-        intent.putExtra("rowId", rowId);
-        this.startService(intent);
+
     }
     
     @Override
     public void onCreate(Bundle icicle) {
+        Log.d(LOG_NAME, "Shortcuts.onCreate");
         super.onCreate(icicle);
-
-        // Resolve the intent
 
         final Intent intent = getIntent();
         final String action = intent.getAction();
 
         // If the intent is a request to create a shortcut, we'll do that and
         // exit
-
         if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
             shortcutList();
             return;
         }
 
-        // If we weren't launched with a CREATE_SHORTCUT intent, simply put up
-        // an informative
-        // display.
-        Log.d(LOG_NAME, "Shortcuts.onCreate");
         Toast myToast = Toast.makeText(this, "Not creating", Toast.LENGTH_SHORT);
         myToast.show();
         Bundle extras = intent.getExtras();
         long rowId = extras.getLong(ROWID_KEY);
         
-        startService(rowId);
+        Intent serviceIntent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
+        serviceIntent.setClass(Shortcuts.this, WakeMeAtService.class);
+        serviceIntent.putExtra("rowId", rowId);
+        startService(serviceIntent);
         finish();
     }
 
