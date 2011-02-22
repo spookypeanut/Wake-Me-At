@@ -35,13 +35,15 @@ import android.widget.TextView;
 // REF#0014
 
 public class Shortcuts extends ListActivity {
-    private static String LOG_NAME = WakeMeAt.LOG_NAME;
+    private static String LOG_NAME;
     public static String BROADCAST_UPDATE;
 
     private static final String ROWID_KEY = "uk.co.spookypeanut.wake_me_at.Shortcuts";
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
     private DatabaseManager db = null;
+    
+    public WakeMeAt mBlah = new WakeMeAt();
 
     @Override
     protected void onListItemClick(ListView l, View v, int position, long id) {
@@ -101,6 +103,8 @@ public class Shortcuts extends ListActivity {
     
     @Override
     public void onCreate(Bundle icicle) {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         Log.d(LOG_NAME, "Shortcuts.onCreate");
         super.onCreate(icicle);
 

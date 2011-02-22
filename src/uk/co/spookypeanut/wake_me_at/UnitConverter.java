@@ -36,7 +36,7 @@ import android.util.Log;
 
 public class UnitConverter
 {
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    private String LOG_NAME;
     private final int SYSTEM_METRIC = 1;
     private final int SYSTEM_IMPERIAL = 2;
     
@@ -68,6 +68,9 @@ public class UnitConverter
      * @param unitAbbrev The abbreviation of the unit to initialize to
      */
     public UnitConverter(Context context, String unitAbbrev) {
+        LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+//      BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
+
         Unit unit = getFromAbbrev(unitAbbrev);
         switchUnit(unit);
     }

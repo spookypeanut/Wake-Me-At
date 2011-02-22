@@ -66,7 +66,8 @@ import com.google.android.maps.OverlayItem;
 public class GetLocationMap extends MapActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    private String LOG_NAME;
+//    private String BROADCAST_UPDATE;
     MapView mapView;
     Context mContext;
     MapOverlay mItemizedOverlay;
@@ -82,6 +83,9 @@ implements LocationListener {
     
     @Override
     public void onCreate(Bundle icicle) {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+//        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
+        
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
 

@@ -51,9 +51,9 @@ import android.widget.AdapterView.OnItemSelectedListener;
 public class EditLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    
-    public static final String BROADCAST_UPDATE = "uk.co.spookypeanut.wake_me_at.alarmupdate";
+
+    private String LOG_NAME;
+    private String BROADCAST_UPDATE;
     
     public static final int NICKDIALOG = 0;
     public static final int RADIUSDIALOG = 1;
@@ -319,6 +319,9 @@ public class EditLocation extends Activity {
     }
 
     protected void onCreate(Bundle icicle) {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
+        
         Log.d(LOG_NAME, "EditLocation.onCreate");
         super.onCreate(icicle);
 

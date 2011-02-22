@@ -44,11 +44,10 @@ import android.widget.TextView;
 
 public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    private String LOG_NAME;
+    private String BROADCAST_UPDATE;
     private final int TTS_REQUEST_CODE = 27;
     private final String POST_UTTERANCE = "WMAPostUtterance";
-    // TODO: Set this globally
-    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
     
     private DatabaseManager db;
     private UnitConverter uc;
@@ -70,6 +69,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     
     @Override
     protected void onCreate(Bundle icicle) {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
 

@@ -41,7 +41,7 @@ import android.util.Log;
 public class DatabaseManager
 {
     private SQLiteDatabase db;
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
+    private String LOG_NAME;
 
     private final String DB_NAME = "WakeMeAtDB";
     private final int DB_VERSION = 2;
@@ -55,14 +55,15 @@ public class DatabaseManager
     private final String TABLE_ROW_RADIUS = "table_row_radius";
     private final String TABLE_ROW_UNIT = "table_row_unit";
     
-    Context context;
+    Context mContext;
 
 
     /** Constructor
      * @param context The context that the db is being handled in
      */
     public DatabaseManager(Context context) {
-        this.context = context;
+        LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+        this.mContext = context;
         CustomSQLiteOpenHelper helper = new CustomSQLiteOpenHelper(context);
         this.db = helper.getWritableDatabase();
     }

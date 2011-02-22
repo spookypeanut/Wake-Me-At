@@ -37,8 +37,8 @@ import android.widget.Toast;
 
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
+    private String LOG_NAME;
+    private String BROADCAST_UPDATE;
 
 
     private static final int ALARMNOTIFY_ID = 1;
@@ -119,6 +119,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onCreate() {
+        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
 

@@ -43,8 +43,8 @@ import android.view.SurfaceView;
 
 //REF#0010
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
-    public final String LOG_NAME = WakeMeAt.LOG_NAME;
-    private final String BROADCAST_UPDATE = WakeMeAt.BROADCAST_UPDATE;
+    private final String LOG_NAME;
+    private final String BROADCAST_UPDATE;
 
     private final float RADTODEGREES = (float) (180.0 / 3.14159265);
 
@@ -73,11 +73,16 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     public Compass(Context context) {
         super(context);
+        LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
         prepareArrow();
     }
 
     public Compass(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
+        LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+        BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
+        
         Log.d(LOG_NAME, "Compass constructor");
         mContext = context;
         SurfaceHolder holder = getHolder();
