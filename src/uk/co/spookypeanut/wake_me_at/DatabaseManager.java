@@ -385,8 +385,8 @@ public class DatabaseManager
                     dataList.add(cursor.getDouble(3));  //TABLE_ROW_LONG
                     dataList.add(cursor.getInt(4));     //TABLE_ROW_PRESET
                     dataList.add(cursor.getString(5));  //TABLE_ROW_PROV
-                    dataList.add(cursor.getFloat(5));   //TABLE_ROW_RADIUS
-                    dataList.add(cursor.getString(6));  //TABLE_ROW_UNIT
+                    dataList.add(cursor.getFloat(6));   //TABLE_ROW_RADIUS
+                    dataList.add(cursor.getString(7));  //TABLE_ROW_UNIT
 
                     dataArrays.add(dataList);
                 }
