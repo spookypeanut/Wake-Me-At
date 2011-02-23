@@ -19,3 +19,4 @@ http://javahowto.blogspot.com/
 0012 http://developer.android.com/resources/samples/LunarLander/index.html
 0013 http://helpdesk.objects.com.au/java/how-to-format-a-number-to-a-certain-number-of-significant-figures-as-opposed-to-decimal-places
 0014 https://github.com/kruton/connectbot/ http://www.google.com/codesearch/p?hl=en#R74tW4dlPuA/src/org/connectbot/HostListActivity.java&q=connectbot%20action_create_shortcut&sa=N&cd=2&ct=rc
+0015 http://android.git.kernel.org http://www.google.com/codesearch/p?hl=en#XLdVEa1vc-g/src/com/android/im/provider/ImpsProvider.java&q=SQLiteDatabase%20onupgrade&sa=N&cd=2&ct=rc&l=339

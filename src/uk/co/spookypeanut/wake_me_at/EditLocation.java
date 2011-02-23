@@ -238,6 +238,7 @@ public class EditLocation extends Activity {
         // TODO: move all strings / constants out to R
         return db.addRow (
             "", 1000.0, 1000.0,
+            0,
             "network", (float) 1.80, "km"
         );
     }

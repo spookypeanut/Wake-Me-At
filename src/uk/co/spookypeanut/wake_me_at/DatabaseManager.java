@@ -44,13 +44,14 @@ public class DatabaseManager
     private String LOG_NAME;
 
     private final String DB_NAME = "WakeMeAtDB";
-    private final int DB_VERSION = 2;
+    private final int DB_VERSION = 3;
 
     private final String TABLE_NAME = "Locations";
     private final String TABLE_ROW_ID = "id";
     private final String TABLE_ROW_NICK = "table_row_nick";
     private final String TABLE_ROW_LAT = "table_row_lat";
     private final String TABLE_ROW_LONG = "table_row_long";
+    private final String TABLE_ROW_PRESET = "table_row_preset";
     private final String TABLE_ROW_PROV = "table_row_prov";
     private final String TABLE_ROW_RADIUS = "table_row_radius";
     private final String TABLE_ROW_UNIT = "table_row_unit";
@@ -88,12 +89,14 @@ public class DatabaseManager
      * @return The rowId of the newly created row
      */
     public long addRow(String rowNick, double rowLat, double rowLong,
+                       int preset,
                        String rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
+        values.put(TABLE_ROW_PRESET, preset);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
         values.put(TABLE_ROW_UNIT, rowUnit);
@@ -135,12 +138,14 @@ public class DatabaseManager
      * @param rowUnit The units that rowRadius is in
      */
     public void updateRow(long rowId, String rowNick, double rowLat, double rowLong,
+                          int preset,
                           String rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
         values.put(TABLE_ROW_LAT, rowLat);
         values.put(TABLE_ROW_LONG, rowLong);
+        values.put(TABLE_ROW_PRESET, preset);
         values.put(TABLE_ROW_PROV, rowProv);
         values.put(TABLE_ROW_RADIUS, rowRadius);
         values.put(TABLE_ROW_UNIT, rowUnit);
@@ -224,6 +229,14 @@ public class DatabaseManager
         setDatumD(rowId, TABLE_ROW_LONG, longitude);
     }
 
+    public int getPreset(long rowId) {
+        return Integer.valueOf(getDatumS(rowId, TABLE_ROW_PRESET));
+    }
+    
+    public void setPreset(long rowId, int preset) {
+        setDatumI(rowId, TABLE_ROW_PRESET, preset);
+    }
+    
     public String getProvider(long rowId) {
         return getDatumS(rowId, TABLE_ROW_PROV);
     }
@@ -292,6 +305,7 @@ public class DatabaseManager
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG,
+                            TABLE_ROW_PRESET,
                             TABLE_ROW_PROV, TABLE_ROW_RADIUS,
                             TABLE_ROW_UNIT},
                             TABLE_ROW_ID + "=" + rowId,
@@ -303,12 +317,14 @@ public class DatabaseManager
             // it to the ArrayList that will be returned by the method.
             if (!cursor.isAfterLast()) {
                 do {
-                    rowArray.add(cursor.getLong(0));
-                    rowArray.add(cursor.getString(1));
-                    rowArray.add(cursor.getDouble(2));
-                    rowArray.add(cursor.getDouble(3));
-                    rowArray.add(cursor.getString(4));
-                    rowArray.add(cursor.getFloat(5));
+                    rowArray.add(cursor.getLong(0));    //TABLE_ROW_ID
+                    rowArray.add(cursor.getString(1));  //TABLE_ROW_NICK
+                    rowArray.add(cursor.getDouble(2));  //TABLE_ROW_LAT
+                    rowArray.add(cursor.getDouble(3));  //TABLE_ROW_LONG
+                    rowArray.add(cursor.getInt(4));     //TABLE_ROW_PRESET
+                    rowArray.add(cursor.getString(5));  //TABLE_ROW_PROV
+                    rowArray.add(cursor.getFloat(6));   //TABLE_ROW_RADIUS
+                    rowArray.add(cursor.getString(7));  //TABLE_ROW_UNIT
                 }
                 while (cursor.moveToNext());
             }
@@ -331,13 +347,14 @@ public class DatabaseManager
         for (int position=0; position < data.size(); position++)
         { 
             ArrayList<Object> row = data.get(position);
-            Log.d(LOG_NAME, row.get(0).toString() + ", " +
-                            row.get(1).toString() + ", " +
-                            row.get(2).toString() + ", " +
-                            row.get(3).toString() + ", " +
-                            row.get(4).toString() + ", " +
-                            row.get(5).toString() + ", " +
-                            row.get(6).toString());
+            Log.d(LOG_NAME, row.get(0).toString() + ", " + //TABLE_ROW_ID
+                            row.get(1).toString() + ", " + //TABLE_ROW_NICK
+                            row.get(2).toString() + ", " + //TABLE_ROW_LAT
+                            row.get(3).toString() + ", " + //TABLE_ROW_LONG
+                            row.get(4).toString() + ", " + //TABLE_ROW_PRESET
+                            row.get(5).toString() + ", " + //TABLE_ROW_PROV
+                            row.get(6).toString() + ", " + //TABLE_ROW_RADIUS
+                            row.get(7).toString());        //TABLE_ROW_UNIT
         }
         Log.d(LOG_NAME, "End of array log");
     }
@@ -351,6 +368,7 @@ public class DatabaseManager
                     TABLE_NAME,
                     new String[] { TABLE_ROW_ID, TABLE_ROW_NICK,
                             TABLE_ROW_LAT, TABLE_ROW_LONG,
+                            TABLE_ROW_PRESET,
                             TABLE_ROW_PROV, TABLE_ROW_RADIUS,
                             TABLE_ROW_UNIT},
                             null, null, null, null, null
@@ -361,13 +379,14 @@ public class DatabaseManager
                 do {
                     ArrayList<Object> dataList = new ArrayList<Object>();
 
-                    dataList.add(cursor.getLong(0));
-                    dataList.add(cursor.getString(1));
-                    dataList.add(cursor.getDouble(2));
-                    dataList.add(cursor.getDouble(3));
-                    dataList.add(cursor.getString(4));
-                    dataList.add(cursor.getFloat(5));
-                    dataList.add(cursor.getString(6));
+                    dataList.add(cursor.getLong(0));    //TABLE_ROW_ID
+                    dataList.add(cursor.getString(1));  //TABLE_ROW_NICK
+                    dataList.add(cursor.getDouble(2));  //TABLE_ROW_LAT
+                    dataList.add(cursor.getDouble(3));  //TABLE_ROW_LONG
+                    dataList.add(cursor.getInt(4));     //TABLE_ROW_PRESET
+                    dataList.add(cursor.getString(5));  //TABLE_ROW_PROV
+                    dataList.add(cursor.getFloat(5));   //TABLE_ROW_RADIUS
+                    dataList.add(cursor.getString(6));  //TABLE_ROW_UNIT
 
                     dataArrays.add(dataList);
                 }
@@ -397,6 +416,7 @@ public class DatabaseManager
             TABLE_ROW_NICK + " TEXT," +
             TABLE_ROW_LAT + " DOUBLE," +
             TABLE_ROW_LONG + " DOUBLE," +
+            TABLE_ROW_PRESET + " INT," +
             TABLE_ROW_PROV + " TEXT," +
             TABLE_ROW_RADIUS + " FLOAT," +
             TABLE_ROW_UNIT + " TEXT" +
@@ -409,11 +429,44 @@ public class DatabaseManager
             db.close();
         }
 
+        //REF#0015
         @Override
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             String upgradeMessage = "Upgrading db v" + oldVersion + " to v" + newVersion;
             Log.d(LOG_NAME, upgradeMessage);
+            switch (oldVersion) {
+            case 2:
+                if (newVersion <= 2){
+                    return;
+                }
+                db.beginTransaction();
+                try {
+                    // add category column to the providers table
+                    db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + TABLE_ROW_PRESET + " INT;");
+                    db.setTransactionSuccessful();
+                } catch (Throwable ex) {
+                    Log.e(LOG_NAME, ex.getMessage(), ex);
+                    break; // force to destroy all old data;
+                } finally {
+                    db.endTransaction();
+                }
+                
+                return;
+            }
+            Log.e(LOG_NAME, "Couldn't upgrade db to " + newVersion + ". Existing data must be destroyed.");
+            destroyOldTables(db);
+            onCreate(db);
         }
         
+        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+            Log.e(LOG_NAME, "Couldn't downgrade db to " + newVersion + ". Existing data must be destroyed.");
+
+            destroyOldTables(db);
+            onCreate(db);
+        }
+        
+        private void destroyOldTables(SQLiteDatabase db) {
+            db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
+        }
     }
 }
