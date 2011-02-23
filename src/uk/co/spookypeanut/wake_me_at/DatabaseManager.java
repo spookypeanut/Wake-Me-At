@@ -31,12 +31,8 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
 
 /**
- * @author spookypeanut
  * Handle the database used in WakeMe@
- */
-/**
  * @author spookypeanut
- *
  */
 public class DatabaseManager
 {
@@ -65,7 +61,7 @@ public class DatabaseManager
     public DatabaseManager(Context context) {
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         this.mContext = context;
-        CustomSQLiteOpenHelper helper = new CustomSQLiteOpenHelper(context);
+        WakeMeAtDbHelper helper = new WakeMeAtDbHelper(context);
         this.db = helper.getWritableDatabase();
     }
 
@@ -158,6 +154,12 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Get a string item from the database
+     * @param rowId The Id of the row to use
+     * @param column The column to get the string from
+     * @return The string item
+     */
     public String getDatumS(long rowId, String column) {
         Cursor cursor;
         String returnValue = "";
@@ -181,6 +183,12 @@ public class DatabaseManager
         return returnValue;
     }
 
+    /**
+     * Set an entry in the database
+     * @param rowId The id of the row to set
+     * @param column The column to set
+     * @param value The value to set the entry to
+     */
     public void setDatumS(long rowId, String column, String value) {
         ContentValues values = new ContentValues();
         values.put(column, value);
@@ -193,14 +201,32 @@ public class DatabaseManager
         }
     }
 
+    /**
+     * Set an entry to a double
+     * @param rowId The id of the row to use
+     * @param column The column to set
+     * @param value The value to set to
+     */
     public void setDatumD(long rowId, String column, double value) {
         setDatumS(rowId, column, Double.toString(value));
     }
 
+    /**
+     * Set an entry to a float
+     * @param rowId The id of the row to use
+     * @param column The column to set
+     * @param value The value to set to
+     */
     public void setDatumF(long rowId, String column, float value) {
         setDatumS(rowId, column, Float.toString(value));
     }
 
+    /**
+     * Set an entry to an integer
+     * @param rowId The id of the row to use
+     * @param column The column to set
+     * @param value The value to set to
+     */
     public void setDatumI(long rowId, String column, int value) {
         setDatumS(rowId, column, Integer.toString(value));
     }
@@ -262,6 +288,10 @@ public class DatabaseManager
     }
 
 
+    /**
+     * Get all the row ids from the database as a list
+     * @return List of row ids
+     */
     public ArrayList<Long> getIdsAsList() {
         ArrayList<Long> returnList = new ArrayList<Long>();
         Cursor cursor;
@@ -292,6 +322,11 @@ public class DatabaseManager
         return returnList;
     }
     
+    /**
+     * Get a database row as an array
+     * @param rowId The id of the row to get
+     * @return The row as an array
+     */
     public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
         // I would recommend creating a JavaBean compliant object 
@@ -337,10 +372,16 @@ public class DatabaseManager
         return rowArray;
     }
 
+    /**
+     * Close the database
+     */
     public void close() {
         db.close();
     }
     
+    /**
+     * Print the entire database to the debug log
+     */
     public void logOutArray() {
         Log.d(LOG_NAME, "Start of array log");
         ArrayList<ArrayList<Object>> data = getAllRowsAsArrays();
@@ -359,6 +400,10 @@ public class DatabaseManager
         Log.d(LOG_NAME, "End of array log");
     }
 
+    /**
+     * Get all of the database rows, as a list of lists
+     * @return List of rows, as lists
+     */
     public ArrayList<ArrayList<Object>> getAllRowsAsArrays() {
         ArrayList<ArrayList<Object>> dataArrays = new ArrayList<ArrayList<Object>>();
         Cursor cursor;
@@ -402,8 +447,14 @@ public class DatabaseManager
     }
 
     
-    private class CustomSQLiteOpenHelper extends SQLiteOpenHelper {
-        public CustomSQLiteOpenHelper(Context context) {
+    /**
+     * Helper class for the database
+     * Inherits from SQLiteOpenHelper
+     * @author spookypeanut
+     *
+     */
+    private class WakeMeAtDbHelper extends SQLiteOpenHelper {
+        public WakeMeAtDbHelper(Context context) {
             super(context, DB_NAME, null, DB_VERSION);
         }
 
@@ -458,13 +509,17 @@ public class DatabaseManager
             onCreate(db);
         }
         
-        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+/*        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             Log.e(LOG_NAME, "Couldn't downgrade db to " + newVersion + ". Existing data must be destroyed.");
 
             destroyOldTables(db);
             onCreate(db);
         }
-        
+*/        
+        /**
+         * Destroy the old tables, if they can't be upgraded
+         * @param db The database to drop the tables of
+         */
         private void destroyOldTables(SQLiteDatabase db) {
             db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         }
