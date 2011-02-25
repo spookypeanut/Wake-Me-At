@@ -62,7 +62,6 @@ import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 
-//@SuppressWarnings("unused")
 public class GetLocationMap extends MapActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -115,7 +114,6 @@ implements LocationListener {
         Toast.makeText(getApplicationContext(), R.string.open_map_toast,
                 Toast.LENGTH_SHORT).show();
         
-        //TODO: Go to current loc if bad lat/long
         moveDestinationTo(mOrigLat, mOrigLong);
     }
 
@@ -125,6 +123,12 @@ implements LocationListener {
         handleIntent(intent);
     }
 
+    
+    /**
+     * When passed a new intent, run this
+     * Can be either via onNewIntent or onCreate
+     * @param intent
+     */
     private void handleIntent(Intent intent) {
         setIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
@@ -133,12 +137,20 @@ implements LocationListener {
         }
     }
     
+    /**
+     * Toggle the map mode between map and satellite
+     */
     private void toggleMapMode() {
         // TODO: Switch the name on the menu too
         mSatellite = !mSatellite;
         mapView.setSatellite(mSatellite);
     }
     
+    /**
+     * Move the destination marker on the map, and zoom to it
+     * @param latitude The new latitude of the marker
+     * @param longitude The new longitude of the marker
+     */
     private void moveDestinationTo(double latitude, double longitude) {
         List<Overlay> mapOverlays = mapView.getOverlays();
         GeoPoint returnValue = new GeoPoint((int) (latitude * 1E6), 
@@ -151,12 +163,21 @@ implements LocationListener {
         moveMapTo(returnValue);
     }
 
+    /**
+     * Move the map to a given point
+     * @param latitude The new latitude
+     * @param longitude The new longitude
+     */
     private void moveMapTo(double latitude, double longitude) {
         GeoPoint location = new GeoPoint((int) (latitude * 1E6), 
                                             (int) (longitude * 1E6));
         moveMapTo(location);
     }
 
+    /**
+     * Move the map to a given point
+     * @param location The new location
+     */
     private void moveMapTo(GeoPoint location) {
         if (location != null) {
             Log.d(LOG_NAME, "moving to " + location.getLatitudeE6() + ", " + location.getLongitudeE6());
@@ -167,6 +188,7 @@ implements LocationListener {
         }
     }
     
+    @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.mn_get_location_map, menu);
@@ -199,6 +221,10 @@ implements LocationListener {
         }
     }
     
+    /**
+     * Get the current location via GPS
+     * @return Current location
+     */
     private Location getCurrentLocation() {
         Location currentLocation = new Location("");
         LocationManager locMan;
@@ -259,6 +285,10 @@ implements LocationListener {
         return true;
     }
     
+    /**
+     * Display a dialog listing the search results
+     * @param searchTerm The text entered in the search box
+     */
     private void resultsDialog(String searchTerm) {
         mResults = getSearchLocations(searchTerm);
         
@@ -297,6 +327,11 @@ implements LocationListener {
         Log.d(LOG_NAME, "Dialog shown");
     }
     
+    /**
+     * Search the map for the given text
+     * @param address The text to search for
+     * @return A list of addresses that match the text
+     */
     private List<Address> getSearchLocations(String address) {
         Log.d(LOG_NAME, "getSearchLocations");
         Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
@@ -330,24 +365,33 @@ implements LocationListener {
         }
     };
     
+    /**
+     * The list in the search results dialog
+     * @author spookypeanut
+     *
+     */
     private class SearchListAdapter extends BaseAdapter {
         public SearchListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
             mCurrLoc = getCurrentLocation();
         }
 
+        @Override
         public int getCount() {
             return mResults.size();
         }
 
+        @Override
         public Object getItem(int position) {
             return position;
         }
 
+        @Override
         public long getItemId(int position) {
             return position;
         }
 
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             //Log.d(LOG_NAME, "getView(" + position + ")");
             View row;
@@ -375,6 +419,11 @@ implements LocationListener {
         }
     }
 
+    /**
+     * Overlay for the destination marker
+     * @author spookypeanut
+     *
+     */
     public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
         private GestureDetector gestureDetector;
         private MapView mapView;
@@ -407,6 +456,7 @@ implements LocationListener {
             return mOverlays.size();
         }
 
+        @Override
         public boolean onTouchEvent(MotionEvent event, MapView mv) {
             mapView = mv;
             if (gestureDetector.onTouchEvent(event)) {
@@ -488,6 +538,7 @@ implements LocationListener {
         @Override
         public boolean onSingleTapUp(MotionEvent e) {
             return false;
-        } 
+        }
+
     }
 }
