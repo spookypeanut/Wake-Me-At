@@ -40,6 +40,10 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
 
+/**
+ * The main activity, which has a list of all the locations
+ * @author spookypeanut
+ */
 public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static String LOG_NAME;
@@ -168,18 +172,30 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "End onCreate()");
     }
     
+    /**
+     * Method called when the rowId of the service has changed
+     * @param newRowId
+     */
     private void rowChanged(long newRowId) {
         Log.d(LOG_NAME, "rowChanged(" + newRowId + ")");
         mRowId = newRowId;
         mLocListAdapter.notifyDataSetChanged();
     }
     
+    /**
+     * Class for the location list on the main activity
+     * @author spookypeanut
+     */
     private class LocListAdapter extends BaseAdapter {
         // REF#0007
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
         }
         
+        /**
+         * Start the service for this list entry
+         * @param position
+         */
         public void startService(int position) {
             Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
             intent.setClass(WakeMeAt.this, WakeMeAtService.class);
@@ -187,30 +203,44 @@ public class WakeMeAt extends ListActivity {
             mContext.startService(intent);
         }
         
+        /**
+         * Delete this list entry
+         * @param position
+         */
         public void deleteItem(int position) {
             db.deleteRow(getListAdapter().getItemId(position));
             this.notifyDataSetChanged();
         }
         
+        /**
+         * Create a new location in the database, and edit it
+         */
         public void addItem() {
             Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
             i.putExtra("rowId", (long) -1);
             startActivity(i);
         }
         
+        @Override
         public int getCount() {
             return db.getRowCount();
             
         }
 
+        @Override
         public Object getItem(int position) {
             return getItemId(position);
         }
 
+        @Override
         public long getItemId(int position) {
             return db.getIdsAsList().get(position);
         }
 
+        /**
+         * Open the edit location activity for this list entry
+         * @param position
+         */
         public void editLocation(int position) {
             Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
             i.putExtra("rowId", getItemId(position));
@@ -218,6 +248,7 @@ public class WakeMeAt extends ListActivity {
             startActivity(i);
         }
         
+        @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
             //Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
