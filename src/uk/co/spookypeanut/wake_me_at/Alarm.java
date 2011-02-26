@@ -33,7 +33,9 @@ import android.media.MediaPlayer;
 import android.media.RingtoneManager;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.PowerManager;
 import android.os.Vibrator;
+import android.os.PowerManager.WakeLock;
 import android.speech.tts.TextToSpeech;
 import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
 import android.util.Log;
@@ -145,6 +147,14 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void startAlarm() {
         //Log.v(LOG_NAME, "Alarm.startAlarm");
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
+
+        //REF#0016
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                        PowerManager.ACQUIRE_CAUSES_WAKEUP, LOG_NAME);
+        wl.acquire();
+        wl.release();
+
         mAlarmSounding = true;
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
