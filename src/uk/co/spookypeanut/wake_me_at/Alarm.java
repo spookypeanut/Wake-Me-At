@@ -145,7 +145,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void startAlarm() {
-        //Log.v(LOG_NAME, "Alarm.startAlarm");
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
 
         //REF#0016
@@ -166,7 +165,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     
     private void stopAlarm() {
-        //Log.v(LOG_NAME, "Alarm.stopAlarm");
         if (mMediaPlayer != null) {
             try {
                 Log.d(LOG_NAME, "Stopping media player");
@@ -211,10 +209,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
         int alarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
         if (alarmVolume != 0) {
-                    Log.d(LOG_NAME, "About to set stream type");
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                     mMediaPlayer.setVolume(alarmVolume, alarmVolume);
-                    Log.d(LOG_NAME, "About to set looping");
                     mMediaPlayer.setLooping(true);
                     try {
                      mMediaPlayer.prepare();
@@ -225,8 +221,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                     // TODO Auto-generated catch block
                     e.printStackTrace();
                 }
-                    Log.d(LOG_NAME, "Headset: " + audioManager.isWiredHeadsetOn());
-                    Log.d(LOG_NAME, "Speakerphone: " + audioManager.isSpeakerphoneOn());
                     // REF#0008
                     audioManager.requestAudioFocus(null, AudioManager.STREAM_ALARM,
                             AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
@@ -251,7 +245,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         super.onResume();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
-        Log.d(LOG_NAME, "Registered receiver");
         if (mAlarmSounding == true) {
             startAlarm();
         }
@@ -260,7 +253,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     protected void onPause() {
         this.unregisterReceiver(this.mReceiver);
-        Log.d(LOG_NAME, "Unregistered receiver");
         stopAlarm();
         super.onPause();
     }
@@ -270,7 +262,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (! mAlarmSounding) {
             super.onBackPressed();
         } else {
-            Log.d(LOG_NAME, "Disallowing pressing back");
+            Log.d(LOG_NAME, "Pressing back is not allowed while alarm is sounding");
         }
     }
 
