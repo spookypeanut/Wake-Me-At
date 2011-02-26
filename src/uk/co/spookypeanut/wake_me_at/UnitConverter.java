@@ -30,7 +30,7 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * A class that is set to a particular unit type, that facilitates the conversion between units
+ * A class that facilitates the conversion between a specified unit and others
  * @author spookypeanut
  */
 
