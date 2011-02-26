@@ -48,6 +48,11 @@ import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.AdapterView.OnItemSelectedListener;
 
+/**
+ * Activity for editing a location saved in the database
+ * @author spookypeanut
+ *
+ */
 public class EditLocation extends Activity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -104,7 +109,12 @@ public class EditLocation extends Activity {
         }
    };
    
-   private void serviceRunning (boolean isThisRow) {
+   /**
+    * Method that is called when it's determined that an alarm service is running
+    * @param isThisRow True if the service that's running is for the
+    *                  same location as this activity
+    */
+    private void serviceRunning (boolean isThisRow) {
        ToggleButton tg = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
        tg.setChecked(isThisRow);
        
@@ -130,6 +140,10 @@ public class EditLocation extends Activity {
        Log.d(LOG_NAME, "Registered receiver");
    }
 
+    /**
+     * Get a new user-specified location, via
+     * a GetLocationMap activity
+     */
     private void getLoc() {
         if (mDialogOpen == false) {
             Intent i = new Intent(EditLocation.this.getApplication(), GetLocationMap.class);
@@ -141,7 +155,6 @@ public class EditLocation extends Activity {
         } else {
             Log.w(LOG_NAME, "Dialog open, skipping location map");
         }
-        
     }
     
     private OnClickListener mStartListener = new OnClickListener() {
@@ -181,6 +194,9 @@ public class EditLocation extends Activity {
         }
     };
     
+    /**
+     * Starts the alarm service for the current activity's database entry
+     */
     private void startService () {
         Button radiusButton = (Button)findViewById(R.id.radiusButton);
         Float radius = Float.valueOf(radiusButton.getText().toString());
@@ -197,10 +213,18 @@ public class EditLocation extends Activity {
         startService(intent);
     }
     
+    /**
+     * Stops the alarm service
+     */
     private void stopService() {
         stopService(new Intent(EditLocation.this, WakeMeAtService.class));
     }
     
+    /**
+     * Method called to install a new latitude and longitude in that database
+     * @param latitude
+     * @param longitude
+     */
     protected void changedLatLong(double latitude, double longitude) {
         db.setLatitude(mRowId, latitude);
         db.setLongitude(mRowId, longitude);
@@ -209,12 +233,20 @@ public class EditLocation extends Activity {
         updateForm();
     }
 
+    /**
+     * Method called to change the location provider in the database
+     * @param locProv
+     */
     protected void changedLocProv(String locProv) {
         Log.d(LOG_NAME, "changedLocProv");
         mLocProv = locProv;
         db.setProvider(mRowId, locProv);
     }
 
+    /**
+     * Method called to change the unit of distance used in the database
+     * @param unit
+     */
     protected void changedUnit(String unit) {
         Log.d(LOG_NAME, "changedUnit");
         mUnit = unit;
@@ -222,18 +254,30 @@ public class EditLocation extends Activity {
         Log.d(LOG_NAME, "end changedUnit");
     }
     
+    /**
+     * Method called to change the location's nickname in the database
+     * @param nick
+     */
     protected void changedNick(String nick) {
         mNick = nick;
         db.setNick(mRowId, nick);
         updateForm();
     }
 
+    /**
+     * Location called to change the radius in the database
+     * @param radius
+     */
     protected void changedRadius(float radius) {
         mRadius = radius;
         db.setRadius(mRowId, radius);
         updateForm();
     }
     
+    /**
+     * Create a new row in the database with default values
+     * @return The id of the new row
+     */
     private long createDefaultRow() {
         // TODO: move all strings / constants out to R
         return db.addRow (
@@ -243,20 +287,31 @@ public class EditLocation extends Activity {
         );
     }
     
+    /**
+     * Load the latitude and longitude from the database
+     */
     protected void loadLatLong() {
         mLatitude = db.getLatitude(mRowId);
         mLongitude = db.getLongitude(mRowId);
+        // If the lat / long are default (invalid) values, prompt
+        // the user to select a location
         if (mLatitude == 1000 && mLongitude == 1000) {
             getLoc();
         }
         updateForm();
     }
     
+    /**
+     * Load the location provider from the database
+     */
     protected void loadLocProv() {
         mLocProv = db.getProvider(mRowId);
         updateForm();
     }
     
+    /**
+     * Update the gui to the latest values
+     */
     protected void updateForm() {
         Button nickButton = (Button)findViewById(R.id.nickButton);
         nickButton.setText(mNick);
@@ -282,9 +337,14 @@ public class EditLocation extends Activity {
         longText.setText(String.valueOf(mLongitude));
     }
     
+    /**
+     * Load the nickname of the location from the database
+     */
     protected void loadNick() {
         Log.v(LOG_NAME, "loadNick()");
         mNick = db.getNick(mRowId);
+        // If the nickname is blank (the default value),
+        // prompt the user for one
         if (mNick.equals("")) {
             Log.v(LOG_NAME, "Nick is empty");
             Dialog monkey = onCreateDialog(NICKDIALOG);
@@ -293,18 +353,25 @@ public class EditLocation extends Activity {
         updateForm();
     }
     
+    /**
+     * Load the radius from the database
+     */
     protected void loadRadius() {
         Log.d(LOG_NAME, "loadRadius()");
         mRadius = db.getRadius(mRowId);
         updateForm();
     }   
     
+    /**
+     * Load the distance unit to use from the database
+     */
     protected void loadUnit() {
         Log.d(LOG_NAME, "loadUnit()");
         mUnit = db.getUnit(mRowId);
         updateForm();
     }   
     
+    @Override
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCMAP && data != null) {
@@ -319,6 +386,7 @@ public class EditLocation extends Activity {
         }
     }
 
+    @Override
     protected void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
