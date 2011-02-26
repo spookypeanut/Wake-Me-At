@@ -42,13 +42,16 @@ import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
 //REF#0010
+/**
+ * Class for the compass which appears on the alarm / tracking screen
+ * @author spookypeanut
+ */
 class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private final String LOG_NAME;
     private final String BROADCAST_UPDATE;
 
     private final float RADTODEGREES = (float) (180.0 / 3.14159265);
 
-    
     private Paint mPaint = new Paint();
     private Path mPath = new Path();
 
@@ -92,8 +95,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
         mCurrLoc = new Location("");
         mDestLoc = new Location("");
-        // create thread only; it's started in surfaceCreated()
-
     }
 
     
@@ -173,18 +174,12 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         canvas.drawPath(mPath, mPaint);
     }
 
-    /* (non-Javadoc)
-     * @see android.view.SurfaceHolder.Callback#surfaceChanged(android.view.SurfaceHolder, int, int, int)
-     */
     @Override
     public void surfaceChanged(SurfaceHolder holder, int format, int width,
             int height) {
         // TODO Auto-generated method stub
     }
 
-    /* (non-Javadoc)
-     * @see android.view.SurfaceHolder.Callback#surfaceCreated(android.view.SurfaceHolder)
-     */
     @Override
     public void surfaceCreated(SurfaceHolder holder) {
         if (mThread == null) {
@@ -216,9 +211,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         Log.d(LOG_NAME, "Registered receiver");
     }
 
-    /* (non-Javadoc)
-     * @see android.view.SurfaceHolder.Callback#surfaceDestroyed(android.view.SurfaceHolder)
-     */
     @Override
     public void surfaceDestroyed(SurfaceHolder holder) {
         mContext.unregisterReceiver(this.mReceiver);
@@ -243,6 +235,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         limbo.interrupt();
     }
 
+    /**
+     * Thread class for the compass surface
+     * @author spookypeanut
+     */
     class CompassThread extends Thread {
         private SurfaceHolder mSurfaceHolder;
         private boolean mRun = false;
@@ -252,6 +248,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             mSurfaceHolder = surfaceHolder;
         }
         
+        /**
+         * Set the running flag of the thread
+         * @param run True if thread should be set to running
+         */
         public void setRunning(boolean run) {
             mRun = run;
         }
@@ -278,6 +278,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         }
     }
     
+    /**
+     * Method called when the location on the service has changed
+     * @param rowId
+     */
     private void locationChanged(long rowId) {
         if (rowId >= 0) {
             DatabaseManager db = new DatabaseManager(mContext);

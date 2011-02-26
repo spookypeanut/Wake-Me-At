@@ -34,6 +34,10 @@ import android.widget.TextView;
 
 // REF#0014
 
+/**
+ * Activity for creating home screen shortcuts (and running them)
+ * @author spookypeanut
+ */
 public class Shortcuts extends ListActivity {
     private static String LOG_NAME;
     public static String BROADCAST_UPDATE;
@@ -52,25 +56,26 @@ public class Shortcuts extends ListActivity {
         createShortcut(mLocListAdapter.getItemId(position));
     }
 
+    /**
+     * Inflate the list of possible shortcuts
+     */
     public void shortcutList() {
         db = new DatabaseManager(this);
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
-
-        Log.d(LOG_NAME, "setListAdaptor");
         setListAdapter(new LocListAdapter(this));
-
-        Log.d(LOG_NAME, "setContentView");
         setContentView(R.layout.shortcuts);
 
         ListView lv = getListView(); 
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
-        Log.d(LOG_NAME, "End shortcutList()");
     }
     
-    
+    /**
+     * Create a home screen shortcut of the given database row
+     * @param rowId
+     */
     public void createShortcut(long rowId) {
         db.logOutArray();
         Log.d(LOG_NAME, "Shortcuts.createShortcut");
@@ -111,13 +116,15 @@ public class Shortcuts extends ListActivity {
         final Intent intent = getIntent();
         final String action = intent.getAction();
 
-        // If the intent is a request to create a shortcut, we'll do that and
-        // exit
+        // If the intent is a request to create a shortcut
+        // we do that and exit
         if (Intent.ACTION_CREATE_SHORTCUT.equals(action)) {
             shortcutList();
             return;
         }
 
+        // If not, we're running from a shortcut. Get the rowId
+        // from the intent, and start the service
         Bundle extras = intent.getExtras();
         long rowId = extras.getLong(ROWID_KEY);
         
@@ -128,6 +135,10 @@ public class Shortcuts extends ListActivity {
         finish();
     }
 
+    /**
+     * The list adaptor for the possible shortcut locations
+     * @author spookypeanut
+     */
     private class LocListAdapter extends BaseAdapter {
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
