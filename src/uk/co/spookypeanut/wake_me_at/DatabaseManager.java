@@ -86,7 +86,7 @@ public class DatabaseManager
      */
     public long addRow(String rowNick, double rowLat, double rowLong,
                        int preset,
-                       String rowProv, float rowRadius, String rowUnit) {
+                       int rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -135,7 +135,7 @@ public class DatabaseManager
      */
     public void updateRow(long rowId, String rowNick, double rowLat, double rowLong,
                           int preset,
-                          String rowProv, float rowRadius, String rowUnit) {
+                          int rowProv, float rowRadius, String rowUnit) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -263,12 +263,12 @@ public class DatabaseManager
         setDatumI(rowId, TABLE_ROW_PRESET, preset);
     }
     
-    public String getProvider(long rowId) {
-        return getDatumS(rowId, TABLE_ROW_PROV);
+    public int getProvider(long rowId) {
+        return Integer.valueOf(getDatumS(rowId, TABLE_ROW_PROV));
     }
 
-    public void setProvider(long rowId, String provider) {
-        setDatumS(rowId, TABLE_ROW_PROV, provider);
+    public void setProvider(long rowId, int provider) {
+        setDatumI(rowId, TABLE_ROW_PROV, provider);
     }
     
     public float getRadius(long rowId) {
@@ -357,7 +357,7 @@ public class DatabaseManager
                     rowArray.add(cursor.getDouble(2));  //TABLE_ROW_LAT
                     rowArray.add(cursor.getDouble(3));  //TABLE_ROW_LONG
                     rowArray.add(cursor.getInt(4));     //TABLE_ROW_PRESET
-                    rowArray.add(cursor.getString(5));  //TABLE_ROW_PROV
+                    rowArray.add(cursor.getInt(5));  //TABLE_ROW_PROV
                     rowArray.add(cursor.getFloat(6));   //TABLE_ROW_RADIUS
                     rowArray.add(cursor.getString(7));  //TABLE_ROW_UNIT
                 }
@@ -429,7 +429,7 @@ public class DatabaseManager
                     dataList.add(cursor.getDouble(2));  //TABLE_ROW_LAT
                     dataList.add(cursor.getDouble(3));  //TABLE_ROW_LONG
                     dataList.add(cursor.getInt(4));     //TABLE_ROW_PRESET
-                    dataList.add(cursor.getString(5));  //TABLE_ROW_PROV
+                    dataList.add(cursor.getInt(5));     //TABLE_ROW_PROV
                     dataList.add(cursor.getFloat(6));   //TABLE_ROW_RADIUS
                     dataList.add(cursor.getString(7));  //TABLE_ROW_UNIT
 
@@ -467,8 +467,9 @@ public class DatabaseManager
             TABLE_ROW_NICK + " TEXT," +
             TABLE_ROW_LAT + " DOUBLE," +
             TABLE_ROW_LONG + " DOUBLE," +
+            
             TABLE_ROW_PRESET + " INT," +
-            TABLE_ROW_PROV + " TEXT," +
+            TABLE_ROW_PROV + " INT," +
             TABLE_ROW_RADIUS + " FLOAT," +
             TABLE_ROW_UNIT + " TEXT" +
             ");";
@@ -485,8 +486,9 @@ public class DatabaseManager
         public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
             String upgradeMessage = "Upgrading db v" + oldVersion + " to v" + newVersion;
             Log.d(LOG_NAME, upgradeMessage);
-            switch (oldVersion) {
+            /*switch (oldVersion) {
             case 2:
+                // Add the column for the location type preset
                 if (newVersion <= 2){
                     return;
                 }
@@ -501,21 +503,34 @@ public class DatabaseManager
                 } finally {
                     db.endTransaction();
                 }
+            case 3:
+                // Add the location provider int column, transfer location provider to it
+                if (newVersion <= 3) {
+                    return;
+                }
+                db.beginTransaction();
+                try {
+                    // add category column to the providers table
+                    db.execSQL("ALTER TABLE " + TABLE_NAME + " ADD COLUMN " + TABLE_ROW_PRESET + " INT;");
+                    db.setTransactionSuccessful();
+                } catch (Throwable ex) {
+                    Log.e(LOG_NAME, ex.getMessage(), ex);
+                    break; // force to destroy all old data;
+                } finally {
+                    db.endTransaction();
+                }
+            case 9999999:
+                if (newVersion <= 9999999) {
+                    return;
+                }
                 
                 return;
-            }
+            }*/
             Log.e(LOG_NAME, "Couldn't upgrade db to " + newVersion + ". Existing data must be destroyed.");
             destroyOldTables(db);
             onCreate(db);
         }
         
-/*        public void onDowngrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-            Log.e(LOG_NAME, "Couldn't downgrade db to " + newVersion + ". Existing data must be destroyed.");
-
-            destroyOldTables(db);
-            onCreate(db);
-        }
-*/        
         /**
          * Destroy the old tables, if they can't be upgraded
          * @param db The database to drop the tables of

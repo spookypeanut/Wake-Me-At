@@ -80,4 +80,17 @@
 <string name="shortcuts">This should never be displayed</string>
 <string name="sample_shortcuts">WakeMe@ location</string>
 <string name="shortcut_name">WakeMe@ %1$s</string>
+
+<string-array name="locProvAndroid">
+<item>gps</item>
+<item>network</item>
+<item>passive</item>
+</string-array>
+
+<string-array name="locProvHuman">
+<item>GPS</item>
+<item>Phone network</item>
+<item>Passive</item>
+</string-array>
+
 </resources>

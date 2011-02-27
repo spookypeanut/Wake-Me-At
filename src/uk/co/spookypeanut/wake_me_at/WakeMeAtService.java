@@ -57,7 +57,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private double mMetresAway = -1.0;
     private Location mCurrLocation = new Location("");
     private Location mFinalDestination = new Location("");
-    private String mProvider;
+    private int mProvider;
     private String mUnit;
     
     private boolean mAlarm = false;
@@ -197,8 +197,9 @@ public class WakeMeAtService extends Service implements LocationListener {
             "Preparing to register location listener w/ TrackRecordingService...");
         try {
           long desiredInterval = 10;
+          String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
           locationManager.requestLocationUpdates(
-              mProvider, desiredInterval,
+              locProvName, desiredInterval,
               10, WakeMeAtService.this);
         } catch (RuntimeException e) {
           Log.e(LOG_NAME,

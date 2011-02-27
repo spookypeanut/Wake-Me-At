@@ -19,6 +19,7 @@ package uk.co.spookypeanut.wake_me_at;
  */
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import android.app.Activity;
@@ -72,14 +73,14 @@ public class EditLocation extends Activity {
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
     private float mRadius = 0;
-    private String mLocProv = "";
+    private int mLocProv = -1;
     private String mUnit = "";
 
     private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
                 View view, int pos, long id) {
-            Log.d(LOG_NAME, "Selected loc prov: " + parent.getSelectedItem().toString());
-            changedLocProv(parent.getSelectedItem().toString());
+            Log.d(LOG_NAME, "Selected loc prov: " + parent.getSelectedItemPosition());
+            changedLocProv(parent.getSelectedItemPosition());
         }
         public void onNothingSelected(AdapterView<?> parent) {}
     };
@@ -205,7 +206,7 @@ public class EditLocation extends Activity {
         mUnit = unitSpin.getSelectedItem().toString();
         changedUnit(mUnit);
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-        mLocProv = locProvSpin.getSelectedItem().toString();
+        mLocProv = locProvSpin.getSelectedItemPosition();
         changedLocProv(mLocProv);
         Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
         intent.setClass(EditLocation.this, WakeMeAtService.class);
@@ -237,7 +238,7 @@ public class EditLocation extends Activity {
      * Method called to change the location provider in the database
      * @param locProv
      */
-    protected void changedLocProv(String locProv) {
+    protected void changedLocProv(int locProv) {
         Log.d(LOG_NAME, "changedLocProv");
         mLocProv = locProv;
         db.setProvider(mRowId, locProv);
@@ -283,7 +284,7 @@ public class EditLocation extends Activity {
         return db.addRow (
             "", 1000.0, 1000.0,
             0,
-            "network", (float) 1.80, "km"
+            1, (float) 1.80, "km"
         );
     }
     
@@ -319,11 +320,8 @@ public class EditLocation extends Activity {
         radText.setText(String.valueOf(mRadius));
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
         SpinnerAdapter adapter = locProvSpin.getAdapter();
-        for(int i = 0; i < adapter.getCount(); i++) {
-            if(adapter.getItem(i).equals(mLocProv)) {
-                locProvSpin.setSelection(i);
-            }
-        }
+        locProvSpin.setSelection(mLocProv);
+
         Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
         adapter = unitSpin.getAdapter();
         for(int i = 0; i < adapter.getCount(); i++) {
@@ -434,14 +432,15 @@ public class EditLocation extends Activity {
         radiusBox.setOnClickListener(mChangeRadiusListener);
 
         LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        List<String> providers = tmpLM.getProviders(true);
-        if (providers.isEmpty()) {
+        List<String> availProviders = tmpLM.getProviders(true);
+        List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
+        if (availProviders.isEmpty()) {
             Log.wtf(LOG_NAME, "How can there be no location providers!?");
         }
-        Log.d(LOG_NAME, providers.toString());
+        Log.d(LOG_NAME, availProviders.toString());
 
         ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, providers);
+                android.R.layout.simple_spinner_item, allProviders);
 
         spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
