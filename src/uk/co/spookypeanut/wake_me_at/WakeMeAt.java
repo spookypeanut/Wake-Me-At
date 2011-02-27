@@ -269,7 +269,8 @@ public class WakeMeAt extends ListActivity {
             tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
-            tv.setText(db.getProvider(id));
+            String locProv = mContext.getResources().getStringArray(R.array.locProvHuman)[db.getProvider(id)];
+            tv.setText(locProv);
             return row;
         }
     }
