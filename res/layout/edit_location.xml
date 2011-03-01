@@ -12,9 +12,7 @@
   copy of the GNU General Public License along with Wake Me At, in the
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
- 
 
- 
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
  android:layout_width="wrap_content" android:layout_height="wrap_content">
  <LinearLayout android:orientation="vertical"

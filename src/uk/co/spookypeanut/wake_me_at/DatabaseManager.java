@@ -48,6 +48,8 @@ public class DatabaseManager
     private final String TABLE_ROW_LAT = "table_row_lat";
     private final String TABLE_ROW_LONG = "table_row_long";
     private final String TABLE_ROW_PRESET = "table_row_preset";
+    
+    //NB: These columns are only used when the preset is set to "custom"
     private final String TABLE_ROW_PROV = "table_row_prov";
     private final String TABLE_ROW_RADIUS = "table_row_radius";
     private final String TABLE_ROW_UNIT = "table_row_unit";
