@@ -35,6 +35,10 @@ import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
+/**
+ * The service that watches the current location, and triggers the alarm if required
+ * @author spookypeanut
+ */
 public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     private String LOG_NAME;
@@ -64,7 +68,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     private Intent mAlarmIntent;
     
-    private LocationManager locationManager;
+    private LocationManager mLocationManager;
     private NotificationManager mNM;
     private Notification mNotification;
     private PendingIntent mIntentOnSelect;
@@ -73,6 +77,13 @@ public class WakeMeAtService extends Service implements LocationListener {
     private Object[] mStartForegroundArgs = new Object[2];
     private Object[] mStopForegroundArgs = new Object[1];
     
+    /**
+     * Copied from one of the API example tools. One day I'll have to
+     * actually go through and figure out what this does (or rather,
+     * why it does it)
+     * @param id
+     * @param notification
+     */
     void startForegroundCompat(int id, Notification notification) {
         // If we have the new startForeground API, then use it.
         if (mStartForeground != null) {
@@ -140,22 +151,24 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "onStartCommand()");
         Bundle extras = intent.getExtras();
 
+        // Get everything we need from the database
         mRowId = extras.getLong("rowId");
         Log.d(LOG_NAME, "row Id for alarm is " + mRowId);
         mNick = db.getNick(mRowId);
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
+        Log.d(LOG_NAME,
+                "Passed latlong: " + mFinalDestination.getLatitude() +
+                ", " + mFinalDestination.getLongitude());
         mRadius = db.getRadius(mRowId);
         mProvider = db.getProvider(mRowId);
+        Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         mUnit = db.getUnit(mRowId);
         
         uc = new UnitConverter(this, mUnit);
-        Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
-        Log.d(LOG_NAME,
-            "Passed latlong: " + mFinalDestination.getLatitude() +
-            ", " + mFinalDestination.getLongitude());
+
         
-        locationManager =
+        mLocationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
         
@@ -178,17 +191,22 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
+        // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
         mAlarm = false;
         mMetresAway = -1;
         updateAlarm();
+        
         db.close();
         super.onDestroy();
     }
 
+    /**
+     * Method that registers the service as a location listener
+     */
     public void registerLocationListener() {
         Log.d(LOG_NAME, "registerLocationListener()");
-        if (locationManager == null) {
+        if (mLocationManager == null) {
           Log.e(LOG_NAME,
               "TrackRecordingService: Do not have any location manager.");
           return;
@@ -198,7 +216,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         try {
           long desiredInterval = 10;
           String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-          locationManager.requestLocationUpdates(
+          mLocationManager.requestLocationUpdates(
               locProvName, desiredInterval,
               10, WakeMeAtService.this);
         } catch (RuntimeException e) {
@@ -207,13 +225,16 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
       }
 
+    /**
+     * Unregister the location listener. Called in onDestroy.
+     */
     public void unregisterLocationListener() {
-        if (locationManager == null) {
+        if (mLocationManager == null) {
           Log.e(LOG_NAME,
               "locationManager is null");
           return;
         }
-        locationManager.removeUpdates(this);
+        mLocationManager.removeUpdates(this);
         Log.d(LOG_NAME,
             "Location listener is unregistered");
     }
