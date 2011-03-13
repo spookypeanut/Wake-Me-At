@@ -1,105 +1,37 @@
 <?xml version="1.0" encoding="utf-8"?>
- <!--
-  This file is part of Wake Me At. Wake Me At is the legal property of
-  its developer, Henry Bush (spookypeanut). Wake Me At is free software:
-  you can redistribute it and/or modify it under the terms of the GNU
-  General Public License as published by the Free Software Foundation,
-  either version 3 of the License, or (at your option) any later
-  version. Wake Me At is distributed in the hope that it will be useful,
-  but WITHOUT ANY WARRANTY; without even the implied warranty of
-  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU
-  General Public License for more details. You should have received a
-  copy of the GNU General Public License along with Wake Me At, in the
-  file "COPYING". If not, see <http://www.gnu.org/licenses/>.
- -->
+<!--
+    This file is part of Wake Me At. Wake Me At is the legal property
+    of its developer, Henry Bush (spookypeanut).
 
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="wrap_content" android:layout_height="wrap_content">
- <LinearLayout android:orientation="vertical"
-  android:layout_width="wrap_content" android:layout_height="wrap_content">
-  <TableLayout android:layout_width="fill_parent"
-   android:layout_height="wrap_content" android:stretchColumns="1">
-   <TableRow>
-     <TextView android:id="@+id/editLocationRunningText"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="Running" />
-         <ToggleButton android:id="@+id/editLocationRunningToggle"
-        android:layout_width="wrap_content"
+    Wake Me At is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wake Me At is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wake Me At, in the file "COPYING".  If not, see 
+    <http://www.gnu.org/licenses/>.
+-->
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+    <TextView
+        android:id="@+id/nick"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:textOn="Running"
-        android:textOff="Not running"/>
-   </TableRow>
-   <TableRow>
-    <TextView android:id="@+id/nickLabel"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="Location name" />
-    <Button android:text="@+id/nickButton" android:id="@+id/nickButton"
-     android:layout_width="wrap_content" android:layout_height="wrap_content" />
-   </TableRow>
-   <TableRow>
-    <TextView android:id="@+id/latLongLabel"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="Lat/long" />
-
-    <LinearLayout android:gravity="center">
-     <TextView android:id="@+id/latitude" android:gravity="bottom"
-      android:layout_height="wrap_content" android:layout_marginBottom="2dip"
-      android:layout_marginTop="2dip" android:layout_width="wrap_content" />
-     <TextView android:id="@+id/comma" android:gravity="bottom"
-      android:layout_height="wrap_content" android:layout_marginBottom="2dip"
-      android:layout_marginTop="2dip" android:layout_width="wrap_content"
-      android:text=", " />
-     <TextView android:id="@+id/longitude" android:gravity="bottom"
-      android:layout_height="wrap_content" android:layout_marginBottom="2dip"
-      android:layout_marginTop="2dip" android:layout_width="wrap_content" />
-    </LinearLayout>
-   </TableRow>
-   <TableRow>
-    <TextView android:id="@+id/changeLocLabel"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="Change Location" />
-    <Button android:id="@+id/getLocationMapButton" android:text="@string/get_loc_map_button_name"
-     android:layout_width="wrap_content" android:layout_height="wrap_content" />
-   </TableRow>
-   <TableRow>
-    <TextView android:id="@+id/locProvLabel"
-     android:layout_height="wrap_content" android:layout_width="wrap_content"
-     android:text="@string/loc_prov_spinner_label" />
-    <Spinner android:id="@+id/loc_provider"
-     android:layout_width="fill_parent" android:layout_height="wrap_content"
-     android:drawSelectorOnTop="true"
-     android:prompt="@string/loc_prov_spinner_label" />
-   </TableRow>
-
-   <TableRow>
-    <TextView android:id="@+id/radiusLabel"
-     android:layout_width="fill_parent" android:layout_height="wrap_content"
-     android:text="Radius" />
-
-    <LinearLayout android:orientation="horizontal"
-  android:layout_width="fill_parent" android:layout_height="wrap_content">
-    <Button android:text="@+id/radiusButton" android:id="@+id/radiusButton"
-     android:layout_width="wrap_content" android:layout_height="wrap_content" />
-
-    <Spinner android:id="@+id/unitList"
-     android:layout_width="wrap_content" android:layout_height="wrap_content"
-     android:drawSelectorOnTop="true"
-     android:prompt="@string/unitListPrompt" />
-     </LinearLayout>
-   </TableRow>
-
-  </TableLayout>
-  <TableLayout android:layout_width="fill_parent"
-   android:layout_height="wrap_content"  android:stretchColumns="0,1">
-
-   <TableRow>
-    <Button android:id="@+id/startService" android:text="@string/start_button_name"
-     android:layout_width="wrap_content" android:layout_height="wrap_content" />
-
-    <Button android:id="@+id/stopService" android:text="@string/stop_button_name"
-     android:layout_width="wrap_content" android:layout_height="wrap_content" />
-   </TableRow>
-
-  </TableLayout>
- </LinearLayout>
-</ScrollView>
+        android:gravity="center"
+        android:textSize="25sp"
+        android:textStyle="italic"
+        android:text="Location name" />
+    <ListView 
+        android:id="@android:id/list"
+        android:layout_width="fill_parent"
+        android:layout_height="fill_parent" />
+</LinearLayout>

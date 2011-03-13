@@ -116,7 +116,7 @@ public class EditLocation extends Activity {
     *                  same location as this activity
     */
     private void serviceRunning (boolean isThisRow) {
-       ToggleButton tg = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
+/*       ToggleButton tg = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
        tg.setChecked(isThisRow);
        
        Button button = (Button)findViewById(R.id.startService);
@@ -124,7 +124,7 @@ public class EditLocation extends Activity {
 
        button = (Button)findViewById(R.id.stopService);
        button.setEnabled(isThisRow);
-   }
+*/   }
    
    @Override
    protected void onPause() {
@@ -199,6 +199,7 @@ public class EditLocation extends Activity {
      * Starts the alarm service for the current activity's database entry
      */
     private void startService () {
+        /*
         Button radiusButton = (Button)findViewById(R.id.radiusButton);
         Float radius = Float.valueOf(radiusButton.getText().toString());
         changedRadius(radius);
@@ -212,6 +213,7 @@ public class EditLocation extends Activity {
         intent.setClass(EditLocation.this, WakeMeAtService.class);
         intent.putExtra("rowId", mRowId);
         startService(intent);
+        */
     }
     
     /**
@@ -314,8 +316,9 @@ public class EditLocation extends Activity {
      * Update the gui to the latest values
      */
     protected void updateForm() {
-        Button nickButton = (Button)findViewById(R.id.nickButton);
-        nickButton.setText(mNick);
+        TextView nickTextView = (TextView) findViewById(R.id.nick);
+        nickTextView.setText(mNick);
+        /*
         Button radText = (Button)findViewById(R.id.radiusButton);
         radText.setText(String.valueOf(mRadius));
         Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
@@ -333,6 +336,7 @@ public class EditLocation extends Activity {
         TextView longText = (TextView)findViewById(R.id.longitude);
         latText.setText(String.valueOf(mLatitude));
         longText.setText(String.valueOf(mLongitude));
+    */
     }
     
     /**
@@ -412,9 +416,9 @@ public class EditLocation extends Activity {
 
         setContentView(R.layout.edit_location);
 
-        button = (Button)findViewById(R.id.nickButton);
-        button.setOnClickListener(mChangeNickListener);
-        
+        TextView tv = (TextView)findViewById(R.id.nick);
+        tv.setOnClickListener(mChangeNickListener);
+/*
         button = (Button)findViewById(R.id.getLocationMapButton);
         button.setOnClickListener(mGetLocMapListener);
         
@@ -461,7 +465,7 @@ public class EditLocation extends Activity {
         s = (Spinner) findViewById(R.id.unitList);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(unitListener);
-
+*/
         loadNick();
         loadLatLong();
         loadRadius();
