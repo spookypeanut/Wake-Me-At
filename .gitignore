@@ -16,3 +16,5 @@ local.properties
 *.jar
 screenshots
 .settings
+build.xml
+proguard.cfg
