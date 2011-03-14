@@ -1,4 +1,5 @@
 package uk.co.spookypeanut.wake_me_at;
+
 /*
     This file is part of Wake Me At. Wake Me At is the legal property
     of its developer, Henry Bush (spookypeanut).
@@ -25,12 +26,15 @@ import java.util.List;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+
+import android.graphics.Color;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
@@ -39,8 +43,11 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
+
+import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
@@ -54,7 +61,7 @@ import android.widget.AdapterView.OnItemSelectedListener;
  * @author spookypeanut
  *
  */
-public class EditLocation extends Activity {
+public class EditLocation extends ListActivity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
 
@@ -67,6 +74,8 @@ public class EditLocation extends Activity {
     
     private DatabaseManager db;
     private UnitConverter uc;
+    private LayoutInflater mInflater;
+    private Context mContext;
 
     private long mRowId;
     private String mNick = "New Location";
@@ -75,6 +84,22 @@ public class EditLocation extends Activity {
     private float mRadius = 0;
     private int mLocProv = -1;
     private String mUnit = "";
+    private String[] mTitles = 
+    {
+        "Location",
+        "Preset",
+        "Radius",
+        "Location provider",
+        "Units"
+    };
+    private String[] mDescription = 
+    {
+        "Tap to view / edit location",
+        "Type of transport used",
+        "Distance away to trigger alarm",
+        "The units to measure distance in",
+        "The method to use to determine location"
+    };
 
     private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
         public void onItemSelected(AdapterView<?> parent,
@@ -111,7 +136,7 @@ public class EditLocation extends Activity {
    };
    
    /**
-    * Method that is called when it's determined that an alarm service is running
+    * Method that's called when it's determined that an alarm service is running
     * @param isThisRow True if the service that's running is for the
     *                  same location as this activity
     */
@@ -397,6 +422,8 @@ public class EditLocation extends Activity {
         super.onCreate(icicle);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
+        mContext = this;
+        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
@@ -531,5 +558,52 @@ public class EditLocation extends Activity {
     protected void onDestroy() {
         db.close();
         super.onDestroy();
+    }
+
+    /**
+     * Class for the location list on the main activity
+     * @author spookypeanut
+     */
+    private class LocListAdapter extends BaseAdapter {
+        // REF#0007
+        public LocListAdapter(Context context) {
+            Log.d(LOG_NAME, "LocListAdapter constructor");
+        }
+        
+        @Override
+        public int getCount() {
+            return db.getRowCount();
+            
+        }
+
+        @Override
+        public Object getItem(int position) {
+            return getItemId(position);
+        }
+
+        @Override
+        public long getItemId(int position) {
+            return db.getIdsAsList().get(position);
+        }
+        
+        @Override
+        public View getView(int position, View convertView, ViewGroup parent) {
+            long id = db.getIdsAsList().get(position);
+            //Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
+            View row;
+            
+            if (null == convertView) {
+                row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
+            } else {
+                row = convertView;
+            }
+            TextView tv = (TextView) row.findViewById(R.id.locSettingName);
+            tv.setText(mTitles[position]);
+            
+            tv = (TextView) row.findViewById(R.id.locSettingDesc);
+            //String locProv = mContext.getResources().getStringArray(R.array.locProvHuman)[db.getProvider(id)];
+            tv.setText(mDescription[position]);
+            return row;
+        }
     }
 }
