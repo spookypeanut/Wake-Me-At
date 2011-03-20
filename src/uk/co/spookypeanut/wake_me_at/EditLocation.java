@@ -488,7 +488,8 @@ public class EditLocation extends ListActivity {
         Spinner s = (Spinner) findViewById(R.id.loc_provider);
         s.setAdapter(spinnerArrayAdapter);
         s.setOnItemSelectedListener(locProvListener);
-       
+      */
+
         uc = new UnitConverter(this, "m");
         ArrayList<String> units = uc.getAbbrevList();
         if (units.isEmpty()) {
@@ -496,6 +497,7 @@ public class EditLocation extends ListActivity {
         }
         Log.d(LOG_NAME, units.toString());
 
+        /*
         spinnerArrayAdapter = new ArrayAdapter<String>(this,
                 android.R.layout.simple_spinner_item, units);
 
@@ -600,6 +602,16 @@ public class EditLocation extends ListActivity {
         public String getSubtitle(int position) {
             if (INDEX_LOC == position) {
                 return mDescription[position];
+            }
+            if (INDEX_RADIUS == position) {
+                return String.valueOf(mRadius) + mUnit;
+            }
+            if (INDEX_UNITS == position) {
+                UnitConverter temp = new UnitConverter(mContext, mUnit);
+                return temp.getName();
+            }
+            if (INDEX_LOCPROV == position) {
+                return mContext.getResources().getStringArray(R.array.locProvHuman)[mLocProv];
             }
             return "crap";
         }
