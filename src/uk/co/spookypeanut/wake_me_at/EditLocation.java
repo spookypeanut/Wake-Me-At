@@ -85,6 +85,14 @@ public class EditLocation extends ListActivity {
     private float mRadius = 0;
     private int mLocProv = -1;
     private String mUnit = "";
+
+    private static final int INDEX_LOC = 0;
+    private static final int INDEX_PRESET = 1;
+    private static final int INDEX_RADIUS = 2;
+    private static final int INDEX_UNITS = 3;
+    private static final int INDEX_LOCPROV = 4;
+    private static final int NUM_SETTINGS = 5;
+
     private String[] mTitles = {
         "Location",
         "Preset",
@@ -588,6 +596,13 @@ public class EditLocation extends ListActivity {
         public long getItemId(int position) {
             return position;
         }
+
+        public String getSubtitle(int position) {
+            if (INDEX_LOC == position) {
+                return mDescription[position];
+            }
+            return "crap";
+        }
         
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
@@ -605,7 +620,7 @@ public class EditLocation extends ListActivity {
             
             tv = (TextView) row.findViewById(R.id.locSettingDesc);
             //String locProv = mContext.getResources().getStringArray(R.array.locProvHuman)[db.getProvider(id)];
-            tv.setText(mDescription[position]);
+            tv.setText(getSubtitle(position));
             return row;
         }
     }
