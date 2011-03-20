@@ -35,6 +35,7 @@ import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 import android.widget.ToggleButton;
 import android.widget.AdapterView.OnItemSelectedListener;
 
@@ -139,6 +140,20 @@ public class EditLocation extends ListActivity {
                 Dialog monkey = onCreateDialog(RADIUSDIALOG);
                 monkey.show();
                 break;
+            case INDEX_UNITS:
+                final CharSequence[] items = {"Red", "Green", "Blue"};
+
+                AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                builder.setTitle("Pick a color");
+                builder.setItems(items, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                    }
+                });
+                AlertDialog alert = builder.create();
+                alert.show();
+                break;
+
         }
     }
     
@@ -445,7 +460,6 @@ public class EditLocation extends ListActivity {
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
-        Button button;
         
         Bundle extras = this.getIntent().getExtras();
         mRowId = extras.getLong("rowId");
