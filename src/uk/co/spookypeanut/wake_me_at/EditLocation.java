@@ -1,24 +1,5 @@
 package uk.co.spookypeanut.wake_me_at;
 
-/*
-    This file is part of Wake Me At. Wake Me At is the legal property
-    of its developer, Henry Bush (spookypeanut).
-
-    Wake Me At is free software: you can redistribute it and/or modify
-    it under the terms of the GNU General Public License as published by
-    the Free Software Foundation, either version 3 of the License, or
-    (at your option) any later version.
-
-    Wake Me At is distributed in the hope that it will be useful,
-    but WITHOUT ANY WARRANTY; without even the implied warranty of
-    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-    GNU General Public License for more details.
-
-    You should have received a copy of the GNU General Public License
-    along with Wake Me At, in the file "COPYING".  If not, see 
-    <http://www.gnu.org/licenses/>.
- */
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -50,11 +31,32 @@ import android.widget.ArrayAdapter;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ListView;
 import android.widget.Spinner;
 import android.widget.SpinnerAdapter;
 import android.widget.TextView;
 import android.widget.ToggleButton;
 import android.widget.AdapterView.OnItemSelectedListener;
+
+/*
+    This file is part of Wake Me At. Wake Me At is the legal property
+    of its developer, Henry Bush (spookypeanut).
+
+    Wake Me At is free software: you can redistribute it and/or modify
+    it under the terms of the GNU General Public License as published by
+    the Free Software Foundation, either version 3 of the License, or
+    (at your option) any later version.
+
+    Wake Me At is distributed in the hope that it will be useful,
+    but WITHOUT ANY WARRANTY; without even the implied warranty of
+    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+    GNU General Public License for more details.
+
+    You should have received a copy of the GNU General Public License
+    along with Wake Me At, in the file "COPYING".  If not, see 
+    <http://www.gnu.org/licenses/>.
+ */
+
 
 /**
  * Activity for editing a location saved in the database
@@ -125,12 +127,20 @@ public class EditLocation extends ListActivity {
         }
         public void onNothingSelected(AdapterView<?> parent) {}
     };
-
-    private OnClickListener mGetLocMapListener = new Button.OnClickListener() {
-        public void onClick(View v) {
-            getLoc();
+    
+    @Override
+    protected void onListItemClick (ListView l, View v, int position, long id) {
+        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
+        switch (position) {
+            case INDEX_LOC:
+                getLoc();
+                break;
+            case INDEX_RADIUS:
+                Dialog monkey = onCreateDialog(RADIUSDIALOG);
+                monkey.show();
+                break;
         }
-    };
+    }
     
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
@@ -631,7 +641,6 @@ public class EditLocation extends ListActivity {
             tv.setText(mTitles[position]);
             
             tv = (TextView) row.findViewById(R.id.locSettingDesc);
-            //String locProv = mContext.getResources().getStringArray(R.array.locProvHuman)[db.getProvider(id)];
             tv.setText(getSubtitle(position));
             return row;
         }
