@@ -89,8 +89,8 @@ public class EditLocation extends ListActivity {
         "Location",
         "Preset",
         "Radius",
-        "Location provider",
-        "Units"
+        "Units",
+        "Location provider"
     };
     private String[] mDescription = 
     {
