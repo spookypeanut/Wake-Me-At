@@ -76,6 +76,7 @@ public class EditLocation extends ListActivity {
     private UnitConverter uc;
     private LayoutInflater mInflater;
     private Context mContext;
+    private LocSettingsAdapter mLocSettingsAdapter;
 
     private long mRowId;
     private String mNick = "New Location";
@@ -442,6 +443,9 @@ public class EditLocation extends ListActivity {
 
         setContentView(R.layout.edit_location);
 
+        setListAdapter(new LocSettingsAdapter(this));
+        mLocSettingsAdapter = (LocSettingsAdapter) getListAdapter();
+
         TextView tv = (TextView)findViewById(R.id.nick);
         tv.setOnClickListener(mChangeNickListener);
 /*
@@ -571,24 +575,24 @@ public class EditLocation extends ListActivity {
         
         @Override
         public int getCount() {
-            return db.getRowCount();
-            
+            Log.d(LOG_NAME, "Count is " + mTitles.length);
+            return mTitles.length;
         }
 
         @Override
         public Object getItem(int position) {
-            return getItemId(position);
+            return position;
         }
 
         @Override
         public long getItemId(int position) {
-            return db.getIdsAsList().get(position);
+            return position;
         }
         
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            long id = db.getIdsAsList().get(position);
-            //Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
+            long id = position;
+            Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
             View row;
             
             if (null == convertView) {
