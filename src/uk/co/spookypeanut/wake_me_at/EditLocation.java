@@ -84,16 +84,14 @@ public class EditLocation extends ListActivity {
     private float mRadius = 0;
     private int mLocProv = -1;
     private String mUnit = "";
-    private String[] mTitles = 
-    {
+    private String[] mTitles = {
         "Location",
         "Preset",
         "Radius",
         "Units",
         "Location provider"
     };
-    private String[] mDescription = 
-    {
+    private String[] mDescription = {
         "Tap to view / edit location",
         "Type of transport used",
         "Distance away to trigger alarm",
@@ -213,6 +211,7 @@ public class EditLocation extends ListActivity {
             monkey.show();
         }
     };
+
     private OnClickListener mChangeRadiusListener = new OnClickListener() {
         public void onClick(View v) {
             Dialog monkey = onCreateDialog(RADIUSDIALOG);
@@ -564,10 +563,10 @@ public class EditLocation extends ListActivity {
      * Class for the location list on the main activity
      * @author spookypeanut
      */
-    private class LocListAdapter extends BaseAdapter {
+    private class LocSettingsAdapter extends BaseAdapter {
         // REF#0007
-        public LocListAdapter(Context context) {
-            Log.d(LOG_NAME, "LocListAdapter constructor");
+        public LocSettingsAdapter(Context context) {
+            Log.d(LOG_NAME, "LocSettingsAdapter constructor");
         }
         
         @Override
