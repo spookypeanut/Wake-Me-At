@@ -141,13 +141,14 @@ public class EditLocation extends ListActivity {
                 monkey.show();
                 break;
             case INDEX_UNITS:
-                final CharSequence[] items = {"Red", "Green", "Blue"};
+                ArrayList<String> unitList = uc.getNameList();
+                final String[] items = unitList.toArray(new String[unitList.size()]);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setTitle("Pick a color");
+                //builder.setTitle("Pick a color");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
-                        Toast.makeText(getApplicationContext(), items[item], Toast.LENGTH_SHORT).show();
+                        changedUnit(items[item]);
                     }
                 });
                 AlertDialog alert = builder.create();
@@ -306,10 +307,12 @@ public class EditLocation extends ListActivity {
 
     /**
      * Method called to change the unit of distance used in the database
-     * @param unit
+     * @param unit as a name
      */
-    protected void changedUnit(String unit) {
+    protected void changedUnit(String unitName) {
         Log.d(LOG_NAME, "changedUnit");
+        String unit = uc.getAbbrevFromName(unitName);
+
         mUnit = unit;
         db.setUnit(mRowId, unit);
         Log.d(LOG_NAME, "end changedUnit");
