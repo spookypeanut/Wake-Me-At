@@ -74,6 +74,29 @@ public class UnitConverter
         Unit unit = getFromAbbrev(unitAbbrev);
         switchUnit(unit);
     }
+
+    public String getAbbrevFromName(String name) {
+        for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
+            Unit currUnit = i.next();
+            if (currUnit.getName() == name) {
+                return currUnit.getAbbrev();
+            }
+        }
+        Log.wtf(LOG_NAME, "No unit " + name + " found");
+        return "ERROR";
+    }
+    /**
+     * Get the list of unit names
+     * @return The list
+     */
+    public ArrayList<String> getNameList() {
+        ArrayList<String> returnList = new ArrayList<String>();
+        for (Iterator<Unit> i = mUnitList.iterator(); i.hasNext();) {
+            Unit currUnit = i.next();
+            returnList.add(currUnit.getName());
+        }
+        return returnList;
+    }
     
     /**
      * Get the list of unit abbreviations
