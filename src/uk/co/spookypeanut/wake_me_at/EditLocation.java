@@ -111,24 +111,6 @@ public class EditLocation extends ListActivity {
         "The method to use to determine location"
     };
 
-    private OnItemSelectedListener locProvListener =  new OnItemSelectedListener() {
-        public void onItemSelected(AdapterView<?> parent,
-                View view, int pos, long id) {
-            Log.d(LOG_NAME, "Selected loc prov: " + parent.getSelectedItemPosition());
-            changedLocProv(parent.getSelectedItemPosition());
-        }
-        public void onNothingSelected(AdapterView<?> parent) {}
-    };
-
-    private OnItemSelectedListener unitListener =  new OnItemSelectedListener() {
-        public void onItemSelected(AdapterView<?> parent,
-                View view, int pos, long id) {
-            Log.d(LOG_NAME, "Selected unit: " + parent.getSelectedItem().toString());
-            changedUnit(parent.getSelectedItem().toString());
-        }
-        public void onNothingSelected(AdapterView<?> parent) {}
-    };
-    
     @Override
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
@@ -259,13 +241,6 @@ public class EditLocation extends ListActivity {
         }
     };
 
-    private OnClickListener mChangeRadiusListener = new OnClickListener() {
-        public void onClick(View v) {
-            Dialog monkey = onCreateDialog(RADIUSDIALOG);
-            monkey.show();
-        }
-    };
-    
     /**
      * Starts the alarm service for the current activity's database entry
      */
@@ -495,39 +470,6 @@ public class EditLocation extends ListActivity {
 
         TextView tv = (TextView)findViewById(R.id.nick);
         tv.setOnClickListener(mChangeNickListener);
-/*
-        button = (Button)findViewById(R.id.getLocationMapButton);
-        button.setOnClickListener(mGetLocMapListener);
-        
-        button = (Button)findViewById(R.id.startService);
-        button.setOnClickListener(mStartListener);
-
-        button = (Button)findViewById(R.id.stopService);
-        button.setOnClickListener(mStopListener);
-        button.setEnabled(false);
-        
-        ToggleButton tb = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
-        tb.setOnClickListener(mRunningListener);
-        
-        Button radiusBox = (Button)findViewById(R.id.radiusButton);
-        radiusBox.setOnClickListener(mChangeRadiusListener);
-
-        LocationManager tmpLM = (LocationManager)getSystemService(Context.LOCATION_SERVICE);
-        List<String> availProviders = tmpLM.getProviders(true);
-        List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
-        if (availProviders.isEmpty()) {
-            Log.wtf(LOG_NAME, "How can there be no location providers!?");
-        }
-        Log.d(LOG_NAME, availProviders.toString());
-
-        ArrayAdapter<String> spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, allProviders);
-
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        Spinner s = (Spinner) findViewById(R.id.loc_provider);
-        s.setAdapter(spinnerArrayAdapter);
-        s.setOnItemSelectedListener(locProvListener);
-      */
 
         uc = new UnitConverter(this, "m");
         ArrayList<String> units = uc.getAbbrevList();
@@ -536,15 +478,6 @@ public class EditLocation extends ListActivity {
         }
         Log.d(LOG_NAME, units.toString());
 
-        /*
-        spinnerArrayAdapter = new ArrayAdapter<String>(this,
-                android.R.layout.simple_spinner_item, units);
-
-        spinnerArrayAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        s = (Spinner) findViewById(R.id.unitList);
-        s.setAdapter(spinnerArrayAdapter);
-        s.setOnItemSelectedListener(unitListener);
-*/
         loadNick();
         loadLatLong();
         loadRadius();
