@@ -145,7 +145,6 @@ public class EditLocation extends ListActivity {
                 final String[] items = unitList.toArray(new String[unitList.size()]);
 
                 AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                //builder.setTitle("Pick a color");
                 builder.setItems(items, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         changedUnit(items[item]);
@@ -153,6 +152,19 @@ public class EditLocation extends ListActivity {
                 });
                 AlertDialog alert = builder.create();
                 alert.show();
+                break;
+            case INDEX_LOCPROV:
+                List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
+                final String[] locProvs = allProviders.toArray(new String[allProviders.size()]);
+
+                AlertDialog.Builder lpbuilder = new AlertDialog.Builder(this);
+                lpbuilder.setItems(locProvs, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        changedLocProv(item);
+                    }
+                });
+                AlertDialog lpalert = lpbuilder.create();
+                lpalert.show();
                 break;
 
         }
