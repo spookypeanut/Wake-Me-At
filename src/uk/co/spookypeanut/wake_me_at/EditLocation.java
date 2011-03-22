@@ -70,6 +70,7 @@ public class EditLocation extends ListActivity {
     private LocSettingsAdapter mLocSettingsAdapter;
 
     private long mRowId;
+    private long mRunningRowId = -1;
     private String mNick = "New Location";
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
@@ -77,14 +78,16 @@ public class EditLocation extends ListActivity {
     private int mLocProv = -1;
     private String mUnit = "";
 
-    private static final int INDEX_LOC = 0;
-    private static final int INDEX_PRESET = 1;
-    private static final int INDEX_RADIUS = 2;
-    private static final int INDEX_UNITS = 3;
-    private static final int INDEX_LOCPROV = 4;
-    private static final int NUM_SETTINGS = 5;
+    private static final int INDEX_ACTIV = 0;
+    private static final int INDEX_LOC = 1;
+    private static final int INDEX_PRESET = 2;
+    private static final int INDEX_RADIUS = 3;
+    private static final int INDEX_UNITS = 4;
+    private static final int INDEX_LOCPROV = 5;
+    private static final int NUM_SETTINGS = 6;
 
     private String[] mTitles = {
+        "Activate alarm",
         "Location",
         "Preset",
         "Radius",
@@ -92,6 +95,7 @@ public class EditLocation extends ListActivity {
         "Location provider"
     };
     private String[] mDescription = {
+        "Tap here to activate the alarm",
         "Tap to view / edit location",
         "Type of transport used",
         "Distance away to trigger alarm",
@@ -103,6 +107,9 @@ public class EditLocation extends ListActivity {
     protected void onListItemClick (ListView l, View v, int position, long id) {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         switch (position) {
+            case INDEX_ACTIV:
+                startService();
+                break;
             case INDEX_LOC:
                 getLoc();
                 break;
@@ -145,8 +152,8 @@ public class EditLocation extends ListActivity {
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
-            long broadcastRowId = extras.getLong("rowId");
-            serviceRunning(broadcastRowId == mRowId);
+            mRunningRowId = extras.getLong("rowId");
+            serviceRunning(isActive());
         }
    };
    
@@ -166,6 +173,10 @@ public class EditLocation extends ListActivity {
        button.setEnabled(isThisRow);
 */   }
    
+    private boolean isActive() {
+        return (mRunningRowId == mRowId);
+    }
+
    @Override
    protected void onPause() {
        this.unregisterReceiver(this.mReceiver);
@@ -540,6 +551,12 @@ public class EditLocation extends ListActivity {
         }
 
         public String getSubtitle(int position) {
+            if (INDEX_ACTIV == position) {
+                if (isActive()) {
+                    return "Running";
+                }
+                return "Not running";
+            }
             if (INDEX_LOC == position) {
                 return mDescription[position];
             }
