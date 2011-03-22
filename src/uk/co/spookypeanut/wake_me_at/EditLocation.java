@@ -351,7 +351,6 @@ public class EditLocation extends ListActivity {
         if (mLatitude == 1000 && mLongitude == 1000) {
             getLoc();
         }
-        updateForm();
     }
     
     /**
@@ -359,7 +358,6 @@ public class EditLocation extends ListActivity {
      */
     protected void loadLocProv() {
         mLocProv = db.getProvider(mRowId);
-        updateForm();
     }
     
     /**
@@ -386,7 +384,6 @@ public class EditLocation extends ListActivity {
             Dialog monkey = onCreateDialog(NICKDIALOG);
             monkey.show();
         }
-        updateForm();
     }
     
     /**
@@ -395,7 +392,6 @@ public class EditLocation extends ListActivity {
     protected void loadRadius() {
         Log.d(LOG_NAME, "loadRadius()");
         mRadius = db.getRadius(mRowId);
-        updateForm();
     }   
     
     /**
@@ -404,7 +400,6 @@ public class EditLocation extends ListActivity {
     protected void loadUnit() {
         Log.d(LOG_NAME, "loadUnit()");
         mUnit = db.getUnit(mRowId);
-        updateForm();
     }   
     
     @Override
@@ -462,13 +457,13 @@ public class EditLocation extends ListActivity {
         if (units.isEmpty()) {
             Log.wtf(LOG_NAME, "How can there be no units!?");
         }
-        Log.d(LOG_NAME, units.toString());
 
         loadNick();
         loadLatLong();
         loadRadius();
         loadLocProv();
         loadUnit();
+        updateForm();
     }
 
     @Override
@@ -543,7 +538,6 @@ public class EditLocation extends ListActivity {
         
         @Override
         public int getCount() {
-            Log.d(LOG_NAME, "Count is " + mTitles.length);
             return mTitles.length;
         }
 
