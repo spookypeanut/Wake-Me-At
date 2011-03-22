@@ -290,6 +290,7 @@ public class EditLocation extends ListActivity {
         Log.d(LOG_NAME, "changedLocProv");
         mLocProv = locProv;
         db.setProvider(mRowId, locProv);
+        updateForm();
     }
 
     /**
@@ -302,6 +303,7 @@ public class EditLocation extends ListActivity {
 
         mUnit = unit;
         db.setUnit(mRowId, unit);
+        updateForm();
         Log.d(LOG_NAME, "end changedUnit");
     }
     
@@ -366,25 +368,9 @@ public class EditLocation extends ListActivity {
     protected void updateForm() {
         TextView nickTextView = (TextView) findViewById(R.id.nick);
         nickTextView.setText(mNick);
-        /*
-        Button radText = (Button)findViewById(R.id.radiusButton);
-        radText.setText(String.valueOf(mRadius));
-        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-        SpinnerAdapter adapter = locProvSpin.getAdapter();
-        locProvSpin.setSelection(mLocProv);
 
-        Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
-        adapter = unitSpin.getAdapter();
-        for(int i = 0; i < adapter.getCount(); i++) {
-            if(adapter.getItem(i).equals(mUnit)) {
-                unitSpin.setSelection(i);
-            }
-        }
-        TextView latText = (TextView)findViewById(R.id.latitude);
-        TextView longText = (TextView)findViewById(R.id.longitude);
-        latText.setText(String.valueOf(mLatitude));
-        longText.setText(String.valueOf(mLongitude));
-    */
+        Log.d(LOG_NAME, "Data set changed!");
+        mLocSettingsAdapter.notifyDataSetChanged();
     }
     
     /**
