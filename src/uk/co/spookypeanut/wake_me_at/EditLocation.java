@@ -108,7 +108,11 @@ public class EditLocation extends ListActivity {
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         switch (position) {
             case INDEX_ACTIV:
-                startService();
+                if (isActive()) {
+                    stopService();
+                } else {
+                    startService();
+                }
                 break;
             case INDEX_LOC:
                 getLoc();
@@ -244,21 +248,11 @@ public class EditLocation extends ListActivity {
      * Starts the alarm service for the current activity's database entry
      */
     private void startService () {
-        /*
-        Button radiusButton = (Button)findViewById(R.id.radiusButton);
-        Float radius = Float.valueOf(radiusButton.getText().toString());
-        changedRadius(radius);
-        Spinner unitSpin = (Spinner)findViewById(R.id.unitList);
-        mUnit = unitSpin.getSelectedItem().toString();
-        changedUnit(mUnit);
-        Spinner locProvSpin = (Spinner)findViewById(R.id.loc_provider);
-        mLocProv = locProvSpin.getSelectedItemPosition();
-        changedLocProv(mLocProv);
+        Log.d(LOG_NAME, "EditLocation.startService");
         Intent intent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
         intent.setClass(EditLocation.this, WakeMeAtService.class);
         intent.putExtra("rowId", mRowId);
         startService(intent);
-        */
     }
     
     /**
