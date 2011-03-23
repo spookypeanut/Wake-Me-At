@@ -157,25 +157,9 @@ public class EditLocation extends ListActivity {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
             mRunningRowId = extras.getLong("rowId");
-            serviceRunning(isActive());
+            updateForm();
         }
    };
-   
-   /**
-    * Method that's called when it's determined that an alarm service is running
-    * @param isThisRow True if the service that's running is for the
-    *                  same location as this activity
-    */
-    private void serviceRunning (boolean isThisRow) {
-/*       ToggleButton tg = (ToggleButton)findViewById(R.id.editLocationRunningToggle);
-       tg.setChecked(isThisRow);
-       
-       Button button = (Button)findViewById(R.id.startService);
-       button.setEnabled(!isThisRow);
-
-       button = (Button)findViewById(R.id.stopService);
-       button.setEnabled(isThisRow);
-*/   }
    
     private boolean isActive() {
         return (mRunningRowId == mRowId);
@@ -212,30 +196,6 @@ public class EditLocation extends ListActivity {
             Log.w(LOG_NAME, "Dialog open, skipping location map");
         }
     }
-    
-    private OnClickListener mStartListener = new OnClickListener() {
-        public void onClick(View v) {
-            startService();
-        }
-    };
-    
-    private OnClickListener mStopListener = new OnClickListener() {
-        public void onClick(View v) {
-            stopService();
-        }
-    };
-    
-    private OnClickListener mRunningListener = new OnClickListener() {
-        public void onClick(View v) {
-            Log.d(LOG_NAME, "mRunningListener, v = " + v);
-            ToggleButton tg = (ToggleButton) v;
-            if (tg.isChecked()) {
-                startService();
-            } else {
-                stopService();
-            }
-        }
-    };
     
     private OnClickListener mChangeNickListener = new OnClickListener() {
         public void onClick(View v) {
