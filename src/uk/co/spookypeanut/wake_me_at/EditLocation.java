@@ -572,11 +572,29 @@ public class EditLocation extends ListActivity {
             } else {
                 row = convertView;
             }
+
+            boolean enabled = true;
+
+            if (mPreset != 0) {
+                // If we're set to anything other than custom, disable the
+                // relevant lines
+                Log.d(LOG_NAME, "Preset is not custom");
+                switch (position) {
+                    case INDEX_LOCPROV:
+                    case INDEX_UNITS:
+                    case INDEX_RADIUS:
+                        Log.d(LOG_NAME, "Disable this one (" + position + ")");
+                        enabled = false;
+                        break;
+                }
+            }
             TextView tv = (TextView) row.findViewById(R.id.locSettingName);
             tv.setText(mTitles[position]);
+            tv.setEnabled(enabled);
             
             tv = (TextView) row.findViewById(R.id.locSettingDesc);
             tv.setText(getSubtitle(position));
+            tv.setEnabled(enabled);
             return row;
         }
     }
