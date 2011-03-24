@@ -25,7 +25,6 @@ import android.widget.BaseAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.ToggleButton;
 
 /*
     This file is part of Wake Me At. Wake Me At is the legal property
@@ -76,6 +75,7 @@ public class EditLocation extends ListActivity {
     private double mLongitude = 0.0;
     private float mRadius = 0;
     private int mLocProv = -1;
+    private int mPreset = -1;
     private String mUnit = "";
 
     private static final int INDEX_ACTIV = 0;
@@ -113,6 +113,19 @@ public class EditLocation extends ListActivity {
                 } else {
                     startService();
                 }
+                break;
+            case INDEX_PRESET:
+                Log.d(LOG_NAME, "Preset pressed");
+                final String[] presetList = mContext.getResources().getStringArray(R.array.presetList);
+
+                AlertDialog.Builder presetBuilder = new AlertDialog.Builder(this);
+                presetBuilder.setItems(presetList, new DialogInterface.OnClickListener() {
+                    public void onClick(DialogInterface dialog, int item) {
+                        changedPreset(item);
+                    }
+                });
+                AlertDialog presetAlert = presetBuilder.create();
+                presetAlert.show();
                 break;
             case INDEX_LOC:
                 getLoc();
@@ -236,6 +249,17 @@ public class EditLocation extends ListActivity {
     }
 
     /**
+     * Method called to change the preset in the database
+     * @param preset
+     */
+    protected void changedPreset(int preset) {
+        Log.d(LOG_NAME, "changedPreset");
+        mPreset = preset;
+        db.setPreset(mRowId, preset);
+        updateForm();
+    }
+
+    /**
      * Method called to change the location provider in the database
      * @param locProv
      */
@@ -304,6 +328,13 @@ public class EditLocation extends ListActivity {
         if (mLatitude == 1000 && mLongitude == 1000) {
             getLoc();
         }
+    }
+    
+    /**
+     * Load the preset from the database
+     */
+    protected void loadPreset() {
+        mPreset = db.getPreset(mRowId);
     }
     
     /**
@@ -413,6 +444,7 @@ public class EditLocation extends ListActivity {
 
         loadNick();
         loadLatLong();
+        loadPreset();
         loadRadius();
         loadLocProv();
         loadUnit();
@@ -480,11 +512,10 @@ public class EditLocation extends ListActivity {
     }
 
     /**
-     * Class for the location list on the main activity
+     * Class for the location settings list in the edit location activity
      * @author spookypeanut
      */
     private class LocSettingsAdapter extends BaseAdapter {
-        // REF#0007
         public LocSettingsAdapter(Context context) {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
         }
@@ -510,6 +541,9 @@ public class EditLocation extends ListActivity {
                     return "Running";
                 }
                 return "Not running";
+            }
+            if (INDEX_PRESET == position) {
+                return mContext.getResources().getStringArray(R.array.presetList)[mPreset];
             }
             if (INDEX_LOC == position) {
                 return mDescription[position];

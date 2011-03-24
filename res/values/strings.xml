@@ -93,4 +93,11 @@
 <item>Passive</item>
 </string-array>
 
+<string-array name="presetList">
+    <item>Custom</item>
+    <item>Bus (local)</item>
+    <item>Bus (inter-city)</item>
+    <item>Train</item>
+</string-array>
+
 </resources>
