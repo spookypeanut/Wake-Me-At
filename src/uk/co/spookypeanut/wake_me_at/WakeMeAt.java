@@ -152,6 +152,10 @@ public class WakeMeAt extends ListActivity {
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
+
+        Presets mine = new Presets(this, 0);
+        Log.d(LOG_NAME, "Preset radius: " + mine.getRadius());
+
         mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
