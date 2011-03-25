@@ -30,7 +30,7 @@ import android.content.Context;
 import android.util.Log;
 
 /**
- * A class that facilitates the conversion between a specified unit and others
+ * A class to dispense preset information
  * @author spookypeanut
  */
 
@@ -45,7 +45,7 @@ public class Presets
                 new Preset("Custom", 1803.0, 1, "m"),
                 new Preset("Train", 1800.0, 1, "m"),
                 new Preset("Bus (local)", 1801.0, 1, "m"),
-                new Preset("Train", 1802.0, 1, "m")
+                new Preset("Bus (inter-city)", 1802.0, 1, "m")
     };
     
     /**
@@ -55,6 +55,18 @@ public class Presets
     public Presets(Context context, int preset) {
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         mPreset = mPresetArray[preset];
+    }
+
+    /**
+     * Get the array of preset names
+     * @return The array
+     */
+    public String[] getAllNames() {
+        String[] returnArray = new String[mPresetArray.length];
+        for (int i = 0; i < mPresetArray.length; i++) {
+            returnArray[i] = mPresetArray[i].getName();
+        }
+        return returnArray;
     }
 
     public double getRadius() {

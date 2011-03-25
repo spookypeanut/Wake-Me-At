@@ -1,22 +1,6 @@
 package uk.co.spookypeanut.wake_me_at;
-/*
-This file is part of Wake Me At. Wake Me At is the legal property
-of its developer, Henry Bush (spookypeanut).
 
-Wake Me At is free software: you can redistribute it and/or modify
-it under the terms of the GNU General Public License as published by
-the Free Software Foundation, either version 3 of the License, or
-(at your option) any later version.
-
-Wake Me At is distributed in the hope that it will be useful,
-but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
-<http://www.gnu.org/licenses/>.
-*/
+import java.util.Arrays;
 
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
@@ -39,6 +23,26 @@ import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.AdapterView.AdapterContextMenuInfo;
+
+/*
+This file is part of Wake Me At. Wake Me At is the legal property
+of its developer, Henry Bush (spookypeanut).
+
+Wake Me At is free software: you can redistribute it and/or modify
+it under the terms of the GNU General Public License as published by
+the Free Software Foundation, either version 3 of the License, or
+(at your option) any later version.
+
+Wake Me At is distributed in the hope that it will be useful,
+but WITHOUT ANY WARRANTY; without even the implied warranty of
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+GNU General Public License for more details.
+
+You should have received a copy of the GNU General Public License
+along with Wake Me At, in the file "COPYING".  If not, see 
+<http://www.gnu.org/licenses/>.
+*/
+
 
 /**
  * The main activity, which has a list of all the locations
@@ -155,6 +159,7 @@ public class WakeMeAt extends ListActivity {
 
         Presets mine = new Presets(this, 0);
         Log.d(LOG_NAME, "Preset radius: " + mine.getRadius());
+        Log.d(LOG_NAME, "Name array: " + Arrays.toString(mine.getAllNames()));
 
         mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
