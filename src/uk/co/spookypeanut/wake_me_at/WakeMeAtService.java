@@ -57,10 +57,10 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     private long mRowId;
     private String mNick;
-    private double mRadius;
-    private double mMetresAway = -1.0;
     private Location mCurrLocation = new Location("");
     private Location mFinalDestination = new Location("");
+    private double mMetresAway = -1.0;
+    private float mRadius;
     private int mProvider;
     private String mUnit;
     
