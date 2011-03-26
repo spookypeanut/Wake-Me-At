@@ -60,6 +60,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private Location mCurrLocation = new Location("");
     private Location mFinalDestination = new Location("");
     private double mMetresAway = -1.0;
+    private int mPreset;
     private float mRadius;
     private int mProvider;
     private String mUnit;
@@ -160,10 +161,18 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME,
                 "Passed latlong: " + mFinalDestination.getLatitude() +
                 ", " + mFinalDestination.getLongitude());
-        mRadius = db.getRadius(mRowId);
-        mProvider = db.getProvider(mRowId);
+        mPreset = db.getPreset(mRowId);
+        Presets presetObj = new Presets(this, mPreset);
+        if (presetObj.isCustom()) {
+            mRadius = db.getRadius(mRowId);
+            mProvider = db.getProvider(mRowId);
+            mUnit = db.getUnit(mRowId);
+        } else {
+            mRadius = presetObj.getRadius();
+            mProvider = presetObj.getLocProv();
+            mUnit = presetObj.getUnit();
+        }
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
-        mUnit = db.getUnit(mRowId);
         
         uc = new UnitConverter(this, mUnit);
 
