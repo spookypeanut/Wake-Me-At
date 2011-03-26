@@ -43,9 +43,9 @@ public class Presets
 
     private final Preset mPresetArray[] = {
                 new Preset("Custom", 1803.0, 1, "m"),
-                new Preset("Train", 1800.0, 1, "m"),
-                new Preset("Bus (local)", 1801.0, 1, "m"),
-                new Preset("Bus (inter-city)", 1802.0, 1, "m")
+                new Preset("Train", 1.8, 1, "km"),
+                new Preset("Bus (local)", 200.0, 0, "m"),
+                new Preset("Bus (inter-city)", 2.0, 1, "km")
     };
     
     /**
