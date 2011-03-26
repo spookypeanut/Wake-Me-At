@@ -163,6 +163,8 @@ public class WakeMeAtService extends Service implements LocationListener {
                 ", " + mFinalDestination.getLongitude());
         mPreset = db.getPreset(mRowId);
         Presets presetObj = new Presets(this, mPreset);
+        // If this is set to custom, use the values from the database
+        // If not, use the values from the preset
         if (presetObj.isCustom()) {
             mRadius = db.getRadius(mRowId);
             mProvider = db.getProvider(mRowId);
@@ -176,7 +178,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         
         uc = new UnitConverter(this, mUnit);
 
-        
         mLocationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
