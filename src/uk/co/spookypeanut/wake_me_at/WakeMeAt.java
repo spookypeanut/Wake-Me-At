@@ -156,9 +156,15 @@ public class WakeMeAt extends ListActivity {
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
-
-        Presets mine = new Presets(this, 0);
-        Log.d(LOG_NAME, "Preset radius: " + mine.getRadius());
+        Presets mine = null;
+        for (int i=0; i<4; i++) {
+            mine = new Presets(this, i);
+            Log.d(LOG_NAME, "Preset name: " + mine.getName());
+            Log.d(LOG_NAME, "Preset radius: " + mine.getRadius());
+            Log.d(LOG_NAME, "Preset unit: " + mine.getUnit());
+            Log.d(LOG_NAME, "Preset locprov: " + mine.getLocProv());
+            Log.d(LOG_NAME, "Which corresponds to " + this.getResources().getStringArray(R.array.locProvHuman)[mine.getLocProv()]);
+        }
         Log.d(LOG_NAME, "Name array: " + Arrays.toString(mine.getAllNames()));
 
         mContext = this;
