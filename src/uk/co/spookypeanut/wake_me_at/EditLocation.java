@@ -76,6 +76,7 @@ public class EditLocation extends ListActivity {
     private float mRadius = 0;
     private int mLocProv = -1;
     private int mPreset = -1;
+    private Presets mPresetObj;
     private String mUnit = "";
 
     private static final int INDEX_ACTIV = 0;
@@ -132,13 +133,13 @@ public class EditLocation extends ListActivity {
                 getLoc();
                 break;
             case INDEX_RADIUS:
-                if (presetIsCustom()) {
+                if (mPresetObj.isCustom()) {
                     Dialog monkey = onCreateDialog(RADIUSDIALOG);
                     monkey.show();
                 }
                 break;
             case INDEX_UNITS:
-                if (presetIsCustom()) {
+                if (mPresetObj.isCustom()) {
                     ArrayList<String> unitList = uc.getNameList();
                     final String[] items = unitList.toArray(new String[unitList.size()]);
 
@@ -153,7 +154,7 @@ public class EditLocation extends ListActivity {
                 }
                 break;
             case INDEX_LOCPROV:
-                if (presetIsCustom()) {
+                if (mPresetObj.isCustom()) {
                     List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
                     final String[] locProvs = allProviders.toArray(new String[allProviders.size()]);
 
@@ -171,10 +172,6 @@ public class EditLocation extends ListActivity {
         }
     }
 
-    public boolean presetIsCustom () {
-        return (mPreset == 0);
-    }
-    
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -266,6 +263,7 @@ public class EditLocation extends ListActivity {
     protected void changedPreset(int preset) {
         Log.d(LOG_NAME, "changedPreset");
         mPreset = preset;
+        mPresetObj.switchPreset(mPreset);
         db.setPreset(mRowId, preset);
         updateForm();
     }
@@ -346,6 +344,7 @@ public class EditLocation extends ListActivity {
      */
     protected void loadPreset() {
         mPreset = db.getPreset(mRowId);
+        mPresetObj.switchPreset(mPreset);
     }
     
     /**
@@ -423,6 +422,7 @@ public class EditLocation extends ListActivity {
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPresetObj = new Presets(mContext, 0);
 
         SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
@@ -547,8 +547,6 @@ public class EditLocation extends ListActivity {
         }
 
         public String getSubtitle(int position) {
-            Presets currPreset;
-            currPreset = new Presets(mContext, mPreset);
             switch (position) {
                 case INDEX_ACTIV:
                     if (isActive()) {
@@ -558,33 +556,33 @@ public class EditLocation extends ListActivity {
                 case INDEX_LOC:
                     return mDescription[position];
                 case INDEX_PRESET:
-                    return currPreset.getName();
+                    return mPresetObj.getName();
                 case INDEX_RADIUS:
                     float rad;
                     String radUnit;
-                    if (presetIsCustom()) {
+                    if (mPresetObj.isCustom()) {
                         rad = mRadius;
                         radUnit = mUnit;
                     } else {
-                        rad = currPreset.getRadius();
-                        radUnit = currPreset.getUnit();
+                        rad = mPresetObj.getRadius();
+                        radUnit = mPresetObj.getUnit();
                     }
                     return String.valueOf(rad) + radUnit;
                 case INDEX_UNITS:
                     String unit;
-                    if (presetIsCustom()) {
+                    if (mPresetObj.isCustom()) {
                         unit = mUnit;
                     } else {
-                        unit = currPreset.getUnit();
+                        unit = mPresetObj.getUnit();
                     }
                     UnitConverter temp = new UnitConverter(mContext, unit);
                     return temp.getName();
                 case INDEX_LOCPROV:
                     int locProv;
-                    if (presetIsCustom()) {
+                    if (mPresetObj.isCustom()) {
                         locProv = mLocProv;
                     } else {
-                        locProv = currPreset.getLocProv();
+                        locProv = mPresetObj.getLocProv();
                     }
                     return mContext.getResources().getStringArray(R.array.locProvHuman)[locProv];
             }
@@ -606,7 +604,7 @@ public class EditLocation extends ListActivity {
 
             boolean enabled = true;
 
-            if (presetIsCustom() == false) {
+            if (mPresetObj.isCustom() == false) {
                 // If we're set to anything other than custom, disable the
                 // relevant lines
                 Log.d(LOG_NAME, "Preset is not custom");
