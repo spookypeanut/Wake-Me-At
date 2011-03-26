@@ -560,7 +560,7 @@ public class EditLocation extends ListActivity {
                 case INDEX_PRESET:
                     return currPreset.getName();
                 case INDEX_RADIUS:
-                    double rad;
+                    float rad;
                     String radUnit;
                     if (presetIsCustom()) {
                         rad = mRadius;

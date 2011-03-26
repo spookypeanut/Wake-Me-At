@@ -84,7 +84,7 @@ public class Presets
         return mPreset.getName();
     }
 
-    public double getRadius() {
+    public float getRadius() {
         return mPreset.getRadius();
     }
 
@@ -103,7 +103,7 @@ public class Presets
      */
     public class Preset {
         String mName;
-        double mRadius;
+        float mRadius;
         int mLocProv;
         String mUnit;
         
@@ -115,7 +115,7 @@ public class Presets
          * @param system The unit system that this unit is in (imperial, metric, etc)
          * @param plural The plural of the unit (eg feet)
          */
-        public Preset(String name, double radius, int locProv, String unit) {
+        public Preset(String name, float radius, int locProv, String unit) {
             mName = name;
             mRadius = radius;
             mLocProv = locProv;
@@ -134,7 +134,7 @@ public class Presets
          * Get the radius of the preset
          * @return The radius of the preset
          */
-        public double getRadius() {
+        public float getRadius() {
             return mRadius;
         }
         
