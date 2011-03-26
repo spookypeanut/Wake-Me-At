@@ -132,34 +132,40 @@ public class EditLocation extends ListActivity {
                 getLoc();
                 break;
             case INDEX_RADIUS:
-                Dialog monkey = onCreateDialog(RADIUSDIALOG);
-                monkey.show();
+                if (presetIsCustom()) {
+                    Dialog monkey = onCreateDialog(RADIUSDIALOG);
+                    monkey.show();
+                }
                 break;
             case INDEX_UNITS:
-                ArrayList<String> unitList = uc.getNameList();
-                final String[] items = unitList.toArray(new String[unitList.size()]);
+                if (presetIsCustom()) {
+                    ArrayList<String> unitList = uc.getNameList();
+                    final String[] items = unitList.toArray(new String[unitList.size()]);
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(this);
-                builder.setItems(items, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        changedUnit(items[item]);
-                    }
-                });
-                AlertDialog alert = builder.create();
-                alert.show();
+                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    builder.setItems(items, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            changedUnit(items[item]);
+                        }
+                    });
+                    AlertDialog alert = builder.create();
+                    alert.show();
+                }
                 break;
             case INDEX_LOCPROV:
-                List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
-                final String[] locProvs = allProviders.toArray(new String[allProviders.size()]);
+                if (presetIsCustom()) {
+                    List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
+                    final String[] locProvs = allProviders.toArray(new String[allProviders.size()]);
 
-                AlertDialog.Builder lpbuilder = new AlertDialog.Builder(this);
-                lpbuilder.setItems(locProvs, new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int item) {
-                        changedLocProv(item);
-                    }
-                });
-                AlertDialog lpalert = lpbuilder.create();
-                lpalert.show();
+                    AlertDialog.Builder lpbuilder = new AlertDialog.Builder(this);
+                    lpbuilder.setItems(locProvs, new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int item) {
+                            changedLocProv(item);
+                        }
+                    });
+                    AlertDialog lpalert = lpbuilder.create();
+                    lpalert.show();
+                }
                 break;
 
         }
