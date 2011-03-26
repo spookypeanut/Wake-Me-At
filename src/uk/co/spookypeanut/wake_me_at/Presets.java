@@ -40,6 +40,7 @@ public class Presets
 
     Context mContext;
     Preset mPreset;
+    int mIndex;
 
     private final Preset mPresetArray[] = {
                 new Preset("Custom", 1803.0, 1, "m"),
@@ -54,7 +55,13 @@ public class Presets
      */
     public Presets(Context context, int preset) {
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+        switchPreset(preset);
+    }
+
+    public void switchPreset(int preset) {
+        Log.d(LOG_NAME, "Initializing preset to " + preset);
         mPreset = mPresetArray[preset];
+        mIndex = preset;
     }
 
     /**
@@ -69,8 +76,24 @@ public class Presets
         return returnArray;
     }
 
+    public int getIndex() {
+        return mIndex;
+    }
+
+    public String getName() {
+        return mPreset.getName();
+    }
+
     public double getRadius() {
         return mPreset.getRadius();
+    }
+
+    public int getLocProv() {
+        return mPreset.getLocProv();
+    }
+
+    public String getUnit() {
+        return mPreset.getUnit();
     }
 
     /**
