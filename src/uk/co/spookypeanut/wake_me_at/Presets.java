@@ -64,6 +64,10 @@ public class Presets
         mIndex = preset;
     }
 
+    public boolean isCustom() {
+        return (getName() == "Custom");
+    }
+
     /**
      * Get the array of preset names
      * @return The array
