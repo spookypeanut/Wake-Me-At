@@ -116,7 +116,8 @@ public class EditLocation extends ListActivity {
                 break;
             case INDEX_PRESET:
                 Log.d(LOG_NAME, "Preset pressed");
-                final String[] presetList = mContext.getResources().getStringArray(R.array.presetList);
+                Presets forList = new Presets(mContext, 0);
+                final String[] presetList = forList.getAllNames();
 
                 AlertDialog.Builder presetBuilder = new AlertDialog.Builder(this);
                 presetBuilder.setItems(presetList, new DialogInterface.OnClickListener() {
@@ -162,6 +163,10 @@ public class EditLocation extends ListActivity {
                 break;
 
         }
+    }
+
+    public boolean presetIsCustom () {
+        return (mPreset == 0);
     }
     
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -536,28 +541,48 @@ public class EditLocation extends ListActivity {
         }
 
         public String getSubtitle(int position) {
-            if (INDEX_ACTIV == position) {
-                if (isActive()) {
-                    return "Running";
-                }
-                return "Not running";
+            Presets currPreset;
+            currPreset = new Presets(mContext, mPreset);
+            switch (position) {
+                case INDEX_ACTIV:
+                    if (isActive()) {
+                        return "Running";
+                    }
+                    return "Not running";
+                case INDEX_LOC:
+                    return mDescription[position];
+                case INDEX_PRESET:
+                    return currPreset.getName();
+                case INDEX_RADIUS:
+                    double rad;
+                    String radUnit;
+                    if (presetIsCustom()) {
+                        rad = mRadius;
+                        radUnit = mUnit;
+                    } else {
+                        rad = currPreset.getRadius();
+                        radUnit = currPreset.getUnit();
+                    }
+                    return String.valueOf(rad) + radUnit;
+                case INDEX_UNITS:
+                    String unit;
+                    if (presetIsCustom()) {
+                        unit = mUnit;
+                    } else {
+                        unit = currPreset.getUnit();
+                    }
+                    UnitConverter temp = new UnitConverter(mContext, unit);
+                    return temp.getName();
+                case INDEX_LOCPROV:
+                    int locProv;
+                    if (presetIsCustom()) {
+                        locProv = mLocProv;
+                    } else {
+                        locProv = currPreset.getLocProv();
+                    }
+                    return mContext.getResources().getStringArray(R.array.locProvHuman)[locProv];
             }
-            if (INDEX_PRESET == position) {
-                return mContext.getResources().getStringArray(R.array.presetList)[mPreset];
-            }
-            if (INDEX_LOC == position) {
-                return mDescription[position];
-            }
-            if (INDEX_RADIUS == position) {
-                return String.valueOf(mRadius) + mUnit;
-            }
-            if (INDEX_UNITS == position) {
-                UnitConverter temp = new UnitConverter(mContext, mUnit);
-                return temp.getName();
-            }
-            if (INDEX_LOCPROV == position) {
-                return mContext.getResources().getStringArray(R.array.locProvHuman)[mLocProv];
-            }
+            Log.wtf(LOG_NAME, "EditLocation.getSubtitle: Invalid position passed");
             return "crap";
         }
         
@@ -575,7 +600,7 @@ public class EditLocation extends ListActivity {
 
             boolean enabled = true;
 
-            if (mPreset != 0) {
+            if (presetIsCustom() == false) {
                 // If we're set to anything other than custom, disable the
                 // relevant lines
                 Log.d(LOG_NAME, "Preset is not custom");
