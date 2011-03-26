@@ -43,10 +43,10 @@ public class Presets
     int mIndex;
 
     private final Preset mPresetArray[] = {
-                new Preset("Custom", 1803.0, 1, "m"),
-                new Preset("Train", 1.8, 1, "km"),
-                new Preset("Bus (local)", 200.0, 0, "m"),
-                new Preset("Bus (inter-city)", 2.0, 1, "km")
+                new Preset("Custom", (float)1803.0, 1, "m"),
+                new Preset("Train", (float)1.8, 1, "km"),
+                new Preset("Bus (local)", (float)200.0, 0, "m"),
+                new Preset("Bus (inter-city)", (float)2.0, 1, "km")
     };
     
     /**
