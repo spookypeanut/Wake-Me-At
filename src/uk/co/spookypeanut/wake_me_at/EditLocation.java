@@ -6,6 +6,7 @@ import java.util.List;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ExpandableListActivity;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -24,6 +25,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
+import android.widget.ExpandableListView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -52,7 +54,7 @@ import android.widget.TextView;
  * @author spookypeanut
  *
  */
-public class EditLocation extends ListActivity {
+public class EditLocation extends ExpandableListActivity {
     public static final int GETLOCMAP = 1;
     public static final String PREFS_NAME = "WakeMeAtPrefs";
 
@@ -106,7 +108,9 @@ public class EditLocation extends ListActivity {
     };
 
     @Override
-    protected void onListItemClick (ListView l, View v, int position, long id) {
+    public boolean onChildClick(ExpandableListView l, View v, int groupPosition, int childPosition, long id) {
+        Log.d(LOG_NAME, "onChildClick(" + l + ", " + v + ", " + groupPosition + ", " + childPosition + ", " + id + ")");
+        int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, childPosition);
         Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         switch (position) {
             case INDEX_ACTIV:
@@ -169,8 +173,8 @@ public class EditLocation extends ListActivity {
                     lpalert.show();
                 }
                 break;
-
         }
+        return true;
     }
 
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -443,7 +447,7 @@ public class EditLocation extends ListActivity {
         setContentView(R.layout.edit_location);
 
         setListAdapter(new LocSettingsAdapter(this));
-        mLocSettingsAdapter = (LocSettingsAdapter) getListAdapter();
+        mLocSettingsAdapter = (LocSettingsAdapter) getExpandableListAdapter();
 
         TextView tv = (TextView)findViewById(R.id.nick);
         tv.setOnClickListener(mChangeNickListener);
@@ -461,6 +465,8 @@ public class EditLocation extends ListActivity {
         loadLocProv();
         loadUnit();
         updateForm();
+
+        Log.d(LOG_NAME, "End of EditLocation.onCreate");
     }
 
     @Override
@@ -527,7 +533,7 @@ public class EditLocation extends ListActivity {
      * Class for the location settings list in the edit location activity
      * @author spookypeanut
      */
-    private class LocSettingsAdapter extends BaseAdapter {
+    private class LocSettingsAdapter extends BaseExpandableListAdapter {
         int groupSize[] = {3, 3};
         String groupName[] = {"Basic", "Advanced"};
         
@@ -546,6 +552,7 @@ public class EditLocation extends ListActivity {
             return total;
         }
         
+        /*
         @Override
         public int getCount() {
             return mTitles.length;
@@ -560,7 +567,7 @@ public class EditLocation extends ListActivity {
         public long getItemId(int position) {
             return position;
         }
-
+*/
         public String getSubtitle(int position) {
             switch (position) {
                 case INDEX_ACTIV:
@@ -605,10 +612,112 @@ public class EditLocation extends ListActivity {
             return "crap";
         }
         
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getGroupCount()
+         */
         @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-            long id = position;
-            Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
+        public int getGroupCount() {
+            return groupSize.length;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getChildrenCount(int)
+         */
+        @Override
+        public int getChildrenCount(int groupPosition) {
+            return groupSize[groupPosition];
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getGroup(int)
+         */
+        @Override
+        public Object getGroup(int groupPosition) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getChild(int, int)
+         */
+        @Override
+        public Object getChild(int groupPosition, int childPosition) {
+            // TODO Auto-generated method stub
+            return null;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getGroupId(int)
+         */
+        @Override
+        public long getGroupId(int groupPosition) {
+            // TODO Auto-generated method stub
+            return 0;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getChildId(int, int)
+         */
+        @Override
+        public long getChildId(int groupPosition, int childPosition) {
+            return getGlobalPosition(groupPosition, childPosition);
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#hasStableIds()
+         */
+        @Override
+        public boolean hasStableIds() {
+            // TODO Auto-generated method stub
+            return false;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getGroupView(int, boolean, android.view.View, android.view.ViewGroup)
+         */
+        @Override
+        public View getGroupView(int groupPosition, boolean isExpanded,
+                View convertView, ViewGroup parent) {
+            Log.d(LOG_NAME, "getGroupView(" + groupPosition + ", " + isExpanded + ", " + convertView + ", " + parent + ")");
+            View row;
+            
+            if (null == convertView) {
+                row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
+            } else {
+                row = convertView;
+            }
+
+            boolean enabled = true;
+
+            TextView tv = (TextView) row.findViewById(R.id.locSettingName);
+            tv.setText(groupName[groupPosition]);
+            tv.setEnabled(enabled);
+            
+            //tv = (TextView) row.findViewById(R.id.locSettingDesc);
+            //tv.setText(getSubtitle(position));
+            //tv.setEnabled(enabled);
+            return row;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#getChildView(int, int, boolean, android.view.View, android.view.ViewGroup)
+         */
+        @Override
+        public View getChildView(int groupPosition, int childPosition,
+                boolean isLastChild, View convertView, ViewGroup parent) {
+            Log.d(LOG_NAME, "getChildView(" + groupPosition + ", " + childPosition + "," + isLastChild + ", " + convertView + ", " + parent + ")");
+            // TODO Auto-generated method stub
+            int position = getGlobalPosition(groupPosition, childPosition);
+            Log.d(LOG_NAME, "getView(" + position + "), mRowId: " + mRowId);
             View row;
             
             if (null == convertView) {
@@ -640,6 +749,16 @@ public class EditLocation extends ListActivity {
             tv.setText(getSubtitle(position));
             tv.setEnabled(enabled);
             return row;
+        }
+
+
+        /* (non-Javadoc)
+         * @see android.widget.ExpandableListAdapter#isChildSelectable(int, int)
+         */
+        @Override
+        public boolean isChildSelectable(int groupPosition, int childPosition) {
+            // TODO Auto-generated method stub
+            return false;
         }
     }
 }
