@@ -690,7 +690,7 @@ public class EditLocation extends ExpandableListActivity {
             View row;
             
             if (null == convertView) {
-                row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
+                row = mInflater.inflate(R.layout.edit_loc_list_group, null);
             } else {
                 row = convertView;
             }
@@ -758,7 +758,7 @@ public class EditLocation extends ExpandableListActivity {
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
             // TODO Auto-generated method stub
-            return false;
+            return true;
         }
     }
 }
