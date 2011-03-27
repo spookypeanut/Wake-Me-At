@@ -466,7 +466,17 @@ public class EditLocation extends ExpandableListActivity {
         loadUnit();
         updateForm();
 
+        resetGroups();
+
         Log.d(LOG_NAME, "End of EditLocation.onCreate");
+    }
+
+    private void resetGroups() {
+        ExpandableListView v = getExpandableListView();
+        v.expandGroup(0);
+        for (int i = 1; i < mLocSettingsAdapter.groupName.length; i++) {
+            v.collapseGroup(i);
+        }
     }
 
     @Override
@@ -552,22 +562,6 @@ public class EditLocation extends ExpandableListActivity {
             return total;
         }
         
-        /*
-        @Override
-        public int getCount() {
-            return mTitles.length;
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return position;
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-*/
         public String getSubtitle(int position) {
             switch (position) {
                 case INDEX_ACTIV:
@@ -700,10 +694,6 @@ public class EditLocation extends ExpandableListActivity {
             TextView tv = (TextView) row.findViewById(R.id.locSettingName);
             tv.setText(groupName[groupPosition]);
             tv.setEnabled(enabled);
-            
-            //tv = (TextView) row.findViewById(R.id.locSettingDesc);
-            //tv.setText(getSubtitle(position));
-            //tv.setEnabled(enabled);
             return row;
         }
 
