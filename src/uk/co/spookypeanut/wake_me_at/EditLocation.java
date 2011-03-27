@@ -22,6 +22,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.BaseExpandableListAdapter;
 import android.widget.EditText;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -527,8 +528,22 @@ public class EditLocation extends ListActivity {
      * @author spookypeanut
      */
     private class LocSettingsAdapter extends BaseAdapter {
+        int groupSize[] = {3, 3};
+        String groupName[] = {"Basic", "Advanced"};
+        
         public LocSettingsAdapter(Context context) {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
+        }
+        
+
+        public int getGlobalPosition(int groupPosition, int childPosition) {
+            int countGroup;
+            int total = 0;
+            for (countGroup = groupPosition; countGroup > 0; countGroup--) {
+                total += groupSize[countGroup - 1];
+            }
+            total += childPosition;
+            return total;
         }
         
         @Override
