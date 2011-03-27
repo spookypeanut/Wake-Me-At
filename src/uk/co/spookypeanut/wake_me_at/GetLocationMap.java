@@ -182,6 +182,7 @@ implements LocationListener {
         if (location != null) {
             Log.d(LOG_NAME, "moving to " + location.getLatitudeE6() + ", " + location.getLongitudeE6());
             MapController mc = mapView.getController();
+            mc.setZoom(15);
             mc.animateTo(location);
         } else {
             Log.e(LOG_NAME, "Location to move to was null");
