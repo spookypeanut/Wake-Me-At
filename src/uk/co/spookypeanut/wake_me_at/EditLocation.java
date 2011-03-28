@@ -268,7 +268,7 @@ public class EditLocation extends ExpandableListActivity {
     protected void changedPreset(int preset) {
         Log.d(LOG_NAME, "changedPreset");
         mPreset = preset;
-        mPresetObj.switchPreset(mPreset);
+        newPresetGui();
         db.setPreset(mRowId, preset);
         updateForm();
     }
@@ -349,9 +349,19 @@ public class EditLocation extends ExpandableListActivity {
      */
     protected void loadPreset() {
         mPreset = db.getPreset(mRowId);
-        mPresetObj.switchPreset(mPreset);
+        newPresetGui();
     }
     
+    private void newPresetGui() {
+        ExpandableListView v = getExpandableListView();
+        mPresetObj.switchPreset(mPreset);
+        if (mPresetObj.isCustom()) {
+            v.expandGroup(1);
+        } else {
+            v.collapseGroup(1);
+        }
+    }
+        
     /**
      * Load the location provider from the database
      */
