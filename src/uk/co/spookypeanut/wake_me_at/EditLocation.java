@@ -96,7 +96,12 @@ public class EditLocation extends ExpandableListActivity {
         "Preset",
         "Radius",
         "Units",
-        "Location provider"
+        "Location provider",
+        "Sound",
+        "Ringtone",
+        "Crescendo",
+        "Vibration",
+        "Speech"
     };
     private String[] mDescription = {
         "Tap here to activate the alarm",
@@ -104,7 +109,12 @@ public class EditLocation extends ExpandableListActivity {
         "Type of transport used",
         "Distance away to trigger alarm",
         "The units to measure distance in",
-        "The method to use to determine location"
+        "The method to use to determine location",
+        "Toggle the audible alarm",
+        "Set the ringtone for the alarm",
+        "Start the alarm quiet, and get louder",
+        "Toggle the vibration alarm",
+        "Toggle synthesized speech"
     };
 
     @Override
@@ -325,9 +335,17 @@ public class EditLocation extends ExpandableListActivity {
     private long createDefaultRow() {
         // TODO: move all strings / constants out to R
         return db.addRow (
-            "", 1000.0, 1000.0,
-            0,
-            1, (float) 1.80, "km"
+            "",              // Nickname
+            1000.0, 1000.0,  // Lat long
+            0,               // Preset
+            1,               // Location provider
+            (float) 1.80,    // Radius
+            "km",            // Unit
+            true,            // Sound
+            "none",          // Ringtone
+            false,           // Crescendo 
+            true,            // Vibration
+            true             // Speech
         );
     }
     
@@ -554,8 +572,10 @@ public class EditLocation extends ExpandableListActivity {
      * @author spookypeanut
      */
     private class LocSettingsAdapter extends BaseExpandableListAdapter {
-        int groupSize[] = {3, 3};
-        String groupName[] = {"Basic", "Advanced"};
+        // The number of items in each section of the list
+        int groupSize[] = {3, 3, 5};
+        // The names of the sections of the list
+        String groupName[] = {"Basic", "Advanced", "Alarm"};
         
         public LocSettingsAdapter(Context context) {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
