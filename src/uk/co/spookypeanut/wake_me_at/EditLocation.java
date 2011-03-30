@@ -79,13 +79,24 @@ public class EditLocation extends ExpandableListActivity {
     private Presets mPresetObj;
     private String mUnit = "";
 
+    private boolean mSound = true;
+    private String mRingtone = "";
+    private boolean mCresc = false;
+    private boolean mVibrate = true;
+    private boolean mSpeech = true;
+
     private static final int INDEX_ACTIV = 0;
     private static final int INDEX_LOC = 1;
     private static final int INDEX_PRESET = 2;
     private static final int INDEX_RADIUS = 3;
     private static final int INDEX_UNITS = 4;
     private static final int INDEX_LOCPROV = 5;
-    private static final int NUM_SETTINGS = 6;
+    private static final int INDEX_SOUND = 6;
+    private static final int INDEX_RINGTONE = 7;
+    private static final int INDEX_CRESC = 8;
+    private static final int INDEX_VIBRATE = 9;
+    private static final int INDEX_SPEECH = 10;
+    //private static final int NUM_SETTINGS = 11;
 
     private String[] mTitles = {
         "Activate alarm",
@@ -425,6 +436,14 @@ public class EditLocation extends ExpandableListActivity {
         Log.d(LOG_NAME, "loadUnit()");
         mUnit = db.getUnit(mRowId);
     }   
+
+    protected void loadAlarmSettings() {
+        Log.d(LOG_NAME, "loadAlarmSettings()");
+        mSound = db.getSound(mRowId);
+        mCresc = db.getCresc(mRowId);
+        mVibrate = db.getVibrate(mRowId);
+        mSpeech = db.getSpeech(mRowId);
+    }
     
     @Override
     protected void onActivityResult (int requestCode,
@@ -489,6 +508,7 @@ public class EditLocation extends ExpandableListActivity {
         loadRadius();
         loadLocProv();
         loadUnit();
+        loadAlarmSettings();
         updateForm();
 
         resetGroups();
@@ -628,6 +648,28 @@ public class EditLocation extends ExpandableListActivity {
                         locProv = mPresetObj.getLocProv();
                     }
                     return mContext.getResources().getStringArray(R.array.locProvHuman)[locProv];
+                case INDEX_SOUND:
+                    if (mSound) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_RINGTONE:
+                    return mRingtone;
+                case INDEX_CRESC:
+                    if (mCresc) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_VIBRATE:
+                    if (mVibrate) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_SPEECH:
+                    if (mSpeech) {
+                        return "On";
+                    }
+                    return "Off";
             }
             Log.wtf(LOG_NAME, "EditLocation.getSubtitle: Invalid position passed");
             return "crap";
