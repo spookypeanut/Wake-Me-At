@@ -199,6 +199,31 @@ public class DatabaseManager
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
+        Log.d(LOG_NAME, "getDatumS returning " + returnValue);
+        return returnValue;
+    }
+
+    public int getDatumI(long rowId, String column) {
+        Cursor cursor;
+        int returnValue = 0;
+
+        try {
+            cursor = db.query (
+                    TABLE_NAME,
+                    new String[] {column},
+                            TABLE_ROW_ID + "=" + rowId,
+                            null, null, null, null, null
+            );
+            cursor.moveToFirst();
+            returnValue = cursor.getInt(0);
+            cursor.close();
+        }
+        catch (SQLException e) 
+        {
+            Log.e("DB ERROR", e.toString());
+            e.printStackTrace();
+        }
+        Log.d(LOG_NAME, "getDatumI returning " + returnValue);
         return returnValue;
     }
 
@@ -279,7 +304,7 @@ public class DatabaseManager
     }
 
     public int getPreset(long rowId) {
-        return Integer.valueOf(getDatumS(rowId, TABLE_ROW_PRESET));
+        return getDatumI(rowId, TABLE_ROW_PRESET);
     }
     
     public void setPreset(long rowId, int preset) {
@@ -287,7 +312,7 @@ public class DatabaseManager
     }
     
     public int getProvider(long rowId) {
-        return Integer.valueOf(getDatumS(rowId, TABLE_ROW_PROV));
+        return getDatumI(rowId, TABLE_ROW_PROV);
     }
 
     public void setProvider(long rowId, int provider) {
@@ -311,7 +336,7 @@ public class DatabaseManager
     }
 
     public boolean getSound(long rowId) {
-        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_SOUND));
+        return (0 != getDatumI(rowId, TABLE_ROW_SOUND));
     }
 
     public void setSound(long rowId, boolean sound) {
@@ -319,7 +344,7 @@ public class DatabaseManager
     }
 
     public boolean getCresc(long rowId) {
-        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_CRESC));
+        return (0 != getDatumI(rowId, TABLE_ROW_CRESC));
     }
 
     public void setCresc(long rowId, boolean cresc) {
@@ -327,7 +352,7 @@ public class DatabaseManager
     }
 
     public boolean getVibrate(long rowId) {
-        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_VIBRATE));
+        return (0 != getDatumI(rowId, TABLE_ROW_VIBRATE));
     }
 
     public void setVibrate(long rowId, boolean vibrate) {
@@ -335,7 +360,7 @@ public class DatabaseManager
     }
 
     public boolean getSpeech(long rowId) {
-        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_SPEECH));
+        return (0 != getDatumI(rowId, TABLE_ROW_SPEECH));
     }
 
     public void setSpeech(long rowId, boolean speech) {
