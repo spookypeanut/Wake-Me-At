@@ -707,7 +707,6 @@ public class EditLocation extends ExpandableListActivity {
         @Override
         public View getGroupView(int groupPosition, boolean isExpanded,
                 View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "getGroupView(" + groupPosition + ", " + isExpanded + ", " + convertView + ", " + parent + ")");
             View row;
             
             if (null == convertView) {
@@ -731,10 +730,7 @@ public class EditLocation extends ExpandableListActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition,
                 boolean isLastChild, View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "getChildView(" + groupPosition + ", " + childPosition + "," + isLastChild + ", " + convertView + ", " + parent + ")");
-            // TODO Auto-generated method stub
             int position = getGlobalPosition(groupPosition, childPosition);
-            Log.d(LOG_NAME, "getView(" + position + "), mRowId: " + mRowId);
             View row;
             
             if (null == convertView) {
@@ -748,12 +744,10 @@ public class EditLocation extends ExpandableListActivity {
             if (mPresetObj.isCustom() == false) {
                 // If we're set to anything other than custom, disable the
                 // relevant lines
-                Log.d(LOG_NAME, "Preset is not custom");
                 switch (position) {
                     case INDEX_LOCPROV:
                     case INDEX_UNITS:
                     case INDEX_RADIUS:
-                        Log.d(LOG_NAME, "Disable this one (" + position + ")");
                         enabled = false;
                         break;
                 }
