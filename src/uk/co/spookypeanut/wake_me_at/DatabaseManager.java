@@ -250,6 +250,10 @@ public class DatabaseManager
         setDatumS(rowId, column, Integer.toString(value));
     }
     
+    public void setDatumB(long rowId, String column, boolean value) {
+        setDatumS(rowId, column, Boolean.toString(value));
+    }
+    
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
@@ -304,6 +308,38 @@ public class DatabaseManager
 
     public void setUnit(long rowId, String unit) {
         setDatumS(rowId, TABLE_ROW_UNIT, unit);
+    }
+
+    public boolean getSound(long rowId) {
+        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_SOUND));
+    }
+
+    public void setSound(long rowId, boolean sound) {
+        setDatumB(rowId, TABLE_ROW_SOUND, sound);
+    }
+
+    public boolean getCresc(long rowId) {
+        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_CRESC));
+    }
+
+    public void setCresc(long rowId, boolean cresc) {
+        setDatumB(rowId, TABLE_ROW_CRESC, cresc);
+    }
+
+    public boolean getVibrate(long rowId) {
+        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_VIBRATE));
+    }
+
+    public void setVibrate(long rowId, boolean vibrate) {
+        setDatumB(rowId, TABLE_ROW_VIBRATE, vibrate);
+    }
+
+    public boolean getSpeech(long rowId) {
+        return Boolean.valueOf(getDatumS(rowId, TABLE_ROW_SPEECH));
+    }
+
+    public void setSpeech(long rowId, boolean speech) {
+        setDatumB(rowId, TABLE_ROW_SPEECH, speech);
     }
 
 
