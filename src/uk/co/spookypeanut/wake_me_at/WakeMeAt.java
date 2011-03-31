@@ -9,6 +9,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
+
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
@@ -284,8 +285,8 @@ public class WakeMeAt extends ListActivity {
             tv.setText(db.getNick(id));
             
             tv = (TextView) row.findViewById(R.id.locListDesc);
-            String locProv = mContext.getResources().getStringArray(R.array.locProvHuman)[db.getProvider(id)];
-            tv.setText(locProv);
+            String preset = new Presets(mContext, db.getPreset(id)).getName();
+            tv.setText(preset);
             return row;
         }
     }
