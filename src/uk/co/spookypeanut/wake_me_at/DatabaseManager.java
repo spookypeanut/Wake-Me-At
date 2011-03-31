@@ -341,6 +341,14 @@ public class DatabaseManager
         setDatumB(rowId, TABLE_ROW_SOUND, sound);
     }
 
+    public String getRingtone(long rowId) {
+        return getDatumS(rowId, TABLE_ROW_RINGTONE);
+    }
+
+    public void setRingtone(long rowId, String ringtone) {
+        setDatumS(rowId, TABLE_ROW_UNIT, ringtone);
+    }
+
     public boolean getCresc(long rowId) {
         return (0 != getDatumI(rowId, TABLE_ROW_CRESC));
     }
