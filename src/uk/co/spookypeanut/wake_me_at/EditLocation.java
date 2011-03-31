@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ExpandableListActivity;
@@ -14,6 +15,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
+
+import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
@@ -53,6 +57,8 @@ import android.widget.TextView;
  */
 public class EditLocation extends ExpandableListActivity {
     public static final int GETLOCMAP = 1;
+    public static final int GETRINGTONE = 2;
+
     public static final String PREFS_NAME = "WakeMeAtPrefs";
 
     private String LOG_NAME;
@@ -80,7 +86,7 @@ public class EditLocation extends ExpandableListActivity {
     private String mUnit = "";
 
     private boolean mSound = true;
-    private String mRingtone = "";
+    private Uri mRingtone;
     private boolean mCresc = false;
     private boolean mVibrate = true;
     private boolean mSpeech = true;
@@ -129,7 +135,6 @@ public class EditLocation extends ExpandableListActivity {
     public boolean onChildClick(ExpandableListView l, View v, int groupPosition, int childPosition, long id) {
         Log.d(LOG_NAME, "onChildClick(" + l + ", " + v + ", " + groupPosition + ", " + childPosition + ", " + id + ")");
         int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, childPosition);
-        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         switch (position) {
             case INDEX_ACTIV:
                 if (isActive()) {
@@ -191,8 +196,30 @@ public class EditLocation extends ExpandableListActivity {
                     lpalert.show();
                 }
                 break;
+            case INDEX_SOUND:
+                toggleSound();
+                break;
+            case INDEX_RINGTONE:
+                Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
+                intent.putExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_DRM, false);
+                //intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
+                                //mContext.getString(R.string.select_audio));
+                ((Activity) mContext).startActivityForResult(intent, GETRINGTONE);
+                break;
         }
         return true;
+    }
+
+    private void toggleSound() {
+        if (true == mSound) {
+            mSound = false;
+        } else {
+            mSound = true;
+        }
+        db.setSound(mRowId, mSound);
+        updateForm();
     }
 
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
@@ -315,6 +342,13 @@ public class EditLocation extends ExpandableListActivity {
         updateForm();
         Log.d(LOG_NAME, "end changedUnit");
     }
+
+    protected void changedRingtone(Uri ringtone) {
+        Log.d(LOG_NAME, "changedRingtone");
+        mRingtone = ringtone;
+        db.setRingtone(mRowId, ringtone.toString());
+        updateForm();
+    }
     
     /**
      * Method called to change the location's nickname in the database
@@ -342,6 +376,7 @@ public class EditLocation extends ExpandableListActivity {
      */
     private long createDefaultRow() {
         // TODO: move all strings / constants out to R
+        Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
         return db.addRow (
             "",              // Nickname
             1000.0, 1000.0,  // Lat long
@@ -350,7 +385,7 @@ public class EditLocation extends ExpandableListActivity {
             (float) 1.80,    // Radius
             "km",            // Unit
             true,            // Sound
-            "none",          // Ringtone
+            temp.toString(), // Ringtone
             false,           // Crescendo 
             true,            // Vibration
             true             // Speech
@@ -440,6 +475,7 @@ public class EditLocation extends ExpandableListActivity {
     protected void loadAlarmSettings() {
         Log.d(LOG_NAME, "loadAlarmSettings()");
         mSound = db.getSound(mRowId);
+        mRingtone = Uri.parse(db.getRingtone(mRowId));
         mCresc = db.getCresc(mRowId);
         mVibrate = db.getVibrate(mRowId);
         mSpeech = db.getSpeech(mRowId);
@@ -457,6 +493,11 @@ public class EditLocation extends ExpandableListActivity {
             double latDbl = Double.valueOf(latString.trim()).doubleValue();
             double longDbl = Double.valueOf(longString.trim()).doubleValue();
             changedLatLong(latDbl, longDbl);
+        }
+        if (requestCode == GETRINGTONE && data != null) {
+            Uri uri = (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+            Log.d(LOG_NAME, "GETRINGTONE found, ringtone is " + uri.toString());
+            changedRingtone(uri);
         }
     }
 
@@ -654,7 +695,7 @@ public class EditLocation extends ExpandableListActivity {
                     }
                     return "Off";
                 case INDEX_RINGTONE:
-                    return mRingtone;
+                    return mRingtone.toString();
                 case INDEX_CRESC:
                     if (mCresc) {
                         return "On";
