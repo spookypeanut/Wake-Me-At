@@ -199,7 +199,6 @@ public class DatabaseManager
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
-        Log.d(LOG_NAME, "getDatumS returning " + returnValue);
         return returnValue;
     }
 
@@ -223,7 +222,6 @@ public class DatabaseManager
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
         }
-        Log.d(LOG_NAME, "getDatumI returning " + returnValue);
         return returnValue;
     }
 
