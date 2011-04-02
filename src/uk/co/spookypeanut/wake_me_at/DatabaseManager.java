@@ -274,7 +274,11 @@ public class DatabaseManager
     }
     
     public void setDatumB(long rowId, String column, boolean value) {
-        setDatumS(rowId, column, Boolean.toString(value));
+        if (value) {
+            setDatumS(rowId, column, "1");
+        } else {
+            setDatumS(rowId, column, "0");
+        }
     }
     
     public String getNick(long rowId) {
