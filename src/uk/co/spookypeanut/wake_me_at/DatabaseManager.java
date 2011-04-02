@@ -350,7 +350,7 @@ public class DatabaseManager
     }
 
     public void setRingtone(long rowId, String ringtone) {
-        setDatumS(rowId, TABLE_ROW_UNIT, ringtone);
+        setDatumS(rowId, TABLE_ROW_RINGTONE, ringtone);
     }
 
     public boolean getCresc(long rowId) {
