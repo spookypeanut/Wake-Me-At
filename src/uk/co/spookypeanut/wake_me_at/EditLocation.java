@@ -208,6 +208,15 @@ public class EditLocation extends ExpandableListActivity {
                                 //mContext.getString(R.string.select_audio));
                 ((Activity) mContext).startActivityForResult(intent, GETRINGTONE);
                 break;
+            case INDEX_CRESC:
+                toggleCresc();
+                break;
+            case INDEX_VIBRATE:
+                toggleVibrate();
+                break;
+            case INDEX_SPEECH:
+                toggleSpeech();
+                break;
         }
         return true;
     }
@@ -219,6 +228,36 @@ public class EditLocation extends ExpandableListActivity {
             mSound = true;
         }
         db.setSound(mRowId, mSound);
+        updateForm();
+    }
+
+    private void toggleCresc() {
+        if (true == mCresc) {
+            mCresc = false;
+        } else {
+            mCresc = true;
+        }
+        db.setCresc(mRowId, mCresc);
+        updateForm();
+    }
+
+    private void toggleVibrate() {
+        if (true == mVibrate) {
+            mVibrate = false;
+        } else {
+            mVibrate = true;
+        }
+        db.setVibrate(mRowId, mVibrate);
+        updateForm();
+    }
+
+    private void toggleSpeech() {
+        if (true == mSpeech) {
+            mSpeech = false;
+        } else {
+            mSpeech = true;
+        }
+        db.setSpeech(mRowId, mSpeech);
         updateForm();
     }
 
