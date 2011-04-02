@@ -109,6 +109,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mFinalDestination.setLongitude(db.getLongitude(mRowId));
 
         mUnit = db.getUnit(mRowId);
+        mNoiseOn = db.getSound(mRowId);
+        mVibrateOn = db.getVibrate(mRowId);
+        mSpeechOn = db.getSpeech(mRowId);
+
         
         uc = new UnitConverter(this, mUnit);
     }
@@ -189,7 +193,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean startAlarmtone() {
         Log.d(LOG_NAME, "Alarm.startAlarmtone()");
         mMediaPlayer = new MediaPlayer();
-        Uri alert = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
+        Uri alert = Uri.parse(db.getRingtone(mRowId));
         try {
             mMediaPlayer.setDataSource(this, alert);
         } catch (IllegalArgumentException e) {
