@@ -70,6 +70,7 @@ public class UnitConverter
     public UnitConverter(Context context, String unitAbbrev) {
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
 //      BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
+        Log.d(LOG_NAME, "UnitConverter constructor, " + unitAbbrev);
 
         Unit unit = getFromAbbrev(unitAbbrev);
         switchUnit(unit);
@@ -222,6 +223,7 @@ public class UnitConverter
      * @param unit The unit to switch to
      */
     public void switchUnit(Unit unit) {
+        Log.d(LOG_NAME, "Switching unit to " + unit.getName());
         mUnit = unit;
     }
     
@@ -233,6 +235,9 @@ public class UnitConverter
      * @return The value in the desired unit
      */
     public double convert(double value, Unit sourceUnit, Unit destUnit) {
+        if (destUnit == null || sourceUnit == null) {
+            Log.wtf(LOG_NAME, "The units are not valid");
+        }
         return value * sourceUnit.getValue() / destUnit.getValue();
     }
     
