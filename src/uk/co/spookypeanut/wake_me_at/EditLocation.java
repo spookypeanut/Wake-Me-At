@@ -15,6 +15,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
+import android.media.Ringtone;
 import android.media.RingtoneManager;
 
 import android.net.Uri;
@@ -734,7 +735,8 @@ public class EditLocation extends ExpandableListActivity {
                     }
                     return "Off";
                 case INDEX_RINGTONE:
-                    return mRingtone.toString();
+                    Ringtone rt = RingtoneManager.getRingtone(mContext, mRingtone);
+                    return rt.getTitle(mContext);
                 case INDEX_CRESC:
                     if (mCresc) {
                         return "On";
