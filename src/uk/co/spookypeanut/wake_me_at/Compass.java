@@ -53,10 +53,14 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private final float RADTODEGREES = (float) (180.0 / 3.14159265);
 
     private Paint mPaint = new Paint();
-    private Path mPath = new Path();
+    private Path mPointerPath = new Path();
 
     private CompassThread mThread = null;
     private Context mContext;
+
+    private final int mBkgColor = Color.YELLOW;
+    private final int mDialColor = Color.BLACK;
+    private final int mNeedleColor = Color.RED;
     
     private SensorManager mSensorManager;
     private int mLayoutWidth, mLayoutHeight;
@@ -78,7 +82,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         super(context);
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
-        prepareArrow();
     }
 
     public Compass(Context context, AttributeSet attributeSet) {
@@ -91,20 +94,42 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         SurfaceHolder holder = getHolder();
         holder.addCallback(this);
         mSensorManager = (SensorManager)context.getSystemService(Context.SENSOR_SERVICE);
-        prepareArrow();
+        preparePaths();
 
         mCurrLoc = new Location("");
         mDestLoc = new Location("");
     }
 
     
-    private void prepareArrow() {
+    private void drawDials(Canvas canvas) {
+        Paint paint = mPaint;
+        Path outer = new Path();
+        Path inner = new Path();
+        final int drawColor = mDialColor;
+        final int bkgColor = mBkgColor;
+        final int radius = 50;
+        final int lineWidth = 5;
+        final int fontSize = 35;
+
+        paint.setColor(drawColor);
+        outer.addCircle(0, 0, radius, Path.Direction.CW);
+        canvas.drawPath(outer, paint);
+        paint.setTextSize(fontSize);
+        paint.setTextAlign(Paint.Align.CENTER);
+        canvas.drawText ("N", 0, 2 * radius, paint);
+
+        paint.setColor(bkgColor);
+        inner.addCircle(0, 0, radius - lineWidth, Path.Direction.CW);
+        canvas.drawPath(inner, paint);
+    }
+
+    private void preparePaths() {
         // Construct a wedge-shaped path
-        mPath.moveTo(0, -40);
-        mPath.lineTo(-5, 40);
-        mPath.lineTo(0, 30);
-        mPath.lineTo(5, 40);
-        mPath.close();
+        mPointerPath.moveTo(0, -40);
+        mPointerPath.lineTo(-5, 40);
+        mPointerPath.lineTo(0, 30);
+        mPointerPath.lineTo(5, 40);
+        mPointerPath.close();
     }
 
     private final SensorEventListener mListener = new SensorEventListener() {
@@ -146,7 +171,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         super.onDraw(canvas);
         Paint paint = mPaint;
 
-        canvas.drawColor(Color.WHITE);
+        canvas.drawColor(mBkgColor);
 
         int cx = mLayoutWidth / 2;
         int cy = mLayoutHeight / 2;
@@ -159,19 +184,20 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             canvas.rotate(northRotation);
         }
         
-        Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.compass);
-        Bitmap scaled = Bitmap.createScaledBitmap(_scratch, 200, 200, true);
-        canvas.drawBitmap(scaled, -cx, -cy, null);
+        //Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.compass);
+        //Bitmap scaled = Bitmap.createScaledBitmap(_scratch, 200, 200, true);
+        //canvas.drawBitmap(scaled, -cx, -cy, null);
         
-        float bearing = mCurrLoc.bearingTo(mDestLoc);
-        canvas.rotate(bearing);
-
-        paint.setColor(Color.RED);
-
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
 
-        canvas.drawPath(mPath, mPaint);
+        drawDials(canvas);
+
+        float bearing = mCurrLoc.bearingTo(mDestLoc);
+        canvas.rotate(bearing);
+
+        paint.setColor(mNeedleColor);
+        canvas.drawPath(mPointerPath, mPaint);
     }
 
     @Override
