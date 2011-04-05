@@ -53,7 +53,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private final float RADTODEGREES = (float) (180.0 / 3.14159265);
 
     private Paint mPaint = new Paint();
-    private Path mPointerPath = new Path();
+    private Path mNeedlePath = new Path();
 
     private CompassThread mThread = null;
     private Context mContext;
@@ -125,11 +125,11 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     private void preparePaths() {
         // Construct a wedge-shaped path
-        mPointerPath.moveTo(0, -40);
-        mPointerPath.lineTo(-5, 40);
-        mPointerPath.lineTo(0, 30);
-        mPointerPath.lineTo(5, 40);
-        mPointerPath.close();
+        mNeedlePath.moveTo(0, -40);
+        mNeedlePath.lineTo(-5, 40);
+        mNeedlePath.lineTo(0, 30);
+        mNeedlePath.lineTo(5, 40);
+        mNeedlePath.close();
     }
 
     private final SensorEventListener mListener = new SensorEventListener() {
@@ -197,7 +197,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         canvas.rotate(bearing);
 
         paint.setColor(mNeedleColor);
-        canvas.drawPath(mPointerPath, mPaint);
+        canvas.drawPath(mNeedlePath, mPaint);
     }
 
     @Override
