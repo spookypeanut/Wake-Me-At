@@ -105,22 +105,41 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         Paint paint = mPaint;
         Path outer = new Path();
         Path inner = new Path();
+        Path northMark = new Path();
+        Path eastMark = new Path();
         final int drawColor = mDialColor;
         final int bkgColor = mBkgColor;
-        final int radius = 50;
-        final int lineWidth = 5;
+        final int radius = 80;
+        final int lineWidth = 3;
         final int fontSize = 35;
 
         paint.setColor(drawColor);
-        outer.addCircle(0, 0, radius, Path.Direction.CW);
+        outer.addCircle(0, 0, radius + lineWidth, Path.Direction.CW);
         canvas.drawPath(outer, paint);
-        paint.setTextSize(fontSize);
-        paint.setTextAlign(Paint.Align.CENTER);
-        canvas.drawText ("N", 0, 2 * radius, paint);
 
         paint.setColor(bkgColor);
         inner.addCircle(0, 0, radius - lineWidth, Path.Direction.CW);
         canvas.drawPath(inner, paint);
+
+        paint.setColor(drawColor);
+        paint.setTextSize(fontSize);
+        paint.setTextAlign(Paint.Align.CENTER);
+        // Up is negative. Which seems strange.
+        canvas.drawText ("N", (float) 0.0, (float) -1.65 * radius, paint);
+
+        northMark.moveTo((float) lineWidth, (float) (radius));
+        northMark.lineTo((float) -lineWidth, (float) (radius));
+        northMark.lineTo((float) -lineWidth, (float) (-radius * 1.2));
+        northMark.lineTo((float) lineWidth, (float) (-radius * 1.2));
+        northMark.close();
+        canvas.drawPath(northMark, paint);
+
+        eastMark.moveTo((float) (-radius), (float) lineWidth);
+        eastMark.lineTo((float) (-radius), (float) -lineWidth);
+        eastMark.lineTo((float) (radius), (float) -lineWidth);
+        eastMark.lineTo((float) (radius), (float) lineWidth);
+        eastMark.close();
+        canvas.drawPath(eastMark, paint);
     }
 
     private void preparePaths() {
@@ -176,6 +195,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         int cx = mLayoutWidth / 2;
         int cy = mLayoutHeight / 2;
         
+        canvas.setMatrix(null);
         canvas.translate(cx, cy);
         
         float northRotation = 0;
@@ -183,11 +203,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             northRotation = -mOriValues[0] * RADTODEGREES;
             canvas.rotate(northRotation);
         }
-        
-        //Bitmap _scratch = BitmapFactory.decodeResource(getResources(), R.drawable.compass);
-        //Bitmap scaled = Bitmap.createScaledBitmap(_scratch, 200, 200, true);
-        //canvas.drawBitmap(scaled, -cx, -cy, null);
-        
+
         paint.setAntiAlias(true);
         paint.setStyle(Paint.Style.FILL);
 
@@ -195,9 +211,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
         float bearing = mCurrLoc.bearingTo(mDestLoc);
         canvas.rotate(bearing);
-
         paint.setColor(mNeedleColor);
         canvas.drawPath(mNeedlePath, mPaint);
+
+        Log.d(LOG_NAME, "northRotation: " + northRotation + ", bearing: " + bearing);
     }
 
     @Override
@@ -228,9 +245,9 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         Log.d(LOG_NAME, "SurfaceView is " + mLayoutWidth + "x" + mLayoutHeight);
         
         Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
-        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_UI);
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_GAME);
+        mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_UI);
         
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         mContext.registerReceiver(this.mReceiver, filter);
