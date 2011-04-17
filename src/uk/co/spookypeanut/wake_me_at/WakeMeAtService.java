@@ -45,6 +45,10 @@ public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     private String LOG_NAME;
     private String BROADCAST_UPDATE;
+    // The minimum time (in milliseconds) before reporting the location again
+    static final long minTime = 10000;
+    // The minimum distance (in metres) before reporting the location again
+    static final float minDistance = 0;
 
 
     private static final int ALARMNOTIFY_ID = 1;
@@ -238,11 +242,11 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME,
             "Preparing to register location listener w/ TrackRecordingService...");
         try {
-          long desiredInterval = 10;
           String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-          mLocationManager.requestLocationUpdates(
-              locProvName, desiredInterval,
-              10, WakeMeAtService.this);
+          mLocationManager.requestLocationUpdates(locProvName,
+                                                  minTime,
+                                                  minDistance,
+                                                  WakeMeAtService.this);
         } catch (RuntimeException e) {
           Log.e(LOG_NAME,
               "Could not register location listener: " + e.getMessage(), e);
@@ -361,11 +365,11 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     @Override
     public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
+        Log.d(LOG_NAME, "onProviderEnabled(" + provider + ")");
     }
 
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
+        Log.d(LOG_NAME, "onStatusChanged(" + provider + ", " + status + ")");
     }
 }
