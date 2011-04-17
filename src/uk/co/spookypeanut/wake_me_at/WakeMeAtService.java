@@ -14,6 +14,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.IBinder;
+import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -50,6 +51,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
 
+    Time lastLocation = new Time();
 
     private static final int ALARMNOTIFY_ID = 1;
     
@@ -299,7 +301,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onLocationChanged(Location location) {
-        Log.v(LOG_NAME, "onLocationChanged()");
+        lastLocation.setToNow();
+        Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
         // message is, e.g. You are 200m from Welwyn North
