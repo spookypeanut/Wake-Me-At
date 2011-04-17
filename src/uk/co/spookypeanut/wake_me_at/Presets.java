@@ -18,16 +18,8 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Iterator;
-import java.util.List;
-
 import android.content.Context;
-import android.util.Log;
+//import android.util.Log;
 
 /**
  * A class to dispense preset information
@@ -36,7 +28,7 @@ import android.util.Log;
 
 public class Presets
 {
-    private String LOG_NAME;
+    //private String LOG_NAME;
 
     Context mContext;
     Preset mPreset;
@@ -54,12 +46,11 @@ public class Presets
      * @param unitAbbrev The abbreviation of the unit to initialize to
      */
     public Presets(Context context, int preset) {
-        LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
+        //LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         switchPreset(preset);
     }
 
     public void switchPreset(int preset) {
-        Log.d(LOG_NAME, "Initializing preset to " + preset);
         mPreset = mPresetArray[preset];
         mIndex = preset;
     }
