@@ -1,4 +1,22 @@
 package uk.co.spookypeanut.wake_me_at;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
+
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.app.Service;
+import android.content.Context;
+import android.content.Intent;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
+import android.os.Bundle;
+import android.os.IBinder;
+import android.util.Log;
+import android.widget.Toast;
+
 /*
 This file is part of Wake Me At. Wake Me At is the legal property
 of its developer, Henry Bush (spookypeanut).
@@ -18,22 +36,6 @@ along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
-
-import android.app.Notification;
-import android.app.NotificationManager;
-import android.app.PendingIntent;
-import android.app.Service;
-import android.content.Context;
-import android.content.Intent;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
-import android.os.Bundle;
-import android.os.IBinder;
-import android.util.Log;
-import android.widget.Toast;
 
 /**
  * The service that watches the current location, and triggers the alarm if required
@@ -184,7 +186,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         
         String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
         if (!mLocationManager.isProviderEnabled(locProvName)) {
-            //onProviderDisabled(locProvName);
             stopService();
             return START_NOT_STICKY;
 
@@ -346,8 +347,14 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onProviderDisabled(String provider) {
+        String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
+        if (provider != locProvName) {
+            Log.wtf(LOG_NAME, "Current provider (" + locProvName +
+                  ") doesn't match the listener provider (" + provider + ")");
+
+        }
         String message = String.format(getString(R.string.providerDisabledMessage),
-                provider);
+                this.getResources().getStringArray(R.array.locProvHuman)[mProvider]);
         Toast.makeText(getApplicationContext(), message,
                 Toast.LENGTH_LONG).show();
     }

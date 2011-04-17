@@ -43,7 +43,7 @@
 <string name="foreground_service_stopped">WakeMe@ alarm cancelled</string>
 <string name="serviceBroadcastName">uk.co.spookypeanut.wake_me_at.alarmupdate</string>
 
-<string name="providerDisabledMessage">The provider "%1$s" is disabled in your phone settings. Please enable it and try again.</string>
+<string name="providerDisabledMessage">The \"%1$s\" location provider is disabled in your phone settings. Please enable it and try again.</string>
 <string name="notif_full">You are %1$s away from %2$s</string>
 
 <!-- GET LOCATION MAP -->
