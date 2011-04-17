@@ -188,6 +188,9 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+        if (canvas == null) {
+            return;
+        }
         Paint paint = mPaint;
 
         canvas.drawColor(mBkgColor);
