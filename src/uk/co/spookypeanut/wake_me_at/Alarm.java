@@ -152,11 +152,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
 
         //REF#0016
-        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-                        PowerManager.ACQUIRE_CAUSES_WAKEUP, LOG_NAME);
-        wl.acquire();
-        wl.release();
+        //PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        //WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                        //PowerManager.ACQUIRE_CAUSES_WAKEUP, LOG_NAME);
+        //wl.acquire();
+        //wl.release();
 
         mAlarmSounding = true;
         if (mSpeechOn) speak();
