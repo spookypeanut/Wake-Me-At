@@ -182,6 +182,13 @@ public class WakeMeAtService extends Service implements LocationListener {
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
         
+        String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
+        if (!mLocationManager.isProviderEnabled(locProvName)) {
+            //onProviderDisabled(locProvName);
+            stopService();
+            return START_NOT_STICKY;
+
+        }
         handleCommand(intent);
         updateAlarm();
 
@@ -193,19 +200,25 @@ public class WakeMeAtService extends Service implements LocationListener {
         return START_STICKY;
     }
 
-    @Override
-    public void onDestroy() {
-        Log.d(LOG_NAME, "WakeMeAtService.onDestroy()");
+
+    private void stopService() {
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
-        Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
-                Toast.LENGTH_SHORT).show();
+
         // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
         mAlarm = false;
         mMetresAway = -1;
         updateAlarm();
+    }
+
+    @Override
+    public void onDestroy() {
+        Log.d(LOG_NAME, "WakeMeAtService.onDestroy()");
+        Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
+                Toast.LENGTH_SHORT).show();
+        stopService();
         
         db.close();
         super.onDestroy();
@@ -333,7 +346,10 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onProviderDisabled(String provider) {
-        // TODO Auto-generated method stub
+        String message = String.format(getString(R.string.providerDisabledMessage),
+                provider);
+        Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
     }
 
     @Override
