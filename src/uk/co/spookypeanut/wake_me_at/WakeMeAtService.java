@@ -13,7 +13,10 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.SystemClock;
+
 import android.text.format.Time;
 import android.util.Log;
 import android.widget.Toast;
@@ -51,6 +54,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
 
+    private Handler mHandler = new Handler();
     Time lastLocation = new Time();
 
     private static final int ALARMNOTIFY_ID = 1;
@@ -303,6 +307,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         lastLocation.setToNow();
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
+        mHandler.removeCallbacks(mUpdateTimeTask);
+        mHandler.postDelayed(mUpdateTimeTask, 13000);
+
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
         // message is, e.g. You are 200m from Welwyn North
@@ -375,4 +382,20 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
         Log.d(LOG_NAME, "onStatusChanged(" + provider + ", " + status + ")");
     }
+
+    private Runnable mUpdateTimeTask = new Runnable() {
+        public void run() {
+            Time currTime = new Time();
+            currTime.setToNow();
+            long millis = Time.compare(currTime, lastLocation);
+            int seconds = (int) (millis / 1000);
+            int minutes = seconds / 60;
+            seconds     = seconds % 60;
+
+            Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
+                            ", last: " + lastLocation.toMillis(false) +
+                            ", millis: " + millis);
+        }
+
+    };
 }
