@@ -58,7 +58,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private CompassThread mThread = null;
     private Context mContext;
 
-    private final int mBkgColor = Color.YELLOW;
+    private final int mBkgColor = Color.WHITE;
     private final int mDialColor = Color.BLACK;
     private final int mNeedleColor = Color.RED;
     
@@ -125,7 +125,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         paint.setTextSize(fontSize);
         paint.setTextAlign(Paint.Align.CENTER);
         // Up is negative. Which seems strange.
-        canvas.drawText ("N", (float) 0.0, (float) -1.65 * radius, paint);
+        canvas.drawText ("N", (float) 0.0, (float) -1.4 * radius, paint);
 
         northMark.moveTo((float) lineWidth, (float) (radius));
         northMark.lineTo((float) -lineWidth, (float) (radius));
