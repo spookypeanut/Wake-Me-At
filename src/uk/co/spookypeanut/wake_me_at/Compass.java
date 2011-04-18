@@ -216,8 +216,6 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         canvas.rotate(bearing);
         paint.setColor(mNeedleColor);
         canvas.drawPath(mNeedlePath, mPaint);
-
-        Log.d(LOG_NAME, "northRotation: " + northRotation + ", bearing: " + bearing);
     }
 
     @Override
