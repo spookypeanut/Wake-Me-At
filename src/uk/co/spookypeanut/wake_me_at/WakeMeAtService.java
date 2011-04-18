@@ -241,23 +241,23 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void registerLocationListener() {
         Log.d(LOG_NAME, "registerLocationListener()");
         if (mLocationManager == null) {
-          Log.e(LOG_NAME,
-              "TrackRecordingService: Do not have any location manager.");
-          return;
+            Log.e(LOG_NAME,
+                    "TrackRecordingService: Do not have any location manager.");
+            return;
         }
         Log.d(LOG_NAME,
-            "Preparing to register location listener w/ TrackRecordingService...");
+                "Preparing to register location listener w/ TrackRecordingService...");
         try {
-          String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-          mLocationManager.requestLocationUpdates(locProvName,
-                                                  minTime,
-                                                  minDistance,
-                                                  WakeMeAtService.this);
+            String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
+            mLocationManager.requestLocationUpdates(locProvName,
+                                                    minTime,
+                                                    minDistance,
+                                                    WakeMeAtService.this);
         } catch (RuntimeException e) {
-          Log.e(LOG_NAME,
-              "Could not register location listener: " + e.getMessage(), e);
+            Log.e(LOG_NAME,
+                    "Could not register location listener: " + e.getMessage(), e);
         }
-      }
+    }
 
     /**
      * Unregister the location listener. Called in onDestroy.
