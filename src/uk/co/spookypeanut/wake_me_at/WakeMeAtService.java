@@ -54,6 +54,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
 
+    static final long noLocationWarningTime = (long) (minTime * 3.1);
     private Handler mHandler = new Handler();
     Time lastLocation = new Time();
 
@@ -308,7 +309,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         lastLocation.setToNow();
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, 13000);
+        mHandler.postDelayed(mUpdateTimeTask, noLocationWarningTime);
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
