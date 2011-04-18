@@ -15,7 +15,6 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
-import android.os.SystemClock;
 
 import android.text.format.Time;
 import android.util.Log;
@@ -49,13 +48,15 @@ public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     private String LOG_NAME;
     private String BROADCAST_UPDATE;
+
     // The minimum time (in milliseconds) before reporting the location again
-    static final long minTime = 10000;
+    static final long SECONDS = 1000;
+    private long mMinTime;
+    private long mNoLocationWarningTime;
+    private long mWarningRepeat;
+
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
-
-    static final long noLocationWarningTime = (long) (minTime * 3);
-    static final long warningRepeat = (long) minTime;
 
     private Handler mHandler = new Handler();
     Time lastLocation = new Time();
@@ -191,6 +192,15 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         
+        if ("gps".equals(this.getResources().getStringArray(R.array.locProvAndroid)[mProvider])) {
+            mMinTime = 10 * SECONDS;
+            mNoLocationWarningTime = 30 * SECONDS;
+        } else {
+            mMinTime = 45 * SECONDS;
+            mNoLocationWarningTime = 90 * SECONDS;
+        }
+        mWarningRepeat = 10 * SECONDS;
+
         uc = new UnitConverter(this, mUnit);
 
         mLocationManager =
@@ -253,7 +263,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         try {
             String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
             mLocationManager.requestLocationUpdates(locProvName,
-                                                    minTime,
+                                                    mMinTime,
                                                     minDistance,
                                                     WakeMeAtService.this);
         } catch (RuntimeException e) {
@@ -311,7 +321,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         lastLocation.setToNow();
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, minTime);
+        mHandler.postDelayed(mUpdateTimeTask, mMinTime);
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
@@ -395,18 +405,18 @@ public class WakeMeAtService extends Service implements LocationListener {
             Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
                             ", last: " + lastLocation.toMillis(false));
             Log.d(LOG_NAME, "Diff: " + millis +
-                            " vs limit: " + noLocationWarningTime);
-            if (millis >= noLocationWarningTime) {
+                            " vs limit: " + mNoLocationWarningTime);
+            if (millis >= mNoLocationWarningTime) {
                 String msg = String.format(getString(R.string.oldLocationWarning),
                         millis / 1000);
                 Toast.makeText(getApplicationContext(), msg,
                         Toast.LENGTH_LONG).show();
                 mHandler.removeCallbacks(mUpdateTimeTask);
-                mHandler.postDelayed(mUpdateTimeTask, warningRepeat);
+                mHandler.postDelayed(mUpdateTimeTask, mWarningRepeat);
                 return;
             }
             mHandler.removeCallbacks(mUpdateTimeTask);
-            mHandler.postDelayed(mUpdateTimeTask, minTime);
+            mHandler.postDelayed(mUpdateTimeTask, mMinTime);
         }
 
     };
