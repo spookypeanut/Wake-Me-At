@@ -229,6 +229,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
+        mHandler.removeCallbacks(mUpdateTimeTask);
 
         // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
