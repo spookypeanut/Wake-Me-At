@@ -54,7 +54,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
 
-    static final long noLocationWarningTime = (long) (minTime * 3.1);
+    static final long noLocationWarningTime = (long) (minTime * 3);
+    static final long warningRepeat = (long) minTime;
+
     private Handler mHandler = new Handler();
     Time lastLocation = new Time();
 
@@ -309,7 +311,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         lastLocation.setToNow();
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, noLocationWarningTime);
+        mHandler.postDelayed(mUpdateTimeTask, minTime);
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
@@ -388,14 +390,23 @@ public class WakeMeAtService extends Service implements LocationListener {
         public void run() {
             Time currTime = new Time();
             currTime.setToNow();
-            long millis = Time.compare(currTime, lastLocation);
-            int seconds = (int) (millis / 1000);
-            int minutes = seconds / 60;
-            seconds     = seconds % 60;
+            long millis = currTime.toMillis(false) - lastLocation.toMillis(false);
 
             Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
-                            ", last: " + lastLocation.toMillis(false) +
-                            ", millis: " + millis);
+                            ", last: " + lastLocation.toMillis(false));
+            Log.d(LOG_NAME, "Diff: " + millis +
+                            " vs limit: " + noLocationWarningTime);
+            if (millis >= noLocationWarningTime) {
+                String msg = String.format(getString(R.string.oldLocationWarning),
+                        millis / 1000);
+                Toast.makeText(getApplicationContext(), msg,
+                        Toast.LENGTH_LONG).show();
+                mHandler.removeCallbacks(mUpdateTimeTask);
+                mHandler.postDelayed(mUpdateTimeTask, warningRepeat);
+                return;
+            }
+            mHandler.removeCallbacks(mUpdateTimeTask);
+            mHandler.postDelayed(mUpdateTimeTask, minTime);
         }
 
     };

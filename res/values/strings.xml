@@ -45,6 +45,7 @@
 
 <string name="providerDisabledMessage">The \"%1$s\" location provider is disabled in your phone settings. Please enable it and try again.</string>
 <string name="notif_full">You are %1$s away from %2$s</string>
+<string name="oldLocationWarning">Warning: the current location is %1$ss old</string>
 
 <!-- GET LOCATION MAP -->
  <string name="open_map_toast">Long press on the map to select a location</string>
