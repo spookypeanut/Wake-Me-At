@@ -157,17 +157,6 @@ public class WakeMeAt extends ListActivity {
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
-        Presets mine = null;
-        for (int i=0; i<4; i++) {
-            mine = new Presets(this, i);
-            Log.d(LOG_NAME, "Name array: " + Arrays.toString(mine.getAllNames()));
-            Log.d(LOG_NAME, "Preset name: " + mine.getName());
-            Log.d(LOG_NAME, "Preset radius: " + mine.getRadius());
-            Log.d(LOG_NAME, "Preset unit: " + mine.getUnit());
-            Log.d(LOG_NAME, "Preset locprov: " + mine.getLocProv());
-            Log.d(LOG_NAME, "Which corresponds to " + this.getResources().getStringArray(R.array.locProvHuman)[mine.getLocProv()]);
-        }
-
         mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
@@ -184,7 +173,6 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
-        db.logOutArray();
         Log.d(LOG_NAME, "End onCreate()");
     }
     
