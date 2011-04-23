@@ -412,8 +412,8 @@ public class WakeMeAtService extends Service implements LocationListener {
                         millis / 1000);
                 Toast.makeText(getApplicationContext(), msg,
                         Toast.LENGTH_LONG).show();
-                mHandler.removeCallbacks(mUpdateTimeTask);
-                mHandler.postDelayed(mUpdateTimeTask, mWarningRepeat);
+                mHandler.removeCallbacks(mCheckLocationAge);
+                mHandler.postDelayed(mCheckLocationAge, mWarningRepeat);
                 return;
             }
             mHandler.removeCallbacks(mCheckLocationAge);
