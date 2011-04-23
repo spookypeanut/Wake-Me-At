@@ -40,7 +40,7 @@ import android.widget.TextView;
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Wake Me At, in the file "COPYING".  If not, see 
+    along with Wake Me At, in the file "COPYING".  If not, see
     <http://www.gnu.org/licenses/>.
  */
 
@@ -51,7 +51,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private String BROADCAST_UPDATE;
     private final int TTS_REQUEST_CODE = 27;
     private final String POST_UTTERANCE = "WMAPostUtterance";
-    
+
     private DatabaseManager db;
     private UnitConverter uc;
     private MediaPlayer mMediaPlayer;
@@ -63,15 +63,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
     private boolean mSpeechOn = false;
-    
+
     private long mRowId;
     private Location mFinalDestination = new Location("");
     private String mNick;
     private String mUnit;
     private boolean mAlarmSounding;
-    
+
     private double mMetresAway;
-    
+
     @Override
     protected void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
@@ -87,25 +87,25 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Intent checkIntent = new Intent();
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, TTS_REQUEST_CODE);
-        
+
         setContentView(R.layout.alarm);
-        
+
         Button button = (Button)findViewById(R.id.alarmButtonStop);
         button.setOnClickListener(mStopService);
-        
+
         button = (Button)findViewById(R.id.alarmButtonEdit);
         button.setOnClickListener(mEditLocation);
-        
+
         button = (Button)findViewById(R.id.alarmButtonMain);
         button.setOnClickListener(mMainWindow);
 
         onNewIntent(this.getIntent());
     }
-    
+
     private void rowChanged(long rowId) {
         Log.v(LOG_NAME, "Alarm.rowChanged(" + rowId + ")");
         db.logOutArray();
-        // TODO: Some issue here: it seems to not be changing the rowid when activating a second alarm  
+        // TODO: Some issue here: it seems to not be changing the rowid when activating a second alarm
         mRowId = rowId;
         mNick = db.getNick(mRowId);
         mFinalDestination.setLatitude(db.getLatitude(mRowId));
@@ -116,10 +116,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mVibrateOn = db.getVibrate(mRowId);
         mSpeechOn = db.getSpeech(mRowId);
 
-        
+
         uc = new UnitConverter(this, mUnit);
     }
-    
+
     private void distanceChanged(double distance) {
         Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
@@ -127,7 +127,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         updateText();
         if (mAlarmSounding && mSpeechOn) speak();
     }
-    
+
     private void updateText() {
         Time currTime = new Time();
         currTime.setToNow();
@@ -168,7 +168,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
         }
     }
-    
+
     private void startAlarm() {
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
 
@@ -188,7 +188,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             }
         }
     }
-    
+
     private void stopAlarm() {
         if (mMediaPlayer != null) {
             try {
@@ -210,7 +210,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             mTts.stop();
         }
     }
-    
+
     private boolean startAlarmtone() {
         Log.d(LOG_NAME, "Alarm.startAlarmtone()");
         mMediaPlayer = new MediaPlayer();
@@ -253,12 +253,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
         return true;
     }
-    
+
     @Override
     protected void onNewIntent(Intent intent) {
         Log.v(LOG_NAME, "Alarm.onNewIntent(" + intent.toString());
         Bundle extras = intent.getExtras();
-        
+
         rowChanged(extras.getLong("rowId"));
         distanceChanged(extras.getDouble("metresAway"));
         if (extras.getBoolean("alarm") == true) {
@@ -266,7 +266,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
     }
     @Override
-    protected void onResume() { 
+    protected void onResume() {
         super.onResume();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
@@ -274,7 +274,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             startAlarm();
         }
     }
-    
+
     @Override
     protected void onPause() {
         this.unregisterReceiver(this.mReceiver);
@@ -318,15 +318,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             Log.d(LOG_NAME, "end of onActivityResult");
         }
     }
-    
+
     @Override
     public void onUtteranceCompleted(String uttId) {
         Log.d(LOG_NAME, "finished speaking");
         if (uttId == POST_UTTERANCE) {
             Log.d(LOG_NAME, "finished speaking");
-        } 
+        }
     }
-    
+
     @Override
     public void onInit(int status) {
         // REF#0003
@@ -346,14 +346,14 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mHandler.removeCallbacks(mCheckLocationAge);
         super.onDestroy();
     }
-    
+
     private void stopService() {
         Log.d(LOG_NAME, "Alarm.stopService()");
         mAlarmSounding = false;
         stopAlarm();
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
-    
+
     private OnClickListener mEditLocation = new Button.OnClickListener() {
         public void onClick(View v) {
             if (mAlarmSounding) {
@@ -365,14 +365,14 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             finish();
         }
     };
-    
+
     private OnClickListener mStopService = new Button.OnClickListener() {
         public void onClick(View v) {
             stopService();
             finish();
         }
     };
-    
+
     private OnClickListener mMainWindow = new Button.OnClickListener() {
         public void onClick(View v) {
             if (mAlarmSounding) {
@@ -383,7 +383,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             finish();
         }
     };
-    
+
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
