@@ -67,7 +67,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private String mUnit;
     private boolean mAlarmSounding;
     
-    private long mLocationAge;
     private double mMetresAway;
     
     @Override
@@ -118,18 +117,16 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         uc = new UnitConverter(this, mUnit);
     }
     
-    private void distanceChanged(double distance, long locAge) {
-        Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ", "
-                                                 + locAge + ")");
+    private void distanceChanged(double distance) {
+        Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
-        mLocationAge = locAge;
         TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
         String message;
         if (mMetresAway < 0) {
             message = (String) getText(R.string.alarmAwaitingFix);
         } else {
             message = String.format(getString(R.string.alarmMessage),
-                    uc.out(mMetresAway), mNick, locAge);
+                    uc.out(mMetresAway), mNick);
         }
         Log.v(LOG_NAME, message);
         tv.setText(message);
@@ -242,8 +239,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Bundle extras = intent.getExtras();
         
         rowChanged(extras.getLong("rowId"));
-        distanceChanged(extras.getDouble("metresAway"),
-                        extras.getLong("locAge"));
+        distanceChanged(extras.getDouble("metresAway"));
         if (extras.getBoolean("alarm") == true) {
             startAlarm();
         }
@@ -371,8 +367,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
-            distanceChanged(extras.getDouble("metresAway"),
-                            extras.getLong("locAge"));
+            distanceChanged(extras.getDouble("metresAway"));
             if (extras.getBoolean("alarm") == true) {
                 startAlarm();
             }
