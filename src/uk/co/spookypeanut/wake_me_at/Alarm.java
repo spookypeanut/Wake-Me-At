@@ -65,6 +65,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean mNoiseOn = true;
     private boolean mSpeechOn = false;
 
+    private float mCrescVolume = (float) 0.1;
     private long mRowId;
     private Location mFinalDestination = new Location("");
     private String mNick;
@@ -152,6 +153,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         public void run() {
             Log.d(LOG_NAME, "Run every second");
             updateText();
+            if (mMediaPlayer != null && db.getCresc(mRowId) && mCrescVolume < 1) {
+                mCrescVolume += .1;
+                Log.d(LOG_NAME, "Cresc volume: " + mCrescVolume);
+                mMediaPlayer.setVolume(mCrescVolume, mCrescVolume);
+            }
             mHandler.removeCallbacks(mRunEverySecond);
             mHandler.postDelayed(mRunEverySecond, 1000);
         }
@@ -234,7 +240,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
         // TODO Something tells me there's a simpler way to set off alarms...
         final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        int alarmVolume = audioManager.getStreamVolume(AudioManager.STREAM_ALARM);
+        float alarmVolume;
+        if (db.getCresc(mRowId)) {
+            alarmVolume = mCrescVolume;
+        } else {
+            alarmVolume = (float) 1.0;
+        }
         if (alarmVolume != 0) {
                     mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
                     mMediaPlayer.setVolume(alarmVolume, alarmVolume);
