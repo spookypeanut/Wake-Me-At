@@ -348,6 +348,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mAlarmIntent.putExtra("alarm", mAlarm);
         mAlarmIntent.putExtra("currLat", mCurrLocation.getLatitude());
         mAlarmIntent.putExtra("currLong", mCurrLocation.getLongitude());
+        mAlarmIntent.putExtra("locTime", lastLocation.toMillis(true));
         Log.d(LOG_NAME, "Sending broadcast");
         sendStickyBroadcast(mAlarmIntent);
     }

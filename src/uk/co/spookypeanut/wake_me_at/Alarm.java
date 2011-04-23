@@ -58,7 +58,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private Vibrator mVibrator;
     private TextToSpeech mTts;
     private Handler mHandler = new Handler();
-    private Time mLastLocation = new Time();
+    // In milliseconds
+    private long mLastLocTime;
 
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
@@ -120,10 +121,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         uc = new UnitConverter(this, mUnit);
     }
 
-    private void distanceChanged(double distance) {
+    private void distanceChanged(double distance, long locTime) {
         Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
-        mLastLocation.setToNow();
+        mLastLocTime = locTime;
         updateText();
         if (mAlarmSounding && mSpeechOn) speak();
     }
@@ -131,7 +132,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void updateText() {
         Time currTime = new Time();
         currTime.setToNow();
-        long locAge = (currTime.toMillis(true) - mLastLocation.toMillis(true)) / 1000;
+        long locAge = (currTime.toMillis(true) - mLastLocTime) / 1000;
 
         TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
         String message;
@@ -260,7 +261,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Bundle extras = intent.getExtras();
 
         rowChanged(extras.getLong("rowId"));
-        distanceChanged(extras.getDouble("metresAway"));
+        distanceChanged(extras.getDouble("metresAway"),
+                        extras.getLong("locTime"));
         if (extras.getBoolean("alarm") == true) {
             startAlarm();
         }
@@ -389,7 +391,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
             Bundle extras = intent.getExtras();
-            distanceChanged(extras.getDouble("metresAway"));
+            distanceChanged(extras.getDouble("metresAway"),
+                            extras.getLong("locTime"));
             if (extras.getBoolean("alarm") == true) {
                 startAlarm();
             }
