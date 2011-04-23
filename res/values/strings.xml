@@ -73,7 +73,7 @@
 <string name="alarmButtonSnooze">Snooze (30s)</string>
 <string name="alarmButtonEdit">Edit Location</string>
 <string name="alarmSpeech">You are %1$s from %2$s</string>
-<string name="alarmMessage">You are %1$s from %2$s (Location is %3$sms old)</string>
+<string name="alarmMessage">You are %1$s from %2$s (Location is %3$ss old)</string>
 <string name="alarmAwaitingFix">Awaiting first location fix...</string>
 
 

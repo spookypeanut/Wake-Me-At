@@ -1,4 +1,30 @@
 package uk.co.spookypeanut.wake_me_at;
+
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Locale;
+
+import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
+import android.location.Location;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Bundle;
+import android.os.Handler;
+import android.os.Vibrator;
+import android.speech.tts.TextToSpeech;
+import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
+import android.text.format.Time;
+import android.util.Log;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.TextView;
+
 /*
     This file is part of Wake Me At. Wake Me At is the legal property
     of its developer, Henry Bush (spookypeanut).
@@ -18,31 +44,6 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 
-import java.io.IOException;
-import java.util.HashMap;
-import java.util.Locale;
-
-import android.app.Activity;
-import android.content.BroadcastReceiver;
-import android.content.Context;
-import android.content.Intent;
-import android.content.IntentFilter;
-import android.location.Location;
-import android.media.AudioManager;
-import android.media.MediaPlayer;
-import android.media.RingtoneManager;
-import android.net.Uri;
-import android.os.Bundle;
-import android.os.PowerManager;
-import android.os.Vibrator;
-import android.os.PowerManager.WakeLock;
-import android.speech.tts.TextToSpeech;
-import android.speech.tts.TextToSpeech.OnUtteranceCompletedListener;
-import android.util.Log;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
-import android.widget.TextView;
 
 public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUtteranceCompletedListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
@@ -56,6 +57,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private MediaPlayer mMediaPlayer;
     private Vibrator mVibrator;
     private TextToSpeech mTts;
+    private Handler mHandler = new Handler();
+    private Time mLastLocation = new Time();
 
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
@@ -120,20 +123,38 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void distanceChanged(double distance) {
         Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
+        mLastLocation.setToNow();
+        updateText();
+        if (mAlarmSounding && mSpeechOn) speak();
+    }
+    
+    private void updateText() {
+        Time currTime = new Time();
+        currTime.setToNow();
+        long locAge = (currTime.toMillis(true) - mLastLocation.toMillis(true)) / 1000;
+
         TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
         String message;
         if (mMetresAway < 0) {
             message = (String) getText(R.string.alarmAwaitingFix);
         } else {
             message = String.format(getString(R.string.alarmMessage),
-                    uc.out(mMetresAway), mNick);
+                    uc.out(mMetresAway), mNick, locAge);
         }
         Log.v(LOG_NAME, message);
         tv.setText(message);
-        if (mAlarmSounding && mSpeechOn) speak();
-
+        mHandler.removeCallbacks(mCheckLocationAge);
+        mHandler.postDelayed(mCheckLocationAge, 1000);
     }
-    
+
+    private Runnable mCheckLocationAge = new Runnable() {
+        public void run() {
+            updateText();
+            mHandler.removeCallbacks(mCheckLocationAge);
+            mHandler.postDelayed(mCheckLocationAge, 1000);
+        }
+    };
+
     private void speak() {
         if (mTts != null) {
             HashMap<String, String> myHashAlarm = new HashMap<String, String>();
@@ -322,6 +343,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
       if (mTts != null) {
           mTts.shutdown();
       }
+        mHandler.removeCallbacks(mCheckLocationAge);
       super.onDestroy();
     }
     
