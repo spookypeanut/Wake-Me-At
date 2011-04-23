@@ -144,15 +144,16 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
         Log.v(LOG_NAME, message);
         tv.setText(message);
-        mHandler.removeCallbacks(mCheckLocationAge);
-        mHandler.postDelayed(mCheckLocationAge, 1000);
+        mHandler.removeCallbacks(mRunEverySecond);
+        mHandler.postDelayed(mRunEverySecond, 1000);
     }
 
-    private Runnable mCheckLocationAge = new Runnable() {
+    private Runnable mRunEverySecond = new Runnable() {
         public void run() {
+            Log.d(LOG_NAME, "Run every second");
             updateText();
-            mHandler.removeCallbacks(mCheckLocationAge);
-            mHandler.postDelayed(mCheckLocationAge, 1000);
+            mHandler.removeCallbacks(mRunEverySecond);
+            mHandler.postDelayed(mRunEverySecond, 1000);
         }
     };
 
@@ -345,7 +346,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (mTts != null) {
             mTts.shutdown();
         }
-        mHandler.removeCallbacks(mCheckLocationAge);
+        mHandler.removeCallbacks(mRunEverySecond);
         super.onDestroy();
     }
 
@@ -353,6 +354,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.d(LOG_NAME, "Alarm.stopService()");
         mAlarmSounding = false;
         stopAlarm();
+        mHandler.removeCallbacks(mRunEverySecond);
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
 
