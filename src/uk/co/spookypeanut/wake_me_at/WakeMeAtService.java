@@ -55,6 +55,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     private long mNoLocationWarningTime;
     private long mWarningRepeat;
 
+    private long mLocationAge = 0;
+
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
 
@@ -323,6 +325,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mCheckLocationAge);
         mHandler.postDelayed(mCheckLocationAge, mMinTime);
+        mLocationAge = 0;
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
@@ -348,12 +351,14 @@ public class WakeMeAtService extends Service implements LocationListener {
         mAlarmIntent.putExtra("alarm", mAlarm);
         mAlarmIntent.putExtra("currLat", mCurrLocation.getLatitude());
         mAlarmIntent.putExtra("currLong", mCurrLocation.getLongitude());
+        mAlarmIntent.putExtra("locAge", mLocationAge);
         Log.d(LOG_NAME, "Sending broadcast");
         sendStickyBroadcast(mAlarmIntent);
     }
     
     public void cancelAlarm() {
         Log.d(LOG_NAME, "WakeMeAtService.cancelAlarm");
+
         mAlarm = false;
         Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -401,21 +406,23 @@ public class WakeMeAtService extends Service implements LocationListener {
         public void run() {
             Time currTime = new Time();
             currTime.setToNow();
-            long millis = currTime.toMillis(false) - lastLocation.toMillis(false);
+            mLocationAge = currTime.toMillis(false) - lastLocation.toMillis(false);
+
 
             Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
                             ", last: " + lastLocation.toMillis(false));
-            Log.d(LOG_NAME, "Diff: " + millis +
+            Log.d(LOG_NAME, "Diff: " + mLocationAge +
                             " vs limit: " + mNoLocationWarningTime);
-            if (millis >= mNoLocationWarningTime) {
+            if (mLocationAge >= mNoLocationWarningTime) {
                 String msg = String.format(getString(R.string.oldLocationWarning),
-                        millis / 1000);
+                        mLocationAge / 1000);
                 Toast.makeText(getApplicationContext(), msg,
                         Toast.LENGTH_LONG).show();
-                mHandler.removeCallbacks(mUpdateTimeTask);
-                mHandler.postDelayed(mUpdateTimeTask, mWarningRepeat);
+                mHandler.removeCallbacks(mCheckLocationAge);
+                mHandler.postDelayed(mCheckLocationAge, mWarningRepeat);
                 return;
             }
+            updateAlarm();
             mHandler.removeCallbacks(mCheckLocationAge);
             mHandler.postDelayed(mCheckLocationAge, mMinTime);
         }
