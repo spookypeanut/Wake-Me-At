@@ -118,7 +118,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mVibrateOn = db.getVibrate(mRowId);
         mSpeechOn = db.getSpeech(mRowId);
 
-
         uc = new UnitConverter(this, mUnit);
     }
 
@@ -146,6 +145,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.v(LOG_NAME, message);
         tv.setText(message);
         mHandler.removeCallbacks(mRunEverySecond);
+        Log.d(LOG_NAME, "updateText: adding mRunEverySecond");
         mHandler.postDelayed(mRunEverySecond, 1000);
     }
 
@@ -159,7 +159,10 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 mMediaPlayer.setVolume(mCrescVolume, mCrescVolume);
             }
             mHandler.removeCallbacks(mRunEverySecond);
-            mHandler.postDelayed(mRunEverySecond, 1000);
+            if (mAlarmSounding) {
+                Log.d(LOG_NAME, "mAlarmSounding is true");
+                mHandler.postDelayed(mRunEverySecond, 1000);
+            }
         }
     };
 
@@ -198,6 +201,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
 
     private void stopAlarm() {
+        Log.d(LOG_NAME, "Alarm.stopAlarm()");
         if (mMediaPlayer != null) {
             try {
                 Log.d(LOG_NAME, "Stopping media player");
@@ -281,6 +285,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     @Override
     protected void onResume() {
+        Log.d(LOG_NAME, "Alarm.onResume");
         super.onResume();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
@@ -291,6 +296,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onPause() {
+        Log.d(LOG_NAME, "Alarm.onPause()");
         this.unregisterReceiver(this.mReceiver);
         stopAlarm();
         super.onPause();
@@ -353,10 +359,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onDestroy() {
+        Log.d(LOG_NAME, "Alarm.onDestroy");
         db.close();
         if (mTts != null) {
             mTts.shutdown();
         }
+        Log.d(LOG_NAME, "onDestroy: removing mRunEverySecond");
         mHandler.removeCallbacks(mRunEverySecond);
         super.onDestroy();
     }
@@ -365,7 +373,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.d(LOG_NAME, "Alarm.stopService()");
         mAlarmSounding = false;
         stopAlarm();
-        mHandler.removeCallbacks(mRunEverySecond);
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
     }
 
