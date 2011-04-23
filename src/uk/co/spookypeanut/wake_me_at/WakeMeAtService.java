@@ -409,10 +409,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             Log.d(LOG_NAME, "Diff: " + millis +
                             " vs limit: " + mNoLocationWarningTime);
             if (millis >= mNoLocationWarningTime) {
-                String msg = String.format(getString(R.string.oldLocationWarning),
-                        millis / 1000);
-                Toast.makeText(getApplicationContext(), msg,
-                        Toast.LENGTH_LONG).show();
+                oldLocationWarning(millis / 1000);
                 mHandler.removeCallbacks(mCheckLocationAge);
                 mHandler.postDelayed(mCheckLocationAge, mWarningRepeat);
                 return;
@@ -422,4 +419,22 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
 
     };
+
+    private void oldLocationWarning(long age) {
+        String msg = String.format(getString(R.string.oldLocationWarning), age);
+        Toast.makeText(getApplicationContext(), msg,
+                Toast.LENGTH_LONG).show();
+
+        Context context = getApplicationContext();
+        CharSequence contentTitle = "Old location";
+        CharSequence contentText = msg;
+
+        Intent notificationIntent = new Intent(this, EditLocation.class);
+        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        mNotification.defaults |= Notification.DEFAULT_SOUND;
+        mNotification.defaults |= Notification.DEFAULT_VIBRATE;
+
+        mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+        mNM.notify(ALARMNOTIFY_ID, mNotification);
+    }
 }
