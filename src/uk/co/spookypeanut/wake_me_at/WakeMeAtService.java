@@ -229,7 +229,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
-        mHandler.removeCallbacks(mUpdateTimeTask);
+        mHandler.removeCallbacks(mCheckLocationAge);
 
         // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
@@ -321,8 +321,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onLocationChanged(Location location) {
         lastLocation.setToNow();
         Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
-        mHandler.removeCallbacks(mUpdateTimeTask);
-        mHandler.postDelayed(mUpdateTimeTask, mMinTime);
+        mHandler.removeCallbacks(mCheckLocationAge);
+        mHandler.postDelayed(mCheckLocationAge, mMinTime);
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
@@ -397,7 +397,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "onStatusChanged(" + provider + ", " + status + ")");
     }
 
-    private Runnable mUpdateTimeTask = new Runnable() {
+    private Runnable mCheckLocationAge = new Runnable() {
         public void run() {
             Time currTime = new Time();
             currTime.setToNow();
@@ -416,8 +416,8 @@ public class WakeMeAtService extends Service implements LocationListener {
                 mHandler.postDelayed(mUpdateTimeTask, mWarningRepeat);
                 return;
             }
-            mHandler.removeCallbacks(mUpdateTimeTask);
-            mHandler.postDelayed(mUpdateTimeTask, mMinTime);
+            mHandler.removeCallbacks(mCheckLocationAge);
+            mHandler.postDelayed(mCheckLocationAge, mMinTime);
         }
 
     };
