@@ -336,15 +336,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         }
         if (mAlarmSounding) startAlarm();
     }
-    
+
     @Override
     protected void onDestroy() {
-      db.close();
-      if (mTts != null) {
-          mTts.shutdown();
-      }
+        db.close();
+        if (mTts != null) {
+            mTts.shutdown();
+        }
         mHandler.removeCallbacks(mCheckLocationAge);
-      super.onDestroy();
+        super.onDestroy();
     }
     
     private void stopService() {
