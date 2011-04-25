@@ -233,6 +233,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         mHandler.removeCallbacks(mCheckLocationAge);
 
+        serviceRunning = false;
+
         // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
         mAlarm = false;
