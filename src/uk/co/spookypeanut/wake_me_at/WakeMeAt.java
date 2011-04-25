@@ -1,7 +1,5 @@
 package uk.co.spookypeanut.wake_me_at;
 
-import java.util.Arrays;
-
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -309,9 +307,13 @@ public class WakeMeAt extends ListActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "Received broadcast");
-            Bundle extras = intent.getExtras();
-            if (mRowId != extras.getLong("rowId")) {
-                rowChanged(extras.getLong("rowId"));
+            if (WakeMeAtService.serviceRunning) {
+                Bundle extras = intent.getExtras();
+                if (mRowId != extras.getLong("rowId")) {
+                    rowChanged(extras.getLong("rowId"));
+                }
+            } else {
+                Log.d(LOG_NAME, "Service is not running");
             }
         }
    };

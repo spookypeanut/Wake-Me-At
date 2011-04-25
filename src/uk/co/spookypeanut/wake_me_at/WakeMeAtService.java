@@ -48,6 +48,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     static final String ACTION_FOREGROUND = "uk.co.spookypeanut.wake_me_at.service";
     private String LOG_NAME;
     private String BROADCAST_UPDATE;
+    public static boolean serviceRunning = false;
 
     // The minimum time (in milliseconds) before reporting the location again
     static final long SECONDS = 1000;
@@ -151,6 +152,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
+        serviceRunning = true;
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
@@ -246,6 +248,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         stopService();
         
         db.close();
+        if (mAlarmIntent != null && mAlarmIntent.getClass() != null) {
+            removeStickyBroadcast(mAlarmIntent);
+        }
         super.onDestroy();
     }
 
