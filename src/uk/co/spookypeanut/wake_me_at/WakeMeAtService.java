@@ -152,7 +152,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
-        serviceRunning = true;
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
@@ -309,6 +308,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             i.putExtra("metresAway", mMetresAway);
             i.putExtra("alarm", mAlarm);
             
+            serviceRunning = true;
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
