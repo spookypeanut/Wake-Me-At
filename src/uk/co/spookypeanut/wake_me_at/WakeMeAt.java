@@ -9,6 +9,9 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.graphics.Color;
 import android.media.AudioManager;
+import android.media.RingtoneManager;
+
+import android.net.Uri;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -187,6 +190,28 @@ public class WakeMeAt extends ListActivity {
     }
     
     /**
+     * Create a new row in the database with default values
+     * @return The id of the new row
+     */
+    private long createDefaultRow() {
+        // TODO: move all strings / constants out to R
+        Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
+        return db.addRow (
+            "",              // Nickname
+            1000.0, 1000.0,  // Lat long
+            0,               // Preset
+            1,               // Location provider
+            (float) 1.80,    // Radius
+            "km",            // Unit
+            true,            // Sound
+            temp.toString(), // Ringtone
+            false,           // Crescendo 
+            true,            // Vibration
+            true             // Speech
+        );
+    }
+    
+    /**
      * Class for the location list on the main activity
      * @author spookypeanut
      */
@@ -220,8 +245,9 @@ public class WakeMeAt extends ListActivity {
          * Create a new location in the database, and edit it
          */
         public void addItem() {
+            long rowId = createDefaultRow();
             Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
-            i.putExtra("rowId", (long) -1);
+            i.putExtra("rowId", rowId);
             startActivity(i);
         }
         

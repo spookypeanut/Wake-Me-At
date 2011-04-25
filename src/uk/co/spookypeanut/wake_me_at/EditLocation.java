@@ -13,7 +13,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.Ringtone;
 import android.media.RingtoneManager;
@@ -411,28 +410,6 @@ public class EditLocation extends ExpandableListActivity {
     }
     
     /**
-     * Create a new row in the database with default values
-     * @return The id of the new row
-     */
-    private long createDefaultRow() {
-        // TODO: move all strings / constants out to R
-        Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
-        return db.addRow (
-            "",              // Nickname
-            1000.0, 1000.0,  // Lat long
-            0,               // Preset
-            1,               // Location provider
-            (float) 1.80,    // Radius
-            "km",            // Unit
-            true,            // Sound
-            temp.toString(), // Ringtone
-            false,           // Crescendo 
-            true,            // Vibration
-            true             // Speech
-        );
-    }
-    
-    /**
      * Load the latitude and longitude from the database
      */
     protected void loadLatLong() {
@@ -554,20 +531,13 @@ public class EditLocation extends ExpandableListActivity {
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mPresetObj = new Presets(mContext, 0);
 
-        SharedPreferences settings = getSharedPreferences(PREFS_NAME, 0);
         db = new DatabaseManager(this);
         
         Bundle extras = this.getIntent().getExtras();
+        Log.d(LOG_NAME, "mRowId = " + mRowId);
         mRowId = extras.getLong("rowId");
         
         Log.d(LOG_NAME, "Row detected: " + mRowId);
-        if (mRowId == -1) {
-            mRowId = createDefaultRow();
-            Log.d(LOG_NAME, "Row created");
-            SharedPreferences.Editor editor = settings.edit();
-            editor.putLong("currRowId", mRowId);
-            editor.commit();
-        }
 
         setContentView(R.layout.edit_location);
 
@@ -885,7 +855,6 @@ public class EditLocation extends ExpandableListActivity {
             tv.setEnabled(enabled);
             return row;
         }
-
 
         /* (non-Javadoc)
          * @see android.widget.ExpandableListAdapter#isChildSelectable(int, int)
