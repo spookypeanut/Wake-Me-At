@@ -214,7 +214,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             return START_NOT_STICKY;
 
         }
-        handleCommand(intent);
+        createNotification(intent);
         updateAlarm();
 
         Toast.makeText(getApplicationContext(), R.string.foreground_service_started,
@@ -293,7 +293,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             "Location listener is unregistered");
     }
  
-    void handleCommand(Intent intent) {
+    void createNotification(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // In this sample, we'll use the same text for the ticker and the expanded notification
             CharSequence text = getText(R.string.foreground_service_started);
