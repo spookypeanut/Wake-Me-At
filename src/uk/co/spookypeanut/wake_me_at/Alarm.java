@@ -159,8 +159,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 mMediaPlayer.setVolume(mCrescVolume, mCrescVolume);
             }
             mHandler.removeCallbacks(mRunEverySecond);
-            if (mAlarmSounding) {
-                Log.d(LOG_NAME, "mAlarmSounding is true");
+            if (WakeMeAtService.serviceRunning) {
+                Log.d(LOG_NAME, "Service is running");
                 mHandler.postDelayed(mRunEverySecond, 1000);
             }
         }
