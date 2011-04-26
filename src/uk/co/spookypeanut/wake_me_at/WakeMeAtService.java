@@ -295,7 +295,7 @@ public class WakeMeAtService extends Service implements LocationListener {
  
     void createNotification(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
-            // In this sample, we'll use the same text for the ticker and the expanded notification
+            // The text to use as the title of our notification
             CharSequence text = getText(R.string.foreground_service_started);
 
             // Set the icon, scrolling text and timestamp
