@@ -215,6 +215,8 @@ public class WakeMeAtService extends Service implements LocationListener {
 
         }
         createNotification(intent);
+
+        serviceRunning = true;
         updateAlarm();
 
         Toast.makeText(getApplicationContext(), R.string.foreground_service_started,
@@ -232,8 +234,6 @@ public class WakeMeAtService extends Service implements LocationListener {
         unregisterLocationListener();
         mHandler.removeCallbacks(mCheckLocationAge);
 
-        serviceRunning = false;
-
         // Set everything back to default values, and tell the alarm activity
         mRowId = -1;
         mAlarm = false;
@@ -247,7 +247,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
                 Toast.LENGTH_SHORT).show();
         stopService();
-        
+
+        serviceRunning = false;
         db.close();
         if (mAlarmIntent != null && mAlarmIntent.getClass() != null) {
             removeStickyBroadcast(mAlarmIntent);
@@ -308,7 +309,6 @@ public class WakeMeAtService extends Service implements LocationListener {
             i.putExtra("metresAway", mMetresAway);
             i.putExtra("alarm", mAlarm);
             
-            serviceRunning = true;
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
