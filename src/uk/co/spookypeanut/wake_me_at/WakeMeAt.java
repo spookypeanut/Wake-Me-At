@@ -306,14 +306,12 @@ public class WakeMeAt extends ListActivity {
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LOG_NAME, "Received broadcast");
+            Log.d(LOG_NAME, "WakeMeAt.onReceive");
             if (WakeMeAtService.serviceRunning) {
                 Bundle extras = intent.getExtras();
                 if (mRowId != extras.getLong("rowId")) {
                     rowChanged(extras.getLong("rowId"));
                 }
-            } else {
-                Log.d(LOG_NAME, "Service is not running");
             }
         }
    };

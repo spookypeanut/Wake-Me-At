@@ -409,7 +409,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LOG_NAME, "Received broadcast");
+            Log.d(LOG_NAME, "Alarm.onReceive");
             Bundle extras = intent.getExtras();
             distanceChanged(extras.getDouble("metresAway"),
                             extras.getLong("locTime"));
