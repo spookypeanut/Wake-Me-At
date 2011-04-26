@@ -99,7 +99,7 @@ public class WakeMeAt extends ListActivity {
       long id = myInfo.id;
       menu.setHeaderTitle(db.getNick(id));
       MenuInflater inflater = getMenuInflater();
-      if (id == mRowId) {
+      if (WakeMeAtService.serviceRunning && (id == mRowId)) {
           inflater.inflate(R.menu.mn_context_running_wake_me_at, menu);
       } else {
           inflater.inflate(R.menu.mn_context_wake_me_at, menu);
@@ -287,7 +287,7 @@ public class WakeMeAt extends ListActivity {
             } else {
                 row = convertView;
             }
-            if (id == mRowId) {
+            if (WakeMeAtService.serviceRunning && (id == mRowId)) {
                 row.setBackgroundColor(Color.RED);
             } else {
                 row.setBackgroundColor(Color.TRANSPARENT);
@@ -307,10 +307,12 @@ public class WakeMeAt extends ListActivity {
         @Override
         public void onReceive(Context context, Intent intent) {
             Log.d(LOG_NAME, "WakeMeAt.onReceive");
-            if (WakeMeAtService.serviceRunning) {
-                Bundle extras = intent.getExtras();
-                if (mRowId != extras.getLong("rowId")) {
-                    rowChanged(extras.getLong("rowId"));
+            Bundle extras = intent.getExtras();
+            long rowId = extras.getLong("rowId");
+            // If the service is running, or the destination is removed
+            if (WakeMeAtService.serviceRunning || rowId == -1) {
+                if (mRowId != rowId) {
+                    rowChanged(rowId);
                 }
             }
         }
