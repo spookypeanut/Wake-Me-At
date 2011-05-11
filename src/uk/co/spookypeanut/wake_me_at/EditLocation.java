@@ -534,6 +534,9 @@ public class EditLocation extends ExpandableListActivity {
         db = new DatabaseManager(this);
         
         Bundle extras = this.getIntent().getExtras();
+        if (null == extras) {
+            finish();
+        }
         Log.d(LOG_NAME, "mRowId = " + mRowId);
         mRowId = extras.getLong("rowId");
         
