@@ -338,6 +338,10 @@ public class WakeMeAtService extends Service implements LocationListener {
                             uc.out(mMetresAway),
                             mNick);
         mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
+        // Turn off the sound and vibrate, in case they were turned
+        // on by the old location warning
+        mNotification.defaults &= ~Notification.DEFAULT_SOUND;
+        mNotification.defaults &= ~Notification.DEFAULT_VIBRATE;
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mMetresAway < uc.toMetres(mRadius)) {
             soundAlarm();
