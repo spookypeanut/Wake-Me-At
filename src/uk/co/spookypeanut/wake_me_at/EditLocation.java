@@ -132,9 +132,13 @@ public class EditLocation extends ExpandableListActivity {
     };
 
     @Override
-    public boolean onChildClick(ExpandableListView l, View v, int groupPosition, int childPosition, long id) {
-        Log.d(LOG_NAME, "onChildClick(" + l + ", " + v + ", " + groupPosition + ", " + childPosition + ", " + id + ")");
-        int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, childPosition);
+    public boolean onChildClick(ExpandableListView l, View v,
+                                int groupPosition, int childPosition,
+                                long id) {
+        Log.d(LOG_NAME, "onChildClick(" + l + ", " + v + ", " + groupPosition +
+                                      ", " + childPosition + ", " + id + ")");
+        int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, 
+                                                             childPosition);
         switch (position) {
             case INDEX_ACTIV:
                 if (isActive()) {
@@ -148,8 +152,10 @@ public class EditLocation extends ExpandableListActivity {
                 Presets forList = new Presets(mContext, 0);
                 final String[] presetList = forList.getAllNames();
 
-                AlertDialog.Builder presetBuilder = new AlertDialog.Builder(this);
-                presetBuilder.setItems(presetList, new DialogInterface.OnClickListener() {
+                AlertDialog.Builder presetBuilder;
+                presetBuilder = new AlertDialog.Builder(this);
+                presetBuilder.setItems(presetList,
+                                       new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
                         changedPreset(item);
                     }

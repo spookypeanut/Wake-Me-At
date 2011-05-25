@@ -41,7 +41,8 @@ along with Wake Me At, in the file "COPYING".  If not, see
 
 
 /**
- * The service that watches the current location, and triggers the alarm if required
+ * The service that watches the current location, and triggers the alarm if
+ * required
  * @author spookypeanut
  */
 public class WakeMeAtService extends Service implements LocationListener {
@@ -193,7 +194,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         
-        if ("gps".equals(this.getResources().getStringArray(R.array.locProvAndroid)[mProvider])) {
+        String lp = this.getResources()
+                        .getStringArray(R.array.locProvAndroid)[mProvider]
+        if ("gps".equals(lp)) {
             mMinTime = 10 * SECONDS;
             mNoLocationWarningTime = 30 * SECONDS;
         } else {
@@ -208,8 +211,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
         
-        String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-        if (!mLocationManager.isProviderEnabled(locProvName)) {
+        if (!mLocationManager.isProviderEnabled(lp)) {
             stopService();
             return START_NOT_STICKY;
 
@@ -219,8 +221,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         serviceRunning = true;
         updateAlarm();
 
-        Toast.makeText(getApplicationContext(), R.string.foreground_service_started,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),
+                       R.string.foreground_service_started,
+                       Toast.LENGTH_SHORT).show();
         
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -244,8 +247,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         Log.d(LOG_NAME, "WakeMeAtService.onDestroy()");
-        Toast.makeText(getApplicationContext(), R.string.foreground_service_stopped,
-                Toast.LENGTH_SHORT).show();
+        Toast.makeText(getApplicationContext(),
+                       R.string.foreground_service_stopped,
+                       Toast.LENGTH_SHORT).show();
         stopService();
 
         serviceRunning = false;
@@ -263,20 +267,21 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "registerLocationListener()");
         if (mLocationManager == null) {
             Log.e(LOG_NAME,
-                    "TrackRecordingService: Do not have any location manager.");
+                  "TrackRecordingService: Do not have any location manager.");
             return;
         }
         Log.d(LOG_NAME,
-                "Preparing to register location listener w/ TrackRecordingService...");
+              "Preparing to register loc listener w/TrackRecordingService...");
         try {
-            String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-            mLocationManager.requestLocationUpdates(locProvName,
+            String lp = this.getResources()
+                            .getStringArray(R.array.locProvAndroid)[mProvider];
+            mLocationManager.requestLocationUpdates(lp,
                                                     mMinTime,
                                                     minDistance,
                                                     WakeMeAtService.this);
         } catch (RuntimeException e) {
             Log.e(LOG_NAME,
-                    "Could not register location listener: " + e.getMessage(), e);
+                  "Couldn't register location listener: " + e.getMessage(), e);
         }
     }
 
@@ -303,7 +308,8 @@ public class WakeMeAtService extends Service implements LocationListener {
             mNotification = new Notification(R.drawable.icon, text,
                     System.currentTimeMillis());
 
-            // The PendingIntent to launch our activity if the user selects this notification
+            // The PendingIntent to launch our activity if the user
+            // selects this notification
             Intent i = new Intent(this, Alarm.class);
             i.putExtra("rowId", mRowId);
             i.putExtra("metresAway", mMetresAway);
@@ -312,8 +318,9 @@ public class WakeMeAtService extends Service implements LocationListener {
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
-            mNotification.setLatestEventInfo(this, getText(R.string.foreground_service_started),
-                           text, mIntentOnSelect);
+            String message = getText(R.string.foreground_service_started);
+            mNotification.setLatestEventInfo(this, message, text,
+                                             mIntentOnSelect);
             
             startForegroundCompat(ALARMNOTIFY_ID, mNotification);
         }
@@ -327,7 +334,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onLocationChanged(Location location) {
         lastLocation.setToNow();
-        Log.v(LOG_NAME, "onLocationChanged(" + lastLocation.toMillis(false) + ")");
+        Log.v(LOG_NAME, "onLocationChanged(" + 
+                        lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mCheckLocationAge);
         mHandler.postDelayed(mCheckLocationAge, mMinTime);
 
@@ -337,7 +345,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         String message = String.format(getString(R.string.notif_full),
                             uc.out(mMetresAway),
                             mNick);
-        mNotification.setLatestEventInfo(this, getText(R.string.app_name), message, mIntentOnSelect);
+        mNotification.setLatestEventInfo(this, getText(R.string.app_name),
+                                         message, mIntentOnSelect);
         // Turn off the sound and vibrate, in case they were turned
         // on by the old location warning
         mNotification.defaults &= ~Notification.DEFAULT_SOUND;
@@ -368,7 +377,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void cancelAlarm() {
         Log.d(LOG_NAME, "WakeMeAtService.cancelAlarm");
         mAlarm = false;
-        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
+                                        Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
@@ -378,7 +388,8 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     public void soundAlarm() {
         mAlarm = true;
-        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(), Alarm.class);
+        Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
+                                        Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
@@ -388,8 +399,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     
     @Override
     public void onProviderDisabled(String provider) {
-        String locProvName = this.getResources().getStringArray(R.array.locProvAndroid)[mProvider];
-        if (provider != locProvName) {
+        String lp = this.getResources()
+                        .getStringArray(R.array.locProvAndroid)[mProvider];
+        if (provider != lp) {
             Log.wtf(LOG_NAME, "Current provider (" + locProvName +
                   ") doesn't match the listener provider (" + provider + ")");
 
@@ -414,7 +426,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         public void run() {
             Time currTime = new Time();
             currTime.setToNow();
-            long millis = currTime.toMillis(false) - lastLocation.toMillis(false);
+            long millis = currTime.toMillis(false) -
+                          lastLocation.toMillis(false);
 
             Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
                             ", last: " + lastLocation.toMillis(false));
