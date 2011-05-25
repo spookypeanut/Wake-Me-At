@@ -205,7 +205,12 @@ public class WakeMeAt extends ListActivity {
             temp.toString(), // Ringtone
             false,           // Crescendo 
             true,            // Vibration
-            true             // Speech
+            true,            // Speech
+            false,           // Toast
+            true,            // Warning
+            true,            // Warn sound
+            true,            // Warn vibrate
+            true             // Warn toast
         );
     }
     

@@ -40,7 +40,7 @@ public class DatabaseManager
     private String LOG_NAME;
 
     private final String DB_NAME = "WakeMeAtDB";
-    private final int DB_VERSION = 1;
+    private final int DB_VERSION = 2;
 
     private final String TABLE_NAME = "Locations";
     private final String TABLE_ROW_ID = "id";
@@ -59,6 +59,12 @@ public class DatabaseManager
     private final String TABLE_ROW_CRESC = "table_row_cresc";
     private final String TABLE_ROW_VIBRATE = "table_row_vibrate";
     private final String TABLE_ROW_SPEECH = "table_row_speech";
+    private final String TABLE_ROW_TOAST = "table_row_toast";
+
+    private final String TABLE_ROW_WARNING = "table_row_warning";
+    private final String TABLE_ROW_WARN_SOUND = "table_row_warn_sound";
+    private final String TABLE_ROW_WARN_VIBRATE = "table_row_warn_vibrate";
+    private final String TABLE_ROW_WARN_TOAST = "table_row_warn_toast";
     Context mContext;
 
 
@@ -94,7 +100,9 @@ public class DatabaseManager
     public long addRow(String rowNick, double rowLat, double rowLong, int preset,
                        int rowProv, float rowRadius, String rowUnit,
                        boolean rowSound, String rowRingtone, boolean rowCresc,
-                       boolean rowVibrate, boolean rowSpeech) {
+                       boolean rowVibrate, boolean rowSpeech, boolean rowToast,
+                       boolean rowWarning, boolean rowWSound, boolean rowWVibrate,
+                       boolean rowWToast) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -109,6 +117,12 @@ public class DatabaseManager
         values.put(TABLE_ROW_CRESC, rowCresc);
         values.put(TABLE_ROW_VIBRATE, rowVibrate);
         values.put(TABLE_ROW_SPEECH, rowSpeech);
+        values.put(TABLE_ROW_TOAST, rowToast);
+
+        values.put(TABLE_ROW_WARNING, rowWarning);
+        values.put(TABLE_ROW_WARN_SOUND, rowWSound);
+        values.put(TABLE_ROW_WARN_VIBRATE, rowWVibrate);
+        values.put(TABLE_ROW_WARN_TOAST, rowWToast);
         long rowId;
         try {
             rowId = db.insert(TABLE_NAME, null, values);
@@ -149,7 +163,9 @@ public class DatabaseManager
     public void updateRow(long rowId, String rowNick, double rowLat, double rowLong, int preset,
                           int rowProv, float rowRadius, String rowUnit,
                           boolean rowSound, String rowRingtone, boolean rowCresc,
-                          boolean rowVibrate, boolean rowSpeech) {
+                          boolean rowVibrate, boolean rowSpeech, boolean rowToast,
+                          boolean rowWarning, boolean rowWSound, boolean rowWVibrate,
+                          boolean rowWToast) {
         // this is a key value pair holder used by android's SQLite functions
         ContentValues values = new ContentValues();
         values.put(TABLE_ROW_NICK, rowNick);
@@ -164,6 +180,12 @@ public class DatabaseManager
         values.put(TABLE_ROW_CRESC, rowCresc);
         values.put(TABLE_ROW_VIBRATE, rowVibrate);
         values.put(TABLE_ROW_SPEECH, rowSpeech);
+        values.put(TABLE_ROW_TOAST, rowToast);
+
+        values.put(TABLE_ROW_WARNING, rowWarning);
+        values.put(TABLE_ROW_WARN_SOUND, rowWSound);
+        values.put(TABLE_ROW_WARN_VIBRATE, rowWVibrate);
+        values.put(TABLE_ROW_WARN_TOAST, rowWToast);
         try {
             db.update(TABLE_NAME, values, TABLE_ROW_ID + "=" + rowId, null);
         }
@@ -377,6 +399,45 @@ public class DatabaseManager
         setDatumB(rowId, TABLE_ROW_SPEECH, speech);
     }
 
+    public boolean getToast(long rowId) {
+        return (0 != getDatumI(rowId, TABLE_ROW_TOAST));
+    }
+
+    public void setToast(long rowId, boolean toast) {
+        setDatumB(rowId, TABLE_ROW_TOAST, toast);
+    }
+
+    public boolean getWarning(long rowId) {
+        return (0 != getDatumI(rowId, TABLE_ROW_WARNING));
+    }
+
+    public void setWarning(long rowId, boolean warning) {
+        setDatumB(rowId, TABLE_ROW_WARNING, warning);
+    }
+
+    public boolean getWarnSound(long rowId) {
+        return (0 != getDatumI(rowId, TABLE_ROW_WARN_SOUND));
+    }
+
+    public void setWarnSound(long rowId, boolean warnSound) {
+        setDatumB(rowId, TABLE_ROW_WARN_SOUND, warnSound);
+    }
+
+    public boolean getWarnVibrate(long rowId) {
+        return (0 != getDatumI(rowId, TABLE_ROW_WARN_VIBRATE));
+    }
+
+    public void setWarnVibrate(long rowId, boolean warnVibrate) {
+        setDatumB(rowId, TABLE_ROW_WARN_VIBRATE, warnVibrate);
+    }
+
+    public boolean getWarnToast(long rowId) {
+        return (0 != getDatumI(rowId, TABLE_ROW_WARN_TOAST));
+    }
+
+    public void setWarnToast(long rowId, boolean warnToast) {
+        setDatumB(rowId, TABLE_ROW_WARN_TOAST, warnToast);
+    }
 
     /**
      * Get all the row ids from the database as a list
@@ -435,7 +496,9 @@ public class DatabaseManager
                             TABLE_ROW_UNIT,
                             TABLE_ROW_SOUND, TABLE_ROW_RINGTONE,
                             TABLE_ROW_CRESC, TABLE_ROW_VIBRATE,
-                            TABLE_ROW_SPEECH
+                            TABLE_ROW_SPEECH, TABLE_ROW_TOAST,
+                            TABLE_ROW_WARNING, TABLE_ROW_WARN_SOUND,
+                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST 
                     },
                     TABLE_ROW_ID + "=" + rowId,
                     null, null, null, null, null
@@ -459,6 +522,11 @@ public class DatabaseManager
                     rowArray.add(cursor.getInt(10) != 0); //TABLE_ROW_CRESC
                     rowArray.add(cursor.getInt(11) != 0); //TABLE_ROW_VIBRATE
                     rowArray.add(cursor.getInt(12) != 0); //TABLE_ROW_SPEECH
+                    rowArray.add(cursor.getInt(13) != 0); //TABLE_ROW_TOAST
+                    rowArray.add(cursor.getInt(14) != 0); //TABLE_ROW_WARNING
+                    rowArray.add(cursor.getInt(15) != 0); //TABLE_ROW_WARN_SOUND
+                    rowArray.add(cursor.getInt(16) != 0); //TABLE_ROW_WARN_VIBRATE
+                    rowArray.add(cursor.getInt(17) != 0); //TABLE_ROW_WARN_TOAST
                 }
                 while (cursor.moveToNext());
             }
@@ -499,7 +567,13 @@ public class DatabaseManager
                             row.get(9).toString() + ", " +  //TABLE_ROW_RINGTONE
                             row.get(10).toString() + ", " + //TABLE_ROW_CRESC
                             row.get(11).toString() + ", " + //TABLE_ROW_VIBRATE 
-                            row.get(12).toString());        //TABLE_ROW_SPEECH
+                            row.get(12).toString() + ", " + //TABLE_ROW_SPEECH
+                            row.get(13).toString() + ", " + //TABLE_ROW_TOAST
+                            row.get(14).toString() + ", " + //TABLE_ROW_WARNING
+                            row.get(15).toString() + ", " + //TABLE_ROW_WARN_SOUND
+                            row.get(16).toString() + ", " + //TABLE_ROW_WARN_VIBRATE
+                            row.get(17).toString()          //TABLE_ROW_WARN_TOAST
+                );
         }
         Log.d(LOG_NAME, "End of array log");
     }
@@ -521,7 +595,10 @@ public class DatabaseManager
                             TABLE_ROW_UNIT,
                             TABLE_ROW_SOUND, TABLE_ROW_RINGTONE,
                             TABLE_ROW_CRESC, TABLE_ROW_VIBRATE,
-                            TABLE_ROW_SPEECH },
+                            TABLE_ROW_SPEECH, TABLE_ROW_TOAST,
+                            TABLE_ROW_WARNING, TABLE_ROW_WARN_SOUND,
+                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST 
+                            },
                             null, null, null, null, null
             );
             cursor.moveToFirst();
@@ -543,6 +620,11 @@ public class DatabaseManager
                     dataList.add(cursor.getInt(10) != 0); //TABLE_ROW_CRESC
                     dataList.add(cursor.getInt(11) != 0); //TABLE_ROW_VIBRATE
                     dataList.add(cursor.getInt(12) != 0); //TABLE_ROW_SPEECH
+                    dataList.add(cursor.getInt(13) != 0); //TABLE_ROW_TOAST
+                    dataList.add(cursor.getInt(14) != 0); //TABLE_ROW_WARNING
+                    dataList.add(cursor.getInt(15) != 0); //TABLE_ROW_WARN_SOUND
+                    dataList.add(cursor.getInt(16) != 0); //TABLE_ROW_WARN_VIBRATE
+                    dataList.add(cursor.getInt(17) != 0); //TABLE_ROW_WARN_TOAST
 
                     dataArrays.add(dataList);
                 }
@@ -588,7 +670,13 @@ public class DatabaseManager
             TABLE_ROW_RINGTONE + " TEXT," +
             TABLE_ROW_CRESC + " INT," +
             TABLE_ROW_VIBRATE + " INT," +
-            TABLE_ROW_SPEECH + " INT" +
+            TABLE_ROW_SPEECH + " INT," +
+            TABLE_ROW_TOAST + " INT," +
+
+            TABLE_ROW_WARNING + " INT," +
+            TABLE_ROW_WARN_SOUND + " INT," +
+            TABLE_ROW_WARN_VIBRATE + " INT," +
+            TABLE_ROW_WARN_TOAST + " INT" +
             ");";
             db.execSQL(newTableQueryString);
         }
