@@ -145,22 +145,18 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         Log.v(LOG_NAME, message);
         tv.setText(message);
         mHandler.removeCallbacks(mRunEverySecond);
-        Log.d(LOG_NAME, "updateText: adding mRunEverySecond");
         mHandler.postDelayed(mRunEverySecond, 1000);
     }
 
     private Runnable mRunEverySecond = new Runnable() {
         public void run() {
-            Log.d(LOG_NAME, "Run every second");
             updateText();
             if (mMediaPlayer != null && db.getCresc(mRowId) && mCrescVolume < 1) {
                 mCrescVolume += .1;
-                Log.d(LOG_NAME, "Cresc volume: " + mCrescVolume);
                 mMediaPlayer.setVolume(mCrescVolume, mCrescVolume);
             }
             mHandler.removeCallbacks(mRunEverySecond);
             if (WakeMeAtService.serviceRunning) {
-                Log.d(LOG_NAME, "Service is running");
                 mHandler.postDelayed(mRunEverySecond, 1000);
             }
         }
@@ -230,16 +226,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         try {
             mMediaPlayer.setDataSource(this, alert);
         } catch (IllegalArgumentException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (SecurityException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IllegalStateException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         } catch (IOException e) {
-            // TODO Auto-generated catch block
             e.printStackTrace();
         }
         // TODO Something tells me there's a simpler way to set off alarms...
