@@ -102,9 +102,10 @@ public class EditLocation extends ExpandableListActivity {
     private static final int INDEX_CRESC = 8;
     private static final int INDEX_VIBRATE = 9;
     private static final int INDEX_SPEECH = 10;
-    private static final int INDEX_WARNTOAST = 11;
+    private static final int INDEX_TOAST = 11;
     private static final int INDEX_WARNSOUND = 12;
     private static final int INDEX_WARNVIBRATE = 13;
+    private static final int INDEX_WARNTOAST = 14;
     //private static final int NUM_SETTINGS = 14;
 
     private String[] mTitles = {
@@ -121,7 +122,8 @@ public class EditLocation extends ExpandableListActivity {
         "Speech",
         "Popup message",
         "Sound",
-        "Vibration"
+        "Vibration",
+        "Popup message"
     };
     private String[] mDescription = {
         "Tap here to activate the alarm",
@@ -135,9 +137,10 @@ public class EditLocation extends ExpandableListActivity {
         "Start the alarm quiet, and get louder",
         "Toggle the vibration alarm",
         "Toggle synthesized speech",
-        "Toggle popup message when the location is old",
+        "Toggle popup message",
         "Toggle sound when the location is old",
-        "Toggle vibration when the location is old"
+        "Toggle vibration when the location is old",
+        "Toggle popup message when the location is old"
     };
 
     @Override
@@ -659,7 +662,7 @@ public class EditLocation extends ExpandableListActivity {
      */
     private class LocSettingsAdapter extends BaseExpandableListAdapter {
         // The number of items in each section of the list
-        int groupSize[] = {3, 3, 5, 3};
+        int groupSize[] = {3, 3, 6, 3};
         // The names of the sections of the list
         String groupName[] = {"Basic",
                               "Advanced",
