@@ -454,7 +454,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         CharSequence contentTitle = "Old location";
         CharSequence contentText = msg;
 
-        Intent notificationIntent = new Intent(this, EditLocation.class);
+        Intent notificationIntent = new Intent(this, Alarm.class);
         PendingIntent contentIntent;
         contentIntent = PendingIntent.getActivity(this, 0, 
                                                   notificationIntent, 0);
