@@ -195,7 +195,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         
         String lp = this.getResources()
-                        .getStringArray(R.array.locProvAndroid)[mProvider]
+                        .getStringArray(R.array.locProvAndroid)[mProvider];
         if ("gps".equals(lp)) {
             mMinTime = 10 * SECONDS;
             mNoLocationWarningTime = 30 * SECONDS;
@@ -296,7 +296,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
         mLocationManager.removeUpdates(this);
         Log.d(LOG_NAME,
-            "Location listener is unregistered");
+              "Location listener is unregistered");
     }
  
     void createNotification(Intent intent) {
@@ -318,8 +318,8 @@ public class WakeMeAtService extends Service implements LocationListener {
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
 
             // Set the info for the views that show in the notification panel.
-            String message = getText(R.string.foreground_service_started);
-            mNotification.setLatestEventInfo(this, message, text,
+            CharSequence msg = getText(R.string.foreground_service_started);
+            mNotification.setLatestEventInfo(this, msg, text,
                                              mIntentOnSelect);
             
             startForegroundCompat(ALARMNOTIFY_ID, mNotification);
@@ -402,7 +402,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         String lp = this.getResources()
                         .getStringArray(R.array.locProvAndroid)[mProvider];
         if (provider != lp) {
-            Log.wtf(LOG_NAME, "Current provider (" + locProvName +
+            Log.wtf(LOG_NAME, "Current provider (" + lp +
                   ") doesn't match the listener provider (" + provider + ")");
 
         }
@@ -455,11 +455,14 @@ public class WakeMeAtService extends Service implements LocationListener {
         CharSequence contentText = msg;
 
         Intent notificationIntent = new Intent(this, EditLocation.class);
-        PendingIntent contentIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
+        PendingIntent contentIntent;
+        contentIntent = PendingIntent.getActivity(this, 0, 
+                                                  notificationIntent, 0);
         mNotification.defaults |= Notification.DEFAULT_SOUND;
         mNotification.defaults |= Notification.DEFAULT_VIBRATE;
 
-        mNotification.setLatestEventInfo(context, contentTitle, contentText, contentIntent);
+        mNotification.setLatestEventInfo(context, contentTitle,
+                                         contentText, contentIntent);
         mNM.notify(ALARMNOTIFY_ID, mNotification);
     }
 }
