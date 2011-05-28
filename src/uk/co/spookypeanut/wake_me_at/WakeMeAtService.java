@@ -82,6 +82,11 @@ public class WakeMeAtService extends Service implements LocationListener {
     private float mRadius;
     private int mProvider;
     private String mUnit;
+    private boolean mToast;
+    private boolean mWarnSound;
+    private boolean mWarnVibrate;
+    private boolean mWarnToast;
+    private boolean mWarningOn;
     
     private boolean mAlarm = false;
 
@@ -192,6 +197,15 @@ public class WakeMeAtService extends Service implements LocationListener {
             mProvider = presetObj.getLocProv();
             mUnit = presetObj.getUnit();
         }
+        mToast = db.getToast(mRowId);
+        mWarnSound = db.getWarnSound(mRowId);
+        mWarnVibrate = db.getWarnVibrate(mRowId);
+        mWarnToast = db.getWarnToast(mRowId);
+        // We turn the warning on if the global warning flag is true, and if
+        // at least one of the warning types is true
+        mWarningOn = db.getWarning(mRowId) && (mWarnSound ||
+                                               mWarnVibrate ||
+                                               mWarnToast);
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
         
         String lp = this.getResources()
@@ -337,7 +351,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.v(LOG_NAME, "onLocationChanged(" + 
                         lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mCheckLocationAge);
-        mHandler.postDelayed(mCheckLocationAge, mMinTime);
+        if (mWarningOn) {
+            mHandler.postDelayed(mCheckLocationAge, mMinTime);
+        }
 
         mCurrLocation = location;
         mMetresAway = location.distanceTo(mFinalDestination);
@@ -447,9 +463,13 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     private void oldLocationWarning(long age) {
         String msg = String.format(getString(R.string.oldLocationWarning), age);
-        Toast.makeText(getApplicationContext(), msg,
-                Toast.LENGTH_LONG).show();
+        if (mWarnToast) {
+            Toast.makeText(getApplicationContext(), msg,
+                    Toast.LENGTH_LONG).show();
+        }
 
+        // We should still add a notification that the location is old, even
+        // if none of the warning settings are turned on
         Context context = getApplicationContext();
         CharSequence contentTitle = "Old location";
         CharSequence contentText = msg;
@@ -458,8 +478,12 @@ public class WakeMeAtService extends Service implements LocationListener {
         PendingIntent contentIntent;
         contentIntent = PendingIntent.getActivity(this, 0, 
                                                   notificationIntent, 0);
-        mNotification.defaults |= Notification.DEFAULT_SOUND;
-        mNotification.defaults |= Notification.DEFAULT_VIBRATE;
+        if (mWarnSound) {
+            mNotification.defaults |= Notification.DEFAULT_SOUND;
+        }
+        if (mWarnVibrate) {
+            mNotification.defaults |= Notification.DEFAULT_VIBRATE;
+        }
 
         mNotification.setLatestEventInfo(context, contentTitle,
                                          contentText, contentIntent);
