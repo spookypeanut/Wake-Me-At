@@ -91,6 +91,7 @@ public class EditLocation extends ExpandableListActivity {
     private boolean mVibrate = true;
     private boolean mSpeech = true;
     private boolean mToast = false;
+    private boolean mWarning = true;
     private boolean mWarnSound = true;
     private boolean mWarnVibrate = true;
     private boolean mWarnToast = true;
@@ -101,16 +102,17 @@ public class EditLocation extends ExpandableListActivity {
     private static final int INDEX_RADIUS = 3;
     private static final int INDEX_UNITS = 4;
     private static final int INDEX_LOCPROV = 5;
-    private static final int INDEX_SOUND = 6;
-    private static final int INDEX_RINGTONE = 7;
-    private static final int INDEX_CRESC = 8;
-    private static final int INDEX_VIBRATE = 9;
-    private static final int INDEX_SPEECH = 10;
-    private static final int INDEX_TOAST = 11;
-    private static final int INDEX_WARNSOUND = 12;
-    private static final int INDEX_WARNVIBRATE = 13;
-    private static final int INDEX_WARNTOAST = 14;
-    //private static final int NUM_SETTINGS = 14;
+    private static final int INDEX_WARNING = 6;
+    private static final int INDEX_SOUND = 7;
+    private static final int INDEX_RINGTONE = 8;
+    private static final int INDEX_CRESC = 9;
+    private static final int INDEX_VIBRATE = 10;
+    private static final int INDEX_SPEECH = 11;
+    private static final int INDEX_TOAST = 12;
+    private static final int INDEX_WARNSOUND = 13;
+    private static final int INDEX_WARNVIBRATE = 14;
+    private static final int INDEX_WARNTOAST = 15;
+    //private static final int NUM_SETTINGS = 16;
 
     private String[] mTitles = {
         "Activate alarm",
@@ -119,6 +121,7 @@ public class EditLocation extends ExpandableListActivity {
         "Radius",
         "Units",
         "Location provider",
+        "Old location warning",
         "Sound",
         "Ringtone",
         "Crescendo",
@@ -136,6 +139,7 @@ public class EditLocation extends ExpandableListActivity {
         "Distance away to trigger alarm",
         "The units to measure distance in",
         "The method to use to determine location",
+        "Toggle the warning when the current location data is old",
         "Toggle the audible alarm",
         "Set the ringtone for the alarm",
         "Start the alarm quiet, and get louder",
@@ -218,6 +222,9 @@ public class EditLocation extends ExpandableListActivity {
                     lpalert.show();
                 }
                 break;
+            case INDEX_WARNING:
+                toggleWarning();
+                break;
             case INDEX_SOUND:
                 toggleSound();
                 break;
@@ -253,6 +260,16 @@ public class EditLocation extends ExpandableListActivity {
                 break;
         }
         return true;
+    }
+
+    private void toggleWarning() {
+        if (true == mWarning) {
+            mWarning = false;
+        } else {
+            mWarning = true;
+        }
+        db.setWarning(mRowId, mWarning);
+        updateForm();
     }
 
     private void toggleSound() {
@@ -571,6 +588,7 @@ public class EditLocation extends ExpandableListActivity {
         mVibrate = db.getVibrate(mRowId);
         mSpeech = db.getSpeech(mRowId);
         mToast = db.getToast(mRowId);
+        mWarning = db.getWarning(mRowId);
         mWarnSound = db.getWarnSound(mRowId);
         mWarnVibrate = db.getWarnVibrate(mRowId);
         mWarnToast = db.getWarnToast(mRowId);
@@ -722,7 +740,7 @@ public class EditLocation extends ExpandableListActivity {
      */
     private class LocSettingsAdapter extends BaseExpandableListAdapter {
         // The number of items in each section of the list
-        int groupSize[] = {3, 3, 6, 3};
+        int groupSize[] = {3, 4, 6, 3};
         // The names of the sections of the list
         String groupName[] = {"Basic",
                               "Advanced",
@@ -783,6 +801,11 @@ public class EditLocation extends ExpandableListActivity {
                         locProv = mPresetObj.getLocProv();
                     }
                     return mContext.getResources().getStringArray(R.array.locProvHuman)[locProv];
+                case INDEX_WARNING:
+                    if (mWarning) {
+                        return "On";
+                    }
+                    return "Off";
                 case INDEX_SOUND:
                     if (mSound) {
                         return "On";
