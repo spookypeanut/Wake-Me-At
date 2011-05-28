@@ -90,6 +90,10 @@ public class EditLocation extends ExpandableListActivity {
     private boolean mCresc = false;
     private boolean mVibrate = true;
     private boolean mSpeech = true;
+    private boolean mToast = false;
+    private boolean mWarnSound = true;
+    private boolean mWarnVibrate = true;
+    private boolean mWarnToast = true;
 
     private static final int INDEX_ACTIV = 0;
     private static final int INDEX_LOC = 1;
@@ -235,6 +239,18 @@ public class EditLocation extends ExpandableListActivity {
             case INDEX_SPEECH:
                 toggleSpeech();
                 break;
+            case INDEX_TOAST:
+                toggleToast();
+                break;
+            case INDEX_WARNSOUND:
+                toggleWarnSound();
+                break;
+            case INDEX_WARNVIBRATE:
+                toggleWarnVibrate();
+                break;
+            case INDEX_WARNTOAST:
+                toggleWarnToast();
+                break;
         }
         return true;
     }
@@ -276,6 +292,46 @@ public class EditLocation extends ExpandableListActivity {
             mSpeech = true;
         }
         db.setSpeech(mRowId, mSpeech);
+        updateForm();
+    }
+
+    private void toggleToast() {
+        if (true == mToast) {
+            mToast = false;
+        } else {
+            mToast = true;
+        }
+        db.setToast(mRowId, mToast);
+        updateForm();
+    }
+
+    private void toggleWarnSound() {
+        if (true == mWarnSound) {
+            mWarnSound = false;
+        } else {
+            mWarnSound = true;
+        }
+        db.setWarnSound(mRowId, mWarnSound);
+        updateForm();
+    }
+
+    private void toggleWarnVibrate() {
+        if (true == mWarnVibrate) {
+            mWarnVibrate = false;
+        } else {
+            mWarnVibrate = true;
+        }
+        db.setWarnVibrate(mRowId, mWarnVibrate);
+        updateForm();
+    }
+
+    private void toggleWarnToast() {
+        if (true == mWarnToast) {
+            mWarnToast = false;
+        } else {
+            mWarnToast = true;
+        }
+        db.setWarnToast(mRowId, mWarnToast);
         updateForm();
     }
 
@@ -514,6 +570,10 @@ public class EditLocation extends ExpandableListActivity {
         mCresc = db.getCresc(mRowId);
         mVibrate = db.getVibrate(mRowId);
         mSpeech = db.getSpeech(mRowId);
+        mToast = db.getToast(mRowId);
+        mWarnSound = db.getWarnSound(mRowId);
+        mWarnVibrate = db.getWarnVibrate(mRowId);
+        mWarnToast = db.getWarnToast(mRowId);
     }
     
     @Override
@@ -743,6 +803,26 @@ public class EditLocation extends ExpandableListActivity {
                     return "Off";
                 case INDEX_SPEECH:
                     if (mSpeech) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_TOAST:
+                    if (mToast) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_WARNSOUND:
+                    if (mWarnSound) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_WARNVIBRATE:
+                    if (mWarnVibrate) {
+                        return "On";
+                    }
+                    return "Off";
+                case INDEX_WARNTOAST:
+                    if (mWarnToast) {
                         return "On";
                     }
                     return "Off";
