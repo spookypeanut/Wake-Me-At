@@ -263,10 +263,13 @@ public class EditLocation extends ExpandableListActivity {
     }
 
     private void toggleWarning() {
+        ExpandableListView v = getExpandableListView();
         if (true == mWarning) {
             mWarning = false;
+            v.collapseGroup(3);
         } else {
             mWarning = true;
+            v.expandGroup(3);
         }
         db.setWarning(mRowId, mWarning);
         updateForm();
@@ -962,16 +965,24 @@ public class EditLocation extends ExpandableListActivity {
 
             boolean enabled = true;
 
-            if (mPresetObj.isCustom() == false) {
-                // If we're set to anything other than custom, disable the
-                // relevant lines
-                switch (position) {
-                    case INDEX_LOCPROV:
-                    case INDEX_UNITS:
-                    case INDEX_RADIUS:
+            // Disable things that should be disabled
+            switch (position) {
+                case INDEX_LOCPROV:
+                case INDEX_UNITS:
+                case INDEX_RADIUS:
+                    if (mPresetObj.isCustom() == false) {
+                        // If we're set to anything other than custom,
+                        // disable the relevant lines
                         enabled = false;
-                        break;
-                }
+                    }
+                    break;
+                case INDEX_WARNSOUND:
+                case INDEX_WARNVIBRATE:
+                case INDEX_WARNTOAST:
+                    if (!mWarning) {
+                        enabled = false;
+                    }
+                    break;
             }
             TextView tv = (TextView) row.findViewById(R.id.locSettingName);
             tv.setText(mTitles[position]);
