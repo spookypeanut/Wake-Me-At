@@ -18,4 +18,4 @@ screenshots
 .settings
 build.xml
 proguard.cfg
-icon*-*x*.png
+icon-gen-*
