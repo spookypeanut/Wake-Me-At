@@ -1,9 +1,10 @@
 CONV := convert -background none -antialias
 
-ALL := icon-512x512.png icon-72x72.png \
+all : icon
+
+icon : icon-512x512.png icon-72x72.png \
 		icon-48x48.png icon-36x36.png
 
-all : $(ALL)
 
 icon-512x512.png : icon.svg
 	$(CONV) icon.svg icon-512x512.png

@@ -433,6 +433,28 @@
          stdDeviation="1.029375"
          id="feGaussianBlur3989" />
     </filter>
+    <filter
+       inkscape:collect="always"
+       id="filter3965"
+       x="-0.070203023"
+       width="1.140406"
+       y="-0.15176965"
+       height="1.3035393">
+      <feGaussianBlur
+         inkscape:collect="always"
+         stdDeviation="1.5520311"
+         id="feGaussianBlur3967" />
+    </filter>
+    <clipPath
+       clipPathUnits="userSpaceOnUse"
+       id="clipPath3974">
+      <path
+         sodipodi:nodetypes="zzzczz"
+         inkscape:connector-curvature="0"
+         id="path3976"
+         d="m 3.0037273,573.46533 c 0,-15.69623 14.7018897,-23.32481 25.0000007,-23.375 10.298109,-0.0502 22.442349,-0.2939 24.375,1.5 1.932649,1.7939 0.99573,18.28456 0.999999,23.25 0,10.73549 -10.464359,21.12825 -24.999999,21.125 -14.535641,-0.003 -25.3750007,-6.80377 -25.3750007,-22.5 z"
+         style="fill:#ffaaaa;stroke:#000000;stroke-width:0.10830735;stroke-opacity:1;display:inline" />
+    </clipPath>
   </defs>
   <sodipodi:namedview
      id="base"
@@ -441,11 +463,11 @@
      borderopacity="1.0"
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
-     inkscape:zoom="0.52682765"
-     inkscape:cx="325.5967"
-     inkscape:cy="371.05053"
+     inkscape:zoom="1.0536553"
+     inkscape:cx="106.02533"
+     inkscape:cy="312.05255"
      inkscape:document-units="px"
-     inkscape:current-layer="layer6"
+     inkscape:current-layer="layer9"
      showgrid="false"
      inkscape:snap-nodes="false"
      inkscape:window-width="1366"
@@ -464,10 +486,29 @@
         <dc:format>image/svg+xml</dc:format>
         <dc:type
            rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
-        <dc:title></dc:title>
+        <dc:title />
       </cc:Work>
     </rdf:RDF>
   </metadata>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     inkscape:label="TestBackground"
+     style="display:none"
+     sodipodi:insensitive="true">
+    <rect
+       style="opacity:0.7;fill:#999999;fill-opacity:1;stroke:#6e6e00;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.51674643;stroke-dasharray:none;stroke-dashoffset:0"
+       id="rect3168"
+       width="567.54803"
+       height="539.07574"
+       x="-27.523233"
+       y="-12.839576" />
+    <path
+       style="opacity:0.7;fill:#999999;fill-opacity:1;stroke:#6e6e00;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.51674643;stroke-dasharray:none;stroke-dashoffset:0;display:inline"
+       d="m -93.96875,-36.5625 0,280.9375 124.71875,0 C 41.956015,112.22254 169.92862,47.880296 260.78125,47.4375 355.86353,46.97401 467.96837,44.7182 485.8125,61.28125 500.66248,75.065112 497.19472,182.17592 495.625,244.375 l 101.34375,0 0,-280.9375 -690.9375,0 z"
+       id="rect3170"
+       inkscape:connector-curvature="0" />
+  </g>
   <g
      inkscape:groupmode="layer"
      id="layer4"
@@ -1032,12 +1073,19 @@
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="zzzczz" />
     <path
-       style="opacity:0.5;fill:#ffffff;stroke:none;filter:url(#filter4016)"
-       d="m 38.448528,548.04224 c -2.61689,0.002 -5.30047,0.0187 -7.875,0.0312 -10.29811,0.0502 -25.0000004,7.67877 -25.0000004,23.375 0,0.95882 0.0457,1.88834 0.125,2.78125 1.43674,-14.0413 15.1276504,-20.88999 24.8750004,-20.9375 10.29811,-0.0502 22.44235,-0.2939 24.375,1.5 0.85288,0.79165 1.1248,4.4876 1.1875,8.75 0.0979,-6.14322 0.006,-12.86064 -1.1875,-13.96875 -1.44949,-1.34543 -8.64932,-1.53688 -16.5,-1.53125 z"
+       style="opacity:0.5;fill:#ffffff;stroke:none;filter:url(#filter3965)"
+       d="m 38.448528,548.04224 c -2.61689,0.002 -5.30047,0.0187 -7.875,0.0312 -10.29811,0.0502 -27.4670087,6.0341 -27.4670087,21.73033 0,0.95882 0.0457,1.88834 0.125,2.78125 1.43674,-14.0413 17.5946587,-19.24532 27.3420087,-19.29283 10.29811,-0.0502 22.44235,-0.2939 24.375,1.5 0.85288,0.79165 1.1248,4.4876 1.1875,8.75 0.0979,-6.14322 0.006,-12.86064 -1.1875,-13.96875 -1.44949,-1.34543 -8.64932,-1.53688 -16.5,-1.53125 z"
        id="path3996"
        inkscape:connector-curvature="0"
-       transform="matrix(9.2329838,0,0,9.2329838,-21.512069,-4504.4575)" />
+       transform="matrix(9.2329838,0,0,9.2329838,2.2148557,-4491.1704)"
+       clip-path="url(#clipPath3974)"
+       sodipodi:nodetypes="ccscsscccc" />
   </g>
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="BlurClip"
+     style="display:inline" />
   <g
      inkscape:groupmode="layer"
      id="layer7"
