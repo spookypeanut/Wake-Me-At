@@ -1,0 +1,28 @@
+#!/usr/bin/env python
+import os
+import sys
+
+targetName = sys.argv[1]
+tokens = targetName.split(".")[0].split("-")
+label = None
+if len(tokens) > 3:
+    label = tokens[2]
+resolution = tokens[-1].split("x")
+
+if label:
+    sourceimage = "icon_gen_%s.svg" % label
+else:
+    sourceimage = "icon.svg"
+
+cmdList = ["inkscape"]
+cmdList.append("--without-gui")
+cmdList.append("--file=%s" % sourceimage)
+cmdList.append("--export-png=%s" % targetName)
+if int(resolution[0]) != 512 or int(resolution[1]) != 512:
+    cmdList.append("--export-width=%s" % resolution[0])
+    cmdList.append("--export-height=%s" % resolution[1])
+
+
+cmd = " ".join(cmdList)
+print "About to run: '%s'" % cmd
+os.system(cmd)
