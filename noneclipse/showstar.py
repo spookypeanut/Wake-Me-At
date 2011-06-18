@@ -8,5 +8,5 @@ for subelement in element:
             if subelement.attrib[i].startswith("Star"):
                 subelement.attrib["style"] = "display:inline"
 
-fileout = open("icon-gen-star.svg", "w")
+fileout = open("generated/icon-gen-star.svg", "w")
 fileout.write(ET.tostring(element))
