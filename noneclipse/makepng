@@ -10,7 +10,7 @@ if len(tokens) > 3:
 resolution = tokens[-1].split("x")
 
 if label:
-    sourceimage = "icon_gen_%s.svg" % label
+    sourceimage = "icon-gen-%s.svg" % label
 else:
     sourceimage = "icon.svg"
 
