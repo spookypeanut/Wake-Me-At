@@ -91,7 +91,7 @@ public class Shortcuts extends ListActivity {
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
                         String.format(getString(R.string.shortcut_name), nick));
         Parcelable iconResource = Intent.ShortcutIconResource.fromContext(
-                this,  R.drawable.icon);
+                this, R.drawable.iconstar);
         intent.putExtra(Intent.EXTRA_SHORTCUT_ICON_RESOURCE, iconResource);
 
         setResult(RESULT_OK, intent);
