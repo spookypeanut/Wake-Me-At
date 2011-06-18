@@ -21,6 +21,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.ContextMenu.ContextMenuInfo;
+import android.view.Window;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
@@ -155,6 +156,7 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
 
         super.onCreate(savedInstanceState);
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
