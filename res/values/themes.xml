@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- REF0017 -->
+    <style name="GreenNature" parent="@android:Theme.Black">
+        <item name="android:listViewStyle">@style/GreenNature.ListView</item>
+        <item name="android:windowBackground">@color/darkprimary</item>
+        <item name="android:colorBackground">@color/darkprimary</item>
+    </style>
+</resources>
