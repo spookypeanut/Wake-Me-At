@@ -1,16 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- REF0017 -->
-    <style name="GreenNature" parent="android:Widget">
-    </style>
+ <!-- REF0017 -->
+ <style name="GreenNature" parent="android:Widget">
+  <item name="android:textAppearance">@style/GreenNature.DefaultText</item>
+ </style>
 
-    <style name="GreenNature.AbsListView">
-        <item name="android:scrollbars">vertical</item>
-        <item name="android:fadingEdge">vertical</item>
-        <item name="android:scrollbarStyle">outsideInset</item>
-    </style>
+ <style name="GreenNature.AbsListView">
+  <item name="android:scrollbars">vertical</item>
+  <item name="android:fadingEdge">vertical</item>
+  <item name="android:scrollbarStyle">outsideInset</item>
+ </style>
 
-    <style name="GreenNature.ListView" parent="GreenNature.AbsListView">
-        <item name="android:divider">#008c00</item>
-    </style>
+ <style name="GreenNature.ListView" parent="GreenNature.AbsListView">
+  <item name="android:layout_width">fill_parent</item>
+  <item name="android:layout_height">fill_parent</item>
+ </style>
+
+ <style name="GreenNature.TextView">
+  <item name="android:layout_width">fill_parent</item>
+  <item name="android:layout_height">wrap_content</item>
+ </style>
+
+ <style name="GreenNature.ListItem">
+  <item name="android:textSize">20sp</item>
+  <item name="android:layout_marginLeft">30sp</item>
+  <item name="android:layout_marginRight">30sp</item>
+ </style>
+ 
+ <style name="GreenNature.ListItemDescription" parent="GreenNature.ListItem">
+  <item name="android:textSize">15sp</item> 
+  <item name="android:gravity">right</item>
+  <item name="android:layout_width">fill_parent</item>
+  <item name="android:layout_height">wrap_content</item>
+  <item name="android:layout_marginLeft">30sp</item>
+  <item name="android:layout_marginRight">30sp</item>
+ </style>
+  
+ <style name="GreenNature.ListItemGroup" parent="GreenNature.Heading">
+  <item name="android:textSize">25sp</item>
+ </style>
+ 
+ <style name="GreenNature.Heading" parent="GreenNature.TextView">
+  <item name="android:background">@color/primary</item>
+  <item name="android:gravity">center</item>
+  <item name="android:textSize">25sp</item>
+  <item name="android:textStyle">bold|italic</item>
+ </style>
+
+ <style name="GreenNature.DefaultText" parent="@android:style/TextAppearance">
+  <item name="android:textSize">12sp</item>
+  <item name="android:textColor">@color/foreground</item>
+  <item name="android:textStyle">bold</item>
+ </style>
 </resources>

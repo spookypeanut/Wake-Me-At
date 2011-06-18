@@ -14,9 +14,12 @@
  -->
 
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="fill_parent" android:layout_height="fill_parent"
+ android:layout_width="fill_parent"
+ android:layout_height="fill_parent"
  android:orientation="vertical">
   <TextView android:id="@+id/locSettingName"
-  android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Setting" android:textSize="25sp" android:layout_gravity="center"/>
+  style="@style/GreenNature.ListItemGroup"
+  android:layout_height="wrap_content"
+  android:layout_width="fill_parent"
+  android:text="Setting"/>
  </LinearLayout>

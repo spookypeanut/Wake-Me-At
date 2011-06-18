@@ -23,12 +23,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
     <TextView
+        style="@style/GreenNature.Heading"
         android:id="@+id/nick"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:gravity="center"
-        android:textSize="25sp"
-        android:textStyle="italic"
         android:text="Location name" />
     <ExpandableListView 
         android:id="@android:id/list"

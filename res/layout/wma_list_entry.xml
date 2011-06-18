@@ -19,9 +19,11 @@
  android:layout_width="fill_parent" android:layout_height="fill_parent"
  android:orientation="vertical">
   <TextView android:id="@+id/locListName"
-  android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Location name" android:textSize="20sp"/>
+          style="@style/GreenNature.ListItem"
+          android:layout_height="wrap_content"
+          android:layout_width="wrap_content"
+          android:text="Location name"/>
   <TextView android:id="@+id/locListDesc"
-  android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Location description" android:textSize="15sp"/>
+          style="@style/GreenNature.ListItemDescription"
+          android:text="Location description"/>
  </LinearLayout>
