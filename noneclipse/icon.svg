@@ -22,6 +22,17 @@
   <defs
      id="defs4">
     <linearGradient
+       id="linearGradient3945">
+      <stop
+         style="stop-color:#828282;stop-opacity:1;"
+         offset="0"
+         id="stop3947" />
+      <stop
+         style="stop-color:#919191;stop-opacity:1;"
+         offset="1"
+         id="stop3949" />
+    </linearGradient>
+    <linearGradient
        id="linearGradient3975">
       <stop
          style="stop-color:#ffff00;stop-opacity:1;"
@@ -464,6 +475,15 @@
          style="fill:#cccccc;fill-opacity:1;stroke:#6e6e00;stroke-width:0.2;stroke-linejoin:round;stroke-miterlimit:4;stroke-opacity:0.51674643;stroke-dasharray:none;display:inline"
          sodipodi:type="star" />
     </clipPath>
+    <linearGradient
+       inkscape:collect="always"
+       xlink:href="#linearGradient3945"
+       id="linearGradient3951"
+       x1="259.62485"
+       y1="588.6319"
+       x2="259.62485"
+       y2="1010.3669"
+       gradientUnits="userSpaceOnUse" />
   </defs>
   <sodipodi:namedview
      id="base"
@@ -473,10 +493,10 @@
      inkscape:pageopacity="0.0"
      inkscape:pageshadow="2"
      inkscape:zoom="1.0536553"
-     inkscape:cx="115.1568"
+     inkscape:cx="219.82423"
      inkscape:cy="245.29883"
      inkscape:document-units="px"
-     inkscape:current-layer="layer11"
+     inkscape:current-layer="layer9"
      showgrid="false"
      inkscape:snap-nodes="false"
      inkscape:window-width="1366"
@@ -521,10 +541,11 @@
   <g
      inkscape:groupmode="layer"
      id="layer11"
-     inkscape:label="Black">
+     inkscape:label="Taskbar"
+     style="display:none">
     <path
        transform="translate(0,-540.3622)"
-       style="fill:#000000;fill-opacity:1;stroke:none;display:inline"
+       style="fill:url(#linearGradient3951);fill-opacity:1;stroke:none;display:inline"
        d="m 29.948221,803.62572 c 0,-144.92303 135.742309,-215.35759 230.824599,-215.821 95.08228,-0.46349 207.20985,-2.71357 225.05398,13.84948 17.84412,16.56305 9.19356,168.82104 9.23298,214.66687 0,99.12061 -96.61726,195.07673 -230.82459,195.04673 C 130.02785,1011.3403 29.948221,948.54876 29.948221,803.62572 z"
        id="path3175"
        inkscape:connector-curvature="0"
