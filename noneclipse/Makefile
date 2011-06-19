@@ -6,7 +6,8 @@ STAR := icon-gen-star-512x512.png icon-gen-star-72x72.png \
 TASKBAR := icon-gen-taskbar-100x100.png icon-gen-taskbar-25x25.png\
 			icon-gen-taskbar-24x24.png icon-gen-taskbar-16x16.png\
 			icon-gen-taskbar-12x12.png icon-gen-taskbar-27x27.png\
-			icon-gen-taskbar-18x18.png icon-gen-taskbar-13x13.png
+			icon-gen-taskbar-18x18.png icon-gen-taskbar-13x13.png\
+			icon-gen-taskbar-14x14.png
 
 all : plain star taskbar
 plain : $(PLAIN)
@@ -56,6 +57,10 @@ icon-gen-taskbar-16x16.png : icon-gen-taskbar.svg
 icon-gen-taskbar-13x13.png : icon-gen-taskbar.svg
 	$(CONV) icon-gen-taskbar-13x13.png
 	optipng -q generated/icon-gen-taskbar-13x13.png
+
+icon-gen-taskbar-14x14.png : icon-gen-taskbar.svg
+	$(CONV) icon-gen-taskbar-14x14.png
+	optipng -q generated/icon-gen-taskbar-14x14.png
 
 icon-gen-taskbar-12x12.png : icon-gen-taskbar.svg
 	$(CONV) icon-gen-taskbar-12x12.png
