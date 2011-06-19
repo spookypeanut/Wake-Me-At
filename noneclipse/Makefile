@@ -14,6 +14,7 @@ TASKBAR := icon-gen-taskbar-25x25.png icon-gen-taskbar-24x38.png\
 all : plain star taskbarbkg taskbar
 plain : $(PLAIN)
 star : $(STAR)
+taskbar : $(TASKBAR)
 taskbarbkg : $(TASKBARBKG)
 
 icon-gen-512x512.png : icon.svg
