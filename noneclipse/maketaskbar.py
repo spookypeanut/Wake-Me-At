@@ -9,5 +9,5 @@ for subelement in element:
             if subelement.attrib[i] == "Taskbar":
                 subelement.attrib["style"] = "display:inline"
 
-fileout = open("generated/icon-gen-taskbar.svg", "w")
+fileout = open("generated/icon-gen-taskbarbkg.svg", "w")
 fileout.write(ET.tostring(element))
