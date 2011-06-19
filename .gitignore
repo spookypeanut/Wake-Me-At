@@ -19,3 +19,6 @@ screenshots
 build.xml
 proguard.cfg
 icon-gen-*
+generated
+.ropeproject
+
