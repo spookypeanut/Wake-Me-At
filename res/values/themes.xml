@@ -3,7 +3,7 @@
     <!-- REF0017 -->
     <style name="GreenNature" parent="@android:Theme.Black">
         <item name="android:listViewStyle">@style/GreenNature.ListView</item>
-        <!-- <item name="android:expandableListViewStyle">@style/GreenNature.ListView</item> -->
+        <item name="android:expandableListViewStyle">@style/GreenNature.ExpandableListView</item> 
         <item name="android:windowBackground">@color/darksecondary</item>
         <item name="android:colorBackground">@color/darksecondary</item>
     </style>

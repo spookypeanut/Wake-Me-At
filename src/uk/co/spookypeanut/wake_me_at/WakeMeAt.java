@@ -295,7 +295,7 @@ public class WakeMeAt extends ListActivity {
                 row = convertView;
             }
             if (WakeMeAtService.serviceRunning && (id == mRowId)) {
-                row.setBackgroundColor(Color.RED);
+                row.setBackgroundColor(getResources().getColor(R.color.highlight));
             } else {
                 row.setBackgroundColor(Color.TRANSPARENT);
             }

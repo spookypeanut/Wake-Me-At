@@ -6,4 +6,11 @@
     <color name="darksecondary">#592c09</color>
     <color name="highlight">#280f99</color>
     <color name="foreground">#ffffff</color>
+    
+    <color name="headingbg">@color/primary</color>
+    <color name="itemgroupbg">@color/secondary</color>
+    <color name="itempressed">@color/highlight</color>
+    <color name="itemfocused">@color/secondary</color>
+    <color name="itemenabled">@color/foreground</color>
+
 </resources>

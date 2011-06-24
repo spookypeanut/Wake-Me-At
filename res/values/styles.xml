@@ -6,14 +6,20 @@
  </style>
 
  <style name="GreenNature.AbsListView">
-  <item name="android:scrollbars">vertical</item>
-  <item name="android:fadingEdge">vertical</item>
-  <item name="android:scrollbarStyle">outsideInset</item>
+  <item name="android:dividerHeight">10sp</item>
  </style>
 
  <style name="GreenNature.ListView" parent="GreenNature.AbsListView">
   <item name="android:layout_width">fill_parent</item>
   <item name="android:layout_height">fill_parent</item>
+  <item name="android:divider">@drawable/divider</item>
+ </style>
+
+ <style name="GreenNature.ExpandableListView" parent="GreenNature.AbsListView">
+  <item name="android:layout_width">fill_parent</item>
+  <item name="android:layout_height">fill_parent</item>
+  <item name="android:childDivider">@drawable/divider</item>
+  <item name="android:divider">@drawable/divider</item>
  </style>
 
  <style name="GreenNature.TextView">
@@ -38,13 +44,14 @@
   
  <style name="GreenNature.ListItemGroup" parent="GreenNature.Heading">
   <item name="android:textSize">25sp</item>
+  <item name="android:background">@color/itemgroupbg</item>
  </style>
  
  <style name="GreenNature.Heading" parent="GreenNature.TextView">
-  <item name="android:background">@color/primary</item>
+  <item name="android:background">@color/headingbg</item>
   <item name="android:gravity">center</item>
   <item name="android:textSize">25sp</item>
-  <item name="android:textStyle">bold|italic</item>
+  <item name="android:textStyle">bold</item>
  </style>
 
  <style name="GreenNature.DefaultText" parent="@android:style/TextAppearance">
