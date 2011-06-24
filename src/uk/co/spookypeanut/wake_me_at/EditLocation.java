@@ -259,6 +259,7 @@ public class EditLocation extends ExpandableListActivity {
                 toggleWarnToast();
                 break;
         }
+        updateForm();
         return true;
     }
 
@@ -954,11 +955,23 @@ public class EditLocation extends ExpandableListActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition,
                 boolean isLastChild, View convertView, ViewGroup parent) {
+            Log.d(LOG_NAME, "EditLocation.getChildView(" + groupPosition + 
+                            ", " + childPosition + ", " + isLastChild + ", " + 
+                            "blah, blah)");
             int position = getGlobalPosition(groupPosition, childPosition);
             View row;
             
             if (null == convertView) {
                 row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
+                /*
+                if (isActive() && (position == INDEX_ACTIV)) {
+                    Log.d(LOG_NAME, "position is " + position);
+                    Log.d(LOG_NAME, "group position is " + groupPosition);
+                    Log.d(LOG_NAME, "child position is " + childPosition);
+                    row.setBackgroundColor(getResources()
+                                           .getColor(R.color.highlight));
+                }
+                */
             } else {
                 row = convertView;
             }
