@@ -4,7 +4,7 @@
     <style name="GreenNature" parent="@android:Theme.Black">
         <item name="android:listViewStyle">@style/GreenNature.ListView</item>
         <item name="android:expandableListViewStyle">@style/GreenNature.ExpandableListView</item> 
-        <item name="android:windowBackground">@color/darksecondary</item>
-        <item name="android:colorBackground">@color/darksecondary</item>
+        <item name="android:windowBackground">@color/mainbg</item>
+        <item name="android:colorBackground">@color/mainbg</item>
     </style>
 </resources>
