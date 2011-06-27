@@ -133,16 +133,22 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         currTime.setToNow();
         long locAge = (currTime.toMillis(true) - mLastLocTime) / 1000;
 
-        TextView tv = (TextView)findViewById(R.id.alarmMessageTextView);
-        String message;
+        String messageOne;
+        String messageTwo;
         if (mMetresAway < 0) {
-            message = (String) getText(R.string.alarmAwaitingFix);
+            messageOne = (String) getText(R.string.alarmAwaitingFix);
         } else {
-            message = String.format(getString(R.string.alarmMessage),
-                    uc.out(mMetresAway), mNick, locAge);
+            messageOne = String.format(getString(R.string.alarmMessage),
+                    uc.out(mMetresAway), mNick);
         }
-        Log.v(LOG_NAME, message);
-        tv.setText(message);
+        messageTwo = String.format(getString(R.string.locAgeMessage),
+                    locAge);
+        Log.d(LOG_NAME, messageOne);
+        Log.d(LOG_NAME, messageTwo);
+        TextView tv = (TextView)findViewById(R.id.alarmMessageOneTextView);
+        tv.setText(messageOne);
+        tv = (TextView)findViewById(R.id.alarmMessageTwoTextView);
+        tv.setText(messageTwo);
         mHandler.removeCallbacks(mRunEverySecond);
         mHandler.postDelayed(mRunEverySecond, 1000);
     }

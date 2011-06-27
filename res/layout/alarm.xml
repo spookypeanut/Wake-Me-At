@@ -18,23 +18,34 @@
  <LinearLayout android:orientation="vertical"
   android:layout_width="fill_parent" android:layout_height="fill_parent">
 
-  <TextView android:id="@+id/alarmTitle" android:layout_height="wrap_content"
-   android:layout_width="wrap_content" android:text="@string/alarmTitle" />
-  <ImageView android:id="@+id/alarmMainImage"
+  <TextView style="@style/GreenNature.Heading"
+   android:layout_height="wrap_content"
+   android:text="@string/alarmTitle"
+   android:layout_width="match_parent"/>
+  <!-- <ImageView android:id="@+id/alarmMainImage"
    android:layout_height="wrap_content" android:layout_width="wrap_content"
-   android:src="@drawable/icon" />
-   <TextView android:id="@+id/alarmMessageTextView" android:layout_height="wrap_content"
-   android:layout_width="wrap_content" android:text="empty message" />
+   android:src="@drawable/icon" />-->
+   <TextView style="@style/GreenNature.TextView"
+   android:id="@+id/alarmMessageOneTextView"
+   android:layout_height="wrap_content"
+   android:text="empty message"
+   android:layout_width="match_parent"/>
+   <TextView style="@style/GreenNature.TextView"
+   android:id="@+id/alarmMessageTwoTextView"
+   android:layout_height="wrap_content"
+   android:text="empty message"
+   android:layout_width="match_parent"/>
+   
   <Button android:id="@+id/alarmButtonStop"
    android:layout_height="wrap_content" android:layout_width="fill_parent"
    android:text="@string/alarmButtonStop" android:gravity="center" />
   <LinearLayout android:orientation="horizontal"
    android:layout_height="wrap_content" android:layout_width="wrap_content">
    <Button android:id="@+id/alarmButtonMain"
-    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:layout_width="fill_parent"
     android:text="@string/alarmButtonMain" />
    <Button android:id="@+id/alarmButtonEdit"
-    android:layout_height="wrap_content" android:layout_width="wrap_content"
+    android:layout_height="wrap_content" android:layout_width="fill_parent"
     android:text="@string/alarmButtonEdit" />
   </LinearLayout>
       <uk.co.spookypeanut.wake_me_at.Compass
