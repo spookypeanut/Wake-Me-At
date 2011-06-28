@@ -22,6 +22,8 @@
     <color name="itemfocusedbg">@color/mainbg</color>
     <color name="itemenabledbg">@color/foreground</color>
     <color name="itemdefaultbg">@color/mainbg</color>
+    <color name="compassneedle">@color/highlight</color>
+    <color name="compassdials">@color/foreground</color>
     <!--<color name="itemselector">@drawable/listitem</color>-->
 
 </resources>

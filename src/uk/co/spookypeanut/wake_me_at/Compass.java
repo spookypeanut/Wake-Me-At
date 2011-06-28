@@ -58,9 +58,9 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private CompassThread mThread = null;
     private Context mContext;
 
-    private final int mBkgColor = Color.WHITE;
-    private final int mDialColor = Color.BLACK;
-    private final int mNeedleColor = Color.RED;
+    private final int mBkgColor = getResources().getColor(R.color.mainbg);
+    private final int mDialColor = getResources().getColor(R.color.compassdials);
+    private final int mNeedleColor = getResources().getColor(R.color.compassneedle);
     
     private SensorManager mSensorManager;
     private int mLayoutWidth, mLayoutHeight;
