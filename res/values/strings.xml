@@ -74,7 +74,7 @@
 <string name="alarmButtonEdit">Edit Location</string>
 <string name="alarmSpeech">You are %1$s from %2$s</string>
 <string name="alarmMessage">You are %1$s from %2$s</string>
-<string name="locAgeMessage">Location is %1$s old</string>
+<string name="locAgeMessage">Location data is %1$ss old</string>
 <string name="alarmAwaitingFix">Awaiting first location fix...</string>
 
 
