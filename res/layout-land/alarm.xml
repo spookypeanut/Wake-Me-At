@@ -11,69 +11,51 @@
  "COPYING". If not, see <http://www.gnu.org/licenses/>. -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:orientation="vertical"
- android:layout_height="fill_parent"
- android:layout_width="fill_parent"
- android:layout_weight="1">
+ android:orientation="vertical" android:layout_height="fill_parent"
+ android:layout_width="fill_parent" android:layout_weight="1">
  <TextView style="@style/GreenNature.Heading"
-  android:layout_height="wrap_content"
-  android:layout_width="match_parent"
-  android:text="@string/alarmTitle"
-  android:layout_weight="0" />
+  android:layout_height="wrap_content" android:layout_width="match_parent"
+  android:text="@string/alarmTitle" android:layout_weight=".15" />
+
  <LinearLayout android:orientation="horizontal"
-  android:layout_height="wrap_content"
-  android:layout_width="match_parent"
-  android:layout_weight="2">
+  android:layout_height="wrap_content" android:layout_width="match_parent"
+  android:layout_weight="1" android:baselineAligned="true">
+
+  <uk.co.spookypeanut.wake_me_at.Compass
+   android:id="@+id/compassSurface" android:gravity="center"
+   android:keepScreenOn="true" android:layout_weight="0.5"
+   android:layout_width="match_parent" android:layout_height="match_parent"
+   android:layout_gravity="center_vertical" />
+
   <LinearLayout android:orientation="vertical"
-   android:layout_height="fill_parent"
-   android:layout_width="fill_parent"
+   android:layout_height="fill_parent" android:layout_width="fill_parent"
    android:layout_weight=".5">
-   <TextView style="@style/GreenNature.TextView"
-    android:id="@+id/alarmMessageOneTextView"
-    android:layout_height="wrap_content"
-    android:layout_width="match_parent"
-    android:text="empty message"
-    android:layout_weight=".1" />
-   <TextView style="@style/GreenNature.TextView"
-    android:id="@+id/alarmMessageTwoTextView"
-    android:layout_height="wrap_content"
-    android:text="empty message"
-    android:layout_width="match_parent"
-    android:layout_weight=".1" />
+   <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageOneTextView"
+    android:layout_width="match_parent" android:text="empty message"
+    android:layout_weight="1" android:gravity="center"
+    android:layout_height="wrap_content" android:textSize="20dp" />
+   <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageTwoTextView"
+    android:text="empty message" android:layout_width="match_parent"
+    android:layout_weight="1" android:gravity="center"
+    android:layout_height="wrap_content" android:textSize="20dp" />
+
+   <LinearLayout android:orientation="horizontal"
+    android:layout_height="wrap_content" android:layout_width="match_parent"
+    android:layout_weight="10" />
+   <LinearLayout android:orientation="horizontal"
+    android:layout_height="wrap_content" android:layout_width="match_parent"
+    android:layout_weight="1">
+    <Button android:id="@+id/alarmButtonMain"
+     android:layout_height="match_parent" android:layout_width="0dip"
+     android:text="@string/alarmButtonMain" android:layout_weight="1" />
+    <Button android:id="@+id/alarmButtonEdit"
+     android:layout_height="match_parent" android:layout_width="0dip"
+     android:layout_weight="1" android:text="@string/alarmButtonEdit" />
+   </LinearLayout>
    <Button android:id="@+id/alarmButtonStop"
-    android:layout_height="wrap_content"
-    android:layout_width="fill_parent"
-    android:text="@string/alarmButtonStop"
-    android:gravity="center"
-    android:layout_weight=".05"/>
+    android:layout_height="wrap_content" android:layout_width="fill_parent"
+    android:text="@string/alarmButtonStop" android:gravity="center"
+    android:layout_weight="2" />
   </LinearLayout>
-
-  <LinearLayout android:orientation="horizontal"
-   android:layout_width="match_parent"
-   android:gravity="center" android:layout_weight=".5" android:layout_height="match_parent">
-   <uk.co.spookypeanut.wake_me_at.Compass
-    android:id="@+id/compassSurface"
-    android:gravity="center"
-    android:keepScreenOn="true"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"  />
-  </LinearLayout>
-
- </LinearLayout>
-
- <LinearLayout android:orientation="horizontal"
-  android:layout_height="wrap_content"
-  android:layout_width="match_parent"
-  android:layout_weight=".5">
-  <Button android:id="@+id/alarmButtonMain"
-   android:layout_height="match_parent"
-   android:layout_width="0dip"
-   android:text="@string/alarmButtonMain"
-   android:layout_weight="1" />
-  <Button android:id="@+id/alarmButtonEdit"
-   android:layout_height="match_parent"
-   android:layout_width="0dip"
-   android:layout_weight="1"
-   android:text="@string/alarmButtonEdit" />
  </LinearLayout>
 </LinearLayout>
