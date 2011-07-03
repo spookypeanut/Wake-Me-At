@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <!-- REF0017 -->
+    <!-- REF#0017 -->
     <style name="GreenNature" parent="@android:Theme.Black">
         <item name="android:listViewStyle">@style/GreenNature.ListView</item>
         <item name="android:expandableListViewStyle">@style/GreenNature.ExpandableListView</item> 
