@@ -24,3 +24,4 @@ http://javahowto.blogspot.com/
 0017 http://www.anddev.org/making_own_theme-t4052.html
 0018 http://nextaction.googlecode.com/svn http://www.google.com/codesearch#JFRx8rMFazE/trunk/android/res/values/themes.xml&q=android%20menu%20style%20context%20lang:xml&type=cs&l=7
 0019 http://blog.androgames.net/40/custom-button-style-and-theme/
+0020 http://stackoverflow.com/questions/4462735/textcolor-defined-in-style-being-applied-to-textview-but-not-button
