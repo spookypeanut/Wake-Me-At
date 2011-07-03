@@ -23,6 +23,14 @@
   <item name="android:divider">@drawable/divider</item>
  </style>
 
+ <style name="GreenNature.Button" parent="@android:style/Widget.Button">
+  <item name="android:background">@drawable/gn_buttonbg</item>
+  <item name="android:textAppearance">@style/GreenNature.DefaultText</item>
+  <item name="android:shadowDx">0</item>
+  <item name="android:shadowDy">-1</item>
+  <item name="android:shadowRadius">0.2</item>
+ </style>
+
  <style name="GreenNature.TextView">
   <item name="android:layout_width">fill_parent</item>
   <item name="android:layout_height">wrap_content</item>

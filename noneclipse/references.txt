@@ -22,4 +22,5 @@ http://javahowto.blogspot.com/
 0015 http://android.git.kernel.org http://www.google.com/codesearch/p?hl=en#XLdVEa1vc-g/src/com/android/im/provider/ImpsProvider.java&q=SQLiteDatabase%20onupgrade&sa=N&cd=2&ct=rc&l=339
 0016 http://sipdroid.googlecode.com http://www.google.com/codesearch/p?hl=en#fCdYvDFICtw/trunk/src/org/sipdroid/sipua/ui/Receiver.java&q=SCREEN_BRIGHT_WAKE_LOCK&sa=N&cd=6&ct=rc
 0017 http://www.anddev.org/making_own_theme-t4052.html
-
+0018 http://nextaction.googlecode.com/svn http://www.google.com/codesearch#JFRx8rMFazE/trunk/android/res/values/themes.xml&q=android%20menu%20style%20context%20lang:xml&type=cs&l=7
+0019 http://blog.androgames.net/40/custom-button-style-and-theme/
