@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
  <!-- REF#0017 -->
- <style name="GreenNature" parent="android:Widget">
-  <item name="android:textAppearance">@style/GreenNature.DefaultText</item>
- </style>
-
  <style name="GreenNature.AbsListView">
   <item name="android:dividerHeight">4sp</item>
   <item name="android:background">@drawable/listitembg</item>
