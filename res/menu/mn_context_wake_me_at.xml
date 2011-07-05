@@ -20,9 +20,9 @@
 <menu
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mn_start"
-          android:title="@strings/mn_context_start" />
+          android:title="@string/mn_context_start" />
     <item android:id="@+id/mn_edit_loc"
-          android:title="@strings/mn_context_edit" />
+          android:title="@string/mn_context_edit" />
     <item android:id="@+id/mn_delete_loc"
-          android:title="@strings/mn_context_delete" />
+          android:title="@string/mn_context_delete" />
 </menu>
