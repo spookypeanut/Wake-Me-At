@@ -26,8 +26,12 @@
 
 <string name="mn_new_loc">New location</string>
 <string name="mn_quit">Quit</string>
-
 <string name="mn_stop_all">Cancel alarm</string>
+
+<string name="mn_context_start">Wake here</string>
+<string name="mn_context_stop">Cancel alarm</string>
+<string name="mn_context_edit">Edit location</string>
+<string name="mn_context_delete">Delete location</string>
  
 <!-- EDIT LOCATION -->
  <string name="get_loc_button_name">Get location...</string>
