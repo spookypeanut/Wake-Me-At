@@ -18,18 +18,30 @@
     <http://www.gnu.org/licenses/>.
 -->
 <LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="wrap_content"
-    android:layout_height="wrap_content"
-    android:orientation="vertical">
-    <TextView
-        style="@style/GreenNature.Heading"
-        android:layout_width="fill_parent"
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:id="@+id/mainTitle"
-        android:text="@string/mainTitle" />
+        android:orientation="vertical">
+    <LinearLayout
+            style="@style/GreenNature.Heading"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView   
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:src="@drawable/icon"/>
+        <TextView
+                style="@style/GreenNature.Heading"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/mainTitle"
+                android:text="@string/mainTitle" />
+    </LinearLayout>
     <ListView
-        android:layout_width="fill_parent"
-        android:layout_height="fill_parent"
-        android:id="@android:id/list" />
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:id="@android:id/list" />
 </LinearLayout>

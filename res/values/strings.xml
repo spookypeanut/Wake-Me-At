@@ -22,7 +22,7 @@
 <string name="alert_dialog_retry">Retry</string>
  
  <!-- WAKEME@ MAIN -->
- <string name="mainTitle">WakeMe@ Location List</string>
+ <string name="mainTitle">Location List</string>
 
 <string name="mn_new_loc">New location</string>
 <string name="mn_quit">Quit</string>
