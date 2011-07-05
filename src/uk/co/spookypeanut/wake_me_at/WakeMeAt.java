@@ -99,6 +99,8 @@ public class WakeMeAt extends ListActivity {
 
       long id = myInfo.id;
       menu.setHeaderTitle(db.getNick(id));
+      menu.setHeaderIcon(R.drawable.icon);
+
       MenuInflater inflater = getMenuInflater();
       if (WakeMeAtService.serviceRunning && (id == mRowId)) {
           inflater.inflate(R.menu.mn_context_running_wake_me_at, menu);
