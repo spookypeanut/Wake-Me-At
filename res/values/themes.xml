@@ -1,12 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- REF#0017 -->
-    <style name="GreenNature" parent="@android:Theme.Black">
+    <style name="GreenNature" parent="@android:Theme">
         <item name="android:listViewStyle">@style/GreenNature.ListView</item>
+        <item name="android:absListViewStyle">@style/GreenNature.AbsListView</item>
         <item name="android:expandableListViewStyle">@style/GreenNature.ExpandableListView</item> 
         <item name="android:windowBackground">@color/mainbg</item>
         <item name="android:colorBackground">@color/mainbg</item>
         <item name="android:buttonStyle">@style/GreenNature.Button</item>
         <item name="android:textAppearance">@style/GreenNature.DefaultText</item>
+        <item name="android:itemTextAppearance">@style/GreenNature.ContextMenuText</item>
+        <item name="android:horizontalDivider">@drawable/divider</item>
+        <item name="android:verticalDivider">@drawable/divider</item>
+        <item name="android:listDivider">@drawable/divider</item>
+        <item name="android:childDivider">@drawable/divider</item>
+        <item name="android:divider">@drawable/divider</item>
+        <item name="android:dividerHeight">4dp</item>
+        <item name="android:windowTitleBackgroundStyle">@style/GreenNature.Heading</item>
     </style>
 </resources>

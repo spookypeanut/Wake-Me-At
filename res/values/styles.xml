@@ -64,6 +64,10 @@
   <item name="android:textStyle">bold</item>
  </style>
 
+ <style name="GreenNature.ContextMenuText" parent="GreenNature.DefaultText">
+  <item name="android:textSize">18sp</item>
+ </style>
+
  <style name="GreenNature.DefaultText" parent="@android:style/TextAppearance">
   <item name="android:textSize">12sp</item>
   <item name="android:textColor">@color/foreground</item>
