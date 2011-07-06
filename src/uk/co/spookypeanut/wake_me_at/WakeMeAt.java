@@ -158,7 +158,6 @@ public class WakeMeAt extends ListActivity {
         Log.d(LOG_NAME, "Start onCreate()");
 
         super.onCreate(savedInstanceState);
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
