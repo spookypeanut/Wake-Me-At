@@ -17,12 +17,22 @@
  android:orientation="vertical"
  android:layout_width="match_parent"
  android:layout_height="match_parent">
-
+    <LinearLayout
+            style="@style/GreenNature.Heading"
+            android:orientation="horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <ImageView   
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="0"
+                android:src="@drawable/icon"/>
   <TextView style="@style/GreenNature.Heading"
    android:layout_height="wrap_content"
    android:layout_width="match_parent"
    android:layout_weight=".5"
    android:text="@string/alarmTitle"/>
+      </LinearLayout>
    <TextView style="@style/GreenNature.TextView"
    android:id="@+id/alarmMessageOneTextView"
    android:layout_height="wrap_content"
