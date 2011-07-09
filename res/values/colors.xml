@@ -13,6 +13,7 @@
     <color name="darksecondary">#0c7547</color>
     <color name="highlight">#9013bf</color>
     <color name="foreground">#ffffff</color>
+    <color name="transparent">#ffffffff</color>
 
     <color name="mainbg">@color/darksecondary</color>
     <color name="headingbg">@color/primary</color>
@@ -24,6 +25,7 @@
     <color name="itemdefaultbg">@color/mainbg</color>
     <color name="compassneedle">@color/highlight</color>
     <color name="compassdials">@color/foreground</color>
+    <color name="buttontext">@color/mainbg</color>
     <!--<color name="itemselector">@drawable/listitem</color>-->
 
 </resources>
