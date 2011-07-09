@@ -39,11 +39,11 @@
    <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageOneTextView"
     android:layout_width="match_parent" android:text="empty message"
     android:layout_weight="1" android:gravity="center"
-    android:layout_height="wrap_content" android:textSize="20dp" />
+    android:layout_height="wrap_content" android:textSize="18dp" />
    <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageTwoTextView"
     android:text="empty message" android:layout_width="match_parent"
     android:layout_weight="1" android:gravity="center"
-    android:layout_height="wrap_content" android:textSize="20dp" />
+    android:layout_height="wrap_content" android:textSize="18dp" />
 
    <LinearLayout android:orientation="horizontal"
     android:layout_height="wrap_content" android:layout_width="match_parent"
