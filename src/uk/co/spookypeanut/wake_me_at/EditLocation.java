@@ -21,6 +21,7 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.text.InputType;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -212,7 +213,7 @@ public class EditLocation extends ExpandableListActivity {
                     List<String> allProviders = Arrays.asList(this.getResources().getStringArray(R.array.locProvHuman));
                     final String[] locProvs = allProviders.toArray(new String[allProviders.size()]);
 
-                    AlertDialog.Builder lpbuilder = new AlertDialog.Builder(this);
+                    AlertDialog.Builder lpbuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ContextMenuText));
                     lpbuilder.setItems(locProvs, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             changedLocProv(item);
