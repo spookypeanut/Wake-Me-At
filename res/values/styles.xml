@@ -3,7 +3,9 @@
  <!-- REF#0017 -->
  <style name="GreenNature.AbsListView">
   <item name="android:dividerHeight">4sp</item>
-  <item name="android:background">@drawable/listitembg</item>
+  <!--<item name="android:drawSelectorOnTop">true</item>-->
+  <!--<item name="android:listSelector">@drawable/listselector</item>-->
+  <!--<item name="android:textColor">@drawable/listitemtext</item>-->
  </style>
 
  <style name="GreenNature.ListView" parent="GreenNature.AbsListView">
@@ -37,10 +39,13 @@
   <item name="android:textSize">16sp</item>
  </style>
 
+ <!-- REF#0021 -->
  <style name="GreenNature.ListItem">
   <item name="android:textSize">20sp</item>
   <item name="android:layout_marginLeft">30sp</item>
   <item name="android:layout_marginRight">30sp</item>
+  <item name="android:background">@drawable/listitembg</item>
+  <item name="android:textColor">@drawable/listitemtext</item>
  </style>
  
  <style name="GreenNature.ListItemDescription" parent="GreenNature.ListItem">
@@ -69,6 +74,11 @@
  </style>
 
  <style name="ContextMenuText" parent="GreenNature.TextView">
+  <item name="android:textAppearance">@style/GreenNature.DefaultText</item>
+  <item name="android:alertDialogStyle">@style/GreenNature.Dialog</item>
+ </style>
+
+ <style name="GreenNature.Dialog" parent="@android:style/Theme">
   <item name="android:textColor">@color/foreground</item>
   <item name="android:textStyle">bold</item>
   <item name="android:textSize">18sp</item>

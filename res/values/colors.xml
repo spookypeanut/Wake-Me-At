@@ -1,30 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="primary">#008c00</color>
-    <!--
-    <color name="darkprimary">#064006</color>
-    <color name="secondary">#d9650b</color>
-    <color name="darksecondary">#592c09</color>
-    <color name="highlight">#280f99</color>
-    <color name="foreground">#ffffff</color>
-    -->
     <color name="darkprimary">#992699</color>
     <color name="secondary">#49b888</color>
     <color name="darksecondary">#0c7547</color>
     <color name="highlight">#9013bf</color>
     <color name="foreground">#ffffff</color>
+    <color name="foregrounddisabled">#808080</color>
     <color name="transparent">#ffffffff</color>
 
     <color name="mainbg">@color/darksecondary</color>
     <color name="headingbg">@color/primary</color>
     <color name="itemgroupbg">@color/secondary</color>
     
-    <color name="itempressedbg">@color/highlight</color>
-    <color name="itemfocusedbg">@color/mainbg</color>
-    <color name="itemenabledbg">@color/foreground</color>
-    <color name="itemdefaultbg">@color/mainbg</color>
+    <color name="itempressedbg">#8000ff80</color>
+    <color name="itemfocusedbg">@color/highlight</color>
+    <!--<color name="itemenabledbg">@color/mainbg</color>-->
+    <color name="itemdefaultbg">#80ff0080</color>
+    
+    <color name="itemdisabledtext">#ff0000</color>
+    <color name="itemdefaulttext">@color/foreground</color>
+
     <color name="compassneedle">@color/highlight</color>
     <color name="compassdials">@color/foreground</color>
+    
     <color name="buttontext">@color/mainbg</color>
     <!--<color name="itemselector">@drawable/listitem</color>-->
 

@@ -998,6 +998,9 @@ public class EditLocation extends ExpandableListActivity {
                     }
                     break;
             }
+            
+            row.setEnabled(enabled);
+            
             TextView tv = (TextView) row.findViewById(R.id.locSettingName);
             tv.setText(mTitles[position]);
             tv.setEnabled(enabled);
