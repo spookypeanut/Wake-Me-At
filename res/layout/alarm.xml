@@ -66,16 +66,21 @@
     android:layout_width="match_parent"
     android:layout_weight="1"
     android:text="@string/alarmButtonMain"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:layout_margin="5dp" />
    <Button android:id="@+id/alarmButtonEdit"
     android:layout_width="match_parent"
     android:layout_weight="1"
     android:text="@string/alarmButtonEdit"
-    android:layout_height="match_parent"/>
+    android:layout_height="match_parent"
+    android:layout_margin="5dp" />
+    
   </LinearLayout>
   <Button android:id="@+id/alarmButtonStop"
    android:layout_height="wrap_content"
    android:layout_width="match_parent"
    android:layout_weight=".5"
-   android:text="@string/alarmButtonStop"/>
+   android:text="@string/alarmButtonStop"
+   android:layout_margin="5dp" />
+   
 </LinearLayout>
