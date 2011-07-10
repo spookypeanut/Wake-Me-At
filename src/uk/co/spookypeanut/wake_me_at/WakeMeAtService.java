@@ -82,7 +82,6 @@ public class WakeMeAtService extends Service implements LocationListener {
     private float mRadius;
     private int mProvider;
     private String mUnit;
-    private boolean mToast;
     private boolean mWarnSound;
     private boolean mWarnVibrate;
     private boolean mWarnToast;
@@ -197,7 +196,6 @@ public class WakeMeAtService extends Service implements LocationListener {
             mProvider = presetObj.getLocProv();
             mUnit = presetObj.getUnit();
         }
-        mToast = db.getToast(mRowId);
         mWarnSound = db.getWarnSound(mRowId);
         mWarnVibrate = db.getWarnVibrate(mRowId);
         mWarnToast = db.getWarnToast(mRowId);

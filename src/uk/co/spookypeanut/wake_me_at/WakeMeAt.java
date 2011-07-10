@@ -5,27 +5,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.RingtoneManager;
-
 import android.net.Uri;
-
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextMenu;
+import android.view.ContextMenu.ContextMenuInfo;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ContextMenu.ContextMenuInfo;
-import android.view.Window;
+import android.widget.AdapterView.AdapterContextMenuInfo;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.AdapterView.AdapterContextMenuInfo;
 
 /*
 This file is part of Wake Me At. Wake Me At is the legal property
@@ -63,6 +59,9 @@ public class WakeMeAt extends ListActivity {
     
     private long mRowId;
     
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -70,6 +69,10 @@ public class WakeMeAt extends ListActivity {
         return true;
     }
     
+    /**
+     * The items on the menu 
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -86,10 +89,13 @@ public class WakeMeAt extends ListActivity {
     
     @Override
     protected void onListItemClick (ListView l, View v, int position, long id) {
-        Log.d(LOG_NAME, "onListItemClick(" + l + ", " + v + ", " + position + ", " + id + ")");
         mLocListAdapter.editLocation(position);
     }
     
+    /**
+     * Create the context menu for the list items
+     * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
+     */
     @Override
     public void onCreateContextMenu(ContextMenu menu, View v,
                                     ContextMenuInfo menuInfo) {
@@ -109,12 +115,15 @@ public class WakeMeAt extends ListActivity {
       }
     }
     
+    /**
+     * Code for the items on the list item context menu
+     * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
+     */
     @Override
     public boolean onContextItemSelected(MenuItem item) {
       AdapterContextMenuInfo info = (AdapterContextMenuInfo) item.getMenuInfo();
       switch (item.getItemId()) {
       case R.id.mn_delete_loc:
-          Log.d(LOG_NAME, "Delete item selected: " + info.position);
           mLocListAdapter.deleteItem(info.position);
         return true;
       case R.id.mn_start:
@@ -153,11 +162,10 @@ public class WakeMeAt extends ListActivity {
     
     @Override
     protected void onCreate(Bundle icicle) {
+        super.onCreate(icicle);
+        
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
-        
-        Log.d(LOG_NAME, "Start onCreate()");
-        super.onCreate(icicle);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
 
@@ -173,7 +181,6 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
-        Log.d(LOG_NAME, "End onCreate()");
     }
     
     /**
@@ -280,10 +287,13 @@ public class WakeMeAt extends ListActivity {
             startActivity(i);
         }
         
+        /**
+         * Create the view for a single line of the listview
+         * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             long id = db.getIdsAsList().get(position);
-            //Log.d(LOG_NAME, "getView(" + id + "), mRowId: " + mRowId);
             View row;
             
             if (null == convertView) {
@@ -291,15 +301,19 @@ public class WakeMeAt extends ListActivity {
             } else {
                 row = convertView;
             }
+            
+            // If this is the currently running location, highlight it
             if (WakeMeAtService.serviceRunning && (id == mRowId)) {
                 row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg_hl));
             } else {
                 row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg));
             }
             
+            // Set the name of the location from the database
             TextView tv = (TextView) row.findViewById(R.id.locListName);
             tv.setText(db.getNick(id));
             
+            // Set the description, which is the preset in the database
             tv = (TextView) row.findViewById(R.id.locListDesc);
             String preset = new Presets(mContext, db.getPreset(id)).getName();
             tv.setText(preset);
