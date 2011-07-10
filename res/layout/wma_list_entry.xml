@@ -15,15 +15,17 @@
 
 <!-- REF#0005 -->
 
- <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="fill_parent" android:layout_height="fill_parent"
- android:orientation="vertical">
-  <TextView android:id="@+id/locListName"
-          style="@style/GreenNature.ListItem"
-          android:layout_height="wrap_content"
-          android:layout_width="wrap_content"
-          android:text="Location name"/>
-  <TextView android:id="@+id/locListDesc"
-          style="@style/GreenNature.ListItemDescription"
-          android:text="Location description"/>
- </LinearLayout>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        style="@style/GreenNature.ListItem"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+    <TextView android:id="@+id/locListName"
+            style="@style/GreenNature.ListItemName"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:text="Location name"/>
+    <TextView android:id="@+id/locListDesc"
+            style="@style/GreenNature.ListItemDescription"
+            android:text="Location description"/>
+</LinearLayout>

@@ -14,13 +14,14 @@
  -->
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
- android:layout_width="fill_parent"
- android:layout_height="fill_parent"
+ style="@style/GreenNature.ListItem"
+ android:layout_width="match_parent"
+ android:layout_height="match_parent"
  android:orientation="vertical">
  <TextView android:id="@+id/locSettingName"
-  style="@style/GreenNature.ListItem"
+  style="@style/GreenNature.ListItemName"
   android:layout_height="wrap_content" 
-  android:layout_width="fill_parent"
+  android:layout_width="match_parent"
   android:text="Setting" />
  <TextView android:id="@+id/locSettingDesc" 
   style="@style/GreenNature.ListItemDescription"

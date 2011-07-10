@@ -41,20 +41,22 @@
 
  <!-- REF#0021 -->
  <style name="GreenNature.ListItem">
-  <item name="android:textSize">20sp</item>
-  <item name="android:layout_marginLeft">30sp</item>
-  <item name="android:layout_marginRight">30sp</item>
+  <!--<item name="android:layout_margin">30dip</item>-->
+  <item name="android:paddingRight">30dip</item>
+  <item name="android:paddingLeft">30dip</item>
   <item name="android:background">@drawable/listitembg</item>
+ </style>
+
+ <style name="GreenNature.ListItemName">
+  <item name="android:textSize">20sp</item>
   <item name="android:textColor">@drawable/listitemtext</item>
  </style>
  
- <style name="GreenNature.ListItemDescription" parent="GreenNature.ListItem">
+ <style name="GreenNature.ListItemDescription" parent="GreenNature.ListItemName">
+  <item name="android:layout_width">match_parent</item>
+  <item name="android:layout_height">wrap_content</item>
   <item name="android:textSize">15sp</item> 
   <item name="android:gravity">right</item>
-  <item name="android:layout_width">fill_parent</item>
-  <item name="android:layout_height">wrap_content</item>
-  <item name="android:layout_marginLeft">30sp</item>
-  <item name="android:layout_marginRight">30sp</item>
  </style>
   
  <style name="GreenNature.ListItemGroup" parent="GreenNature.Heading">
