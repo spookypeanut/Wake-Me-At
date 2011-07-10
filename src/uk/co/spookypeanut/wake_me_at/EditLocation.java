@@ -1013,7 +1013,6 @@ public class EditLocation extends ExpandableListActivity {
          */
         @Override
         public boolean isChildSelectable(int groupPosition, int childPosition) {
-            // TODO Auto-generated method stub
             return true;
         }
     }

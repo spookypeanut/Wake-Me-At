@@ -169,7 +169,7 @@ public class WakeMeAt extends ListActivity {
         setContentView(R.layout.wake_me_at);
         setListAdapter(new LocListAdapter(this));
 
-        ListView lv = getListView(); 
+        ListView lv = getListView();
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
