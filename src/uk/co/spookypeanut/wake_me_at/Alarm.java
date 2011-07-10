@@ -24,6 +24,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 /*
     This file is part of Wake Me At. Wake Me At is the legal property
@@ -64,6 +65,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean mVibrateOn = true;
     private boolean mNoiseOn = true;
     private boolean mSpeechOn = false;
+    private boolean mToastOn = false;
 
     private float mCrescVolume = (float) 0.1;
     private long mRowId;
@@ -116,6 +118,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mNoiseOn = db.getSound(mRowId);
         mVibrateOn = db.getVibrate(mRowId);
         mSpeechOn = db.getSpeech(mRowId);
+        mToastOn = db.getToast(mRowId);
 
         uc = new UnitConverter(this, mUnit);
     }
@@ -194,6 +197,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         mAlarmSounding = true;
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
+        if (mToastOn) {
+            String message = String.format(getString(R.string.alarmMessage),
+                uc.out(mMetresAway), mNick);
+            Toast.makeText(getApplicationContext(), message,
+                Toast.LENGTH_LONG).show();
+        }
         if (mNoiseOn) {
             if (mMediaPlayer == null) {
                 startAlarmtone();
