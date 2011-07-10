@@ -174,7 +174,7 @@ public class EditLocation extends ExpandableListActivity {
                 final String[] presetList = forList.getAllNames();
 
                 AlertDialog.Builder presetBuilder;
-                presetBuilder = new AlertDialog.Builder(this);
+                presetBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ContextMenuText));
                 presetBuilder.setItems(presetList,
                                        new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -198,7 +198,7 @@ public class EditLocation extends ExpandableListActivity {
                     ArrayList<String> unitList = uc.getNameList();
                     final String[] items = unitList.toArray(new String[unitList.size()]);
 
-                    AlertDialog.Builder builder = new AlertDialog.Builder(this);
+                    AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ContextMenuText));
                     builder.setItems(items, new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int item) {
                             changedUnit(items[item]);
