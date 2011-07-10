@@ -882,7 +882,6 @@ public class EditLocation extends ExpandableListActivity {
          */
         @Override
         public Object getGroup(int groupPosition) {
-            // TODO Auto-generated method stub
             return null;
         }
 
@@ -892,7 +891,6 @@ public class EditLocation extends ExpandableListActivity {
          */
         @Override
         public Object getChild(int groupPosition, int childPosition) {
-            // TODO Auto-generated method stub
             return null;
         }
 
@@ -902,7 +900,6 @@ public class EditLocation extends ExpandableListActivity {
          */
         @Override
         public long getGroupId(int groupPosition) {
-            // TODO Auto-generated method stub
             return 0;
         }
 
@@ -921,7 +918,6 @@ public class EditLocation extends ExpandableListActivity {
          */
         @Override
         public boolean hasStableIds() {
-            // TODO Auto-generated method stub
             return false;
         }
 
