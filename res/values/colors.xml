@@ -14,10 +14,10 @@
     <color name="headingbg">@color/primary</color>
     <color name="itemgroupbg">@color/secondary</color>
     
+    <color name="itemdefaultbg">@color/transparent</color>
+    <color name="itemhighlightbg">@color/highlight</color>
     <color name="itempressedbg">#8000ff80</color>
     <color name="itemfocusedbg">@color/highlight</color>
-    <!--<color name="itemenabledbg">@color/mainbg</color>-->
-    <color name="itemdefaultbg">@color/transparent</color>
     
     <color name="itemdisabledtext">@color/gray</color>
     <color name="itemdefaulttext">@color/foreground</color>
