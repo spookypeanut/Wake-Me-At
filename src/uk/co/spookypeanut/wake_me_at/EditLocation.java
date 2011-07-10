@@ -627,21 +627,20 @@ public class EditLocation extends ExpandableListActivity {
         Log.d(LOG_NAME, "EditLocation.onCreate");
         super.onCreate(icicle);
 
-        setVolumeControlStream(AudioManager.STREAM_ALARM);
-        mContext = this;
-        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mPresetObj = new Presets(mContext, 0);
-
-        db = new DatabaseManager(this);
-        
         Bundle extras = this.getIntent().getExtras();
         if (null == extras) {
             finish();
         }
         Log.d(LOG_NAME, "mRowId = " + mRowId);
         mRowId = extras.getLong("rowId");
-        
         Log.d(LOG_NAME, "Row detected: " + mRowId);
+        
+        setVolumeControlStream(AudioManager.STREAM_ALARM);
+        mContext = this;
+        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mPresetObj = new Presets(mContext, 0);
+
+        db = new DatabaseManager(this);
 
         setContentView(R.layout.edit_location);
 
