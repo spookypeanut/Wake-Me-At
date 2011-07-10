@@ -14,18 +14,23 @@
  -->
 
  <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ style="@style/GreenNature.ListItem"
  android:layout_width="fill_parent" android:layout_height="fill_parent"
  android:orientation="vertical">
   <TextView android:id="@+id/searchListLine0"
+  style="@style/GreenNature.ListItemName"
   android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Line0" android:textSize="15sp"/>
+  android:text="Line0"/>
   <TextView android:id="@+id/searchListLine1"
+  style="@style/GreenNature.ListItemDescription"
   android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Line1" android:textSize="15sp"/>
+  android:text="Line1"/>
   <TextView android:id="@+id/searchListLine2"
+  style="@style/GreenNature.ListItemDescription"
   android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="Line2" android:textSize="15sp"/>
+  android:text="Line2"/>
   <TextView android:id="@+id/searchListDist"
-  android:layout_height="wrap_content" android:layout_width="wrap_content"
-  android:text="0m away" android:textSize="10sp"/>
+  android:layout_height="wrap_content" android:layout_width="match_parent"
+  android:text="0m away" android:textSize="10sp"
+  android:gravity="right"/>
  </LinearLayout>
