@@ -23,7 +23,7 @@
     <TextView android:id="@+id/locListName"
             style="@style/GreenNature.ListItemName"
             android:layout_height="wrap_content"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:text="Location name"/>
     <TextView android:id="@+id/locListDesc"
             style="@style/GreenNature.ListItemDescription"
