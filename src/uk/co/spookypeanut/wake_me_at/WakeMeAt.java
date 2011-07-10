@@ -292,10 +292,9 @@ public class WakeMeAt extends ListActivity {
                 row = convertView;
             }
             if (WakeMeAtService.serviceRunning && (id == mRowId)) {
-                row.setBackgroundColor(getResources()
-                                       .getColor(R.color.highlight));
+                row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg_hl));
             } else {
-                row.setBackgroundColor(Color.TRANSPARENT);
+                row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg));
             }
             
             TextView tv = (TextView) row.findViewById(R.id.locListName);

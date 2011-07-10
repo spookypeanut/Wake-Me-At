@@ -963,17 +963,15 @@ public class EditLocation extends ExpandableListActivity {
             
             if (null == convertView) {
                 row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
-                /*
-                if (isActive() && (position == INDEX_ACTIV)) {
-                    Log.d(LOG_NAME, "position is " + position);
-                    Log.d(LOG_NAME, "group position is " + groupPosition);
-                    Log.d(LOG_NAME, "child position is " + childPosition);
-                    row.setBackgroundColor(getResources()
-                                           .getColor(R.color.highlight));
-                }
-                */
             } else {
                 row = convertView;
+            }
+            if (isActive() && (position == INDEX_ACTIV)) {
+                row.setBackgroundDrawable(getResources()
+                                          .getDrawable(R.drawable.listitembg_hl));
+            } else {
+                row.setBackgroundDrawable(getResources()
+                                          .getDrawable(R.drawable.listitembg));
             }
 
             boolean enabled = true;
