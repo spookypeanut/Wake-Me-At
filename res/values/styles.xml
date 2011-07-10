@@ -3,9 +3,6 @@
  <!-- REF#0017 -->
  <style name="GreenNature.AbsListView">
   <item name="android:dividerHeight">4sp</item>
-  <!--<item name="android:drawSelectorOnTop">true</item>-->
-  <!--<item name="android:listSelector">@drawable/listselector</item>-->
-  <!--<item name="android:textColor">@drawable/listitemtext</item>-->
  </style>
 
  <style name="GreenNature.ListView" parent="GreenNature.AbsListView">
@@ -35,7 +32,6 @@
 
  <!-- REF#0021 -->
  <style name="GreenNature.ListItem">
-  <!--<item name="android:layout_margin">30dip</item>-->
   <item name="android:paddingRight">30dip</item>
   <item name="android:paddingLeft">30dip</item>
   <item name="android:background">@drawable/listitembg</item>
