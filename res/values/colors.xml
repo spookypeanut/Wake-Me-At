@@ -7,7 +7,8 @@
     <color name="highlight">#9013bf</color>
     <color name="foreground">#ffffff</color>
     <color name="foregrounddisabled">#808080</color>
-    <color name="transparent">#ffffffff</color>
+    <color name="transparent">#00ffffff</color>
+    <color name="gray">#ff7f7f7f</color>
 
     <color name="mainbg">@color/darksecondary</color>
     <color name="headingbg">@color/primary</color>
@@ -16,9 +17,9 @@
     <color name="itempressedbg">#8000ff80</color>
     <color name="itemfocusedbg">@color/highlight</color>
     <!--<color name="itemenabledbg">@color/mainbg</color>-->
-    <color name="itemdefaultbg">#80ff0080</color>
+    <color name="itemdefaultbg">@color/transparent</color>
     
-    <color name="itemdisabledtext">#ff0000</color>
+    <color name="itemdisabledtext">@color/gray</color>
     <color name="itemdefaulttext">@color/foreground</color>
 
     <color name="compassneedle">@color/highlight</color>
