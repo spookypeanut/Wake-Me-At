@@ -24,9 +24,6 @@
   <!-- Not sure why this is needed, but others have seen this too: REF#0020 -->
   <item name="android:textColor">@color/buttontext</item>
   <item name="android:textSize">16sp</item>
-  <item name="android:shadowDx">0</item>
-  <item name="android:shadowDy">-1</item>
-  <item name="android:shadowRadius">0.2</item>
  </style>
 
  <style name="GreenNature.TextView">
