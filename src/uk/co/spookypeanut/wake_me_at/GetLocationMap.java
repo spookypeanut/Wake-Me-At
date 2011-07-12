@@ -79,6 +79,7 @@ implements LocationListener {
     boolean mSatellite = false;
     Location mCurrLoc;
     UnitConverter uc;
+    String mSearchTerm;
     
     @Override
     public void onCreate(Bundle icicle) {
@@ -292,6 +293,7 @@ implements LocationListener {
      * @param searchTerm The text entered in the search box
      */
     private void resultsDialog(String searchTerm) {
+        mSearchTerm = searchTerm;
         mResults = getSearchLocations(searchTerm);
         
         if (mResults == null) {
@@ -506,6 +508,7 @@ implements LocationListener {
                 public void onClick(DialogInterface dialog,
                         int which) {
                     Intent i = new Intent();
+                    i.putExtra("searchTerm", mSearchTerm);
                     setResult(RESULT_OK, i.setAction(
                             mDest.getLatitudeE6() / 1E6 + "," +
                             mDest.getLongitudeE6() / 1E6));
