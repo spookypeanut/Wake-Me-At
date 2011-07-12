@@ -730,7 +730,8 @@ public class EditLocation extends ExpandableListActivity {
             mDialogOpen = true;
             return new AlertDialog.Builder(EditLocation.this)
                 .setTitle(title)
-                .setView(textEntryView) 
+                .setView(textEntryView)
+                .setIcon(R.drawable.icon)
                 .setPositiveButton(R.string.alert_dialog_ok, positiveListener)
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
