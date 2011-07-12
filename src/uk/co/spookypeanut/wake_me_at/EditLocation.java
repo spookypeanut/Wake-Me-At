@@ -85,6 +85,8 @@ public class EditLocation extends ExpandableListActivity {
     private int mPreset = -1;
     private Presets mPresetObj;
     private String mUnit = "";
+    
+    private String mSearchTerm = "";
 
     private boolean mSound = true;
     private Uri mRingtone;
@@ -567,7 +569,7 @@ public class EditLocation extends ExpandableListActivity {
     
     /**
      * Load the nickname of the location from the database
-     */
+     */ 
     protected void loadNick() {
         Log.v(LOG_NAME, "loadNick()");
         mNick = db.getNick(mRowId);
@@ -618,7 +620,7 @@ public class EditLocation extends ExpandableListActivity {
         if (requestCode == GETLOCMAP && data != null) {
             mDialogOpen = false;
             Bundle extras = data.getExtras();
-            String searchTerm = extras.getString("searchTerm");
+            mSearchTerm = extras.getString("searchTerm");
             String latLongString = data.getAction();
 
             String tempStrings[] = latLongString.split(",");
@@ -627,6 +629,7 @@ public class EditLocation extends ExpandableListActivity {
             double latDbl = Double.valueOf(latString.trim()).doubleValue();
             double longDbl = Double.valueOf(longString.trim()).doubleValue();
             changedLatLong(latDbl, longDbl);
+            loadNick();
         }
         if (requestCode == GETRINGTONE && data != null) {
             Uri uri = (Uri) data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
@@ -704,6 +707,7 @@ public class EditLocation extends ExpandableListActivity {
             DialogInterface.OnClickListener positiveListener = null;
             switch (type) {
                 case NICKDIALOG:
+                    inputBox.setText(mSearchTerm);
                     title = "Location name";
                     positiveListener = new DialogInterface.OnClickListener() {
                         public void onClick(DialogInterface dialog, int whichButton) {
