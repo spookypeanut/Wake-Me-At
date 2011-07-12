@@ -84,9 +84,6 @@ implements LocationListener {
     @Override
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
-//        BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
-        
-        Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         super.onCreate(icicle);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
