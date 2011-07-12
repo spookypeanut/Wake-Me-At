@@ -575,7 +575,9 @@ public class EditLocation extends ExpandableListActivity {
         if (mNick.equals("")) {
             Log.v(LOG_NAME, "Nick is empty");
             Dialog monkey = onCreateDialog(NICKDIALOG);
-            monkey.show();
+            if (monkey != null) {
+                monkey.show();
+            }
         }
     }
     
