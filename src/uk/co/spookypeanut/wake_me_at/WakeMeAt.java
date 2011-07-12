@@ -203,7 +203,7 @@ public class WakeMeAt extends ListActivity {
         return db.addRow (
             "",              // Nickname
             1000.0, 1000.0,  // Lat long
-            0,               // Preset
+            1,               // Preset
             1,               // Location provider
             (float) 1.80,    // Radius
             "km",            // Unit
