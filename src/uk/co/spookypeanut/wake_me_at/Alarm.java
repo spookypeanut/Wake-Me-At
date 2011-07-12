@@ -147,8 +147,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             messageTwo = String.format(getString(R.string.locAgeMessage),
                     locAge);
         }
-        Log.d(LOG_NAME, messageOne);
-        Log.d(LOG_NAME, messageTwo);
         TextView tv = (TextView)findViewById(R.id.alarmMessageOneTextView);
         tv.setText(messageOne);
         tv = (TextView)findViewById(R.id.alarmMessageTwoTextView);
