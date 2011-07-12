@@ -397,6 +397,7 @@ public class EditLocation extends ExpandableListActivity {
             i.putExtra("longitude", mLongitude);
             i.putExtra("nick", mNick);
             Log.d(LOG_NAME, i.toString());
+            mDialogOpen = true;
             startActivityForResult(i, GETLOCMAP);
         } else {
             Log.w(LOG_NAME, "Dialog open, skipping location map");
@@ -615,6 +616,9 @@ public class EditLocation extends ExpandableListActivity {
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
         if (requestCode == GETLOCMAP && data != null) {
+            mDialogOpen = false;
+            Bundle extras = data.getExtras();
+            String searchTerm = extras.getString("searchTerm");
             String latLongString = data.getAction();
 
             String tempStrings[] = latLongString.split(",");
@@ -668,8 +672,8 @@ public class EditLocation extends ExpandableListActivity {
             Log.wtf(LOG_NAME, "How can there be no units!?");
         }
 
-        loadNick();
         loadLatLong();
+        loadNick();
         loadPreset();
         loadRadius();
         loadLocProv();
@@ -705,7 +709,6 @@ public class EditLocation extends ExpandableListActivity {
                         public void onClick(DialogInterface dialog, int whichButton) {
                             changedNick(inputBox.getText().toString());
                             mDialogOpen = false;
-                            loadLatLong();
                         }
                     };
                 break;
