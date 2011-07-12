@@ -506,6 +506,16 @@ public class EditLocation extends ExpandableListActivity {
     }
     
     /**
+     * Detect if the stored location is invalid (ie not yet set)
+     * @return True is location is invalid
+     */
+    protected boolean invalidLocation() {
+        if (mLatitude == 1000 && mLongitude == 1000) {
+            return true;
+        }
+        return false;
+    }
+    /**
      * Load the latitude and longitude from the database
      */
     protected void loadLatLong() {
@@ -513,7 +523,7 @@ public class EditLocation extends ExpandableListActivity {
         mLongitude = db.getLongitude(mRowId);
         // If the lat / long are default (invalid) values, prompt
         // the user to select a location
-        if (mLatitude == 1000 && mLongitude == 1000) {
+        if (invalidLocation()) {
             getLoc();
         }
     }
