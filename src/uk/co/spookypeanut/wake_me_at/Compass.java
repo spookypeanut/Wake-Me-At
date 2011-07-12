@@ -141,10 +141,13 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
     private void preparePaths() {
         // Construct a wedge-shaped path
-        mNeedlePath.moveTo(0, -40);
-        mNeedlePath.lineTo(-5, 40);
-        mNeedlePath.lineTo(0, 30);
-        mNeedlePath.lineTo(5, 40);
+        int needleWidth = 15;
+        int needleLength = 60;
+        
+        mNeedlePath.moveTo(0, -needleLength);
+        mNeedlePath.lineTo(-needleWidth, needleLength);
+        mNeedlePath.lineTo(0, (float) (needleLength * 0.75));
+        mNeedlePath.lineTo(needleWidth, needleLength);
         mNeedlePath.close();
     }
 
