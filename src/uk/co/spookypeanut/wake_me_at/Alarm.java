@@ -140,12 +140,13 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         String messageTwo;
         if (mMetresAway < 0) {
             messageOne = (String) getText(R.string.alarmAwaitingFix);
+            messageTwo = "";
         } else {
             messageOne = String.format(getString(R.string.alarmMessage),
                     uc.out(mMetresAway), mNick);
-        }
-        messageTwo = String.format(getString(R.string.locAgeMessage),
+            messageTwo = String.format(getString(R.string.locAgeMessage),
                     locAge);
+        }
         Log.d(LOG_NAME, messageOne);
         Log.d(LOG_NAME, messageTwo);
         TextView tv = (TextView)findViewById(R.id.alarmMessageOneTextView);
