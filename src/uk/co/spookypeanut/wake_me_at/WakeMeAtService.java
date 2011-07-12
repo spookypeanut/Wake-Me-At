@@ -215,7 +215,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             mMinTime = 45 * SECONDS;
             mNoLocationWarningTime = 90 * SECONDS;
         }
-        mWarningRepeat = 10 * SECONDS;
+        mWarningRepeat = mMinTime;
 
         uc = new UnitConverter(this, mUnit);
 
