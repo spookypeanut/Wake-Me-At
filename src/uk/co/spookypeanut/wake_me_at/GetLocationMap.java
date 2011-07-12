@@ -115,6 +115,7 @@ implements LocationListener {
                 Toast.LENGTH_SHORT).show();
         
         moveDestinationTo(mOrigLat, mOrigLong);
+        onSearchRequested();
     }
 
     @Override
