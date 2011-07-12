@@ -362,6 +362,9 @@ implements LocationListener {
             double longitude = mResults.get(position).getLongitude();
             moveMapTo(latitude, longitude);
             Log.d(LOG_NAME, "dialog is " + view.getContext().toString() + "");
+            mDest = new GeoPoint((int) (latitude * 1E6), 
+                                 (int) (longitude * 1E6));
+            selectedLocation();
             mResultsDialog.dismiss();
         }
     };
@@ -430,7 +433,6 @@ implements LocationListener {
         private MapView mapView;
 
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-        private Context mContext;
 
         public MapOverlay(Drawable defaultMarker, Context context) {
             super(boundCenter(defaultMarker));
@@ -472,49 +474,12 @@ implements LocationListener {
             Toast.makeText(getApplicationContext(), R.string.long_press_toast,
                     Toast.LENGTH_SHORT).show();
 
-            Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
             mDest = mapView.getProjection().fromPixels(
                     (int) event.getX(),
                     (int) event.getY());
-
-            AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-            dialog.setTitle("Location");
-            List<Address> addresses = null;
-            Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
-            try {
-                addresses = geoCoder.getFromLocation(
-                        mDest.getLatitudeE6()  / 1E6, 
-                        mDest.getLongitudeE6() / 1E6, 1);
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            String dialogMsg = "Latitude / Longitude:\n";
-            dialogMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6 + "\n";
-            if (addresses != null && addresses.size() > 0) 
-            {
-                for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
-                    dialogMsg += addresses.get(0).getAddressLine(i) + "\n";
-            } else {
-                Log.wtf(LOG_NAME, "GeoCoder returned null");
-                dialogMsg += "(Address retrieval failed: no data connection?)";
-            }
-            dialog.setMessage(dialogMsg);
-            dialog.setCancelable(true);
-            dialog.setPositiveButton(R.string.uselocationbutton,
-                    new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog,
-                        int which) {
-                    Intent i = new Intent();
-                    i.putExtra("searchTerm", mSearchTerm);
-                    setResult(RESULT_OK, i.setAction(
-                            mDest.getLatitudeE6() / 1E6 + "," +
-                            mDest.getLongitudeE6() / 1E6));
-                    finish();
-                }
-            });
-            dialog.setNegativeButton(R.string.dontuselocationbutton, null);
-            dialog.show();
+            selectedLocation();
         }
+
 
         @Override
         public boolean onDown(MotionEvent e) {
@@ -543,4 +508,46 @@ implements LocationListener {
         }
 
     }
+    public void selectedLocation() {
+        Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
+
+        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
+        dialog.setTitle("Location");
+        List<Address> addresses = null;
+        Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
+        try {
+            addresses = geoCoder.getFromLocation(
+                    mDest.getLatitudeE6()  / 1E6, 
+                    mDest.getLongitudeE6() / 1E6, 1);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        String dialogMsg = "Latitude / Longitude:\n";
+        dialogMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6 + "\n";
+        if (addresses != null && addresses.size() > 0) 
+        {
+            for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
+                dialogMsg += addresses.get(0).getAddressLine(i) + "\n";
+        } else {
+            Log.wtf(LOG_NAME, "GeoCoder returned null");
+            dialogMsg += "(Address retrieval failed: no data connection?)";
+        }
+        dialog.setMessage(dialogMsg);
+        dialog.setCancelable(true);
+        dialog.setPositiveButton(R.string.uselocationbutton,
+                new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog,
+                    int which) {
+                Intent i = new Intent();
+                i.putExtra("searchTerm", mSearchTerm);
+                setResult(RESULT_OK, i.setAction(
+                        mDest.getLatitudeE6() / 1E6 + "," +
+                        mDest.getLongitudeE6() / 1E6));
+                finish();
+            }
+        });
+        dialog.setNegativeButton(R.string.dontuselocationbutton, null);
+        dialog.show();
+    }
+
 }
