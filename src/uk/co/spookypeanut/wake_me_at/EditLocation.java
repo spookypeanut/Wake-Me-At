@@ -120,7 +120,7 @@ public class EditLocation extends ExpandableListActivity {
     private String[] mTitles = {
         "Activate alarm",
         "Location",
-        "Preset",
+        "Mode of transport",
         "Radius",
         "Units",
         "Location provider",
