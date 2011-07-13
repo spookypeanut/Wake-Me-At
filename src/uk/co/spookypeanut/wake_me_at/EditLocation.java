@@ -388,7 +388,6 @@ public class EditLocation extends ExpandableListActivity {
        mRunningRowId = -1;
        IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
        this.registerReceiver(this.mReceiver, filter);
-       Log.d(LOG_NAME, "Registered receiver");
    }
 
     /**
@@ -778,7 +777,6 @@ public class EditLocation extends ExpandableListActivity {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
         }
         
-
         public int getGlobalPosition(int groupPosition, int childPosition) {
             int countGroup;
             int total = 0;

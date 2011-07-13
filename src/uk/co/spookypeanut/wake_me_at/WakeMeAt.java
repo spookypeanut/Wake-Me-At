@@ -188,7 +188,6 @@ public class WakeMeAt extends ListActivity {
      * @param newRowId
      */
     private void rowChanged(long newRowId) {
-        Log.d(LOG_NAME, "rowChanged(" + newRowId + ")");
         mRowId = newRowId;
         mLocListAdapter.notifyDataSetChanged();
     }
