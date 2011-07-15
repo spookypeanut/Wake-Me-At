@@ -104,7 +104,7 @@ implements LocationListener {
             mOrigLat = currLoc.getLatitude();
             mOrigLong = currLoc.getLongitude();
         }
-        mNick = extras.getString("nick");
+        mSearchTerm = extras.getString("nick");
 
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
@@ -281,7 +281,7 @@ implements LocationListener {
     @Override
     public boolean onSearchRequested() {
         Log.d(LOG_NAME, "Searching");
-        startSearch(mNick, true, null, false);
+        startSearch(mSearchTerm, true, null, false);
         return true;
     }
     
@@ -298,8 +298,8 @@ implements LocationListener {
                 .setTitle("No data connection")
                 .setPositiveButton(R.string.alert_dialog_retry, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        // TODO: How can I retry?
-                    }
+                        onSearchRequested();
+                        }
                 })
                 .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
