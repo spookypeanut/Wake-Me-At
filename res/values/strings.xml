@@ -71,6 +71,8 @@
 <string name="search_nodata_title">No data connection</string>
 <string name="search_nodata_message">Can\'t get search results, as there is no data connection</string>
 
+<string name="searchresults_title">Search results</string>
+
 <string name="uselocation_title">Selected location</string>
 <string name="uselocation_nodata">(Address retrieval failed: no data connection?)</string>
 

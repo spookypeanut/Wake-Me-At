@@ -316,19 +316,13 @@ implements LocationListener {
         }
         mResultsDialog = new Dialog(mContext);
         mResultsDialog.setContentView(R.layout.search_list);
-        Log.d(LOG_NAME, "content view is set");
 
         ListView list = (ListView) mResultsDialog.findViewById(R.id.result_list);
-        Log.d(LOG_NAME, "using list " + list.toString());
         list.setAdapter(new SearchListAdapter(this));
         list.setOnItemClickListener(mResultClickListener);
-        Log.d(LOG_NAME, "adapter is set");
 
-        mResultsDialog.setTitle("Location");
-        
-        Log.d(LOG_NAME, "About to show dialog");
+        mResultsDialog.setTitle(R.string.searchresults_title);
         mResultsDialog.show();
-        Log.d(LOG_NAME, "Dialog shown");
     }
     
     /**
