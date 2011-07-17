@@ -1,5 +1,7 @@
 package uk.co.spookypeanut.wake_me_at;
 
+import java.util.ArrayList;
+
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -151,6 +153,7 @@ public class WakeMeAt extends ListActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        deleteEmpty();
         mLocListAdapter.notifyDataSetChanged();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
@@ -183,6 +186,18 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
         
         mLocListAdapter = (LocListAdapter) getListAdapter();
+    }
+    
+    public void deleteEmpty() {
+        int i;
+        ArrayList <Long> idList = db.getIdsAsList();
+        for (i = 0; i < idList.size(); i++) {
+            long id = idList.get(i);
+            if ((db.getLatitude(id) == INVALIDLATLONG) &&
+                (db.getLongitude(id) == INVALIDLATLONG)) {
+                db.deleteRow(id);
+            }
+        }
     }
     
     /**
