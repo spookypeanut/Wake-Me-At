@@ -52,6 +52,8 @@ public class WakeMeAt extends ListActivity {
     public static String LOG_NAME;
     public static String BROADCAST_UPDATE;
     
+    public static final double INVALIDLATLONG = 1000.0;
+    
     private DatabaseManager db;
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
@@ -201,7 +203,8 @@ public class WakeMeAt extends ListActivity {
         Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
         return db.addRow (
             "",              // Nickname
-            1000.0, 1000.0,  // Lat long
+            INVALIDLATLONG,  // Lat
+            INVALIDLATLONG,  // Long
             1,               // Preset
             1,               // Location provider
             (float) 1.80,    // Radius
