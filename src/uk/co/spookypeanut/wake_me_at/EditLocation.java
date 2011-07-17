@@ -177,6 +177,7 @@ public class EditLocation extends ExpandableListActivity {
 
                 AlertDialog.Builder presetBuilder;
                 presetBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.GreenNatureDialog));
+                presetBuilder.setTitle("Mode of transport");
                 presetBuilder.setItems(presetList,
                                        new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {

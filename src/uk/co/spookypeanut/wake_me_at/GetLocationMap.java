@@ -38,6 +38,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -49,6 +50,7 @@ import android.view.ViewGroup;
 import android.view.GestureDetector.OnGestureListener;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -295,20 +297,21 @@ implements LocationListener {
         
         if (mResults == null) {
             Dialog badConnectionDlg = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog))
-                .setTitle("No data connection")
-                .setPositiveButton(R.string.alert_dialog_retry, new DialogInterface.OnClickListener() {
+                .setTitle(R.string.search_nodata_title)
+                .setMessage(R.string.search_nodata_message)
+                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         onSearchRequested();
                         }
                 })
-                .setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Log.d(LOG_NAME, "clicked negative");
-                    }
-                })
+                .setIcon(R.drawable.icon)
                 .create();
-          
+            
             badConnectionDlg.show();
+
+            // Change the button style for the dialog
+            // I can't find a way to do this in the xml, which is very annoying. Is it possible?
+            ((Button) badConnectionDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);            
             return;
         }
         mResultsDialog = new Dialog(mContext);
@@ -511,8 +514,7 @@ implements LocationListener {
     public void selectedLocation() {
         Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
 
-        AlertDialog.Builder dialog = new AlertDialog.Builder(mContext);
-        dialog.setTitle("Location");
+
         List<Address> addresses = null;
         Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
         try {
@@ -530,8 +532,12 @@ implements LocationListener {
                 dialogMsg += addresses.get(0).getAddressLine(i) + "\n";
         } else {
             Log.wtf(LOG_NAME, "GeoCoder returned null");
-            dialogMsg += "(Address retrieval failed: no data connection?)";
+            dialogMsg += (String) getText(R.string.uselocation_nodata);
+
         }
+        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog));
+        dialog.setTitle(R.string.uselocation_title);
+        dialog.setIcon(R.drawable.icon);
         dialog.setMessage(dialogMsg);
         dialog.setCancelable(true);
         dialog.setPositiveButton(R.string.uselocationbutton,
@@ -547,7 +553,13 @@ implements LocationListener {
             }
         });
         dialog.setNegativeButton(R.string.dontuselocationbutton, null);
-        dialog.show();
+        AlertDialog alert = dialog.create();
+
+        alert.show();
+        // Change the button style for the "use this location" dialog
+        // I can't find a way to do this in the xml, which is very annoying. Is it possible?
+        ((Button) alert.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
+        ((Button) alert.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
 
 }

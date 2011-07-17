@@ -68,7 +68,13 @@
 <string name="search_hint">Search map</string>
 <string name="search_prompt">Say a location name</string>
 
- <string name="long_press_toast">Loading location information...</string>
+<string name="search_nodata_title">No data connection</string>
+<string name="search_nodata_message">Can\'t get search results, as there is no data connection</string>
+
+<string name="uselocation_title">Selected location</string>
+<string name="uselocation_nodata">(Address retrieval failed: no data connection?)</string>
+
+<string name="long_press_toast">Loading location information...</string>
 
 <!-- ALARM -->
 <string name="alarmTitle">Approaching destination</string>
