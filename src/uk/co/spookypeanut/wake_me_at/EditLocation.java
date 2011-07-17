@@ -176,7 +176,7 @@ public class EditLocation extends ExpandableListActivity {
                 final String[] presetList = forList.getAllNames();
 
                 AlertDialog.Builder presetBuilder;
-                presetBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.ContextMenuText));
+                presetBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.GreenNatureDialog));
                 presetBuilder.setItems(presetList,
                                        new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {

@@ -294,7 +294,7 @@ implements LocationListener {
         mResults = getSearchLocations(searchTerm);
         
         if (mResults == null) {
-            Dialog badConnectionDlg = new AlertDialog.Builder(mContext)
+            Dialog badConnectionDlg = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog))
                 .setTitle("No data connection")
                 .setPositiveButton(R.string.alert_dialog_retry, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {

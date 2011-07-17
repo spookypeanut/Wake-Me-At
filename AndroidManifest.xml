@@ -44,7 +44,7 @@
 
   <activity android:name="Alarm" android:launchMode="singleTask" /> <!-- REF#0001 -->
 
-  <activity android:theme="@android:style/Theme.Dialog"
+  <activity android:theme="@style/GreenNatureDialog"
    android:icon="@drawable/icon" android:name=".GetLocationMap"
    android:label="@string/map_name" android:launchMode="singleTop">
    <intent-filter>
@@ -56,7 +56,7 @@
     android:resource="@xml/searchable" />
   </activity>
 
-  <activity android:name=".Shortcuts" android:theme="@android:style/Theme.Dialog"
+  <activity android:name=".Shortcuts" android:theme="@style/GreenNatureDialog"
    android:label="@string/shortcuts">
    <intent-filter>
     <action android:name="android.intent.action.MAIN" />
