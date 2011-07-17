@@ -32,6 +32,8 @@
 <string name="mn_context_stop">Cancel alarm</string>
 <string name="mn_context_edit">Edit location</string>
 <string name="mn_context_delete">Delete location</string>
+
+<string name="mn_unnamed">&lt;unnamed&gt;</string>
  
 <!-- EDIT LOCATION -->
  <string name="get_loc_button_name">Get location...</string>

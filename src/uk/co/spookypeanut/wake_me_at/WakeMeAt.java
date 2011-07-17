@@ -328,7 +328,13 @@ public class WakeMeAt extends ListActivity {
             
             // Set the name of the location from the database
             TextView tv = (TextView) row.findViewById(R.id.locListName);
-            tv.setText(db.getNick(id));
+            String nick = db.getNick(id);
+            if ("".equals(nick)) {
+                Log.d(LOG_NAME, "Correcting");
+                tv.setText(R.string.mn_unnamed);
+            } else {
+                tv.setText(db.getNick(id));
+            }
             
             // Set the description, which is the preset in the database
             tv = (TextView) row.findViewById(R.id.locListDesc);
