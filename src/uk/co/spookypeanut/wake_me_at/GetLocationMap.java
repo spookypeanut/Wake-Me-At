@@ -81,6 +81,7 @@ implements LocationListener {
     boolean mSatellite = false;
     Location mCurrLoc;
     UnitConverter uc;
+    boolean mSearching;
     String mSearchTerm;
     
     @Override
@@ -108,22 +109,62 @@ implements LocationListener {
         }
         mSearchTerm = extras.getString("nick");
 
+        final Bundle data = (Bundle) getLastNonConfigurationInstance();
+
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
         mItemizedOverlay = new MapOverlay(drawable, this);
-
-        Toast.makeText(getApplicationContext(), R.string.open_map_toast,
-                Toast.LENGTH_SHORT).show();
-        
         moveDestinationTo(mOrigLat, mOrigLong);
-        onSearchRequested();
+        if (data != null) {
+            Log.d(LOG_NAME, "Existing instance detected");
+            mSearchTerm = data.getString("mSearchTerm");
+            mSearching = data.getBoolean("mSearching");
+            Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+            double lat = (double) data.getInt("mDestLat") / 1E6;
+            double longi = (double) data.getInt("mDestLong") / 1E6;
+            moveMapTo(lat, longi);
+        } else {
+            Log.d(LOG_NAME, "No existing instance detected");
+            moveMapTo(mOrigLat, mOrigLong);
+            mSearching = true;
+        }
+        if (mSearching) {
+            onSearchRequested();
+        }
+
+
     }
 
+    @Override
+    public Object onRetainNonConfigurationInstance() {
+        Bundle returnBundle = new Bundle();
+        Log.d(LOG_NAME, "term: " + mSearchTerm + ", mSearching: " + mSearching);    
+        returnBundle.putString("mSearchTerm", mSearchTerm);
+        returnBundle.putBoolean("mSearching", mSearching);
+        mDest = mapView.getProjection().fromPixels(
+                mapView.getWidth()/2,
+                mapView.getHeight()/2);
+        returnBundle.putInt("mDestLat",mDest.getLatitudeE6());
+        returnBundle.putInt("mDestLong", mDest.getLongitudeE6());
+        return returnBundle;
+    }
+    
     @Override
     public void onNewIntent(Intent intent) {
         setIntent(intent);
         handleIntent(intent);
     }
 
+    
+    /**
+     * When back is pressed, we're not searching anymore
+     * @see android.app.Activity#onBackPressed()
+     */
+    @Override
+    public void onBackPressed() {
+        mSearching = false;
+        Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+        super.onBackPressed();
+    }
     
     /**
      * When passed a new intent, run this
@@ -133,8 +174,11 @@ implements LocationListener {
     private void handleIntent(Intent intent) {
         setIntent(intent);
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
-          String query = intent.getStringExtra(SearchManager.QUERY);
-          resultsDialog(query);
+            // We've finished searching then
+            mSearching = false;
+            Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+            String query = intent.getStringExtra(SearchManager.QUERY);
+            resultsDialog(query);
         }
     }
     
@@ -148,7 +192,7 @@ implements LocationListener {
     }
     
     /**
-     * Move the destination marker on the map, and zoom to it
+     * Move the destination marker on the map
      * @param latitude The new latitude of the marker
      * @param longitude The new longitude of the marker
      */
@@ -161,7 +205,6 @@ implements LocationListener {
                 "Location To Set Off Alarm");
         mItemizedOverlay.addOverlay(destinationOverlay);
         mapOverlays.add(mItemizedOverlay);
-        moveMapTo(returnValue);
     }
 
     /**
@@ -183,7 +226,9 @@ implements LocationListener {
         if (location != null) {
             Log.d(LOG_NAME, "moving to " + location.getLatitudeE6() + ", " + location.getLongitudeE6());
             MapController mc = mapView.getController();
+            Log.d(LOG_NAME, "Controller got");
             mc.setZoom(15);
+            Log.d(LOG_NAME, "Zoom set");
             mc.animateTo(location);
         } else {
             Log.e(LOG_NAME, "Location to move to was null");
@@ -282,7 +327,9 @@ implements LocationListener {
     
     @Override
     public boolean onSearchRequested() {
-        Log.d(LOG_NAME, "Searching");
+        mSearching = true;
+        Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+        
         startSearch(mSearchTerm, true, null, false);
         return true;
     }
@@ -292,6 +339,8 @@ implements LocationListener {
      * @param searchTerm The text entered in the search box
      */
     private void resultsDialog(String searchTerm) {
+
+        
         mSearchTerm = searchTerm;
         mResults = getSearchLocations(searchTerm);
         
