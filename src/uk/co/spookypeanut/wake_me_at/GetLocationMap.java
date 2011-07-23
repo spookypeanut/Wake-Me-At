@@ -111,6 +111,8 @@ implements LocationListener {
         }
         mSearchTerm = extras.getString("nick");
 
+        // See onRetainNonConfigurationInstance for the information that
+        // we receive here
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
 
         Drawable drawable = this.getResources().getDrawable(R.drawable.x);
@@ -137,6 +139,14 @@ implements LocationListener {
 
     }
 
+    /** (non-Javadoc)
+     * @see android.app.Activity#onRetainNonConfigurationInstance()
+     * Generally, when the screen is rotated, the activity gets started again 
+     * from scratch. In this case, that would be *really* annoying, if we had
+     * chosen a location, got search up, etc. So this method gives us the ability
+     * to pass some information to future existences of ourself, and handle it
+     * in onCreate
+     */
     @Override
     public Object onRetainNonConfigurationInstance() {
         Bundle returnBundle = new Bundle();
