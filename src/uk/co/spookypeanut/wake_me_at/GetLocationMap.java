@@ -118,7 +118,7 @@ implements LocationListener {
             Log.d(LOG_NAME, "Existing instance detected");
             mSearchTerm = data.getString("mSearchTerm");
             mSearching = data.getBoolean("mSearching");
-            Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+            Log.d(LOG_NAME, "mSearching is set to " + mSearching);
             double lat = (double) data.getInt("mDestLat") / 1E6;
             double longi = (double) data.getInt("mDestLong") / 1E6;
             moveMapTo(lat, longi);
@@ -162,7 +162,7 @@ implements LocationListener {
     @Override
     public void onBackPressed() {
         mSearching = false;
-        Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+        Log.d(LOG_NAME, "onBackPressed: mSearching now set to " + mSearching);
         super.onBackPressed();
     }
     
@@ -176,7 +176,7 @@ implements LocationListener {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // We've finished searching then
             mSearching = false;
-            Log.d(LOG_NAME, "mSearching now set to " + mSearching);
+            Log.d(LOG_NAME, "handleIntent: mSearching now set to " + mSearching);
             String query = intent.getStringExtra(SearchManager.QUERY);
             resultsDialog(query);
         }
@@ -328,8 +328,7 @@ implements LocationListener {
     @Override
     public boolean onSearchRequested() {
         mSearching = true;
-        Log.d(LOG_NAME, "mSearching now set to " + mSearching);
-        
+        Log.d(LOG_NAME, "onSearchRequested: mSearching now set to " + mSearching);
         startSearch(mSearchTerm, true, null, false);
         return true;
     }

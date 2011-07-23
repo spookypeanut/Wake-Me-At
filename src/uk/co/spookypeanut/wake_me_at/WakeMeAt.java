@@ -330,7 +330,6 @@ public class WakeMeAt extends ListActivity {
             TextView tv = (TextView) row.findViewById(R.id.locListName);
             String nick = db.getNick(id);
             if ("".equals(nick)) {
-                Log.d(LOG_NAME, "Correcting");
                 tv.setText(R.string.mn_unnamed);
             } else {
                 tv.setText(db.getNick(id));

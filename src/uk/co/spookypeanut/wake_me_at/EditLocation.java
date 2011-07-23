@@ -973,9 +973,6 @@ public class EditLocation extends ExpandableListActivity {
         @Override
         public View getChildView(int groupPosition, int childPosition,
                 boolean isLastChild, View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "EditLocation.getChildView(" + groupPosition + 
-                            ", " + childPosition + ", " + isLastChild + ", " + 
-                            "blah, blah)");
             int position = getGlobalPosition(groupPosition, childPosition);
             View row;
             
