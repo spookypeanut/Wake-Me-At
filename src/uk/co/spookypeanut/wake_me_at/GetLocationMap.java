@@ -83,6 +83,7 @@ implements LocationListener {
     UnitConverter uc;
     boolean mSearching;
     String mSearchTerm;
+    static SearchManager mSearchManager;
     
     @Override
     public void onCreate(Bundle icicle) {
@@ -90,6 +91,7 @@ implements LocationListener {
         super.onCreate(icicle);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
+        mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
@@ -128,6 +130,7 @@ implements LocationListener {
             mSearching = true;
         }
         if (mSearching) {
+            Log.d(LOG_NAME, "Searching at start");
             onSearchRequested();
         }
 
@@ -329,6 +332,23 @@ implements LocationListener {
     public boolean onSearchRequested() {
         mSearching = true;
         Log.d(LOG_NAME, "onSearchRequested: mSearching now set to " + mSearching);
+        // This gets called when the user leaves the search dialog to go back to
+        // the Launcher.
+        mSearchManager.setOnCancelListener(new SearchManager.OnCancelListener() {
+            public void onCancel() {
+                mSearchManager.setOnCancelListener(null);
+                mSearching = false;
+                Log.d(LOG_NAME, "OnCancelListener: mSearching is now " + mSearching);
+            }
+        });
+        mSearchManager.setOnDismissListener(new SearchManager.OnDismissListener() {
+            public void onDismiss() {
+                mSearchManager.setOnDismissListener(null);
+                mSearching = false;
+                Log.d(LOG_NAME, "OnDismissListener: mSearching is now " + mSearching);
+            }
+        });
+
         startSearch(mSearchTerm, true, null, false);
         return true;
     }
