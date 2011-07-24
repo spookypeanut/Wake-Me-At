@@ -595,16 +595,17 @@ implements LocationListener {
         Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
 
         List<Address> addresses = null;
-        Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
+        double latitude = mDest.getLatitudeE6()  / 1E6;
+        double longitude = mDest.getLongitudeE6() / 1E6;
+        moveDestinationTo(latitude, longitude);
+        Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
         try {
-            addresses = geoCoder.getFromLocation(
-                    mDest.getLatitudeE6()  / 1E6, 
-                    mDest.getLongitudeE6() / 1E6, 1);
+            addresses = geoCoder.getFromLocation(latitude, longitude, 1);
         } catch (IOException e) {
             e.printStackTrace();
         }
         String latlongMsg = "Latitude / Longitude:\n";
-        latlongMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6;
+        latlongMsg += latitude + ", " + longitude;
         String addressMsg = "";
         if (addresses != null && addresses.size() > 0) 
         {
