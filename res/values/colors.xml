@@ -18,6 +18,7 @@
 
     <color name="mainbg">@color/darksecondary</color>
     <color name="headingbg">@color/primary</color>
+    <color name="footerbg">@color/headingbg</color>
     <color name="itemgroupbg">@color/secondary</color>
     
     <color name="itemdefaultbg">@color/transparent</color>
