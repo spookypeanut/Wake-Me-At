@@ -40,6 +40,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -47,14 +48,13 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.GestureDetector.OnGestureListener;
 import android.widget.AdapterView;
+import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
-import android.widget.AdapterView.OnItemClickListener;
 
 import com.google.android.maps.GeoPoint;
 import com.google.android.maps.ItemizedOverlay;
@@ -161,26 +161,17 @@ implements LocationListener {
         return returnBundle;
     }
     
-    @Override
-    public void onNewIntent(Intent intent) {
-        setIntent(intent);
-        handleIntent(intent);
-    }
-
-    
-    /**
-     * When back is pressed, we're not searching anymore
-     * @see android.app.Activity#onBackPressed()
+    /* (non-Javadoc)
+     * @see com.google.android.maps.MapActivity#onNewIntent(android.content.Intent)
      */
     @Override
-    public void onBackPressed() {
-        mSearching = false;
-        Log.d(LOG_NAME, "onBackPressed: mSearching now set to " + mSearching);
-        super.onBackPressed();
+    public void onNewIntent(Intent intent) {
+        //setIntent(intent);
+        handleIntent(intent);
     }
     
     /**
-     * When passed a new intent, run this
+     * When passed a new intent, run this.
      * Can be either via onNewIntent or onCreate
      * @param intent
      */

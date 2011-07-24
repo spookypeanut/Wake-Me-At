@@ -703,8 +703,7 @@ public class EditLocation extends ExpandableListActivity {
     @Override
     protected Dialog onCreateDialog(int type) {
         if (mDialogOpen == false) {
-            LayoutInflater factory = LayoutInflater.from(this);
-            final View textEntryView = factory.inflate(R.layout.text_input, null);
+            final View textEntryView =  mInflater.inflate(R.layout.text_input, null);
             final EditText inputBox = (EditText)textEntryView.findViewById(R.id.input_edit);
             String title = "";
             DialogInterface.OnClickListener positiveListener = null;
