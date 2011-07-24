@@ -574,9 +574,25 @@ implements LocationListener {
         }
 
     }
+    
+    /**
+     * The method the passes the required data back to caller
+     */
+    protected void returnLocation() {
+        Intent i = new Intent();
+        i.putExtra("searchTerm", mSearchTerm);
+        setResult(RESULT_OK, i.setAction(
+                mDest.getLatitudeE6() / 1E6 + "," +
+                mDest.getLongitudeE6() / 1E6));
+        finish();
+    }
+    
+    /**
+     * The user has specified a location, we now ask them if they're sure that
+     * this is the one they want
+     */
     public void selectedLocation() {
         Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
-
 
         List<Address> addresses = null;
         Log.d(LOG_NAME, "Attempting geocoder lookup from " + mDest.getLatitudeE6() + ", " + mDest.getLongitudeE6());
@@ -587,42 +603,49 @@ implements LocationListener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        String dialogMsg = "Latitude / Longitude:\n";
-        dialogMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6 + "\n";
+        String latlongMsg = "Latitude / Longitude:\n";
+        latlongMsg += mDest.getLatitudeE6() / 1E6 + ", " + mDest.getLongitudeE6() / 1E6;
+        String addressMsg = "";
         if (addresses != null && addresses.size() > 0) 
         {
             for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
-                dialogMsg += addresses.get(0).getAddressLine(i) + "\n";
+                addressMsg += addresses.get(0).getAddressLine(i) + "\n";
         } else {
             Log.wtf(LOG_NAME, "GeoCoder returned null");
-            dialogMsg += (String) getText(R.string.uselocation_nodata);
+            addressMsg += (String) getText(R.string.uselocation_nodata);
 
         }
-        AlertDialog.Builder dialog = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog));
-        dialog.setTitle(R.string.uselocation_title);
-        dialog.setIcon(R.drawable.icon);
-        dialog.setMessage(dialogMsg);
-        dialog.setCancelable(true);
-        dialog.setPositiveButton(R.string.uselocationbutton,
-                new DialogInterface.OnClickListener() {
-            public void onClick(DialogInterface dialog,
-                    int which) {
-                Intent i = new Intent();
-                i.putExtra("searchTerm", mSearchTerm);
-                setResult(RESULT_OK, i.setAction(
-                        mDest.getLatitudeE6() / 1E6 + "," +
-                        mDest.getLongitudeE6() / 1E6));
-                finish();
+        
+        final View textEntryView =  mInflater.inflate(R.layout.select_location, null);
+        final TextView latlongBox = (TextView)textEntryView.findViewById(R.id.latlong_msg);
+        final TextView addressBox = (TextView)textEntryView.findViewById(R.id.address_msg);
+        latlongBox.setText(latlongMsg);
+        addressBox.setText(addressMsg);
+
+        String title = "";
+        DialogInterface.OnClickListener positiveListener = null;
+        title = "Location name";
+        positiveListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                returnLocation();
+            }
+        };
+        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        builder.setTitle(title);
+        builder.setView(textEntryView);
+        builder.setIcon(R.drawable.icon);
+        builder.setPositiveButton(R.string.alert_dialog_ok, positiveListener);
+        builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                Log.d(LOG_NAME, "clicked negative");
             }
         });
-        dialog.setNegativeButton(R.string.dontuselocationbutton, null);
-        AlertDialog alert = dialog.create();
-
-        alert.show();
+        AlertDialog dialog = builder.create();
+        dialog.show();
+        
         // Change the button style for the "use this location" dialog
         // I can't find a way to do this in the xml, which is very annoying. Is it possible?
-        ((Button) alert.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
-        ((Button) alert.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
+        ((Button) dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
+        ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
-
 }
