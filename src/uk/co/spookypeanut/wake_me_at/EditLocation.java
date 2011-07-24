@@ -77,7 +77,7 @@ public class EditLocation extends ExpandableListActivity {
 
     private long mRowId;
     private long mRunningRowId = -1;
-    private String mNick = "New Location";
+    private String mNick = "";
     private double mLatitude = 0.0;
     private double mLongitude = 0.0;
     private float mRadius = 0;
