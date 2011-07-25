@@ -204,13 +204,13 @@ implements LocationListener {
         OverlayItem destinationOverlay = new OverlayItem(returnValue,
                 "Wake Me Here",
                 "Location To Set Off Alarm");
-        MapOverlay x;
-        Drawable drawable = this.getResources().getDrawable(R.drawable.x);
+        MapOverlay pointer;
+        Drawable drawable = this.getResources().getDrawable(R.drawable.pointer2);
 
-        x = new MapOverlay(drawable, this);
-        x.addOverlay(destinationOverlay);
+        pointer = new MapOverlay(drawable, this);
+        pointer.addOverlay(destinationOverlay);
         mapOverlays.clear();
-        mapOverlays.add(x);
+        mapOverlays.add(pointer);
     }
 
     /**
@@ -503,13 +503,13 @@ implements LocationListener {
         private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
 
         public MapOverlay(Drawable defaultMarker, Context context) {
-            super(boundCenter(defaultMarker));
+            super(boundCenterBottom(defaultMarker));
             mContext = context;
             gestureDetector = new GestureDetector(this);
         }
 
         public MapOverlay(Drawable defaultMarker) {
-            super(boundCenter(defaultMarker));
+            super(boundCenterBottom(defaultMarker));
         }
 
         public void addOverlay(OverlayItem overlay) {
