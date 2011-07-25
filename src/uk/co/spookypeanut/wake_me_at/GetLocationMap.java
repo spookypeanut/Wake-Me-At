@@ -71,7 +71,6 @@ implements LocationListener {
 //    private String BROADCAST_UPDATE;
     MapView mapView;
     Context mContext;
-    MapOverlay mItemizedOverlay;
     GeoPoint mDest;
     String mNick;
     double mOrigLat, mOrigLong;
@@ -115,8 +114,6 @@ implements LocationListener {
         // we receive here
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
 
-        Drawable drawable = this.getResources().getDrawable(R.drawable.x);
-        mItemizedOverlay = new MapOverlay(drawable, this);
         moveDestinationTo(mOrigLat, mOrigLong);
         if (data != null) {
             Log.d(LOG_NAME, "Existing instance detected");
@@ -207,8 +204,13 @@ implements LocationListener {
         OverlayItem destinationOverlay = new OverlayItem(returnValue,
                 "Wake Me Here",
                 "Location To Set Off Alarm");
-        mItemizedOverlay.addOverlay(destinationOverlay);
-        mapOverlays.add(mItemizedOverlay);
+        MapOverlay x;
+        Drawable drawable = this.getResources().getDrawable(R.drawable.x);
+
+        x = new MapOverlay(drawable, this);
+        x.addOverlay(destinationOverlay);
+        mapOverlays.clear();
+        mapOverlays.add(x);
     }
 
     /**
