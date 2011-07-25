@@ -170,7 +170,9 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     };
 
     private void speak() {
-        if (mTts != null) {
+        Log.d(LOG_NAME, "Alarm.speak()");
+        if (mTts != null && false == mTts.isSpeaking()) {
+        //if (mTts != null) {
             HashMap<String, String> myHashAlarm = new HashMap<String, String>();
             myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_STREAM,
                             String.valueOf(AudioManager.STREAM_ALARM));
@@ -193,18 +195,20 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         //wl.acquire();
         //wl.release();
 
-        mAlarmSounding = true;
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
-        if (mToastOn) {
-            String message = String.format(getString(R.string.alarmMessage),
-                uc.out(mMetresAway), mNick);
-            Toast.makeText(getApplicationContext(), message,
-                Toast.LENGTH_LONG).show();
-        }
         if (mNoiseOn) {
-            if (mMediaPlayer == null) {
-                startAlarmtone();
+            startAlarmtone();
+        }
+        if (false == mAlarmSounding) {
+            Log.d(LOG_NAME, "Sound alarm!");
+            mAlarmSounding = true;
+
+            if (mToastOn) {
+                String message = String.format(getString(R.string.alarmMessage),
+                    uc.out(mMetresAway), mNick);
+                Toast.makeText(getApplicationContext(), message,
+                    Toast.LENGTH_LONG).show();
             }
         }
     }
@@ -234,44 +238,55 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     private boolean startAlarmtone() {
         Log.d(LOG_NAME, "Alarm.startAlarmtone()");
-        mMediaPlayer = new MediaPlayer();
-        Uri alert = Uri.parse(db.getRingtone(mRowId));
-        try {
-            mMediaPlayer.setDataSource(this, alert);
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-        } catch (IOException e) {
-            e.printStackTrace();
+        float alarmVolume = (float) 1.0;
+        if (null == mMediaPlayer) {
+            Log.d(LOG_NAME, "Initializing mediaPlayer");
+            mMediaPlayer = new MediaPlayer();
+            Uri alert = Uri.parse(db.getRingtone(mRowId));
+            try {
+                mMediaPlayer.setDataSource(this, alert);
+            } catch (IllegalArgumentException e) {
+                e.printStackTrace();
+            } catch (SecurityException e) {
+                e.printStackTrace();
+            } catch (IllegalStateException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
+            mMediaPlayer.setVolume(alarmVolume, alarmVolume);
+            mMediaPlayer.setLooping(true);
+            Log.d(LOG_NAME, "About to prepare mMediaPlayer");
+            try {
+                 mMediaPlayer.prepare();
+            }
+            catch (IllegalStateException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            catch (IOException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
+            // REF#0008
+            final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
+            audioManager.requestAudioFocus(null, AudioManager.STREAM_ALARM,
+                    AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
         }
         // TODO Something tells me there's a simpler way to set off alarms...
-        final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
-        float alarmVolume;
         if (db.getCresc(mRowId)) {
             alarmVolume = mCrescVolume;
         } else {
             alarmVolume = (float) 1.0;
         }
+        if (true == mMediaPlayer.isPlaying()) {
+            Log.d(LOG_NAME, "About to play mMediaPlayer");
+            Log.d(LOG_NAME, "mediaPlayer is playing, exiting");
+            return true;
+        }
         if (alarmVolume != 0) {
-                    mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
-                    mMediaPlayer.setVolume(alarmVolume, alarmVolume);
-                    mMediaPlayer.setLooping(true);
-                    try {
-                     mMediaPlayer.prepare();
-                } catch (IllegalStateException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                } catch (IOException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-                    // REF#0008
-                    audioManager.requestAudioFocus(null, AudioManager.STREAM_ALARM,
-                            AudioManager.AUDIOFOCUS_GAIN_TRANSIENT);
-                   mMediaPlayer.start();
+            mMediaPlayer.start();
         }
         return true;
     }
@@ -294,7 +309,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         super.onResume();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
-        if (mAlarmSounding == true) {
+        if (true == mAlarmSounding) {
             startAlarm();
         }
     }
@@ -309,11 +324,20 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     public void onBackPressed() {
-        if (! mAlarmSounding) {
+        if (!mAlarmSounding) {
             super.onBackPressed();
         } else {
             Log.d(LOG_NAME, "Pressing back is not allowed while alarm is sounding");
         }
+    }
+
+    private void initializeTts() {
+        Log.d(LOG_NAME, "Initialize tts");
+            mTts = new TextToSpeech(this, this);
+            Locale loc = new Locale("en", "","");
+            if(mTts.isLanguageAvailable(loc) >= TextToSpeech.LANG_AVAILABLE){
+                mTts.setLanguage(loc);
+            }
     }
 
     @Override
@@ -326,11 +350,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 // success, create the TTS instance
                 Log.d(LOG_NAME, "text to speech present");
-                mTts = new TextToSpeech(this, this);
-                Locale loc = new Locale("en", "","");
-                if(mTts.isLanguageAvailable(loc) >= TextToSpeech.LANG_AVAILABLE){
-                    mTts.setLanguage(loc);
-                }
+                initializeTts();
             } else {
                 // missing data, install it
                 Log.wtf(LOG_NAME, "No TTS data");
