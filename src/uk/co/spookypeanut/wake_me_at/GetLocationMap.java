@@ -205,7 +205,7 @@ implements LocationListener {
                 "Wake Me Here",
                 "Location To Set Off Alarm");
         MapOverlay pointer;
-        Drawable drawable = this.getResources().getDrawable(R.drawable.pointer2);
+        Drawable drawable = this.getResources().getDrawable(R.drawable.pointer);
 
         pointer = new MapOverlay(drawable, this);
         pointer.addOverlay(destinationOverlay);
