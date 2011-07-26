@@ -8,7 +8,7 @@ TASKBARBKG := icon-gen-taskbarbkg-100x100.png icon-gen-taskbarbkg-25x25.png\
 				icon-gen-taskbarbkg-12x12.png icon-gen-taskbarbkg-27x27.png\
 				icon-gen-taskbarbkg-18x18.png icon-gen-taskbarbkg-13x13.png\
 				icon-gen-taskbarbkg-14x14.png
-POINTER := icon-gen-pointer-32x64.png
+POINTER := icon-gen-pointer-64x128.png
 TASKBAR := icon-gen-taskbar-25x25.png icon-gen-taskbar-24x38.png\
 			icon-gen-taskbar-12x19.png icon-gen-taskbar-16x25.png
 
@@ -35,9 +35,9 @@ icon-gen-36x36.png : icon.svg
 icon-gen-pointer.svg : icon.svg
 	./makepointer.py
 
-icon-gen-pointer-32x64.png : icon-gen-pointer.svg
-	$(CONV) icon-gen-pointer-32x64.png
-	optipng -q generated/icon-gen-pointer-32x64.png
+icon-gen-pointer-64x128.png : icon-gen-pointer.svg
+	$(CONV) icon-gen-pointer-64x128.png
+	optipng -q generated/icon-gen-pointer-64x128.png
 
 icon-gen-taskbarbkg.svg : icon.svg
 	./maketaskbar.py
