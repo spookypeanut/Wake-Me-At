@@ -494,7 +494,7 @@
      inkscape:pageshadow="2"
      inkscape:zoom="0.74504681"
      inkscape:cx="366.70153"
-     inkscape:cy="98.33897"
+     inkscape:cy="183.47593"
      inkscape:document-units="px"
      inkscape:current-layer="layer12"
      showgrid="false"
@@ -567,10 +567,11 @@
   <g
      inkscape:groupmode="layer"
      id="layer12"
-     inkscape:label="Pointer">
+     inkscape:label="Pointer"
+     style="display:none">
     <path
-       style="display:inline;fill:#008c00;stroke:none"
-       d="M 35.115849,310.79568 C 196.34173,453.58986 252.8762,597.72623 265.11815,791.52392 283.61438,598.82883 306.1372,489.34999 489.72373,306.05029 z"
+       style="fill:#008c00;stroke:none;display:inline"
+       d="M 35.115849,313.06538 C 174.86657,581.69827 220.66346,737.23371 265.11815,1023.7241 307.77394,736.87951 357.14071,584.9582 489.72373,306.05029 z"
        id="path3184"
        inkscape:connector-curvature="0"
        sodipodi:nodetypes="cccc" />
