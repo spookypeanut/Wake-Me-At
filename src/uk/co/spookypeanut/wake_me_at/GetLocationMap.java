@@ -521,6 +521,13 @@ implements LocationListener {
         protected OverlayItem createItem(int i) {
             return mOverlays.get(i);
         }
+        
+        @Override
+        public void draw(android.graphics.Canvas canvas,
+                MapView mapView,
+                boolean shadow) {
+            super.draw(canvas, mapView, false);
+        }
 
         @Override
         public int size() {
