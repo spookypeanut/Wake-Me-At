@@ -8,6 +8,8 @@
     <color name="gray">#ff7f7f7f</color>
     <color name="transparent">#00ffffff</color>
 
+<!-- REF#0022 -->
+
     <color name="primary">#008c00</color>
     <color name="darkprimary">#006000</color>
     <color name="secondary">#65a800</color>
