@@ -14,7 +14,7 @@
     <color name="darkprimary">#006000</color>
     <color name="secondary">#65a800</color>
     <color name="darksecondary">#000000</color>
-    <color name="highlight">#4cff05</color>
+    <color name="highlight">#4f4fef</color>
     <color name="foreground">@color/white</color>
     <color name="foregrounddisabled">@color/gray</color>
 
