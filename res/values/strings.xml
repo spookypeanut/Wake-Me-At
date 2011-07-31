@@ -23,6 +23,7 @@
  
  <!-- WAKEME@ MAIN -->
  <string name="mainTitle">Location List</string>
+ <string name="new_location_item">[Tap here to add a new location]</string>
 
 <string name="mn_new_loc">New location</string>
 <string name="mn_quit">Quit</string>

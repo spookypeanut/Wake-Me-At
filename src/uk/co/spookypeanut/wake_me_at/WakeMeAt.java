@@ -106,7 +106,10 @@ public class WakeMeAt extends ListActivity {
       super.onCreateContextMenu(menu, v, menuInfo);
       Log.d(LOG_NAME, "onCreateContextMenu");
       AdapterContextMenuInfo myInfo = (AdapterContextMenuInfo) menuInfo;
-
+      if (mLocListAdapter.isNewLocItem(myInfo.position)) {
+          Log.d(LOG_NAME, "This is the new location item");
+          return;
+      }
       long id = myInfo.id;
       menu.setHeaderTitle(db.getNick(id));
       menu.setHeaderIcon(R.drawable.icon);
@@ -279,7 +282,8 @@ public class WakeMeAt extends ListActivity {
         
         @Override
         public int getCount() {
-            return db.getRowCount();
+            // Add one for the "Add new location..." row
+            return db.getRowCount() + 1;
             
         }
 
@@ -288,9 +292,19 @@ public class WakeMeAt extends ListActivity {
             return getItemId(position);
         }
 
+        private boolean isNewLocItem(int position) {
+            return (position == (getCount() - 1 ));
+        }
+        
         @Override
         public long getItemId(int position) {
-            return db.getIdsAsList().get(position);
+            Log.d(LOG_NAME, "getItemId(" + position + ")");
+            if (isNewLocItem(position)) {
+                Log.d(LOG_NAME, "Returning 0");
+                return 0;
+            } else {
+                return db.getIdsAsList().get(position);
+            }
         }
 
         /**
@@ -298,6 +312,10 @@ public class WakeMeAt extends ListActivity {
          * @param position
          */
         public void editLocation(int position) {
+            if (isNewLocItem(position)) {
+                addItem();
+                return;
+            }
             Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
             i.putExtra("rowId", getItemId(position));
             Log.d(LOG_NAME, "About to start activity");
@@ -310,15 +328,25 @@ public class WakeMeAt extends ListActivity {
          */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            long id = db.getIdsAsList().get(position);
-            View row;
-            
-            if (null == convertView) {
-                row = mInflater.inflate(R.layout.wma_list_entry, null);
+            Log.d(LOG_NAME, "getView(" + position + ")");
+            boolean newLocItem;
+            long id;
+            int layout;
+            if (isNewLocItem(position)) {
+                layout = R.layout.wma_newloc_list_entry;
+                newLocItem = true;
+                id = -1;
             } else {
-                row = convertView;
+                layout = R.layout.wma_list_entry;
+                newLocItem = false;
+                id = db.getIdsAsList().get(position);
             }
             
+            
+            // We used to check if we already had a row, and neatly re-use it if we did.
+            // Unfortunately, the "add new location" row uses a different layout, so we can't
+            View row = mInflater.inflate(layout, null);
+
             // If this is the currently running location, highlight it
             if (WakeMeAtService.serviceRunning && (id == mRowId)) {
                 row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg_hl));
@@ -328,17 +356,26 @@ public class WakeMeAt extends ListActivity {
             
             // Set the name of the location from the database
             TextView tv = (TextView) row.findViewById(R.id.locListName);
-            String nick = db.getNick(id);
+            String nick;
+            if (newLocItem) {
+                nick = getResources().getString(R.string.new_location_item);
+            } else {
+                nick = db.getNick(id);
+            }
             if ("".equals(nick)) {
                 tv.setText(R.string.mn_unnamed);
             } else {
-                tv.setText(db.getNick(id));
+                tv.setText(nick);
+            }
+            
+            if (newLocItem) {
+                return row;
             }
             
             // Set the description, which is the preset in the database
+            String subtitle = new Presets(mContext, db.getPreset(id)).getName();
             tv = (TextView) row.findViewById(R.id.locListDesc);
-            String preset = new Presets(mContext, db.getPreset(id)).getName();
-            tv.setText(preset);
+            tv.setText(subtitle);
             return row;
         }
     }
