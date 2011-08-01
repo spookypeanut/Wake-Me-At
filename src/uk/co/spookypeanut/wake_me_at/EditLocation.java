@@ -177,7 +177,7 @@ public class EditLocation extends ExpandableListActivity {
 
                 AlertDialog.Builder presetBuilder;
                 presetBuilder = new AlertDialog.Builder(new ContextThemeWrapper(this, R.style.GreenNatureDialog));
-                presetBuilder.setTitle("Mode of transport");
+                presetBuilder.setTitle(R.string.preset_label);
                 presetBuilder.setItems(presetList,
                                        new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int item) {
@@ -768,11 +768,8 @@ public class EditLocation extends ExpandableListActivity {
         // The number of items in each section of the list
         int groupSize[] = {3, 4, 6, 3};
         // The names of the sections of the list
-        String groupName[] = {"Basic",
-                              "Advanced",
-                              "Alarm",
-                              "Old location warning"};
-        
+        String groupName[] = mContext.getResources().getStringArray(R.array.editLocationHeadingList);
+
         public LocSettingsAdapter(Context context) {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
         }
