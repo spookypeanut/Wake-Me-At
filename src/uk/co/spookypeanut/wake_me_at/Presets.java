@@ -19,7 +19,6 @@ along with Wake Me At, in the file "COPYING".  If not, see
 */
 
 import android.content.Context;
-//import android.util.Log;
 
 /**
  * A class to dispense preset information
@@ -46,7 +45,6 @@ public class Presets
      * @param unitAbbrev The abbreviation of the unit to initialize to
      */
     public Presets(Context context, int preset) {
-        //LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         switchPreset(preset);
     }
 
@@ -92,7 +90,7 @@ public class Presets
     }
 
     /**
-     * An TODO object to represent a unit
+     * An object to represent a mode-of-transport preset
      * @author spookypeanut
      *
      */
@@ -104,11 +102,10 @@ public class Presets
         
         /**
          * Constructor
-         * @param name The name of the unit for use in selecting it (eg foot)
-         * TODO @param abbrev The abbreviation of the unit
-         * @param value The number of metres in this unit
-         * @param system The unit system that this unit is in (imperial, metric, etc)
-         * @param plural The plural of the unit (eg feet)
+         * @param name The name of the preset (eg Train)
+         * @param radius The distance away to alert the user (in *unit*s)
+         * @param locProv The location provider to use
+         * @param unit The name of the unit that *radius* refers to
          */
         public Preset(String name, float radius, int locProv, String unit) {
             mName = name;
@@ -118,8 +115,8 @@ public class Presets
         }
         
         /**
-         * Get the name of the unit
-         * @return The name of the unit
+         * Get the name of the preset
+         * @return The name of the preset
          */
         public String getName() {
             return mName;
@@ -134,16 +131,16 @@ public class Presets
         }
         
         /**
-         * Get the abbreviation of the unit
-         * @return The abbreviation of the unit
+         * Get the location provider used in the preset
+         * @return The number of the location provider
          */
         public int getLocProv() {
             return mLocProv;
         }
         
         /**
-         * Get the TODO number of metres in the unit
-         * @return The number of metres in the unit
+         * Get the name of the unit used in the preset
+         * @return The name of the unit
          */
         public String getUnit() {
             return mUnit;
