@@ -25,3 +25,9 @@
     android:clickable="true"
     android:apiKey="08Z7eLu684dRhvaYq_VrwSTQvoMB8Lj0_HV5aVw"
 />
+<!-- Debug key
+android:apiKey="08Z7eLu684dRhvaYq_VrwSTQvoMB8Lj0_HV5aVw"
+-->
+<!-- Final key
+android:apiKey="08Z7eLu684dSCC-izhfOcHPikeg9N75p5ZUfJ4g"
+ -->
