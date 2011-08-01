@@ -117,11 +117,6 @@
 <item>Advanced</item>
 <item>Alarm</item>
 <item>Out-of-date location warning</item>
-<string-array name="presetList">
-    <item>Custom</item>
-    <item>Bus (local)</item>
-    <item>Bus (inter-city)</item>
-    <item>Train</item>
 </string-array>
 
 </resources>

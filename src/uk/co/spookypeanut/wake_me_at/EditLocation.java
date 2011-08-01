@@ -171,7 +171,6 @@ public class EditLocation extends ExpandableListActivity {
                 }
                 break;
             case INDEX_PRESET:
-                Log.d(LOG_NAME, "Preset pressed");
                 Presets forList = new Presets(mContext, 0);
                 final String[] presetList = forList.getAllNames();
 
@@ -237,8 +236,6 @@ public class EditLocation extends ExpandableListActivity {
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, false);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, false);
                 intent.putExtra(RingtoneManager.EXTRA_RINGTONE_INCLUDE_DRM, false);
-                //intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TITLE,
-                                //mContext.getString(R.string.select_audio));
                 ((Activity) mContext).startActivityForResult(intent, GETRINGTONE);
                 break;
             case INDEX_CRESC:
