@@ -30,7 +30,7 @@
 
   <uses-library android:name="com.google.android.maps" />
 
-  <service android:name="WakeMeAtService" android:label="WMAS"
+  <service android:name="WakeMeAtService" android:label="WakeMe@ alarm"
    android:icon="@drawable/icon" android:permission="android.permission.ACCESS_FINE_LOCATION" />
 
   <activity android:label="@string/app_name" android:name="WakeMeAt">
