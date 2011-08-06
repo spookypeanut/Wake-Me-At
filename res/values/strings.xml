@@ -63,7 +63,8 @@
  <string name="dontuselocationbutton">Try again</string>
  <string name="geocoder_progress">Address lookup</string>
  <string name="geocoder_progress_msg">Please wait while the address is being retrieved</string>
- 
+ <string name="search_progress">Searching</string>
+ <string name="search_progress_msg">Searching the map for \"%1$s\"</string>
 
 <string name="mn_map">Map Mode</string>
 <string name="mn_satellite">Satellite Mode</string>

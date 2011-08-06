@@ -99,10 +99,17 @@ implements LocationListener {
             gotDestinationAddress();
         }
     };
+    final Runnable mGotSearchResults = new Runnable() {
+        public void run() {
+            mProgressDialog.cancel();
+            resultsDialog();
+        }
+    };
     
     @Override
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         mContext = this;
         super.onCreate(icicle);
         // REF#0023: Setting a content view for a mapview is kinda slow (3 sec or so on
@@ -196,7 +203,7 @@ implements LocationListener {
             mSearching = false;
             Log.d(LOG_NAME, "handleIntent: mSearching now set to " + mSearching);
             String query = intent.getStringExtra(SearchManager.QUERY);
-            resultsDialog(query);
+            doSearch(query);
         }
     }
     
@@ -385,16 +392,28 @@ implements LocationListener {
         return true;
     }
     
+    
+    private void doSearch(String searchTerm) {
+        mSearchTerm = searchTerm;
+
+        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
+        Thread t = new Thread() {
+            public void run() {
+                getSearchLocations();
+                mHandler.post(mGotSearchResults);
+                }
+        };
+        t.start();
+        mProgressDialog = ProgressDialog.show(mContext,
+                getText(R.string.search_progress),
+                String.format(getString(R.string.search_progress_msg),
+                        mSearchTerm), true, true);
+    }
     /**
      * Display a dialog listing the search results
      * @param searchTerm The text entered in the search box
      */
-    private void resultsDialog(String searchTerm) {
-
-        
-        mSearchTerm = searchTerm;
-        mResults = getSearchLocations(searchTerm);
-        
+    private void resultsDialog() {
         if (mResults == null) {
             Dialog badConnectionDlg = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog))
                 .setTitle(R.string.search_nodata_title)
@@ -430,23 +449,16 @@ implements LocationListener {
      * @param address The text to search for
      * @return A list of addresses that match the text
      */
-    private List<Address> getSearchLocations(String address) {
+    private void getSearchLocations() {
         Log.d(LOG_NAME, "getSearchLocations");
-        List<Address> locations = null;
         try {
-            locations = mGeocoder.getFromLocationName(address, 5);
+            mResults = mGeocoder.getFromLocationName(mSearchTerm, 5);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        if (locations == null) {
+        if (mResults == null) {
             Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
-            return null;
         }
-        for (int i = 0; i < locations.size(); i++) {
-            Log.d(LOG_NAME, "Location " + i + ": " + locations.get(i).toString());
-        }
-        return locations;
-
     }
     
     private OnItemClickListener mResultClickListener = new AdapterView.OnItemClickListener() {
