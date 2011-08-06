@@ -1,2 +1,3 @@
 * Fixed force close related to deleting locations
 * More new-user-friendly map with "please wait" dialogs
+* Out-of-date location warning is now off by default
