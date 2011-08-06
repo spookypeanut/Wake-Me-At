@@ -327,6 +327,8 @@ public class WakeMeAtService extends Service implements LocationListener {
             i.putExtra("metresAway", mMetresAway);
             i.putExtra("alarm", mAlarm);
             
+            // It appears that the extras aren't updated, so we use 
+            // FLAG_CANCEL_CURRENT to completely start from scratch
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 
                                          PendingIntent.FLAG_CANCEL_CURRENT);
 
