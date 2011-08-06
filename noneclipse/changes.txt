@@ -1,0 +1,1 @@
+* Fixed force close related to deleting locations
