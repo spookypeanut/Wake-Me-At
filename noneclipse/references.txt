@@ -27,3 +27,4 @@ http://javahowto.blogspot.com/
 0020 http://stackoverflow.com/questions/4462735/textcolor-defined-in-style-being-applied-to-textview-but-not-button
 0021 http://android-journey.blogspot.com/2009/12/android-selectors.html
 0022 http://www.colourlovers.com/palette/499342/my_love_for_peas
+0023 http://stackoverflow.com/questions/6493534/show-progressdialog-while-loading-layout-with-setcontentview

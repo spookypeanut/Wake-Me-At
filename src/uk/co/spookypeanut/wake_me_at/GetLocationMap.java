@@ -104,6 +104,10 @@ implements LocationListener {
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         super.onCreate(icicle);
+        // REF#0023: Setting a content view for a mapview is kinda slow (3 sec or so on
+        // my Nexus One. However, we don't seem to be able to pop up a progress window,
+        // as both need access to the ui. This sucks. 
+        setContentView(R.layout.get_location_map);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
@@ -112,7 +116,6 @@ implements LocationListener {
         mContext = this;
         mGeocoder = new Geocoder(this, Locale.getDefault());
         uc = new UnitConverter(this, "m");
-        setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
@@ -149,8 +152,6 @@ implements LocationListener {
             Log.d(LOG_NAME, "Searching at start");
             onSearchRequested();
         }
-
-
     }
 
     /** (non-Javadoc)
