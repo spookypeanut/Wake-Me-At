@@ -56,7 +56,7 @@
 <string name="oldLocationWarning">Warning: the current location is %1$ss old</string>
 
 <!-- GET LOCATION MAP -->
- <string name="open_map_toast">Long press on the map to select a location</string>
+ <string name="how_to_select_location">Long press on the map to select a location</string>
  <string name="map_name">Select location</string>
  <string name="get_loc_layout_name">Select location</string>
  <string name="uselocationbutton">Use this</string>

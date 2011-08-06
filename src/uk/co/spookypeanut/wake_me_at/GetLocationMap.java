@@ -331,6 +331,12 @@ implements LocationListener {
         // TODO Auto-generated method stub
     }
     
+    private void howToSelectLocationInfo() {
+        Toast.makeText(getApplicationContext(), 
+                       R.string.how_to_select_location,
+                       Toast.LENGTH_LONG).show();
+    }
+
     @Override
     public boolean onSearchRequested() {
         mSearching = true;
@@ -341,14 +347,14 @@ implements LocationListener {
             public void onCancel() {
                 mSearchManager.setOnCancelListener(null);
                 mSearching = false;
-                Log.d(LOG_NAME, "OnCancelListener: mSearching is now " + mSearching);
+                howToSelectLocationInfo();
             }
         });
         mSearchManager.setOnDismissListener(new SearchManager.OnDismissListener() {
             public void onDismiss() {
                 mSearchManager.setOnDismissListener(null);
                 mSearching = false;
-                Log.d(LOG_NAME, "OnDismissListener: mSearching is now " + mSearching);
+                howToSelectLocationInfo();
             }
         });
 
@@ -429,7 +435,6 @@ implements LocationListener {
             double latitude = mResults.get(position).getLatitude();
             double longitude = mResults.get(position).getLongitude();
             moveMapTo(latitude, longitude);
-            Log.d(LOG_NAME, "dialog is " + view.getContext().toString() + "");
             mDest = new GeoPoint((int) (latitude * 1E6), 
                                  (int) (longitude * 1E6));
             selectedLocation();
@@ -647,7 +652,7 @@ implements LocationListener {
         builder.setPositiveButton(R.string.alert_dialog_ok, positiveListener);
         builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
-                Log.d(LOG_NAME, "clicked negative");
+                howToSelectLocationInfo();
             }
         });
         AlertDialog dialog = builder.create();
