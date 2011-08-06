@@ -24,6 +24,7 @@ import java.util.Locale;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.ProgressDialog;
 import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -37,6 +38,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
+import android.os.Handler;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
@@ -82,7 +84,21 @@ implements LocationListener {
     UnitConverter uc;
     boolean mSearching;
     String mSearchTerm;
+    Geocoder mGeocoder;
     static SearchManager mSearchManager;
+    ProgressDialog mProgressDialog;
+    List<Address> mDestAddresses = null;
+    
+    // Need handler for callbacks to the UI thread
+    final Handler mHandler = new Handler();
+    
+    // Create runnable for posting
+    final Runnable mGotAddresses = new Runnable() {
+        public void run() {
+            mProgressDialog.cancel();
+            gotDestinationAddress();
+        }
+    };
     
     @Override
     public void onCreate(Bundle icicle) {
@@ -94,6 +110,7 @@ implements LocationListener {
 
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mContext = this;
+        mGeocoder = new Geocoder(this, Locale.getDefault());
         uc = new UnitConverter(this, "m");
         setContentView(R.layout.get_location_map);
         mapView = (MapView) findViewById(R.id.mapview);
@@ -409,10 +426,9 @@ implements LocationListener {
      */
     private List<Address> getSearchLocations(String address) {
         Log.d(LOG_NAME, "getSearchLocations");
-        Geocoder geoCoder = new Geocoder(this, Locale.getDefault());
         List<Address> locations = null;
         try {
-            locations = geoCoder.getFromLocationName(address, 5);
+            locations = mGeocoder.getFromLocationName(address, 5);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -550,10 +566,6 @@ implements LocationListener {
 
         @Override
         public void onLongPress(MotionEvent event) {
-            // TODO: this doesn't show, need to thread it http://developer.android.com/guide/appendix/faq/commontasks.html#threading
-            Toast.makeText(getApplicationContext(), R.string.long_press_toast,
-                    Toast.LENGTH_SHORT).show();
-
             mDest = mapView.getProjection().fromPixels(
                     (int) event.getX(),
                     (int) event.getY());
@@ -606,25 +618,40 @@ implements LocationListener {
      * this is the one they want
      */
     public void selectedLocation() {
-        Geocoder geoCoder = new Geocoder(mContext, Locale.getDefault());
-
-        List<Address> addresses = null;
-        double latitude = mDest.getLatitudeE6()  / 1E6;
-        double longitude = mDest.getLongitudeE6() / 1E6;
+        final double latitude = mDest.getLatitudeE6()  / 1E6;
+        final double longitude = mDest.getLongitudeE6() / 1E6;
         moveDestinationTo(latitude, longitude);
         Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
-        try {
-            addresses = geoCoder.getFromLocation(latitude, longitude, 1);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        
+        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
+        Thread t = new Thread() {
+            public void run() {
+                try {
+                    mDestAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                mHandler.post(mGotAddresses);
+                }
+        };
+        t.start();
+        mProgressDialog = ProgressDialog.show(mContext,
+                getText(R.string.geocoder_progress),
+                getText(R.string.geocoder_progress_msg),
+                true, true);
+    }
+    
+    private void gotDestinationAddress() {
+        final double latitude = mDest.getLatitudeE6()  / 1E6;
+        final double longitude = mDest.getLongitudeE6() / 1E6;
+
         String latlongMsg = "Latitude / Longitude:\n";
         latlongMsg += latitude + ", " + longitude;
         String addressMsg = "";
-        if (addresses != null && addresses.size() > 0) 
+        if (mDestAddresses != null && mDestAddresses.size() > 0) 
         {
-            for (int i=0; i<addresses.get(0).getMaxAddressLineIndex(); i++)
-                addressMsg += addresses.get(0).getAddressLine(i) + "\n";
+            for (int i=0; i<mDestAddresses.get(0).getMaxAddressLineIndex(); i++)
+                addressMsg += mDestAddresses.get(0).getAddressLine(i) + "\n";
         } else {
             Log.wtf(LOG_NAME, "GeoCoder returned null");
             addressMsg += (String) getText(R.string.uselocation_nodata);

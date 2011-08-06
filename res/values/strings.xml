@@ -61,6 +61,9 @@
  <string name="get_loc_layout_name">Select location</string>
  <string name="uselocationbutton">Use this</string>
  <string name="dontuselocationbutton">Try again</string>
+ <string name="geocoder_progress">Address lookup</string>
+ <string name="geocoder_progress_msg">Please wait while the address is being retrieved</string>
+ 
 
 <string name="mn_map">Map Mode</string>
 <string name="mn_satellite">Satellite Mode</string>
