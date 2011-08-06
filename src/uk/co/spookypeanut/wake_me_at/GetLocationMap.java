@@ -103,6 +103,7 @@ implements LocationListener {
     @Override
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        mContext = this;
         super.onCreate(icicle);
         // REF#0023: Setting a content view for a mapview is kinda slow (3 sec or so on
         // my Nexus One. However, we don't seem to be able to pop up a progress window,
@@ -113,7 +114,6 @@ implements LocationListener {
         mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
 
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-        mContext = this;
         mGeocoder = new Geocoder(this, Locale.getDefault());
         uc = new UnitConverter(this, "m");
         mapView = (MapView) findViewById(R.id.mapview);
@@ -181,7 +181,6 @@ implements LocationListener {
      */
     @Override
     public void onNewIntent(Intent intent) {
-        //setIntent(intent);
         handleIntent(intent);
     }
     
@@ -259,6 +258,9 @@ implements LocationListener {
         }
     }
     
+    /* (non-Javadoc)
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         MenuInflater inflater = getMenuInflater();
@@ -266,6 +268,9 @@ implements LocationListener {
         return true;
     }
     
+    /* (non-Javadoc)
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -616,7 +621,8 @@ implements LocationListener {
     
     /**
      * The user has specified a location, we now ask them if they're sure that
-     * this is the one they want
+     * this is the one they want. This method just starts a thread to retrieve
+     * the addresses
      */
     public void selectedLocation() {
         final double latitude = mDest.getLatitudeE6()  / 1E6;
@@ -642,6 +648,10 @@ implements LocationListener {
                 true, true);
     }
     
+    /**
+     * This method is called from the thread that retrieved the addresses
+     * from the geocoder to finish the process started in selectedLocation()
+     */
     private void gotDestinationAddress() {
         final double latitude = mDest.getLatitudeE6()  / 1E6;
         final double longitude = mDest.getLongitudeE6() / 1E6;

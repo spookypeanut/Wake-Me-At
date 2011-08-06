@@ -292,15 +292,19 @@ public class WakeMeAt extends ListActivity {
             return getItemId(position);
         }
 
+        /**
+         * Return true if this item is the "press here for new
+         * location" entry
+         * @param position
+         * @return
+         */
         private boolean isNewLocItem(int position) {
             return (position == (getCount() - 1 ));
         }
         
         @Override
         public long getItemId(int position) {
-            Log.d(LOG_NAME, "getItemId(" + position + ")");
             if (isNewLocItem(position)) {
-                Log.d(LOG_NAME, "Returning 0");
                 return 0;
             } else {
                 return db.getIdsAsList().get(position);
@@ -318,7 +322,7 @@ public class WakeMeAt extends ListActivity {
             }
             Intent i = new Intent(WakeMeAt.this.getApplication(), EditLocation.class);
             i.putExtra("rowId", getItemId(position));
-            Log.d(LOG_NAME, "About to start activity");
+            Log.d(LOG_NAME, "About to start EditLocation");
             startActivity(i);
         }
         
@@ -328,7 +332,6 @@ public class WakeMeAt extends ListActivity {
          */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            Log.d(LOG_NAME, "getView(" + position + ")");
             boolean newLocItem;
             long id;
             int layout;

@@ -398,7 +398,6 @@ public class EditLocation extends ExpandableListActivity {
             i.putExtra("latitude", mLatitude);
             i.putExtra("longitude", mLongitude);
             i.putExtra("nick", mNick);
-            Log.d(LOG_NAME, i.toString());
             mDialogOpen = true;
             startActivityForResult(i, GETLOCMAP);
         } else {
@@ -563,7 +562,6 @@ public class EditLocation extends ExpandableListActivity {
         TextView nickTextView = (TextView) findViewById(R.id.nick);
         nickTextView.setText(mNick);
 
-        Log.d(LOG_NAME, "Data set changed!");
         mLocSettingsAdapter.notifyDataSetChanged();
     }
     
