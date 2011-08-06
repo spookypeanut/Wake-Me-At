@@ -233,7 +233,7 @@ public class WakeMeAt extends ListActivity {
             true,            // Vibration
             true,            // Speech
             false,           // Toast
-            true,            // Warning
+            false,           // Warning
             true,            // Warn sound
             true,            // Warn vibrate
             true             // Warn toast
