@@ -327,7 +327,8 @@ public class WakeMeAtService extends Service implements LocationListener {
             i.putExtra("metresAway", mMetresAway);
             i.putExtra("alarm", mAlarm);
             
-            mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 0);
+            mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 
+                                         PendingIntent.FLAG_CANCEL_CURRENT);
 
             // Set the info for the views that show in the notification panel.
             CharSequence msg = getText(R.string.foreground_service_started);
