@@ -389,6 +389,7 @@ public class EditLocation extends ExpandableListActivity {
        // If the service is running, it will inform us of the running id as soon
        // as we receive a broadcast. If not, -1 is correct
        mRunningRowId = -1;
+       mDialogOpen = false;
        IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
        this.registerReceiver(this.mReceiver, filter);
        mLocSettingsAdapter.notifyDataSetChanged();
