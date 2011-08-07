@@ -972,18 +972,17 @@ public class EditLocation extends ExpandableListActivity {
                 boolean isLastChild, View convertView, ViewGroup parent) {
             int position = getGlobalPosition(groupPosition, childPosition);
             View row;
-            
-            if (null == convertView) {
+            if (position == INDEX_ACTIV) {
+                row = mInflater.inflate(R.layout.edit_loc_activate_entry, null);
+                if (isActive()){
+                    row.setBackgroundDrawable(getResources()
+                            .getDrawable(R.drawable.listitembg_hl));
+                } else {
+                    row.setBackgroundDrawable(getResources()
+                            .getDrawable(R.drawable.listitembg));
+                }
+            } else {
                 row = mInflater.inflate(R.layout.edit_loc_list_entry, null);
-            } else {
-                row = convertView;
-            }
-            if (isActive() && (position == INDEX_ACTIV)) {
-                row.setBackgroundDrawable(getResources()
-                                          .getDrawable(R.drawable.listitembg_hl));
-            } else {
-                row.setBackgroundDrawable(getResources()
-                                          .getDrawable(R.drawable.listitembg));
             }
 
             boolean enabled = true;
