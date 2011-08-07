@@ -455,10 +455,12 @@ public class EditLocation extends ExpandableListActivity {
      * @param preset
      */
     protected void changedPreset(int preset) {
-        Log.d(LOG_NAME, "changedPreset");
         mPreset = preset;
+        mPresetObj.switchPreset(preset);
         newPresetGui();
         db.setPreset(mRowId, preset);
+        
+        updateUc();
         updateForm();
     }
 
@@ -467,7 +469,6 @@ public class EditLocation extends ExpandableListActivity {
      * @param locProv
      */
     protected void changedLocProv(int locProv) {
-        Log.d(LOG_NAME, "changedLocProv");
         mLocProv = locProv;
         db.setProvider(mRowId, locProv);
         updateForm();
@@ -478,17 +479,15 @@ public class EditLocation extends ExpandableListActivity {
      * @param unit as a name
      */
     protected void changedUnit(String unitName) {
-        Log.d(LOG_NAME, "changedUnit");
-        String unit = uc.getAbbrevFromName(unitName);
+        mUnit = uc.getAbbrevFromName(unitName);
 
-        mUnit = unit;
-        db.setUnit(mRowId, unit);
+        db.setUnit(mRowId, mUnit);
+        updateUc();
         updateForm();
         Log.d(LOG_NAME, "end changedUnit");
     }
 
     protected void changedRingtone(Uri ringtone) {
-        Log.d(LOG_NAME, "changedRingtone");
         mRingtone = ringtone;
         db.setRingtone(mRowId, ringtone.toString());
         updateForm();
@@ -512,6 +511,24 @@ public class EditLocation extends ExpandableListActivity {
         mRadius = radius;
         db.setRadius(mRowId, radius);
         updateForm();
+    }
+    
+    /**
+     * Update the unitconverter stored in the class to the appropriate unit
+     */
+    protected void updateUc() {
+        String unit;
+        if (mPresetObj.isCustom()) {
+            // If we haven't set mUnit yet, just make it something innocuous
+            if (mUnit == null || "".equals(mUnit)) {
+                unit = "m";
+            } else {
+            unit = mUnit;
+            }
+        } else {
+            unit = mPresetObj.getUnit();
+        }
+        uc = new UnitConverter(mContext, unit);
     }
     
     /**
@@ -543,6 +560,7 @@ public class EditLocation extends ExpandableListActivity {
     protected void loadPreset() {
         mPreset = db.getPreset(mRowId);
         newPresetGui();
+        updateUc();
     }
     
     private void newPresetGui() {
@@ -593,7 +611,6 @@ public class EditLocation extends ExpandableListActivity {
      * Load the radius from the database
      */
     protected void loadRadius() {
-        Log.d(LOG_NAME, "loadRadius()");
         mRadius = db.getRadius(mRowId);
     }   
     
@@ -601,12 +618,11 @@ public class EditLocation extends ExpandableListActivity {
      * Load the distance unit to use from the database
      */
     protected void loadUnit() {
-        Log.d(LOG_NAME, "loadUnit()");
         mUnit = db.getUnit(mRowId);
+        updateUc();
     }   
 
     protected void loadAlarmSettings() {
-        Log.d(LOG_NAME, "loadAlarmSettings()");
         mSound = db.getSound(mRowId);
         mRingtone = Uri.parse(db.getRingtone(mRowId));
         mCresc = db.getCresc(mRowId);
@@ -655,7 +671,6 @@ public class EditLocation extends ExpandableListActivity {
         if (null == extras) {
             finish();
         }
-        Log.d(LOG_NAME, "mRowId = " + mRowId);
         mRowId = extras.getLong("rowId");
         Log.d(LOG_NAME, "Row detected: " + mRowId);
         
@@ -683,12 +698,14 @@ public class EditLocation extends ExpandableListActivity {
         loadLatLong();
         loadNick();
         loadPreset();
-        loadRadius();
         loadLocProv();
         loadUnit();
+        // We need to load the radius after anything that might change the unit
+        loadRadius();
         loadAlarmSettings();
         updateForm();
 
+        db.logOutArray();
         resetGroups();
 
         Log.d(LOG_NAME, "End of EditLocation.onCreate");
@@ -743,7 +760,6 @@ public class EditLocation extends ExpandableListActivity {
                 .setPositiveButton(R.string.alert_dialog_ok, positiveListener)
                 .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
-                        Log.d(LOG_NAME, "clicked negative");
                         mDialogOpen = false;
                     }
                 })
@@ -809,7 +825,8 @@ public class EditLocation extends ExpandableListActivity {
                     }
                     return String.valueOf(rad) + radUnit;
                 case INDEX_UNITS:
-                    String unit;
+                     String unit;
+                     
                     if (mPresetObj.isCustom()) {
                         unit = mUnit;
                     } else {
