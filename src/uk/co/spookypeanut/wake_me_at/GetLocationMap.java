@@ -29,6 +29,12 @@ import android.app.SearchManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Paint;
+import android.graphics.Point;
 import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
@@ -65,6 +71,7 @@ import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
+import com.google.android.maps.Projection;
 
 public class GetLocationMap extends MapActivity
 implements LocationListener {
@@ -76,6 +83,7 @@ implements LocationListener {
     GeoPoint mDest;
     String mNick;
     double mOrigLat, mOrigLong;
+    double mRadius;
     LayoutInflater mInflater;
     private List<Address> mResults;
     Dialog mResultsDialog;
@@ -130,6 +138,7 @@ implements LocationListener {
         Bundle extras = this.getIntent().getExtras();
         mOrigLat = extras.getDouble("latitude");
         mOrigLong = extras.getDouble("longitude");
+        mRadius = extras.getDouble("radiusMetres");
         if (mOrigLat == 1000 && mOrigLong == 1000) {
             Location currLoc = getCurrentLocation();
             mOrigLat = currLoc.getLatitude();
@@ -219,18 +228,10 @@ implements LocationListener {
      */
     private void moveDestinationTo(double latitude, double longitude) {
         List<Overlay> mapOverlays = mapView.getOverlays();
-        GeoPoint returnValue = new GeoPoint((int) (latitude * 1E6), 
-                                            (int) (longitude * 1E6));
-        OverlayItem destinationOverlay = new OverlayItem(returnValue,
-                "Wake Me Here",
-                "Location To Set Off Alarm");
-        MapOverlay pointer;
-        Drawable drawable = this.getResources().getDrawable(R.drawable.pointer);
 
-        pointer = new MapOverlay(drawable, this);
-        pointer.addOverlay(destinationOverlay);
+        DestOverlay destOverlay = new DestOverlay(mContext, latitude, longitude, mRadius);
         mapOverlays.clear();
-        mapOverlays.add(pointer);
+        mapOverlays.add(destOverlay);
     }
 
     /**
@@ -702,5 +703,51 @@ implements LocationListener {
         // I can't find a way to do this in the xml, which is very annoying. Is it possible?
         ((Button) dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
         ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
+    }
+    
+    public class DestOverlay extends Overlay{
+
+        Context oContext;
+        double mLat;
+        double mLon;
+        double mRadius;
+
+         public DestOverlay(Context context, double lat, double lon, double radius) {
+                oContext = context;
+                mLat = lat;
+                mLon = lon;
+                mRadius = radius;
+         }
+
+         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+             super.draw(canvas, mapView, shadow); 
+             Resources res = oContext.getResources();
+             float[] result = new float[1];
+
+             Location.distanceBetween(mLat, mLon, mLat, mLon + 1, result);
+             float longitudeLineDistance = result[0];
+             
+             Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.pointer);
+             Projection projection = mapView.getProjection();
+             Point pt = new Point();
+             Point left = new Point();
+             GeoPoint geo = new GeoPoint((int) (mLat *1e6), (int)(mLon * 1e6));
+             GeoPoint leftGeo = new GeoPoint((int)(mLat * 1E6), (int)((mLon - mRadius / longitudeLineDistance) * 1E6));
+
+             projection.toPixels(leftGeo, left);
+             projection.toPixels(geo, pt);
+
+             float circleRadius = (float) pt.x - (float) left.x;
+             
+             Paint circlePaint = new Paint();
+             circlePaint.setColor(res.getColor(R.color.overlaycolor));
+             circlePaint.setAntiAlias(true);
+             circlePaint.setStyle(Paint.Style.FILL);
+             canvas.drawCircle((float)pt.x, (float)pt.y, circleRadius, circlePaint);
+
+             float drawablex = pt.x - bitmap.getWidth() / 2;
+             float drawabley = pt.y - bitmap.getHeight();
+             canvas.drawBitmap(bitmap, drawablex, drawabley, new Paint());
+            }
     }
 }

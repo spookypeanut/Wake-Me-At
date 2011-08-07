@@ -404,6 +404,7 @@ public class EditLocation extends ExpandableListActivity {
             Intent i = new Intent(EditLocation.this.getApplication(), GetLocationMap.class);
             i.putExtra("latitude", mLatitude);
             i.putExtra("longitude", mLongitude);
+            i.putExtra("radiusMetres", uc.toMetres(mRadius));
             i.putExtra("nick", mNick);
             mDialogOpen = true;
             startActivityForResult(i, GETLOCMAP);
