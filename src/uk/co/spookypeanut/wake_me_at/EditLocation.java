@@ -117,6 +117,9 @@ public class EditLocation extends ExpandableListActivity {
     private static final int INDEX_WARNTOAST = 15;
     //private static final int NUM_SETTINGS = 16;
 
+    /* The titles of all of the controls available on the edit
+     * location page
+     */
     private String[] mTitles = {
         "Activate alarm",
         "Location",
@@ -135,6 +138,10 @@ public class EditLocation extends ExpandableListActivity {
         "Vibration",
         "Popup message"
     };
+    
+    /* Descriptions of all the controls. These aren't all used atm,
+     * but some of them are
+     */
     private String[] mDescription = {
         "Tap here to activate the alarm",
         "Tap to view / edit location",
@@ -158,8 +165,6 @@ public class EditLocation extends ExpandableListActivity {
     public boolean onChildClick(ExpandableListView l, View v,
                                 int groupPosition, int childPosition,
                                 long id) {
-        Log.d(LOG_NAME, "onChildClick(" + l + ", " + v + ", " + groupPosition +
-                                      ", " + childPosition + ", " + id + ")");
         int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, 
                                                              childPosition);
         switch (position) {
