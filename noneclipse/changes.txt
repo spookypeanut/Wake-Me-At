@@ -1,3 +1,4 @@
-* Fixed force close related to deleting locations
 * More new-user-friendly map with "please wait" dialogs
+* "Activate alarm" on Edit Location screen made more prominent
 * Out-of-date location warning is now off by default
+* Several bug fixes
