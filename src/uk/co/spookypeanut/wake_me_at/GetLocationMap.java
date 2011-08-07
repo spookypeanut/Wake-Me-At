@@ -18,7 +18,6 @@ package uk.co.spookypeanut.wake_me_at;
     <http://www.gnu.org/licenses/>.
  */
 import java.io.IOException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
@@ -35,7 +34,6 @@ import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Point;
-import android.graphics.drawable.Drawable;
 import android.location.Address;
 import android.location.Criteria;
 import android.location.Geocoder;
@@ -65,12 +63,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.maps.GeoPoint;
-import com.google.android.maps.ItemizedOverlay;
 import com.google.android.maps.MapActivity;
 import com.google.android.maps.MapController;
 import com.google.android.maps.MapView;
 import com.google.android.maps.Overlay;
-import com.google.android.maps.OverlayItem;
 import com.google.android.maps.Projection;
 
 public class GetLocationMap extends MapActivity
@@ -521,94 +517,6 @@ implements LocationListener {
         }
     }
 
-    /**
-     * Overlay for the destination marker
-     * @author spookypeanut
-     *
-     */
-    public class MapOverlay extends ItemizedOverlay<OverlayItem> implements OnGestureListener {
-        private GestureDetector gestureDetector;
-        private MapView mapView;
-
-        private ArrayList<OverlayItem> mOverlays = new ArrayList<OverlayItem>();
-
-        public MapOverlay(Drawable defaultMarker, Context context) {
-            super(boundCenterBottom(defaultMarker));
-            mContext = context;
-            gestureDetector = new GestureDetector(this);
-        }
-
-        public MapOverlay(Drawable defaultMarker) {
-            super(boundCenterBottom(defaultMarker));
-        }
-
-        public void addOverlay(OverlayItem overlay) {
-            mOverlays.add(overlay);
-            populate();
-        }
-
-        @Override
-        protected OverlayItem createItem(int i) {
-            return mOverlays.get(i);
-        }
-        
-        @Override
-        public void draw(android.graphics.Canvas canvas,
-                MapView mapView,
-                boolean shadow) {
-            super.draw(canvas, mapView, false);
-        }
-
-        @Override
-        public int size() {
-            return mOverlays.size();
-        }
-
-        @Override
-        public boolean onTouchEvent(MotionEvent event, MapView mv) {
-            mapView = mv;
-            if (gestureDetector.onTouchEvent(event)) {
-                return true;
-            }
-            return false;
-        }
-
-        @Override
-        public void onLongPress(MotionEvent event) {
-            mDest = mapView.getProjection().fromPixels(
-                    (int) event.getX(),
-                    (int) event.getY());
-            selectedLocation();
-        }
-
-
-        @Override
-        public boolean onDown(MotionEvent e) {
-            return false;
-        }
-
-        @Override
-        public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                float velocityY) {
-            return false;
-        }
-
-        @Override
-        public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                float distanceY) {
-            return false;
-        }
-
-        @Override
-        public void onShowPress(MotionEvent e) {
-        }
-
-        @Override
-        public boolean onSingleTapUp(MotionEvent e) {
-            return false;
-        }
-
-    }
     
     /**
      * The method the passes the required data back to caller
@@ -705,8 +613,9 @@ implements LocationListener {
         ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
     
-    public class DestOverlay extends Overlay{
-
+    public class DestOverlay extends Overlay implements OnGestureListener{
+        private GestureDetector gestureDetector;
+        
         Context oContext;
         double mLat;
         double mLon;
@@ -717,6 +626,7 @@ implements LocationListener {
                 mLat = lat;
                 mLon = lon;
                 mRadius = radius;
+                gestureDetector = new GestureDetector(this);
          }
 
          public void draw(Canvas canvas, MapView mapView, boolean shadow) {
@@ -749,5 +659,50 @@ implements LocationListener {
              float drawabley = pt.y - bitmap.getHeight();
              canvas.drawBitmap(bitmap, drawablex, drawabley, new Paint());
             }
+
+         @Override
+         public boolean onTouchEvent(MotionEvent event, MapView mv) {
+             mapView = mv;
+             if (gestureDetector.onTouchEvent(event)) {
+                 return true;
+             }
+             return false;
+         }
+
+         @Override
+         public void onLongPress(MotionEvent event) {
+             Log.d(LOG_NAME, "GetLocationMap.onLongPress");
+             mDest = mapView.getProjection().fromPixels(
+                     (int) event.getX(),
+                     (int) event.getY());
+             selectedLocation();
+         }
+
+         @Override
+         public boolean onDown(MotionEvent e) {
+             return false;
+         }
+
+         @Override
+         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
+                 float velocityY) {
+             return false;
+         }
+
+         @Override
+         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
+                 float distanceY) {
+             return false;
+         }
+
+         @Override
+         public void onShowPress(MotionEvent e) {
+         }
+
+         @Override
+         public boolean onSingleTapUp(MotionEvent e) {
+             return false;
+         }
     }
+    
 }
