@@ -391,6 +391,7 @@ public class EditLocation extends ExpandableListActivity {
        mRunningRowId = -1;
        IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
        this.registerReceiver(this.mReceiver, filter);
+       mLocSettingsAdapter.notifyDataSetChanged();
    }
 
     /**
