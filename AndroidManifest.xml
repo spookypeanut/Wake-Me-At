@@ -13,8 +13,8 @@
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
- package="uk.co.spookypeanut.wake_me_at" android:versionCode="1"
- android:versionName="1.0" android:installLocation="preferExternal">
+ package="uk.co.spookypeanut.wake_me_at" android:versionCode="2"
+ android:versionName="2.0" android:installLocation="preferExternal">
  
  <uses-permission android:name="android.permission.INTERNET" />
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
