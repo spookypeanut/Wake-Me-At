@@ -146,7 +146,6 @@ implements LocationListener {
             Log.d(LOG_NAME, "Existing instance detected");
             mSearchTerm = data.getString("mSearchTerm");
             mSearching = data.getBoolean("mSearching");
-            Log.d(LOG_NAME, "mSearching is set to " + mSearching);
             double lat = (double) data.getInt("mDestLat") / 1E6;
             double longi = (double) data.getInt("mDestLong") / 1E6;
             moveMapTo(lat, longi);
@@ -156,7 +155,6 @@ implements LocationListener {
             mSearching = true;
         }
         if (mSearching) {
-            Log.d(LOG_NAME, "Searching at start");
             onSearchRequested();
         }
     }
@@ -172,7 +170,6 @@ implements LocationListener {
     @Override
     public Object onRetainNonConfigurationInstance() {
         Bundle returnBundle = new Bundle();
-        Log.d(LOG_NAME, "term: " + mSearchTerm + ", mSearching: " + mSearching);    
         returnBundle.putString("mSearchTerm", mSearchTerm);
         returnBundle.putBoolean("mSearching", mSearching);
         mDest = mapView.getProjection().fromPixels(
@@ -201,7 +198,6 @@ implements LocationListener {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             // We've finished searching then
             mSearching = false;
-            Log.d(LOG_NAME, "handleIntent: mSearching now set to " + mSearching);
             String query = intent.getStringExtra(SearchManager.QUERY);
             doSearch(query);
         }
@@ -254,11 +250,8 @@ implements LocationListener {
      */
     private void moveMapTo(GeoPoint location) {
         if (location != null) {
-            Log.d(LOG_NAME, "moving to " + location.getLatitudeE6() + ", " + location.getLongitudeE6());
             MapController mc = mapView.getController();
-            Log.d(LOG_NAME, "Controller got");
             mc.setZoom(15);
-            Log.d(LOG_NAME, "Zoom set");
             mc.animateTo(location);
         } else {
             Log.e(LOG_NAME, "Location to move to was null");
@@ -370,7 +363,6 @@ implements LocationListener {
     @Override
     public boolean onSearchRequested() {
         mSearching = true;
-        Log.d(LOG_NAME, "onSearchRequested: mSearching now set to " + mSearching);
         // This gets called when the user leaves the search dialog to go back to
         // the Launcher.
         mSearchManager.setOnCancelListener(new SearchManager.OnCancelListener() {
@@ -483,7 +475,6 @@ implements LocationListener {
      */
     private class SearchListAdapter extends BaseAdapter {
         public SearchListAdapter(Context context) {
-            Log.d(LOG_NAME, "LocListAdapter constructor");
             mCurrLoc = getCurrentLocation();
         }
 
@@ -504,7 +495,6 @@ implements LocationListener {
 
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
-            //Log.d(LOG_NAME, "getView(" + position + ")");
             View row;
             
             if (null == convertView) {
