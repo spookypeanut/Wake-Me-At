@@ -46,6 +46,7 @@ import android.os.Handler;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
+import android.view.GestureDetector.OnDoubleTapListener;
 import android.view.GestureDetector.OnGestureListener;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -613,7 +614,7 @@ implements LocationListener {
         ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
     
-    public class DestOverlay extends Overlay implements OnGestureListener{
+    public class DestOverlay extends Overlay implements OnGestureListener, OnDoubleTapListener{
         private GestureDetector gestureDetector;
         
         Context oContext;
@@ -627,6 +628,7 @@ implements LocationListener {
                 mLon = lon;
                 mRadius = radius;
                 gestureDetector = new GestureDetector(this);
+                gestureDetector.setOnDoubleTapListener((OnDoubleTapListener) this);
          }
 
          public void draw(Canvas canvas, MapView mapView, boolean shadow) {
@@ -660,6 +662,16 @@ implements LocationListener {
              canvas.drawBitmap(bitmap, drawablex, drawabley, new Paint());
             }
 
+         @Override
+         public boolean onDoubleTap(MotionEvent e) {
+             // REF#0024
+             MapController mc = mapView.getController();
+             int x = (int) e.getX();
+             int y = (int) e.getY();
+             mc.zoomInFixing(x, y);
+             return true;
+         }
+         
          @Override
          public boolean onTouchEvent(MotionEvent event, MapView mv) {
              mapView = mv;
@@ -703,6 +715,26 @@ implements LocationListener {
          public boolean onSingleTapUp(MotionEvent e) {
              return false;
          }
+
+
+
+        /* (non-Javadoc)
+         * @see android.view.GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(android.view.MotionEvent)
+         */
+        @Override
+        public boolean onSingleTapConfirmed(MotionEvent e) {
+            return false;
+        }
+
+
+
+        /* (non-Javadoc)
+         * @see android.view.GestureDetector.OnDoubleTapListener#onDoubleTapEvent(android.view.MotionEvent)
+         */
+        @Override
+        public boolean onDoubleTapEvent(MotionEvent e) {
+            return false;
+        }
     }
     
 }
