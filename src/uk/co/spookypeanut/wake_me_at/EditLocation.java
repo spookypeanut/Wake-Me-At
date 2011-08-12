@@ -696,13 +696,15 @@ public class EditLocation extends ExpandableListActivity {
             Log.wtf(LOG_NAME, "How can there be no units!?");
         }
 
-        loadLatLong();
-        loadNick();
         loadPreset();
         loadLocProv();
         loadUnit();
         // We need to load the radius after anything that might change the unit
         loadRadius();
+        // We need to load the location after the radius, so it shows on the map
+        loadLatLong();
+        // We need to load the nick after the location, so the map pops up before nick window
+        loadNick();
         loadAlarmSettings();
         updateForm();
 
