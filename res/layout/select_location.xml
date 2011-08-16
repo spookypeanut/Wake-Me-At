@@ -22,8 +22,7 @@
     android:id="@+id/main_layout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:orientation="vertical"
-    android:background="@color/transparent">
+    android:orientation="vertical">
 
     <TextView 
         android:id="@+id/input_view"
@@ -33,7 +32,6 @@
         android:layout_marginRight="20dip"
         android:text=""
         android:gravity="center"
-        android:background="@color/transparent"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView 
         android:id="@+id/latlong_msg"
@@ -43,13 +41,11 @@
         android:layout_marginRight="20dip"
         android:text=""
         android:gravity="center_horizontal"
-        android:background="@color/transparent"
         android:textAppearance="?android:attr/textAppearanceMedium" />
     <TextView 
         android:text="\n\n\n\n"
         android:layout_height="wrap_content"
-        android:layout_width="match_parent"
-        android:background="@color/transparent" />
+        android:layout_width="match_parent"/>
     <TextView 
         android:id="@+id/address_msg"
         android:layout_height="wrap_content"
@@ -58,6 +54,5 @@
         android:layout_marginRight="20dip"
         android:text=""
         android:gravity="center_horizontal"
-        android:background="@color/transparent"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 </LinearLayout>

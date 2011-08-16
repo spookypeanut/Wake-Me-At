@@ -405,7 +405,7 @@ implements LocationListener {
      */
     private void resultsDialog() {
         if (mResults == null) {
-            Dialog badConnectionDlg = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog))
+            Dialog badConnectionDlg = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.search_nodata_title)
                 .setMessage(R.string.search_nodata_message)
                 .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
@@ -595,7 +595,7 @@ implements LocationListener {
                 returnLocation();
             }
         };
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext);
+        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog));
         builder.setTitle(title);
         builder.setView(textEntryView);
         builder.setIcon(R.drawable.icon);
