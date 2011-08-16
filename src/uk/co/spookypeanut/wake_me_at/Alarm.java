@@ -352,12 +352,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 Log.d(LOG_NAME, "text to speech present");
                 initializeTts();
             } else {
-                // missing data, install it
                 Log.wtf(LOG_NAME, "No TTS data");
-                Intent installIntent = new Intent();
-                installIntent.setAction(
-                    TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
-                startActivity(installIntent);
+                Toast.makeText(getApplicationContext(), R.string.noTtsError,
+                        Toast.LENGTH_LONG).show();
+                // TODO Move this to EditLocation, when turning speech on
+                // missing data, install it
+                //Intent installIntent = new Intent();
+                //installIntent.setAction(
+                //    TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
+                //startActivity(installIntent);
             }
 
             Log.d(LOG_NAME, "end of onActivityResult");

@@ -96,6 +96,7 @@
 <string name="alarmMessage">You are %1$s from %2$s</string>
 <string name="locAgeMessage">Location data is %1$ss old</string>
 <string name="alarmAwaitingFix">Awaiting first location fix...</string>
+<string name="noTtsError">Your device does not have Text-To-Speech capability</string>
 
 
 <!-- SHORTCUTS -->
