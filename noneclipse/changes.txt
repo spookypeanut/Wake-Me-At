@@ -1,1 +1,2 @@
 * Double-tapping the map zooms in
+* Several bug fixes
