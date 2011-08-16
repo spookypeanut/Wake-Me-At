@@ -15,7 +15,7 @@ package uk.co.spookypeanut.wake_me_at;
  GNU General Public License for more details.
 
  You should have received a copy of the GNU General Public License
- along with Wake Me At, in the file "COPYING".  If not, see 
+ along with Wake Me At, in the file "COPYING".  If not, see
  <http://www.gnu.org/licenses/>.
  */
 
@@ -46,7 +46,7 @@ public class Shortcuts extends ListActivity {
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
     private DatabaseManager db = null;
-    
+
     public WakeMeAt mBlah = new WakeMeAt();
 
     @Override
@@ -66,12 +66,12 @@ public class Shortcuts extends ListActivity {
         setListAdapter(new LocListAdapter(this));
         setContentView(R.layout.shortcuts);
 
-        ListView lv = getListView(); 
+        ListView lv = getListView();
         registerForContextMenu(lv);
-        
+
         mLocListAdapter = (LocListAdapter) getListAdapter();
     }
-    
+
     /**
      * Create a home screen shortcut of the given database row
      * @param rowId
@@ -79,13 +79,13 @@ public class Shortcuts extends ListActivity {
     public void createShortcut(long rowId) {
         db.logOutArray();
         Log.d(LOG_NAME, "Shortcuts.createShortcut");
-        
+
         Intent shortcutIntent = new Intent(Intent.ACTION_MAIN);
         shortcutIntent.setClassName(this, this.getClass().getName());
         shortcutIntent.putExtra(ROWID_KEY, rowId);
-        
+
         String nick = db.getNick(rowId);
-        
+
         Intent intent = new Intent();
         intent.putExtra(Intent.EXTRA_SHORTCUT_INTENT, shortcutIntent);
         intent.putExtra(Intent.EXTRA_SHORTCUT_NAME,
@@ -105,7 +105,7 @@ public class Shortcuts extends ListActivity {
         }
         super.onDestroy();
     }
-    
+
     @Override
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
@@ -127,7 +127,7 @@ public class Shortcuts extends ListActivity {
         // from the intent, and start the service
         Bundle extras = intent.getExtras();
         long rowId = extras.getLong(ROWID_KEY);
-        
+
         Intent serviceIntent = new Intent(WakeMeAtService.ACTION_FOREGROUND);
         serviceIntent.setClass(Shortcuts.this, WakeMeAtService.class);
         serviceIntent.putExtra("rowId", rowId);

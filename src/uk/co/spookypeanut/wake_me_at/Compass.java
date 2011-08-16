@@ -14,7 +14,7 @@ package uk.co.spookypeanut.wake_me_at;
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Wake Me At, in the file "COPYING".  If not, see 
+    along with Wake Me At, in the file "COPYING".  If not, see
     <http://www.gnu.org/licenses/>.
  */
 
@@ -58,18 +58,18 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
     private final int mBkgColor = getResources().getColor(R.color.mainbg);
     private final int mDialColor = getResources().getColor(R.color.compassdials);
     private final int mNeedleColor = getResources().getColor(R.color.compassneedle);
-    
+
     private SensorManager mSensorManager;
     private int mLayoutWidth, mLayoutHeight;
     private SurfaceView mSurfaceView;
 
     private float[] mOriValues = {(float)10.0, (float)10.0, (float)10.0};
-    
+
     private float[] mGravity = new float[3];
     private float[] mGeoMag = new float[3];
     private float[] mRotMatrix = new float[16];
     private float[] mInclMatrix = new float[16];
-    
+
     private double mCurrLat, mCurrLong;
     private Location mCurrLoc;
     private Location mDestLoc;
@@ -85,7 +85,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         super(context, attributeSet);
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) context.getText(R.string.serviceBroadcastName);
-        
+
         Log.d(LOG_NAME, "Compass constructor");
         mContext = context;
         SurfaceHolder holder = getHolder();
@@ -97,7 +97,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mDestLoc = new Location("");
     }
 
-    
+
     private void drawDials(Canvas canvas) {
         Paint paint = mPaint;
         Path outer = new Path();
@@ -143,7 +143,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         // Construct a wedge-shaped path
         int needleWidth = 15;
         int needleLength = 60;
-        
+
         mNeedlePath.moveTo(0, -needleLength);
         mNeedlePath.lineTo(-needleWidth, needleLength);
         mNeedlePath.lineTo(0, (float) (needleLength * 0.75));
@@ -166,7 +166,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
                 mGravity = event.values.clone();
                 sensorReady = true;
                 break;
-            }   
+            }
 
             if (sensorReady && mGeoMag != null && mGravity != null) {
                 //Log.d(LOG_NAME, "All values present");
@@ -183,7 +183,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             // TODO Auto-generated method stub
         }
     };
-    
+
     //REF#0011, REF#0012
     @Override
     protected void onDraw(Canvas canvas) {
@@ -197,10 +197,10 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
 
         int cx = mLayoutWidth / 2;
         int cy = mLayoutHeight / 2;
-        
+
         canvas.setMatrix(null);
         canvas.translate(cx, cy);
-        
+
         float northRotation = 0;
         if (mOriValues != null) {
             northRotation = -mOriValues[0] * RADTODEGREES;
@@ -234,7 +234,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
                 }
             });
         }
-        
+
         mThread.setRunning(true);
         Log.d(LOG_NAME, "Before start, mThread.getState(): " + mThread.getState());
         mThread.start();
@@ -244,12 +244,12 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
         mLayoutWidth = mSurfaceView.getWidth();
         mLayoutHeight = mSurfaceView.getHeight();
         Log.d(LOG_NAME, "SurfaceView is " + mLayoutWidth + "x" + mLayoutHeight);
-        
+
         Sensor sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
         mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_UI);
         sensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         mSensorManager.registerListener(mListener, sensor, SensorManager.SENSOR_DELAY_UI);
-        
+
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         mContext.registerReceiver(this.mReceiver, filter);
         Log.d(LOG_NAME, "Registered receiver");
@@ -291,7 +291,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
                 Handler handler) {
             mSurfaceHolder = surfaceHolder;
         }
-        
+
         /**
          * Set the running flag of the thread
          * @param run True if thread should be set to running
@@ -321,7 +321,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             }
         }
     }
-    
+
     /**
      * Method called when the location on the service has changed
      * @param rowId
@@ -334,7 +334,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
             db.close();
         }
     }
-    
+
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -349,7 +349,7 @@ class Compass extends SurfaceView implements SurfaceHolder.Callback {
                 mRowId = extras.getLong("rowId");
                 locationChanged(mRowId);
             }
-            
+
         }
    };
 }

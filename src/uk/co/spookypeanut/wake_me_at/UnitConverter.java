@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
+along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
@@ -39,30 +39,30 @@ public class UnitConverter
     private String LOG_NAME;
     private final int SYSTEM_METRIC = 1;
     private final int SYSTEM_IMPERIAL = 2;
-    
+
     // Number of decimal places to round to
     static final int DP = 1;
     static final int SF = 2;
-    
+
     // The value that determines which unit in a unit system will be used
     private final double LARGESTNUM = 500;
 
     Context mContext;
-    
+
     // Metre is a special unit, as it's the one that's used internally
     private final Unit mMetreUnit = new Unit("metre", "m", 1, SYSTEM_METRIC, "metres");
-    
-    private final List <Unit> mUnitList = 
+
+    private final List <Unit> mUnitList =
             Arrays.asList(
                 mMetreUnit,
                 new Unit("kilometre", "km", 1000, SYSTEM_METRIC, "kilometres"),
-                
+
                 new Unit("foot", "ft", 0.3048, SYSTEM_IMPERIAL, "feet"),
                 new Unit("yard", "yd", 0.9144, SYSTEM_IMPERIAL, "yards"),
                 new Unit("mile", "mi", 1609.344, SYSTEM_IMPERIAL, "miles"));
 
     Unit mUnit;
-    
+
     /**
      * Unit converter constructor
      * @param unitAbbrev The abbreviation of the unit to initialize to
@@ -98,7 +98,7 @@ public class UnitConverter
         }
         return returnList;
     }
-    
+
     /**
      * Get the list of unit abbreviations
      * @return The list
@@ -111,7 +111,7 @@ public class UnitConverter
         }
         return returnList;
     }
-    
+
     /**
      * Get a unit object from its abbreviation
      * @param abbrev The abbreviation of the required unit
@@ -128,7 +128,7 @@ public class UnitConverter
         Log.wtf(LOG_NAME, "The unit \"" + abbrev + "\" was not found");
         return null;
     }
-    
+
     /**
      * Get the name of the current unit
      * @return The name of the unit
@@ -136,7 +136,7 @@ public class UnitConverter
     public String getName() {
         return mUnit.getName();
     }
-    
+
     /**
      * Get the abbreviation of the current unit
      * @return The abbreviation of the unit
@@ -144,7 +144,7 @@ public class UnitConverter
     public String getAbbrev() {
         return mUnit.getAbbrev();
     }
-    
+
     /**
      * Convert a value in the current unit to metres
      * @param value The value to convert to metres
@@ -153,7 +153,7 @@ public class UnitConverter
     public double toMetres(double value) {
         return convert(value, mUnit, getFromAbbrev("m"));
     }
-    
+
     /**
      * Convert a value in metres to the current unit
      * @param value The value to convert to the current unit
@@ -162,7 +162,7 @@ public class UnitConverter
     public double toUnit(double value) {
         return convert(value, getFromAbbrev("m"), mUnit);
     }
-    
+
     /**
      * Convert a double to a certain number of significant figures
      * REF#0013
@@ -178,8 +178,8 @@ public class UnitConverter
             BigDecimal bigDecimal = new BigDecimal(value,
                mathContext);
             return bigDecimal.toPlainString();
-         } 
-    
+         }
+
     /**
      * The "standard" method for rounding
      * @param value The value to round
@@ -188,7 +188,7 @@ public class UnitConverter
     private static String round(double value) {
         return formatToSignificant(value, SF);
     }
-    
+
     /**
      * A string representation of a value, including the unit abbreviation
      * @param value The value to convert to a string
@@ -199,10 +199,10 @@ public class UnitConverter
         Unit bestUnit = getBestUnit(value);
         double outValue = convert(value, mMetreUnit, bestUnit);
         String outAbbrev = bestUnit.getAbbrev();
-        
+
         return String.format("%s%s", round(outValue), outAbbrev);
     }
-    
+
     /**
      * A string representation of a value, ready to be spoken
      * Similar to out(), but designed to be sent to text-to-speech
@@ -214,10 +214,10 @@ public class UnitConverter
         Unit bestUnit = getBestUnit(value);
         double outValue = convert(value, mMetreUnit, bestUnit);
         String outName = bestUnit.getPlural();
-        
+
         return String.format("%s%s", round(outValue), outName);
     }
-    
+
     /**
      * Switch the objects current unit
      * @param unit The unit to switch to
@@ -226,7 +226,7 @@ public class UnitConverter
         Log.d(LOG_NAME, "Switching unit to " + unit.getName());
         mUnit = unit;
     }
-    
+
     /**
      * A generic unit converter
      * @param value The value to convert to another unit
@@ -240,7 +240,7 @@ public class UnitConverter
         }
         return value * sourceUnit.getValue() / destUnit.getValue();
     }
-    
+
     /**
      * Return a list of unit objects that are in a given unit system
      * @param system An int value of the desired unit system
@@ -257,9 +257,9 @@ public class UnitConverter
         }
         return returnList;
     }
-    
+
     /**
-     * Get the best unit for a human-readable description of a given value 
+     * Get the best unit for a human-readable description of a given value
      * @param srcValue Value to fine unit for, in metres
      * @return A unit object of the best unit to use
      */
@@ -282,7 +282,7 @@ public class UnitConverter
             //Log.d(LOG_NAME, "Best unit so far: " + currBestUnit.getAbbrev());
             destValue = convert(srcValue, mMetreUnit, currUnit);
             //Log.d(LOG_NAME, "destValue: " + destValue);
-            // If the value in this unit is below our ideal number  
+            // If the value in this unit is below our ideal number
             if (!(destValue < LARGESTNUM && currBestValue < LARGESTNUM)) {
                     currBestUnit = currUnit;
                     currBestValue = destValue;
@@ -295,7 +295,7 @@ public class UnitConverter
         //Log.d(LOG_NAME, "Best unit for " + srcValue + ": " + currBestUnit.getAbbrev());
         return currBestUnit;
     }
-    
+
     /**
      * An object to represent a unit
      * @author spookypeanut
@@ -307,7 +307,7 @@ public class UnitConverter
         double mValue;
         int mSystem;
         String mPlural;
-        
+
         /**
          * Constructor
          * @param name The name of the unit for use in selecting it (eg foot)
@@ -323,7 +323,7 @@ public class UnitConverter
             mSystem = system;
             mPlural = plural;
         }
-        
+
         /**
          * Get the name of the unit
          * @return The name of the unit
@@ -331,7 +331,7 @@ public class UnitConverter
         public String getName() {
             return mName;
         }
-        
+
         /**
          * Get the plural of the unit
          * @return The plural of the unit
@@ -339,7 +339,7 @@ public class UnitConverter
         public String getPlural() {
             return mPlural;
         }
-        
+
         /**
          * Get the abbreviation of the unit
          * @return The abbreviation of the unit
@@ -347,7 +347,7 @@ public class UnitConverter
         public String getAbbrev() {
             return mAbbrev;
         }
-        
+
         /**
          * Get the number of metres in the unit
          * @return The number of metres in the unit
@@ -355,7 +355,7 @@ public class UnitConverter
         public double getValue() {
             return mValue;
         }
-        
+
         /**
          * Get the system that the unit is in
          * @return The system that the unit is in

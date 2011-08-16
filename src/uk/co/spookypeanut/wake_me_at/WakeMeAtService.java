@@ -35,7 +35,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
+along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
@@ -64,15 +64,15 @@ public class WakeMeAtService extends Service implements LocationListener {
     Time lastLocation = new Time();
 
     private static final int ALARMNOTIFY_ID = 1;
-    
+
     private static final Class<?>[] mStartForegroundSignature = new Class[] {
         int.class, Notification.class};
     private static final Class<?>[] mStopForegroundSignature = new Class[] {
         boolean.class};
-    
+
     private DatabaseManager db;
     private UnitConverter uc;
-    
+
     private long mRowId;
     private String mNick;
     private Location mCurrLocation = new Location("");
@@ -86,11 +86,11 @@ public class WakeMeAtService extends Service implements LocationListener {
     private boolean mWarnVibrate;
     private boolean mWarnToast;
     private boolean mWarningOn;
-    
+
     private boolean mAlarm = false;
 
     private Intent mAlarmIntent;
-    
+
     private LocationManager mLocationManager;
     private NotificationManager mNM;
     private Notification mNotification;
@@ -99,7 +99,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private Method mStopForeground;
     private Object[] mStartForegroundArgs = new Object[2];
     private Object[] mStopForegroundArgs = new Object[1];
-    
+
     /**
      * Copied from one of the API example tools. One day I'll have to
      * actually go through and figure out what this does (or rather,
@@ -123,12 +123,12 @@ public class WakeMeAtService extends Service implements LocationListener {
             }
             return;
         }
-        
+
         // Fall back on the old API.
         setForeground(true);
         mNM.notify(id, notification);
     }
-    
+
     void stopForegroundCompat(int id) {
         // If we have the new stopForeground API, then use it.
         if (mStopForeground != null) {
@@ -144,13 +144,13 @@ public class WakeMeAtService extends Service implements LocationListener {
             }
             return;
         }
-        
+
         // Fall back on the old API.  Note to cancel BEFORE changing the
         // foreground state, since we could be killed at that point.
         mNM.cancel(id);
         setForeground(false);
     }
-    
+
     @Override
     public void onCreate() {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
@@ -205,7 +205,7 @@ public class WakeMeAtService extends Service implements LocationListener {
                                                mWarnVibrate ||
                                                mWarnToast);
         Log.d(LOG_NAME, "Provider: \"" + mProvider + "\"");
-        
+
         String lp = this.getResources()
                         .getStringArray(R.array.locProvAndroid)[mProvider];
         if ("gps".equals(lp)) {
@@ -222,7 +222,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mLocationManager =
             (LocationManager) getSystemService(Context.LOCATION_SERVICE);
         registerLocationListener();
-        
+
         if (!mLocationManager.isProviderEnabled(lp)) {
             stopService();
             return START_NOT_STICKY;
@@ -236,7 +236,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Toast.makeText(getApplicationContext(),
                        R.string.foreground_service_started,
                        Toast.LENGTH_SHORT).show();
-        
+
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         return START_STICKY;
@@ -310,7 +310,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME,
               "Location listener is unregistered");
     }
- 
+
     void createNotification(Intent intent) {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // The text to use as the title of our notification
@@ -326,30 +326,30 @@ public class WakeMeAtService extends Service implements LocationListener {
             i.putExtra("rowId", mRowId);
             i.putExtra("metresAway", mMetresAway);
             i.putExtra("alarm", mAlarm);
-            
-            // It appears that the extras aren't updated, so we use 
+
+            // It appears that the extras aren't updated, so we use
             // FLAG_CANCEL_CURRENT to completely start from scratch
-            mIntentOnSelect = PendingIntent.getActivity(this, 0, i, 
+            mIntentOnSelect = PendingIntent.getActivity(this, 0, i,
                                          PendingIntent.FLAG_CANCEL_CURRENT);
 
             // Set the info for the views that show in the notification panel.
             CharSequence msg = getText(R.string.foreground_service_started);
             mNotification.setLatestEventInfo(this, msg, text,
                                              mIntentOnSelect);
-            
+
             startForegroundCompat(ALARMNOTIFY_ID, mNotification);
         }
     }
-    
+
     @Override
     public IBinder onBind(Intent intent) {
         return null;
     }
-    
+
     @Override
     public void onLocationChanged(Location location) {
         lastLocation.setToNow();
-        Log.v(LOG_NAME, "onLocationChanged(" + 
+        Log.v(LOG_NAME, "onLocationChanged(" +
                         lastLocation.toMillis(false) + ")");
         mHandler.removeCallbacks(mCheckLocationAge);
         if (mWarningOn) {
@@ -371,7 +371,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         mNM.notify(ALARMNOTIFY_ID, mNotification);
         if (mMetresAway < uc.toMetres(mRadius)) {
             soundAlarm();
-        } 
+        }
         updateAlarm();
     }
 
@@ -390,7 +390,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         Log.d(LOG_NAME, "mRowId: " + mRowId);
         sendStickyBroadcast(mAlarmIntent);
     }
-    
+
     public void cancelAlarm() {
         Log.d(LOG_NAME, "WakeMeAtService.cancelAlarm");
         mAlarm = false;
@@ -399,10 +399,10 @@ public class WakeMeAtService extends Service implements LocationListener {
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
-        
+
         startActivity(alarmIntent);
     }
-    
+
     public void soundAlarm() {
         mAlarm = true;
         Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
@@ -413,7 +413,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         startActivity(alarmIntent);
         updateAlarm();
     }
-    
+
     @Override
     public void onProviderDisabled(String provider) {
         String lp = this.getResources()
@@ -446,7 +446,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             long millis = currTime.toMillis(false) -
                           lastLocation.toMillis(false);
 
-            Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) + 
+            Log.d(LOG_NAME, "Curr: " + currTime.toMillis(false) +
                             ", last: " + lastLocation.toMillis(false));
             Log.d(LOG_NAME, "Diff: " + millis +
                             " vs limit: " + mNoLocationWarningTime);
@@ -477,7 +477,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
         Intent notificationIntent = new Intent(this, Alarm.class);
         PendingIntent contentIntent;
-        contentIntent = PendingIntent.getActivity(this, 0, 
+        contentIntent = PendingIntent.getActivity(this, 0,
                                                   notificationIntent, 0);
         if (mWarnSound) {
             mNotification.defaults |= Notification.DEFAULT_SOUND;

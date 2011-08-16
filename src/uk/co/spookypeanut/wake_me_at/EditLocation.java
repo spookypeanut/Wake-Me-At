@@ -46,7 +46,7 @@ import android.widget.TextView;
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Wake Me At, in the file "COPYING".  If not, see 
+    along with Wake Me At, in the file "COPYING".  If not, see
     <http://www.gnu.org/licenses/>.
  */
 
@@ -64,11 +64,11 @@ public class EditLocation extends ExpandableListActivity {
 
     private String LOG_NAME;
     private String BROADCAST_UPDATE;
-    
+
     public static final int NICKDIALOG = 0;
     public static final int RADIUSDIALOG = 1;
     private boolean mDialogOpen = false;
-    
+
     private DatabaseManager db;
     private UnitConverter uc;
     private LayoutInflater mInflater;
@@ -85,7 +85,7 @@ public class EditLocation extends ExpandableListActivity {
     private int mPreset = -1;
     private Presets mPresetObj;
     private String mUnit = "";
-    
+
     private String mSearchTerm = "";
 
     private boolean mSound = true;
@@ -138,7 +138,7 @@ public class EditLocation extends ExpandableListActivity {
         "Vibration",
         "Popup message"
     };
-    
+
     /* Descriptions of all the controls. These aren't all used atm,
      * but some of them are
      */
@@ -165,7 +165,7 @@ public class EditLocation extends ExpandableListActivity {
     public boolean onChildClick(ExpandableListView l, View v,
                                 int groupPosition, int childPosition,
                                 long id) {
-        int position = mLocSettingsAdapter.getGlobalPosition(groupPosition, 
+        int position = mLocSettingsAdapter.getGlobalPosition(groupPosition,
                                                              childPosition);
         switch (position) {
             case INDEX_ACTIV:
@@ -371,7 +371,7 @@ public class EditLocation extends ExpandableListActivity {
             updateForm();
         }
    };
-   
+
     private boolean isActive() {
         return (mRunningRowId == mRowId);
     }
@@ -382,9 +382,9 @@ public class EditLocation extends ExpandableListActivity {
        Log.d(LOG_NAME, "Unregistered receiver");
        super.onPause();
    }
-   
+
    @Override
-   protected void onResume() { 
+   protected void onResume() {
        super.onResume();
        // If the service is running, it will inform us of the running id as soon
        // as we receive a broadcast. If not, -1 is correct
@@ -412,7 +412,7 @@ public class EditLocation extends ExpandableListActivity {
             Log.w(LOG_NAME, "Dialog open, skipping location map");
         }
     }
-    
+
     private OnClickListener mChangeNickListener = new OnClickListener() {
         public void onClick(View v) {
             Dialog monkey = onCreateDialog(NICKDIALOG);
@@ -430,14 +430,14 @@ public class EditLocation extends ExpandableListActivity {
         intent.putExtra("rowId", mRowId);
         startService(intent);
     }
-    
+
     /**
      * Stops the alarm service
      */
     private void stopService() {
         stopService(new Intent(EditLocation.this, WakeMeAtService.class));
     }
-    
+
     /**
      * Method called to install a new latitude and longitude in that database
      * @param latitude
@@ -460,7 +460,7 @@ public class EditLocation extends ExpandableListActivity {
         mPresetObj.switchPreset(preset);
         newPresetGui();
         db.setPreset(mRowId, preset);
-        
+
         updateUc();
         updateForm();
     }
@@ -493,7 +493,7 @@ public class EditLocation extends ExpandableListActivity {
         db.setRingtone(mRowId, ringtone.toString());
         updateForm();
     }
-    
+
     /**
      * Method called to change the location's nickname in the database
      * @param nick
@@ -513,7 +513,7 @@ public class EditLocation extends ExpandableListActivity {
         db.setRadius(mRowId, radius);
         updateForm();
     }
-    
+
     /**
      * Update the unitconverter stored in the class to the appropriate unit
      */
@@ -531,7 +531,7 @@ public class EditLocation extends ExpandableListActivity {
         }
         uc = new UnitConverter(mContext, unit);
     }
-    
+
     /**
      * Detect if the stored location is invalid (ie not yet set)
      * @return True is location is invalid
@@ -554,7 +554,7 @@ public class EditLocation extends ExpandableListActivity {
             getLoc();
         }
     }
-    
+
     /**
      * Load the preset from the database
      */
@@ -563,7 +563,7 @@ public class EditLocation extends ExpandableListActivity {
         newPresetGui();
         updateUc();
     }
-    
+
     private void newPresetGui() {
         ExpandableListView v = getExpandableListView();
         mPresetObj.switchPreset(mPreset);
@@ -573,14 +573,14 @@ public class EditLocation extends ExpandableListActivity {
             v.collapseGroup(1);
         }
     }
-        
+
     /**
      * Load the location provider from the database
      */
     protected void loadLocProv() {
         mLocProv = db.getProvider(mRowId);
     }
-    
+
     /**
      * Update the gui to the latest values
      */
@@ -590,10 +590,10 @@ public class EditLocation extends ExpandableListActivity {
 
         mLocSettingsAdapter.notifyDataSetChanged();
     }
-    
+
     /**
      * Load the nickname of the location from the database
-     */ 
+     */
     protected void loadNick() {
         Log.v(LOG_NAME, "loadNick()");
         mNick = db.getNick(mRowId);
@@ -607,21 +607,21 @@ public class EditLocation extends ExpandableListActivity {
             }
         }
     }
-    
+
     /**
      * Load the radius from the database
      */
     protected void loadRadius() {
         mRadius = db.getRadius(mRowId);
-    }   
-    
+    }
+
     /**
      * Load the distance unit to use from the database
      */
     protected void loadUnit() {
         mUnit = db.getUnit(mRowId);
         updateUc();
-    }   
+    }
 
     protected void loadAlarmSettings() {
         mSound = db.getSound(mRowId);
@@ -635,7 +635,7 @@ public class EditLocation extends ExpandableListActivity {
         mWarnVibrate = db.getWarnVibrate(mRowId);
         mWarnToast = db.getWarnToast(mRowId);
     }
-    
+
     @Override
     protected void onActivityResult (int requestCode,
             int resultCode, Intent data) {
@@ -664,7 +664,7 @@ public class EditLocation extends ExpandableListActivity {
     protected void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
-        
+
         Log.d(LOG_NAME, "EditLocation.onCreate");
         super.onCreate(icicle);
 
@@ -674,7 +674,7 @@ public class EditLocation extends ExpandableListActivity {
         }
         mRowId = extras.getLong("rowId");
         Log.d(LOG_NAME, "Row detected: " + mRowId);
-        
+
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mContext = this;
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -772,9 +772,9 @@ public class EditLocation extends ExpandableListActivity {
             return null;
         }
     }
-    
 
-    
+
+
     @Override
     protected void onDestroy() {
         db.close();
@@ -794,7 +794,7 @@ public class EditLocation extends ExpandableListActivity {
         public LocSettingsAdapter(Context context) {
             Log.d(LOG_NAME, "LocSettingsAdapter constructor");
         }
-        
+
         public int getGlobalPosition(int groupPosition, int childPosition) {
             int countGroup;
             int total = 0;
@@ -804,7 +804,7 @@ public class EditLocation extends ExpandableListActivity {
             total += childPosition;
             return total;
         }
-        
+
         public String getSubtitle(int position) {
             switch (position) {
                 case INDEX_ACTIV:
@@ -829,7 +829,7 @@ public class EditLocation extends ExpandableListActivity {
                     return String.valueOf(rad) + radUnit;
                 case INDEX_UNITS:
                      String unit;
-                     
+
                     if (mPresetObj.isCustom()) {
                         unit = mUnit;
                     } else {
@@ -897,7 +897,7 @@ public class EditLocation extends ExpandableListActivity {
             Log.wtf(LOG_NAME, "EditLocation.getSubtitle: Invalid position passed");
             return "crap";
         }
-        
+
 
         /* (non-Javadoc)
          * @see android.widget.ExpandableListAdapter#getGroupCount()
@@ -969,7 +969,7 @@ public class EditLocation extends ExpandableListActivity {
         public View getGroupView(int groupPosition, boolean isExpanded,
                 View convertView, ViewGroup parent) {
             View row;
-            
+
             if (null == convertView) {
                 row = mInflater.inflate(R.layout.edit_loc_list_group, null);
             } else {
@@ -1027,13 +1027,13 @@ public class EditLocation extends ExpandableListActivity {
                     }
                     break;
             }
-            
+
             row.setEnabled(enabled);
-            
+
             TextView tv = (TextView) row.findViewById(R.id.locSettingName);
             tv.setText(mTitles[position]);
             tv.setEnabled(enabled);
-            
+
             tv = (TextView) row.findViewById(R.id.locSettingDesc);
             tv.setText(getSubtitle(position));
             tv.setEnabled(enabled);

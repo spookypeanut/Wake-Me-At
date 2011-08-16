@@ -40,7 +40,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
+along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
@@ -53,16 +53,16 @@ public class WakeMeAt extends ListActivity {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     public static String LOG_NAME;
     public static String BROADCAST_UPDATE;
-    
+
     public static final double INVALIDLATLONG = 1000.0;
-    
+
     private DatabaseManager db;
     private LayoutInflater mInflater;
     private LocListAdapter mLocListAdapter;
     private Context mContext;
-    
+
     private long mRowId;
-    
+
     /* (non-Javadoc)
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
@@ -72,9 +72,9 @@ public class WakeMeAt extends ListActivity {
         inflater.inflate(R.menu.mn_wake_me_at, menu);
         return true;
     }
-    
+
     /**
-     * The items on the menu 
+     * The items on the menu
      * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
      */
     @Override
@@ -90,12 +90,12 @@ public class WakeMeAt extends ListActivity {
             return super.onOptionsItemSelected(item);
         }
     }
-    
+
     @Override
     protected void onListItemClick (ListView l, View v, int position, long id) {
         mLocListAdapter.editLocation(position);
     }
-    
+
     /**
      * Create the context menu for the list items
      * @see android.app.Activity#onCreateContextMenu(android.view.ContextMenu, android.view.View, android.view.ContextMenu.ContextMenuInfo)
@@ -121,7 +121,7 @@ public class WakeMeAt extends ListActivity {
           inflater.inflate(R.menu.mn_context_wake_me_at, menu);
       }
     }
-    
+
     /**
      * Code for the items on the list item context menu
      * @see android.app.Activity#onContextItemSelected(android.view.MenuItem)
@@ -146,13 +146,13 @@ public class WakeMeAt extends ListActivity {
         return super.onContextItemSelected(item);
       }
     }
-    
+
     @Override
     protected void onPause() {
         this.unregisterReceiver(this.mReceiver);
         super.onPause();
     }
-    
+
     @Override
     protected void onResume() {
         super.onResume();
@@ -161,17 +161,17 @@ public class WakeMeAt extends ListActivity {
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
     }
-    
+
     @Override
     protected void onDestroy() {
         db.close();
         super.onDestroy();
     }
-    
+
     @Override
     protected void onCreate(Bundle icicle) {
         super.onCreate(icicle);
-        
+
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
 
@@ -181,16 +181,16 @@ public class WakeMeAt extends ListActivity {
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
 
         db = new DatabaseManager(this);
-        
+
         setContentView(R.layout.wake_me_at);
         setListAdapter(new LocListAdapter(this));
 
         ListView lv = getListView();
         registerForContextMenu(lv);
-        
+
         mLocListAdapter = (LocListAdapter) getListAdapter();
     }
-    
+
     public void deleteEmpty() {
         int i;
         ArrayList <Long> idList = db.getIdsAsList();
@@ -202,7 +202,7 @@ public class WakeMeAt extends ListActivity {
             }
         }
     }
-    
+
     /**
      * Method called when the rowId of the service has changed
      * @param newRowId
@@ -211,14 +211,14 @@ public class WakeMeAt extends ListActivity {
         mRowId = newRowId;
         mLocListAdapter.notifyDataSetChanged();
     }
-    
+
     /**
      * Create a new row in the database with default values
      * @return The id of the new row
      */
     private long createDefaultRow() {
         // TODO: move all strings / constants out to R
-        Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM); 
+        Uri temp = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
         return db.addRow (
             "",              // Nickname
             INVALIDLATLONG,  // Lat
@@ -229,7 +229,7 @@ public class WakeMeAt extends ListActivity {
             "km",            // Unit
             true,            // Sound
             temp.toString(), // Ringtone
-            false,           // Crescendo 
+            false,           // Crescendo
             true,            // Vibration
             true,            // Speech
             false,           // Toast
@@ -239,7 +239,7 @@ public class WakeMeAt extends ListActivity {
             true             // Warn toast
         );
     }
-    
+
     /**
      * Class for the location list on the main activity
      * @author spookypeanut
@@ -249,7 +249,7 @@ public class WakeMeAt extends ListActivity {
         public LocListAdapter(Context context) {
             Log.d(LOG_NAME, "LocListAdapter constructor");
         }
-        
+
         /**
          * Start the service for this list entry
          * @param position
@@ -260,7 +260,7 @@ public class WakeMeAt extends ListActivity {
             intent.putExtra("rowId", getListAdapter().getItemId(position));
             mContext.startService(intent);
         }
-        
+
         /**
          * Delete this list entry
          * @param position
@@ -269,7 +269,7 @@ public class WakeMeAt extends ListActivity {
             db.deleteRow(getListAdapter().getItemId(position));
             this.notifyDataSetChanged();
         }
-        
+
         /**
          * Create a new location in the database, and edit it
          */
@@ -279,12 +279,12 @@ public class WakeMeAt extends ListActivity {
             i.putExtra("rowId", rowId);
             startActivity(i);
         }
-        
+
         @Override
         public int getCount() {
             // Add one for the "Add new location..." row
             return db.getRowCount() + 1;
-            
+
         }
 
         @Override
@@ -301,7 +301,7 @@ public class WakeMeAt extends ListActivity {
         private boolean isNewLocItem(int position) {
             return (position == (getCount() - 1 ));
         }
-        
+
         @Override
         public long getItemId(int position) {
             if (isNewLocItem(position)) {
@@ -325,7 +325,7 @@ public class WakeMeAt extends ListActivity {
             Log.d(LOG_NAME, "About to start EditLocation");
             startActivity(i);
         }
-        
+
         /**
          * Create the view for a single line of the listview
          * @see android.widget.Adapter#getView(int, android.view.View, android.view.ViewGroup)
@@ -344,8 +344,8 @@ public class WakeMeAt extends ListActivity {
                 newLocItem = false;
                 id = db.getIdsAsList().get(position);
             }
-            
-            
+
+
             // We used to check if we already had a row, and neatly re-use it if we did.
             // Unfortunately, the "add new location" row uses a different layout, so we can't
             View row = mInflater.inflate(layout, null);
@@ -356,7 +356,7 @@ public class WakeMeAt extends ListActivity {
             } else {
                 row.setBackgroundDrawable(getResources().getDrawable(R.drawable.listitembg));
             }
-            
+
             // Set the name of the location from the database
             TextView tv = (TextView) row.findViewById(R.id.locListName);
             String nick;
@@ -370,11 +370,11 @@ public class WakeMeAt extends ListActivity {
             } else {
                 tv.setText(nick);
             }
-            
+
             if (newLocItem) {
                 return row;
             }
-            
+
             // Set the description, which is the preset in the database
             String subtitle = new Presets(mContext, db.getPreset(id)).getName();
             tv = (TextView) row.findViewById(R.id.locListDesc);
@@ -382,7 +382,7 @@ public class WakeMeAt extends ListActivity {
             return row;
         }
     }
-    
+
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {

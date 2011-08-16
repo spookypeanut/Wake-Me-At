@@ -14,7 +14,7 @@ package uk.co.spookypeanut.wake_me_at;
     GNU General Public License for more details.
 
     You should have received a copy of the GNU General Public License
-    along with Wake Me At, in the file "COPYING".  If not, see 
+    along with Wake Me At, in the file "COPYING".  If not, see
     <http://www.gnu.org/licenses/>.
  */
 import java.io.IOException;
@@ -93,10 +93,10 @@ implements LocationListener {
     static SearchManager mSearchManager;
     ProgressDialog mProgressDialog;
     List<Address> mDestAddresses = null;
-    
+
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
-    
+
     // Create runnable for posting
     final Runnable mGotAddresses = new Runnable() {
         public void run() {
@@ -110,7 +110,7 @@ implements LocationListener {
             resultsDialog();
         }
     };
-    
+
     @Override
     public void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
@@ -119,7 +119,7 @@ implements LocationListener {
         super.onCreate(icicle);
         // REF#0023: Setting a content view for a mapview is kinda slow (3 sec or so on
         // my Nexus One. However, we don't seem to be able to pop up a progress window,
-        // as both need access to the ui. This sucks. 
+        // as both need access to the ui. This sucks.
         setContentView(R.layout.get_location_map);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
@@ -167,7 +167,7 @@ implements LocationListener {
 
     /** (non-Javadoc)
      * @see android.app.Activity#onRetainNonConfigurationInstance()
-     * Generally, when the screen is rotated, the activity gets started again 
+     * Generally, when the screen is rotated, the activity gets started again
      * from scratch. In this case, that would be *really* annoying, if we had
      * chosen a location, got search up, etc. So this method gives us the ability
      * to pass some information to future existences of ourself, and handle it
@@ -185,7 +185,7 @@ implements LocationListener {
         returnBundle.putInt("mDestLong", mDest.getLongitudeE6());
         return returnBundle;
     }
-    
+
     /* (non-Javadoc)
      * @see com.google.android.maps.MapActivity#onNewIntent(android.content.Intent)
      */
@@ -193,7 +193,7 @@ implements LocationListener {
     public void onNewIntent(Intent intent) {
         handleIntent(intent);
     }
-    
+
     /**
      * When passed a new intent, run this.
      * Can be either via onNewIntent or onCreate
@@ -208,7 +208,7 @@ implements LocationListener {
             doSearch(query);
         }
     }
-    
+
     /**
      * Toggle the map mode between map and satellite
      */
@@ -217,7 +217,7 @@ implements LocationListener {
         mSatellite = !mSatellite;
         mapView.setSatellite(mSatellite);
     }
-    
+
     /**
      * Move the destination marker on the map
      * @param latitude The new latitude of the marker
@@ -237,7 +237,7 @@ implements LocationListener {
      * @param longitude The new longitude
      */
     private void moveMapTo(double latitude, double longitude) {
-        GeoPoint location = new GeoPoint((int) (latitude * 1E6), 
+        GeoPoint location = new GeoPoint((int) (latitude * 1E6),
                                             (int) (longitude * 1E6));
         moveMapTo(location);
     }
@@ -255,7 +255,7 @@ implements LocationListener {
             Log.e(LOG_NAME, "Location to move to was null");
         }
     }
-    
+
     /* (non-Javadoc)
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
@@ -265,7 +265,7 @@ implements LocationListener {
         inflater.inflate(R.menu.mn_get_location_map, menu);
         return true;
     }
-    
+
     /* (non-Javadoc)
      * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
      */
@@ -285,7 +285,7 @@ implements LocationListener {
             } else {
                 Log.e(LOG_NAME, "Location inaccessible");
             }
-            
+
             return true;
         case R.id.mn_satellite:
             toggleMapMode();
@@ -294,7 +294,7 @@ implements LocationListener {
             return super.onOptionsItemSelected(item);
         }
     }
-    
+
     /**
      * Get the current location via GPS
      * @return Current location
@@ -308,12 +308,12 @@ implements LocationListener {
         String provider = locMan.getBestProvider(new Criteria(), true);
         if (provider == null) {
             Log.wtf(LOG_NAME, "Provider is null");
-            // TODO: do this properly 
+            // TODO: do this properly
             return currentLocation;
         }
         if(!locMan.isProviderEnabled(provider)){
             Log.wtf(LOG_NAME, "Provider is disabled");
-            // TODO: do this properly 
+            // TODO: do this properly
             return currentLocation;
         }
         currentLocation = locMan.getLastKnownLocation(provider);
@@ -321,7 +321,7 @@ implements LocationListener {
 
         if(currentLocation == null){
             Log.wtf(LOG_NAME, "Return value from getLastKnownLocation is null");
-            // TODO: do this properly 
+            // TODO: do this properly
             return currentLocation;
         }
         return currentLocation;
@@ -351,9 +351,9 @@ implements LocationListener {
     public void onStatusChanged(String provider, int status, Bundle extras) {
         // TODO Auto-generated method stub
     }
-    
+
     private void howToSelectLocationInfo() {
-        Toast.makeText(getApplicationContext(), 
+        Toast.makeText(getApplicationContext(),
                        R.string.how_to_select_location,
                        Toast.LENGTH_LONG).show();
     }
@@ -377,12 +377,11 @@ implements LocationListener {
                 howToSelectLocationInfo();
             }
         });
-
         startSearch(mSearchTerm, true, null, false);
         return true;
     }
-    
-    
+
+
     private void doSearch(String searchTerm) {
         mSearchTerm = searchTerm;
 
@@ -415,12 +414,12 @@ implements LocationListener {
                 })
                 .setIcon(R.drawable.icon)
                 .create();
-            
+
             badConnectionDlg.show();
 
             // Change the button style for the dialog
             // I can't find a way to do this in the xml, which is very annoying. Is it possible?
-            ((Button) badConnectionDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);            
+            ((Button) badConnectionDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
             return;
         }
         mResultsDialog = new Dialog(mContext);
@@ -433,7 +432,7 @@ implements LocationListener {
         mResultsDialog.setTitle(R.string.searchresults_title);
         mResultsDialog.show();
     }
-    
+
     /**
      * Search the map for the given text
      * @param address The text to search for
@@ -450,7 +449,7 @@ implements LocationListener {
             Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
         }
     }
-    
+
     private OnItemClickListener mResultClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
@@ -459,13 +458,13 @@ implements LocationListener {
             double latitude = mResults.get(position).getLatitude();
             double longitude = mResults.get(position).getLongitude();
             moveMapTo(latitude, longitude);
-            mDest = new GeoPoint((int) (latitude * 1E6), 
+            mDest = new GeoPoint((int) (latitude * 1E6),
                                  (int) (longitude * 1E6));
             selectedLocation();
             mResultsDialog.dismiss();
         }
     };
-    
+
     /**
      * The list in the search results dialog
      * @author spookypeanut
@@ -494,7 +493,7 @@ implements LocationListener {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row;
-            
+
             if (null == convertView) {
                 row = mInflater.inflate(R.layout.search_list_entry, null);
             } else {
@@ -512,13 +511,13 @@ implements LocationListener {
             resultAsLoc.setLatitude(result.getLatitude());
             resultAsLoc.setLongitude(result.getLongitude());
             tv.setText(uc.out(mCurrLoc.distanceTo(resultAsLoc)) + " away");
-           
-            
+
+
             return row;
         }
     }
 
-    
+
     /**
      * The method the passes the required data back to caller
      */
@@ -530,7 +529,7 @@ implements LocationListener {
                 mDest.getLongitudeE6() / 1E6));
         finish();
     }
-    
+
     /**
      * The user has specified a location, we now ask them if they're sure that
      * this is the one they want. This method just starts a thread to retrieve
@@ -541,7 +540,7 @@ implements LocationListener {
         final double longitude = mDest.getLongitudeE6() / 1E6;
         moveDestinationTo(latitude, longitude);
         Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
-        
+
         // Fire off a thread to do some work that we shouldn't do directly in the UI thread
         Thread t = new Thread() {
             public void run() {
@@ -559,7 +558,7 @@ implements LocationListener {
                 getText(R.string.geocoder_progress_msg),
                 true, true);
     }
-    
+
     /**
      * This method is called from the thread that retrieved the addresses
      * from the geocoder to finish the process started in selectedLocation()
@@ -571,7 +570,7 @@ implements LocationListener {
         String latlongMsg = "Latitude / Longitude:\n";
         latlongMsg += latitude + ", " + longitude;
         String addressMsg = "";
-        if (mDestAddresses != null && mDestAddresses.size() > 0) 
+        if (mDestAddresses != null && mDestAddresses.size() > 0)
         {
             for (int i=0; i<mDestAddresses.get(0).getMaxAddressLineIndex(); i++)
                 addressMsg += mDestAddresses.get(0).getAddressLine(i) + "\n";
@@ -580,16 +579,15 @@ implements LocationListener {
             addressMsg += (String) getText(R.string.uselocation_nodata);
 
         }
-        
+
         final View textEntryView =  mInflater.inflate(R.layout.select_location, null);
         final TextView latlongBox = (TextView)textEntryView.findViewById(R.id.latlong_msg);
         final TextView addressBox = (TextView)textEntryView.findViewById(R.id.address_msg);
         latlongBox.setText(latlongMsg);
         addressBox.setText(addressMsg);
 
-        String title = "";
+        String title = "Location name";
         DialogInterface.OnClickListener positiveListener = null;
-        title = "Location name";
         positiveListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 returnLocation();
@@ -607,16 +605,16 @@ implements LocationListener {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-        
+
         // Change the button style for the "use this location" dialog
         // I can't find a way to do this in the xml, which is very annoying. Is it possible?
         ((Button) dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
         ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
-    
+
     public class DestOverlay extends Overlay implements OnGestureListener, OnDoubleTapListener{
         private GestureDetector gestureDetector;
-        
+
         Context oContext;
         double mLat;
         double mLon;
@@ -632,13 +630,13 @@ implements LocationListener {
          }
 
          public void draw(Canvas canvas, MapView mapView, boolean shadow) {
-             super.draw(canvas, mapView, shadow); 
+             super.draw(canvas, mapView, shadow);
              Resources res = oContext.getResources();
              float[] result = new float[1];
 
              Location.distanceBetween(mLat, mLon, mLat, mLon + 1, result);
              float longitudeLineDistance = result[0];
-             
+
              Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.pointer);
              Projection projection = mapView.getProjection();
              Point pt = new Point();
@@ -650,7 +648,7 @@ implements LocationListener {
              projection.toPixels(geo, pt);
 
              float circleRadius = (float) pt.x - (float) left.x;
-             
+
              Paint circlePaint = new Paint();
              circlePaint.setColor(res.getColor(R.color.overlaycolor));
              circlePaint.setAntiAlias(true);
@@ -671,7 +669,7 @@ implements LocationListener {
              mc.zoomInFixing(x, y);
              return true;
          }
-         
+
          @Override
          public boolean onTouchEvent(MotionEvent event, MapView mv) {
              mapView = mv;
@@ -736,5 +734,5 @@ implements LocationListener {
             return false;
         }
     }
-    
+
 }

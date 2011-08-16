@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
+along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
@@ -48,12 +48,12 @@ public class DatabaseManager
     private final String TABLE_ROW_LAT = "table_row_lat";
     private final String TABLE_ROW_LONG = "table_row_long";
     private final String TABLE_ROW_PRESET = "table_row_preset";
-    
+
     //NB: These columns are only used when the preset is set to "custom"
     private final String TABLE_ROW_PROV = "table_row_prov";
     private final String TABLE_ROW_RADIUS = "table_row_radius";
     private final String TABLE_ROW_UNIT = "table_row_unit";
-    
+
     private final String TABLE_ROW_SOUND = "table_row_sound";
     private final String TABLE_ROW_RINGTONE = "table_row_ringtone";
     private final String TABLE_ROW_CRESC = "table_row_cresc";
@@ -78,7 +78,7 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
-    /** 
+    /**
      * Get the number of rows in the db
      * @return Rows in db
      */
@@ -86,7 +86,7 @@ public class DatabaseManager
         ArrayList <ArrayList <Object>> allData = getAllRowsAsArrays();
         return allData.size();
     }
-    
+
     /**
      * Add a new row to the db
      * @param rowNick The nickname of the location
@@ -149,7 +149,7 @@ public class DatabaseManager
         }
     }
 
-    
+
     /**
      * Change the entry for a given row in the database
      * @param rowId The id in the database of the row to change
@@ -216,7 +216,7 @@ public class DatabaseManager
             returnValue = cursor.getString(0);
             cursor.close();
         }
-        catch (SQLException e) 
+        catch (SQLException e)
         {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
@@ -239,7 +239,7 @@ public class DatabaseManager
             returnValue = cursor.getInt(0);
             cursor.close();
         }
-        catch (SQLException e) 
+        catch (SQLException e)
         {
             Log.e("DB ERROR", e.toString());
             e.printStackTrace();
@@ -294,7 +294,7 @@ public class DatabaseManager
     public void setDatumI(long rowId, String column, int value) {
         setDatumS(rowId, column, Integer.toString(value));
     }
-    
+
     public void setDatumB(long rowId, String column, boolean value) {
         if (value) {
             setDatumS(rowId, column, "1");
@@ -302,7 +302,7 @@ public class DatabaseManager
             setDatumS(rowId, column, "0");
         }
     }
-    
+
     public String getNick(long rowId) {
         return getDatumS(rowId, TABLE_ROW_NICK);
     }
@@ -310,7 +310,7 @@ public class DatabaseManager
     public void setNick(long rowId, String nick) {
         setDatumS(rowId, TABLE_ROW_NICK, nick);
     }
-    
+
     public double getLatitude(long rowId) {
         return Double.valueOf(getDatumS(rowId, TABLE_ROW_LAT));
     }
@@ -330,11 +330,11 @@ public class DatabaseManager
     public int getPreset(long rowId) {
         return getDatumI(rowId, TABLE_ROW_PRESET);
     }
-    
+
     public void setPreset(long rowId, int preset) {
         setDatumI(rowId, TABLE_ROW_PRESET, preset);
     }
-    
+
     public int getProvider(long rowId) {
         return getDatumI(rowId, TABLE_ROW_PROV);
     }
@@ -342,7 +342,7 @@ public class DatabaseManager
     public void setProvider(long rowId, int provider) {
         setDatumI(rowId, TABLE_ROW_PROV, provider);
     }
-    
+
     public float getRadius(long rowId) {
         return Float.valueOf(getDatumS(rowId, TABLE_ROW_RADIUS));
     }
@@ -472,7 +472,7 @@ public class DatabaseManager
         }
         return returnList;
     }
-    
+
     /**
      * Get a database row as an array
      * @param rowId The id of the row to get
@@ -480,7 +480,7 @@ public class DatabaseManager
      */
     public ArrayList<Object> getRowAsArray(long rowId) {
         // create an array list to store data from the database row.
-        // I would recommend creating a JavaBean compliant object 
+        // I would recommend creating a JavaBean compliant object
         // to store this data instead.  That way you can ensure
         // data types are correct.
         ArrayList<Object> rowArray = new ArrayList<Object>();
@@ -498,7 +498,7 @@ public class DatabaseManager
                             TABLE_ROW_CRESC, TABLE_ROW_VIBRATE,
                             TABLE_ROW_SPEECH, TABLE_ROW_TOAST,
                             TABLE_ROW_WARNING, TABLE_ROW_WARN_SOUND,
-                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST 
+                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST
                     },
                     TABLE_ROW_ID + "=" + rowId,
                     null, null, null, null, null
@@ -545,7 +545,7 @@ public class DatabaseManager
     public void close() {
         db.close();
     }
-    
+
     /**
      * Print the entire database to the debug log
      */
@@ -553,7 +553,7 @@ public class DatabaseManager
         Log.d(LOG_NAME, "Start of array log");
         ArrayList<ArrayList<Object>> data = getAllRowsAsArrays();
         for (int position=0; position < data.size(); position++)
-        { 
+        {
             ArrayList<Object> row = data.get(position);
             Log.d(LOG_NAME, row.get(0).toString() + ", " +  //TABLE_ROW_ID
                             row.get(1).toString() + ", " +  //TABLE_ROW_NICK
@@ -566,7 +566,7 @@ public class DatabaseManager
                             row.get(8).toString() + ", " +  //TABLE_ROW_SOUND
                             row.get(9).toString() + ", " +  //TABLE_ROW_RINGTONE
                             row.get(10).toString() + ", " + //TABLE_ROW_CRESC
-                            row.get(11).toString() + ", " + //TABLE_ROW_VIBRATE 
+                            row.get(11).toString() + ", " + //TABLE_ROW_VIBRATE
                             row.get(12).toString() + ", " + //TABLE_ROW_SPEECH
                             row.get(13).toString() + ", " + //TABLE_ROW_TOAST
                             row.get(14).toString() + ", " + //TABLE_ROW_WARNING
@@ -597,7 +597,7 @@ public class DatabaseManager
                             TABLE_ROW_CRESC, TABLE_ROW_VIBRATE,
                             TABLE_ROW_SPEECH, TABLE_ROW_TOAST,
                             TABLE_ROW_WARNING, TABLE_ROW_WARN_SOUND,
-                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST 
+                            TABLE_ROW_WARN_VIBRATE, TABLE_ROW_WARN_TOAST
                             },
                             null, null, null, null, null
             );
@@ -639,7 +639,7 @@ public class DatabaseManager
         return dataArrays;
     }
 
-    
+
     /**
      * Helper class for the database
      * Inherits from SQLiteOpenHelper
@@ -660,7 +660,7 @@ public class DatabaseManager
             TABLE_ROW_NICK + " TEXT," +
             TABLE_ROW_LAT + " DOUBLE," +
             TABLE_ROW_LONG + " DOUBLE," +
-            
+
             TABLE_ROW_PRESET + " INT," +
             TABLE_ROW_PROV + " INT," +
             TABLE_ROW_RADIUS + " FLOAT," +
@@ -728,14 +728,14 @@ public class DatabaseManager
                 if (newVersion <= 9999999) {
                     return;
                 }
-                
+
                 return;
             }*/
             Log.e(LOG_NAME, "Couldn't upgrade db to " + newVersion + ". Existing data must be destroyed.");
             destroyOldTables(db);
             onCreate(db);
         }
-        
+
         /**
          * Destroy the old tables, if they can't be upgraded
          * @param db The database to drop the tables of

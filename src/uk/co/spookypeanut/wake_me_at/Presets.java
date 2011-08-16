@@ -14,7 +14,7 @@ MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
 GNU General Public License for more details.
 
 You should have received a copy of the GNU General Public License
-along with Wake Me At, in the file "COPYING".  If not, see 
+along with Wake Me At, in the file "COPYING".  If not, see
 <http://www.gnu.org/licenses/>.
 */
 
@@ -39,7 +39,7 @@ public class Presets
                 new Preset("Bus (local)", (float)200.0, 0, "m"),
                 new Preset("Bus (inter-city)", (float)2.0, 1, "km")
     };
-    
+
     /**
      * Unit converter constructor
      * @param unitAbbrev The abbreviation of the unit to initialize to
@@ -99,7 +99,7 @@ public class Presets
         float mRadius;
         int mLocProv;
         String mUnit;
-        
+
         /**
          * Constructor
          * @param name The name of the preset (eg Train)
@@ -113,7 +113,7 @@ public class Presets
             mLocProv = locProv;
             mUnit = unit;
         }
-        
+
         /**
          * Get the name of the preset
          * @return The name of the preset
@@ -121,7 +121,7 @@ public class Presets
         public String getName() {
             return mName;
         }
-        
+
         /**
          * Get the radius of the preset
          * @return The radius of the preset
@@ -129,7 +129,7 @@ public class Presets
         public float getRadius() {
             return mRadius;
         }
-        
+
         /**
          * Get the location provider used in the preset
          * @return The number of the location provider
@@ -137,7 +137,7 @@ public class Presets
         public int getLocProv() {
             return mLocProv;
         }
-        
+
         /**
          * Get the name of the unit used in the preset
          * @return The name of the unit
