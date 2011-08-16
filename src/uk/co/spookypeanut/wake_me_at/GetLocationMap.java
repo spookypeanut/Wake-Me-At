@@ -414,12 +414,27 @@ implements LocationListener {
                 })
                 .setIcon(R.drawable.icon)
                 .create();
-
             badConnectionDlg.show();
-
             // Change the button style for the dialog
             // I can't find a way to do this in the xml, which is very annoying. Is it possible?
             ((Button) badConnectionDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
+            return;
+        }
+        if (mResults.size() == 0) {
+            Dialog noResultsDlg = new AlertDialog.Builder(mContext)
+            .setTitle(R.string.search_noresults_title)
+            .setMessage(R.string.search_noresults_message)
+            .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    onSearchRequested();
+                    }
+            })
+            .setIcon(R.drawable.icon)
+            .create();
+            noResultsDlg.show();
+            // Change the button style for the dialog
+            // I can't find a way to do this in the xml, which is very annoying. Is it possible?
+            ((Button) noResultsDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
             return;
         }
         mResultsDialog = new Dialog(mContext);

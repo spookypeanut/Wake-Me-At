@@ -79,6 +79,9 @@
 <string name="search_nodata_title">No data connection</string>
 <string name="search_nodata_message">Can\'t get search results, as there is no data connection</string>
 
+<string name="search_noresults_title">No results</string>
+<string name="search_noresults_message">The search did not generate any results: check your spelling, and try being more specific (e.g. \"Manchester Piccadilly\" instead of \"Piccadilly\")</string>
+
 <string name="searchresults_title">Search results</string>
 
 <string name="uselocation_title">Selected location</string>
