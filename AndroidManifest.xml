@@ -42,7 +42,7 @@
 
   <activity android:name="EditLocation" />
 
-  <activity android:name="Alarm" android:launchMode="singleTask" /> <!-- REF#0001 -->
+  <activity android:name="Alarm" android:launchMode="singleInstance" /> <!-- REF#0001 -->
 
   <activity
    android:icon="@drawable/icon"
