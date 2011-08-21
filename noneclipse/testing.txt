@@ -1,0 +1,4 @@
+Things that I always forget to test before releasing:
+
+* text-to-speech
+* maps apikey

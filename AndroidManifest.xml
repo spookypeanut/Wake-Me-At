@@ -13,8 +13,8 @@
   file "COPYING". If not, see <http://www.gnu.org/licenses/>.
  -->
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
- package="uk.co.spookypeanut.wake_me_at" android:versionCode="3"
- android:versionName="2.1" android:installLocation="preferExternal">
+ package="uk.co.spookypeanut.wake_me_at" android:versionCode="6"
+ android:versionName="3.2" android:installLocation="preferExternal">
  
  <uses-permission android:name="android.permission.INTERNET" />
  <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
@@ -42,7 +42,7 @@
 
   <activity android:name="EditLocation" />
 
-  <activity android:name="Alarm" android:launchMode="singleInstance" /> <!-- REF#0001 -->
+  <activity android:name="Alarm" android:launchMode="singleTask" /> <!-- REF#0001 -->
 
   <activity
    android:icon="@drawable/icon"
