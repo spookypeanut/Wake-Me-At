@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
  <!-- REF#0017 -->
- <style name="TranslucentAlertBox" parent="@android:style/AlertDialog">
+ <style name="TranslucentAlertBox" parent="@android:style/Theme.Dialog">
   <item name="android:buttonStyle">@style/GreenNature.Button</item>
   <item name="android:centerDark">@color/transparent</item>
   <item name="android:bottomMedium">@color/footerbg</item>
