@@ -213,7 +213,6 @@ implements LocationListener {
      * Toggle the map mode between map and satellite
      */
     private void toggleMapMode() {
-        // TODO: Switch the name on the menu too
         mSatellite = !mSatellite;
         mapView.setSatellite(mSatellite);
     }
@@ -289,6 +288,11 @@ implements LocationListener {
             return true;
         case R.id.mn_satellite:
             toggleMapMode();
+            if (mSatellite) {
+                item.setTitle(R.string.mn_map);
+            } else {
+                item.setTitle(R.string.mn_satellite);
+            }
             return true;
         default:
             return super.onOptionsItemSelected(item);
