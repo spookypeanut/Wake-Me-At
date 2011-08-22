@@ -103,7 +103,10 @@
 
 
 <!-- SHORTCUTS -->
-<string name="shortcuts">This should never be displayed</string>
+<!-- I thought this would never get used, but I think it shows in the
+  multi-tasking thing (long-pressing Home) when the task is launched
+  from a shortcut -->
+<string name="shortcuts">WakeMe@</string>
 <string name="sample_shortcuts">WakeMe@ location</string>
 <string name="shortcut_name">WakeMe@ %1$s</string>
 
