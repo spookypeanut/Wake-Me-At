@@ -97,13 +97,16 @@ implements LocationListener {
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
 
-    // Create runnable for posting
+    /* This runnable is called when the address of the potential
+     * destination has been retrieved, to cancel the progress dialog */
     final Runnable mGotAddresses = new Runnable() {
         public void run() {
             mProgressDialog.cancel();
             gotDestinationAddress();
         }
     };
+    /* This runnable is called when the search results have been
+     * retrieved, to cancel the progress dialog */
     final Runnable mGotSearchResults = new Runnable() {
         public void run() {
             mProgressDialog.cancel();
@@ -132,31 +135,40 @@ implements LocationListener {
         mapView.setBuiltInZoomControls(true);
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
         mapView.setSatellite(mSatellite);
+        
+        // Get the information from the intent 
         Bundle extras = this.getIntent().getExtras();
+        // We need the location to place our starting pointer
         mOrigLat = extras.getDouble("latitude");
         mOrigLong = extras.getDouble("longitude");
+        // We need the radius to draw it on the map
         mRadius = extras.getDouble("radiusMetres");
+        // We need the nick to pre-populate the search box
+        mSearchTerm = extras.getString("nick");
+        
+        // If the location is the (invalid) default, we start from our current location
         if (mOrigLat == 1000 && mOrigLong == 1000) {
             Location currLoc = getCurrentLocation();
             mOrigLat = currLoc.getLatitude();
             mOrigLong = currLoc.getLongitude();
         }
-        mSearchTerm = extras.getString("nick");
+        moveDestinationTo(mOrigLat, mOrigLong);
 
         // See onRetainNonConfigurationInstance for the information that
         // we receive here
         final Bundle data = (Bundle) getLastNonConfigurationInstance();
 
-        moveDestinationTo(mOrigLat, mOrigLong);
         if (data != null) {
-            Log.d(LOG_NAME, "Existing instance detected");
+            // If we have an existing instance, we get the location,
+            // the last search term, and whether the search box is open
             mSearchTerm = data.getString("mSearchTerm");
             mSearching = data.getBoolean("mSearching");
             double lat = (double) data.getInt("mDestLat") / 1E6;
             double longi = (double) data.getInt("mDestLong") / 1E6;
             moveMapTo(lat, longi);
         } else {
-            Log.d(LOG_NAME, "No existing instance detected");
+            // If we don't have an existing instance, we move the map to the
+            // starting location and open the search box
             moveMapTo(mOrigLat, mOrigLong);
             mSearching = true;
         }
@@ -272,22 +284,26 @@ implements LocationListener {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
         case R.id.mn_orig_loc:
+            // Move the map back to the original location
             moveMapTo(mOrigLat, mOrigLong);
             return true;
         case R.id.mn_search:
+            // Pop-up the search dialog
             onSearchRequested();
             return true;
         case R.id.mn_curr_loc:
+            // Move the centre of the map to the current location
             Location here = getCurrentLocation();
             if (here != null) {
                 moveMapTo(here.getLatitude(), here.getLongitude());
             } else {
                 Log.e(LOG_NAME, "Location inaccessible");
             }
-
             return true;
         case R.id.mn_satellite:
             toggleMapMode();
+            // Switch the text of the menu item depending which mode we're
+            // currently in
             if (mSatellite) {
                 item.setTitle(R.string.mn_map);
             } else {
@@ -311,51 +327,79 @@ implements LocationListener {
                 1000, 2, this);
         String provider = locMan.getBestProvider(new Criteria(), true);
         if (provider == null) {
+            // If there is no best location provider, something has gone
+            // seriously wrong. But there's not much we can do.
             Log.wtf(LOG_NAME, "Provider is null");
-            // TODO: do this properly
-            return currentLocation;
+            return null;
         }
         if(!locMan.isProviderEnabled(provider)){
+            Toast.makeText(mContext, R.string.providerDisabledMessage,
+                           Toast.LENGTH_LONG);
             Log.wtf(LOG_NAME, "Provider is disabled");
-            // TODO: do this properly
-            return currentLocation;
+            return null;
         }
         currentLocation = locMan.getLastKnownLocation(provider);
         locMan.removeUpdates(this);
 
         if(currentLocation == null){
+            // Again: if this happens, I don't know what went wrong, nor
+            // what we can do about it.
             Log.wtf(LOG_NAME, "Return value from getLastKnownLocation is null");
-            // TODO: do this properly
-            return currentLocation;
+            return null;
         }
         return currentLocation;
     }
 
+    /* (non-Javadoc)
+     * @see com.google.android.maps.MapActivity#isRouteDisplayed()
+     * This is required to inherit, but there is never a route displayed
+     */
     @Override
     protected boolean isRouteDisplayed() {
         return false;
     }
 
+    /* (non-Javadoc)
+     * @see android.location.LocationListener#onLocationChanged(android.location.Location)
+     * We're not interested in the location changing, so just return
+     */
     @Override
     public void onLocationChanged(Location location) {
-        // TODO Auto-generated method stub
+        return;
     }
 
+    /* (non-Javadoc)
+     * @see android.location.LocationListener#onProviderDisabled(java.lang.String)
+     * If the provider is disabled, do nothing. We'll survive.
+     */
     @Override
     public void onProviderDisabled(String provider) {
-        // TODO Auto-generated method stub
+        return;
     }
 
+    /* (non-Javadoc)
+     * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
+     * If the location provider gets enabled, do nothing
+     */
     @Override
     public void onProviderEnabled(String provider) {
-        // TODO Auto-generated method stub
+        return;
     }
 
+    /* (non-Javadoc)
+     * @see android.location.LocationListener#onStatusChanged(java.lang.String, int, android.os.Bundle)
+     * We should probably think about handling this correctly, but the location
+     * on the map is not really that crucial so for now, we just ignore it.
+     */
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
-        // TODO Auto-generated method stub
+        return;
     }
 
+    /**
+     * Display a pop-up message explaining to the user how they should go about
+     * choosing a location
+     */
     private void howToSelectLocationInfo() {
         Toast.makeText(getApplicationContext(),
                        R.string.how_to_select_location,
@@ -364,6 +408,8 @@ implements LocationListener {
 
     @Override
     public boolean onSearchRequested() {
+        // We record whether the search dialog is open or not, so that if the screen gets
+        // rotated, we can re-create it. See onRetainNonConfigurationInstance.
         mSearching = true;
         // This gets called when the user leaves the search dialog to go back to
         // the Launcher.
@@ -374,6 +420,8 @@ implements LocationListener {
                 howToSelectLocationInfo();
             }
         });
+        // I'm not sure if this ever gets called. But if it does, it should do
+        // the same as the above.
         mSearchManager.setOnDismissListener(new SearchManager.OnDismissListener() {
             public void onDismiss() {
                 mSearchManager.setOnDismissListener(null);
@@ -386,10 +434,18 @@ implements LocationListener {
     }
 
 
+    /**
+     * The method that performs the search, and acts on the results.
+     * In practice, this just sets off the search in a separate thread and
+     * display a progress dialog.
+     * @param searchTerm The term entered in the search box
+     */
     private void doSearch(String searchTerm) {
+        // We save this so it can be passed back to the caller as the nick
         mSearchTerm = searchTerm;
 
-        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
+        // Fire off a thread to do some work that we shouldn't do directly in
+        // the UI thread. In this case, getting search results.
         Thread t = new Thread() {
             public void run() {
                 getSearchLocations();
