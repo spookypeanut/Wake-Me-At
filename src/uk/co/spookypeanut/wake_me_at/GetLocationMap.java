@@ -74,28 +74,29 @@ public class GetLocationMap extends MapActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     private String LOG_NAME;
-//    private String BROADCAST_UPDATE;
-    MapView mapView;
     Context mContext;
-    GeoPoint mDest;
-    String mNick;
-    double mOrigLat, mOrigLong;
-    double mRadius;
     LayoutInflater mInflater;
-    private List<Address> mResults;
-    Dialog mResultsDialog;
-    boolean mSatellite = false;
-    Location mCurrLoc;
+    MapView mapView;
     UnitConverter uc;
-    boolean mSearching;
-    String mSearchTerm;
     Geocoder mGeocoder;
     static SearchManager mSearchManager;
-    ProgressDialog mProgressDialog;
-    List<Address> mDestAddresses = null;
-
     // Need handler for callbacks to the UI thread
     final Handler mHandler = new Handler();
+
+    Location mCurrLoc;
+    double mOrigLat, mOrigLong;
+    GeoPoint mDest;
+    String mNick;
+    double mRadius;
+    
+    private List<Address> mResults;
+    List<Address> mDestAddresses = null;
+    Dialog mResultsDialog;
+    boolean mSearching;
+    String mSearchTerm;
+
+    ProgressDialog mProgressDialog;
+    boolean mSatellite = false;
 
     /* This runnable is called when the address of the potential
      * destination has been retrieved, to cancel the progress dialog */
@@ -127,10 +128,10 @@ implements LocationListener {
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-
         mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mGeocoder = new Geocoder(this, Locale.getDefault());
         uc = new UnitConverter(this, "m");
+
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
