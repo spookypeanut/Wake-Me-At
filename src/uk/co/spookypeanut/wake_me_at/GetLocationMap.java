@@ -106,6 +106,7 @@ implements LocationListener {
             gotDestinationAddress();
         }
     };
+
     /* This runnable is called when the search results have been
      * retrieved, to cancel the progress dialog */
     final Runnable mGotSearchResults = new Runnable() {
@@ -121,20 +122,22 @@ implements LocationListener {
         Log.d(LOG_NAME, "GetLocationMap.onCreate()");
         mContext = this;
         super.onCreate(icicle);
-        // REF#0023: Setting a content view for a mapview is kinda slow (3 sec or so on
-        // my Nexus One. However, we don't seem to be able to pop up a progress window,
-        // as both need access to the ui. This sucks.
+        // REF#0023: Setting a content view for a mapview is kinda slow (3 sec
+        // or so on my Nexus One. However, we don't seem to be able to pop up a
+        // progress window, as both need access to the ui. This sucks.
         setContentView(R.layout.get_location_map);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
         mSearchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
-        mInflater = (LayoutInflater)getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+        mInflater = (LayoutInflater) getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         mGeocoder = new Geocoder(this, Locale.getDefault());
+        // We need this just to print out distances in the correct format, etc
         uc = new UnitConverter(this, "m");
 
         mapView = (MapView) findViewById(R.id.mapview);
         mapView.setBuiltInZoomControls(true);
         setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+        // This it probably pointless here: mSatellite should always be false
         mapView.setSatellite(mSatellite);
         
         // Get the information from the intent 
@@ -182,9 +185,9 @@ implements LocationListener {
      * @see android.app.Activity#onRetainNonConfigurationInstance()
      * Generally, when the screen is rotated, the activity gets started again
      * from scratch. In this case, that would be *really* annoying, if we had
-     * chosen a location, got search up, etc. So this method gives us the ability
-     * to pass some information to future existences of ourself, and handle it
-     * in onCreate
+     * chosen a location, got search up, etc. So this method gives us the 
+     * ability to pass some information to future existences of ourself, and
+     * handle it in onCreate
      */
     @Override
     public Object onRetainNonConfigurationInstance() {
@@ -210,6 +213,8 @@ implements LocationListener {
     /**
      * When passed a new intent, run this.
      * Can be either via onNewIntent or onCreate
+     * TODO: Seems to be run only from onNewIntent atm: maybe it could be
+     * removed? But I'll leave it for now
      * @param intent
      */
     private void handleIntent(Intent intent) {
@@ -261,6 +266,7 @@ implements LocationListener {
     private void moveMapTo(GeoPoint location) {
         if (location != null) {
             MapController mc = mapView.getController();
+            // We also set the zoom level. Should we?
             mc.setZoom(15);
             mc.animateTo(location);
         } else {
@@ -434,7 +440,6 @@ implements LocationListener {
         return true;
     }
 
-
     /**
      * The method that performs the search, and acts on the results.
      * In practice, this just sets off the search in a separate thread and
@@ -459,16 +464,20 @@ implements LocationListener {
                 String.format(getString(R.string.search_progress_msg),
                         mSearchTerm), true, true);
     }
+
     /**
      * Display a dialog listing the search results
      * @param searchTerm The text entered in the search box
      */
     private void resultsDialog() {
         if (mResults == null) {
+            // Create the dialog that informs the user that the search failed
+            // because of bad data connection 
             Dialog badConnectionDlg = new AlertDialog.Builder(mContext)
                 .setTitle(R.string.search_nodata_title)
                 .setMessage(R.string.search_nodata_message)
-                .setPositiveButton(R.string.alert_dialog_ok, new DialogInterface.OnClickListener() {
+                .setPositiveButton(R.string.alert_dialog_ok,
+                                   new DialogInterface.OnClickListener() {
                     public void onClick(DialogInterface dialog, int whichButton) {
                         onSearchRequested();
                         }
@@ -482,6 +491,8 @@ implements LocationListener {
             return;
         }
         if (mResults.size() == 0) {
+            // Create the dialog that informs the user that the search failed
+            // because no results were found
             Dialog noResultsDlg = new AlertDialog.Builder(mContext)
             .setTitle(R.string.search_noresults_title)
             .setMessage(R.string.search_noresults_message)
@@ -498,6 +509,8 @@ implements LocationListener {
             ((Button) noResultsDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
             return;
         }
+        // If neither of the others happened, then presumably we have a list of
+        // results: display them in a pretty list
         mResultsDialog = new Dialog(mContext);
         mResultsDialog.setContentView(R.layout.search_list);
 
@@ -510,27 +523,15 @@ implements LocationListener {
     }
 
     /**
-     * Search the map for the given text
-     * @param address The text to search for
-     * @return A list of addresses that match the text
+     * The listener that reacts to a click on one of the search results in the
+     * list adaptor
+     * Get the location from the item, move the map to it, and pop up a
+     * confirmation dialog
      */
-    private void getSearchLocations() {
-        Log.d(LOG_NAME, "getSearchLocations");
-        try {
-            mResults = mGeocoder.getFromLocationName(mSearchTerm, 5);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        if (mResults == null) {
-            Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
-        }
-    }
-
     private OnItemClickListener mResultClickListener = new AdapterView.OnItemClickListener() {
         @Override
         public void onItemClick(AdapterView<?> parent, View view, int position,
                 long id) {
-            Log.d(LOG_NAME, "onItemClick(" + parent + ", " + view + ", " + position + ", " + id + ")");
             double latitude = mResults.get(position).getLatitude();
             double longitude = mResults.get(position).getLongitude();
             moveMapTo(latitude, longitude);
@@ -540,6 +541,22 @@ implements LocationListener {
             mResultsDialog.dismiss();
         }
     };
+
+    /**
+     * Search the map for text entered by the user
+     * This is run in a separate thread, called from doSearch, so that we can
+     * display a progress dialog on the screen
+     */
+    private void getSearchLocations() {
+        try {
+            mResults = mGeocoder.getFromLocationName(mSearchTerm, 5);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        if (mResults == null) {
+            Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
+        }
+    }
 
     /**
      * The list in the search results dialog
@@ -566,6 +583,9 @@ implements LocationListener {
             return position;
         }
 
+        /**
+         * Inflate the view, and add the details of the given location into it
+         */
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             View row;
@@ -588,17 +608,18 @@ implements LocationListener {
             resultAsLoc.setLongitude(result.getLongitude());
             tv.setText(uc.out(mCurrLoc.distanceTo(resultAsLoc)) + " away");
 
-
             return row;
         }
     }
 
-
     /**
-     * The method the passes the required data back to caller
+     * The method that, at the end of the activity, passes the required data
+     * back to caller
      */
     protected void returnLocation() {
         Intent i = new Intent();
+        // We pass the search term back so that the caller can populate the
+        // location name box with it
         i.putExtra("searchTerm", mSearchTerm);
         setResult(RESULT_OK, i.setAction(
                 mDest.getLatitudeE6() / 1E6 + "," +
@@ -617,7 +638,8 @@ implements LocationListener {
         moveDestinationTo(latitude, longitude);
         Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
 
-        // Fire off a thread to do some work that we shouldn't do directly in the UI thread
+        // Fire off a thread to do some work that we shouldn't do directly in
+        // the UI thread. In this case, geo-code a location.
         Thread t = new Thread() {
             public void run() {
                 try {
@@ -629,6 +651,7 @@ implements LocationListener {
                 }
         };
         t.start();
+        // Create a progress dialog while we wait for the thread to finish
         mProgressDialog = ProgressDialog.show(mContext,
                 getText(R.string.geocoder_progress),
                 getText(R.string.geocoder_progress_msg),
@@ -636,19 +659,21 @@ implements LocationListener {
     }
 
     /**
-     * This method is called from the thread that retrieved the addresses
-     * from the geocoder to finish the process started in selectedLocation()
+     * This method is called from the thread that retrieves the addresses
+     * from the geocoder. It finishes the process started in selectedLocation()
      */
     private void gotDestinationAddress() {
         final double latitude = mDest.getLatitudeE6()  / 1E6;
         final double longitude = mDest.getLongitudeE6() / 1E6;
 
+        // Prepare the various strings to display in the alert dialog
         String latlongMsg = "Latitude / Longitude:\n";
         latlongMsg += latitude + ", " + longitude;
+
         String addressMsg = "";
-        if (mDestAddresses != null && mDestAddresses.size() > 0)
-        {
-            for (int i=0; i<mDestAddresses.get(0).getMaxAddressLineIndex(); i++)
+        if (mDestAddresses != null && mDestAddresses.size() > 0) {
+            int i;
+            for (i = 0; i < mDestAddresses.get(0).getMaxAddressLineIndex(); i++)
                 addressMsg += mDestAddresses.get(0).getAddressLine(i) + "\n";
         } else {
             Log.wtf(LOG_NAME, "GeoCoder returned null");
@@ -656,25 +681,31 @@ implements LocationListener {
 
         }
 
-        final View textEntryView =  mInflater.inflate(R.layout.select_location, null);
-        final TextView latlongBox = (TextView)textEntryView.findViewById(R.id.latlong_msg);
-        final TextView addressBox = (TextView)textEntryView.findViewById(R.id.address_msg);
+        // Inflate the dialog, and put everything into it
+        final View textEntryView =  mInflater.inflate(R.layout.select_location,
+                                                      null);
+        final TextView latlongBox = (TextView)textEntryView.
+                                              findViewById(R.id.latlong_msg);
+        final TextView addressBox = (TextView)textEntryView.
+                                              findViewById(R.id.address_msg);
         latlongBox.setText(latlongMsg);
         addressBox.setText(addressMsg);
 
-        String title = "Location name";
         DialogInterface.OnClickListener positiveListener = null;
         positiveListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 returnLocation();
             }
         };
-        AlertDialog.Builder builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, R.style.GreenNatureDialog));
-        builder.setTitle(title);
+        AlertDialog.Builder builder;
+        builder = new AlertDialog.Builder(new ContextThemeWrapper(mContext, 
+                                                R.style.GreenNatureDialog));
+        builder.setTitle(R.string.select_location_dialog_title);
         builder.setView(textEntryView);
         builder.setIcon(R.drawable.icon);
         builder.setPositiveButton(R.string.alert_dialog_ok, positiveListener);
-        builder.setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+        builder.setNegativeButton(R.string.alert_dialog_cancel,
+                                  new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 howToSelectLocationInfo();
             }
@@ -688,7 +719,12 @@ implements LocationListener {
         ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
 
-    public class DestOverlay extends Overlay implements OnGestureListener, OnDoubleTapListener{
+    /**
+     * The class for the destination overlay on the map. Includes long-pressing
+     * to select a location, and double-tapping to zoom in
+     */
+    public class DestOverlay extends Overlay implements OnGestureListener, 
+                                                        OnDoubleTapListener{
         private GestureDetector gestureDetector;
 
         Context oContext;
@@ -696,7 +732,9 @@ implements LocationListener {
         double mLon;
         double mRadius;
 
-         public DestOverlay(Context context, double lat, double lon, double radius) {
+         public DestOverlay(Context context,
+                            double lat, double lon,
+                            double radius) {
                 oContext = context;
                 mLat = lat;
                 mLon = lon;
@@ -705,33 +743,49 @@ implements LocationListener {
                 gestureDetector.setOnDoubleTapListener((OnDoubleTapListener) this);
          }
 
+         /**
+          * How to draw the overlay.
+          * This includes both the marker and the circle denoting the radius
+          */
          public void draw(Canvas canvas, MapView mapView, boolean shadow) {
              super.draw(canvas, mapView, shadow);
              Resources res = oContext.getResources();
              float[] result = new float[1];
 
+             // Find the distance apart that one degree of longitude gives at
+             // this latitude
              Location.distanceBetween(mLat, mLon, mLat, mLon + 1, result);
              float longitudeLineDistance = result[0];
 
-             Bitmap bitmap = BitmapFactory.decodeResource(res, R.drawable.pointer);
-             Projection projection = mapView.getProjection();
-             Point pt = new Point();
-             Point left = new Point();
+             // Create two GeoPoints: one at the location, another at *radius*
+             // units away from the location
              GeoPoint geo = new GeoPoint((int) (mLat *1e6), (int)(mLon * 1e6));
              GeoPoint leftGeo = new GeoPoint((int)(mLat * 1E6), (int)((mLon - mRadius / longitudeLineDistance) * 1E6));
 
+             // Get those two GeoPoints in pixels as Points
+             Projection projection = mapView.getProjection();
+             Point pt = new Point();
+             Point left = new Point();
              projection.toPixels(leftGeo, left);
              projection.toPixels(geo, pt);
 
+             // The distance these two points are away from each other is the
+             // radius that we should draw the circle, in pixels
              float circleRadius = (float) pt.x - (float) left.x;
 
+             // Draw the circle first
              Paint circlePaint = new Paint();
              circlePaint.setColor(res.getColor(R.color.overlaycolor));
              circlePaint.setAntiAlias(true);
              circlePaint.setStyle(Paint.Style.FILL);
              canvas.drawCircle((float)pt.x, (float)pt.y, circleRadius, circlePaint);
 
+             // Then draw the pointer on top
+             Bitmap bitmap;
+             bitmap = BitmapFactory.decodeResource(res, R.drawable.pointer);
+             // The "hot-spot" is in the middle horizontally...
              float drawablex = pt.x - bitmap.getWidth() / 2;
+             // ... and at the bottom vertically
              float drawabley = pt.y - bitmap.getHeight();
              canvas.drawBitmap(bitmap, drawablex, drawabley, new Paint());
             }
@@ -755,29 +809,35 @@ implements LocationListener {
              return false;
          }
 
+         /**
+          * If a long press is heard, select the location
+          */
          @Override
          public void onLongPress(MotionEvent event) {
-             Log.d(LOG_NAME, "GetLocationMap.onLongPress");
              mDest = mapView.getProjection().fromPixels(
                      (int) event.getX(),
                      (int) event.getY());
              selectedLocation();
          }
 
+         /**
+          * These methods are all required to implement gesture listener, but
+          *  don't need them
+          */
          @Override
          public boolean onDown(MotionEvent e) {
              return false;
          }
 
          @Override
-         public boolean onFling(MotionEvent e1, MotionEvent e2, float velocityX,
-                 float velocityY) {
+         public boolean onFling(MotionEvent e1, MotionEvent e2,
+                                float velocityX, float velocityY) {
              return false;
          }
 
          @Override
-         public boolean onScroll(MotionEvent e1, MotionEvent e2, float distanceX,
-                 float distanceY) {
+         public boolean onScroll(MotionEvent e1, MotionEvent e2,
+                                 float distanceX, float distanceY) {
              return false;
          }
 
@@ -791,7 +851,6 @@ implements LocationListener {
          }
 
 
-
         /* (non-Javadoc)
          * @see android.view.GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(android.view.MotionEvent)
          */
@@ -799,7 +858,6 @@ implements LocationListener {
         public boolean onSingleTapConfirmed(MotionEvent e) {
             return false;
         }
-
 
 
         /* (non-Javadoc)
@@ -810,5 +868,4 @@ implements LocationListener {
             return false;
         }
     }
-
 }
