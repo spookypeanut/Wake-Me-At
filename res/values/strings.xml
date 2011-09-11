@@ -66,6 +66,7 @@
  <string name="search_progress">Searching</string>
  <string name="search_progress_msg">Searching the map for \"%1$s\"</string>
  <string name="select_location_dialog_title">Location name</string>
+ <string name="cant_get_location_msg">Couldn\'t get your location: defaulting to the centre of the earth</string>
 
 <string name="mn_map">Map Mode</string>
 <string name="mn_satellite">Satellite Mode</string>

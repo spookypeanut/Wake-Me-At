@@ -153,8 +153,10 @@ implements LocationListener {
         // If the location is the (invalid) default, we start from our current location
         if (mOrigLat == 1000 && mOrigLong == 1000) {
             Location currLoc = getCurrentLocation();
-            mOrigLat = currLoc.getLatitude();
-            mOrigLong = currLoc.getLongitude();
+            if (currLoc != null) {
+                mOrigLat = currLoc.getLatitude();
+                mOrigLong = currLoc.getLongitude();
+            }
         }
         moveDestinationTo(mOrigLat, mOrigLong);
 
@@ -322,6 +324,24 @@ implements LocationListener {
         }
     }
 
+    
+    /**
+     * getCurrentLocation should never return null. Let's pop up a long
+     * toast, explaining what has happened, and then return a location in
+     * the middle of the Atlantic
+     * @return A generic Location 
+     */
+    private Location cantGetLocation() {
+        // The weird thing is that this is what my device (Nexus One) does this
+        // anyway by default, but I've had report of a force close
+        Toast.makeText(mContext, R.string.cant_get_location_msg,
+                       Toast.LENGTH_LONG);
+        Location fakeLocation = new Location("");
+        fakeLocation.setLatitude(0.0);
+        fakeLocation.setLongitude(0.0);
+        return fakeLocation;
+    }
+    
     /**
      * Get the current location via GPS
      * @return Current location
@@ -337,13 +357,13 @@ implements LocationListener {
             // If there is no best location provider, something has gone
             // seriously wrong. But there's not much we can do.
             Log.wtf(LOG_NAME, "Provider is null");
-            return null;
+            return cantGetLocation();
         }
         if(!locMan.isProviderEnabled(provider)){
             Toast.makeText(mContext, R.string.providerDisabledMessage,
                            Toast.LENGTH_LONG);
             Log.wtf(LOG_NAME, "Provider is disabled");
-            return null;
+            return cantGetLocation();
         }
         currentLocation = locMan.getLastKnownLocation(provider);
         locMan.removeUpdates(this);
@@ -352,7 +372,7 @@ implements LocationListener {
             // Again: if this happens, I don't know what went wrong, nor
             // what we can do about it.
             Log.wtf(LOG_NAME, "Return value from getLastKnownLocation is null");
-            return null;
+            return cantGetLocation();
         }
         return currentLocation;
     }
