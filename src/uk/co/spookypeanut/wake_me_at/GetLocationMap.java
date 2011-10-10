@@ -94,6 +94,9 @@ implements LocationListener {
     Dialog mResultsDialog;
     boolean mSearching;
     String mSearchTerm;
+    // If our search fails through lack of data, retry this many times
+    int mTries = 0;
+    private static final int MAX_TRIES = 10;
 
     ProgressDialog mProgressDialog;
     boolean mSatellite = false;
@@ -474,6 +477,7 @@ implements LocationListener {
         // the UI thread. In this case, getting search results.
         Thread t = new Thread() {
             public void run() {
+                mTries = 0;
                 getSearchLocations();
                 mHandler.post(mGotSearchResults);
                 }
@@ -568,13 +572,25 @@ implements LocationListener {
      * display a progress dialog on the screen
      */
     private void getSearchLocations() {
+        mResults = null;
         try {
             mResults = mGeocoder.getFromLocationName(mSearchTerm, 5);
         } catch (IOException e) {
             e.printStackTrace();
         }
         if (mResults == null) {
-            Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
+            mTries++;
+            if (mTries < MAX_TRIES) {
+                Log.w(LOG_NAME, "No data connection, retrying search");
+                Log.w(LOG_NAME, "Try " + (mTries + 1) + "/" + MAX_TRIES);
+                // Just in case our geocoder is dodgy, recreate it
+                mGeocoder = new Geocoder(mContext, Locale.getDefault());
+                getSearchLocations();
+            } else {
+                mResults = null;
+                mTries = 0;
+                Log.wtf(LOG_NAME, "Couldn't retrieve locations: no data connection?");
+            }
         }
     }
 
