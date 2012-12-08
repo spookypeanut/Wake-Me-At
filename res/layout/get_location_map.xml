@@ -23,10 +23,10 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:apiKey="08Z7eLu684dRhvaYq_VrwSTQvoMB8Lj0_HV5aVw"
+    android:apiKey="08Z7eLu684dTO7MvDeeVHuVBCn3IWZIKriQOx6g"
 />
 <!-- Debug key
-android:apiKey="08Z7eLu684dRhvaYq_VrwSTQvoMB8Lj0_HV5aVw"
+android:apiKey="08Z7eLu684dTO7MvDeeVHuVBCn3IWZIKriQOx6g"
 -->
 <!-- Final key
 android:apiKey="08Z7eLu684dSCC-izhfOcHPikeg9N75p5ZUfJ4g"

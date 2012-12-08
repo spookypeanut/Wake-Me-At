@@ -12,7 +12,7 @@ Desktop.ini
 *.apk
 bin/*
 gen
-local.properties
+*.properties
 *.jar
 screenshots
 .settings
