@@ -131,5 +131,7 @@
 <item>Alarm</item>
 <item>Out-of-date location warning</item>
 </string-array>
+<string name="mock_locations_allowed">The system is configured to accept mock locations</string>
+<string name="mock_locations_not_allowed">The system is configured to forbid mock locations</string>
 
 </resources>

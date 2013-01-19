@@ -1,5 +1,6 @@
 package uk.co.spookypeanut.wake_me_at;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 
@@ -157,6 +158,18 @@ public class WakeMeAtService extends Service implements LocationListener {
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         db = new DatabaseManager(this);
+
+        if(MockLocations.isMockLocationSet(this) == true) {
+            try {
+                mockLocations = new MockLocations(this.getApplicationContext());
+                Toast.makeText(getApplicationContext(), R.string.mock_locations_allowed, Toast.LENGTH_LONG).show();
+            } catch (IOException e) {
+                Log.e(LOG_NAME, "unable to create MockLocations instance", e);
+            }
+        } else {
+            Toast.makeText(getApplicationContext(), R.string.mock_locations_not_allowed, Toast.LENGTH_LONG).show();
+            Log.e(LOG_NAME, "'Allow Mock Locations' setting is not set");
+        }
 
         try {
             mStartForeground = getClass().getMethod("startForeground",
