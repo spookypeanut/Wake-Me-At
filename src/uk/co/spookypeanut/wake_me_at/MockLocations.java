@@ -41,7 +41,7 @@ public class MockLocations implements Runnable {
 	/*
 	 * private class level constants
 	 */
-	private final String TAG = "MockLocations";
+    private String LOG_NAME;
 	private final boolean V_LOG = false;
 	
 	private final String LOCATION_FILE = "mock-locations.txt";
@@ -66,9 +66,11 @@ public class MockLocations implements Runnable {
 	 * @throws IOException  if opening the zip file fails
 	 */
 	public MockLocations(Context context) throws IOException {
-		
+//        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+        LOG_NAME = "WakeMe@";
+
 		if(V_LOG) {
-			Log.v(TAG, "opening the zip file");
+			Log.v(LOG_NAME, "opening the zip file");
 		}
 		
 		// open the zip file and get the required file inside
@@ -79,14 +81,14 @@ public class MockLocations implements Runnable {
 		while((mZipEntry = mZipInput.getNextEntry())!= null) {
 			
 			if(V_LOG) {
-				Log.v(TAG, "ZipEntry: " + mZipEntry.getName());
+				Log.v(LOG_NAME, "ZipEntry: " + mZipEntry.getName());
 			}
 			
 			// read the bytes from the file and convert them to a string
 			if(mZipEntry.getName().equals(LOCATION_FILE)) {
 				
 				if(V_LOG) {
-					Log.v(TAG, "required file found inside zip file");
+					Log.v(LOG_NAME, "required file found inside zip file");
 				}
 				
 				ByteArrayOutputStream mByteStream = new ByteArrayOutputStream();
@@ -101,7 +103,7 @@ public class MockLocations implements Runnable {
 			}
 			
 			if(V_LOG) {
-				Log.v(TAG, "location file successfully read");
+				Log.v(LOG_NAME, "location file successfully read");
 			}
 			
 			mZipInput.closeEntry();
@@ -142,7 +144,7 @@ public class MockLocations implements Runnable {
 	public void requestStop() {
 		
 		if(V_LOG) {
-			Log.v(TAG, "thread requested to stop");
+			Log.v(LOG_NAME, "thread requested to stop");
 		}
 		
 		keepGoing = false;
@@ -156,7 +158,7 @@ public class MockLocations implements Runnable {
 	public void run() {
 		
 		if(V_LOG) {
-			Log.v(TAG, "thread started");
+			Log.v(LOG_NAME, "thread started");
 		}
 		
 		String[] mParts;
@@ -175,7 +177,7 @@ public class MockLocations implements Runnable {
 			if(keepGoing == false)  {
 				
 				if(V_LOG) {
-					Log.v(TAG, "thread stopped");
+					Log.v(LOG_NAME, "thread stopped");
 				}
 				
 				return;
@@ -194,27 +196,27 @@ public class MockLocations implements Runnable {
 			 *  validate the line
 			 */
 			if(mParts.length != 3) {
-				Log.e(TAG, "expected 3 data elements found '" + mParts.length + "' on line: " + mLineCount);
+				Log.e(LOG_NAME, "expected 3 data elements found '" + mParts.length + "' on line: " + mLineCount);
 			}
 			
 			try {
 				mSleepTime = Integer.parseInt(mParts[0]);
 			} catch (NumberFormatException e) {
-				Log.e(TAG, "unable to parse the sleep time element on line: " + mLineCount);
+				Log.e(LOG_NAME, "unable to parse the sleep time element on line: " + mLineCount);
 				continue;
 			}
 			
 			try {
 				mLatitude = Double.parseDouble(mParts[1]);
 			} catch (NumberFormatException e) {
-				Log.e(TAG, "unable to parse the latitude element on line: " + mLineCount);
+				Log.e(LOG_NAME, "unable to parse the latitude element on line: " + mLineCount);
 				continue;
 			}
 
 			try {
 				mLongitude = Double.parseDouble(mParts[2]);
 			} catch (NumberFormatException e) {
-				Log.e(TAG, "unable to parse the longitude element on line: " + mLineCount);
+				Log.e(LOG_NAME, "unable to parse the longitude element on line: " + mLineCount);
 				continue;
 			}
 			
@@ -229,7 +231,7 @@ public class MockLocations implements Runnable {
 			locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, mLocation);
 			
 			if(V_LOG) {
-				Log.v(TAG, "new location sent");
+				Log.v(LOG_NAME, "new location sent");
 			}
 
 			// sleep the thread
@@ -238,11 +240,11 @@ public class MockLocations implements Runnable {
 			} catch (InterruptedException e) {
 				if(keepGoing == false) {
 					if(V_LOG) {
-						Log.v(TAG, "thread was interrupted and is stopping");
+						Log.v(LOG_NAME, "thread was interrupted and is stopping");
 					}
 					return;
 				} else {
-					Log.w(TAG, "thread was interrupted without being requested to stop", e);
+					Log.w(LOG_NAME, "thread was interrupted without being requested to stop", e);
 				}
 			}
 		}
