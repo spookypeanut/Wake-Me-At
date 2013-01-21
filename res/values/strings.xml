@@ -116,12 +116,14 @@
 <item>gps</item>
 <item>network</item>
 <item>passive</item>
+<item>mock</item>
 </string-array>
 
 <string-array name="locProvHuman">
 <item>GPS</item>
 <item>Phone network</item>
 <item>Passive</item>
+<item>Mock GPS</item>
 </string-array>
 
 

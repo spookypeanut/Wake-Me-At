@@ -51,6 +51,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     private String LOG_NAME;
     private String BROADCAST_UPDATE;
     public static boolean serviceRunning = false;
+    
+    private MockLocations mockLocations = null;
+    private Thread mockLocationsThread = null;
 
     // The minimum time (in milliseconds) before reporting the location again
     static final long SECONDS = 1000;
@@ -221,6 +224,9 @@ public class WakeMeAtService extends Service implements LocationListener {
 
         String lp = this.getResources()
                         .getStringArray(R.array.locProvAndroid)[mProvider];
+        if ("mock".equals(lp)) {
+            lp = "gps";
+        }
         if ("gps".equals(lp)) {
             mMinTime = 10 * SECONDS;
             mNoLocationWarningTime = 30 * SECONDS;
@@ -257,6 +263,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
 
     private void stopService() {
+        Log.d(LOG_NAME, "WakeMeAtService.stopService()");
         // Make sure our notification is gone.
         stopForegroundCompat(ALARMNOTIFY_ID);
         unregisterLocationListener();
@@ -300,6 +307,13 @@ public class WakeMeAtService extends Service implements LocationListener {
         try {
             String lp = this.getResources()
                             .getStringArray(R.array.locProvAndroid)[mProvider];
+            if ("mock".equals(lp)) {
+                if(mockLocations != null) {
+                    Thread mockLocationThread = new Thread(mockLocations, "MockLocations");
+                    mockLocationThread.start();
+                }
+                lp = "gps";
+            }
             mLocationManager.requestLocationUpdates(lp,
                                                     mMinTime,
                                                     minDistance,
@@ -314,6 +328,9 @@ public class WakeMeAtService extends Service implements LocationListener {
      * Unregister the location listener. Called in onDestroy.
      */
     public void unregisterLocationListener() {
+        if (mockLocations != null) {
+            mockLocations.requestStop();
+        }
         if (mLocationManager == null) {
           Log.e(LOG_NAME,
               "locationManager is null");
@@ -431,6 +448,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void onProviderDisabled(String provider) {
         String lp = this.getResources()
                         .getStringArray(R.array.locProvAndroid)[mProvider];
+        if ("mock".equals(lp)) {
+            lp = "gps";
+        }
         if (provider != lp) {
             Log.wtf(LOG_NAME, "Current provider (" + lp +
                   ") doesn't match the listener provider (" + provider + ")");
