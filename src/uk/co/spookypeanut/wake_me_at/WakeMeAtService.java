@@ -16,6 +16,7 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.PowerManager;
 
 import android.text.format.Time;
 import android.util.Log;
@@ -90,6 +91,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private boolean mWarnVibrate;
     private boolean mWarnToast;
     private boolean mWarningOn;
+    PowerManager.WakeLock wl = null;
 
     private boolean mAlarm = false;
 
@@ -279,6 +281,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     @Override
     public void onDestroy() {
         Log.d(LOG_NAME, "WakeMeAtService.onDestroy()");
+        if (wl != null) {
+            wl.release();
+        }
         Toast.makeText(getApplicationContext(),
                        R.string.foreground_service_stopped,
                        Toast.LENGTH_SHORT).show();
@@ -424,6 +429,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     public void cancelAlarm() {
         Log.d(LOG_NAME, "WakeMeAtService.cancelAlarm");
         mAlarm = false;
+        if (wl != null) {
+            wl.release();
+        }
         Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
                                         Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
@@ -435,6 +443,11 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     public void soundAlarm() {
         mAlarm = true;
+        PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
+                            PowerManager.ACQUIRE_CAUSES_WAKEUP,
+                            LOG_NAME);
+        wl.acquire();
         Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
                                         Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
