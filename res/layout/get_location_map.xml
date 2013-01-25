@@ -23,7 +23,7 @@
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
     android:clickable="true"
-    android:apiKey="08Z7eLu684dTO7MvDeeVHuVBCn3IWZIKriQOx6g"
+    android:apiKey="08Z7eLu684dSCC-izhfOcHPikeg9N75p5ZUfJ4g"
 />
 <!-- Debug key
 android:apiKey="08Z7eLu684dTO7MvDeeVHuVBCn3IWZIKriQOx6g"
