@@ -30,3 +30,4 @@ http://javahowto.blogspot.com/
 0023 http://stackoverflow.com/questions/6493534/show-progressdialog-while-loading-layout-with-setcontentview
 0024 http://chrisblunt.com/2010/08/12/android-map-view-double-taps-and-overlay-markers/
 0025 https://github.com/servalproject/ServalMaps/blob/master/src/org/servalproject/maps/location/MockLocations.java
+0026 Android 4.2 source: packages/apps/DeskClock/src/com/android/deskclock/AlarmAlertFullScreen.java

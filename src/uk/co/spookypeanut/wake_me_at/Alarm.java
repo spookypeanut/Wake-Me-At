@@ -22,6 +22,8 @@ import android.text.format.Time;
 import android.util.Log;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -187,14 +189,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     private void startAlarm() {
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
-
-        //REF#0016
-        //PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        //WakeLock wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
-                        //PowerManager.ACQUIRE_CAUSES_WAKEUP, LOG_NAME);
-        //wl.acquire();
-        //wl.release();
-
+        
+        //REF#0026
+        final Window win = getWindow();
+        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD);
+        win.addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+ 
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
         if (mNoiseOn) {
