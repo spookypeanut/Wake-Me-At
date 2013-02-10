@@ -11,13 +11,15 @@ TASKBARBKG := icon-gen-taskbarbkg-100x100.png icon-gen-taskbarbkg-25x25.png\
 POINTER := icon-gen-pointer-64x128.png
 TASKBAR := icon-gen-taskbar-25x25.png icon-gen-taskbar-24x38.png\
 			icon-gen-taskbar-12x19.png icon-gen-taskbar-16x25.png
+MOCKZIP := mock-locations.zip
 
-all : plain star taskbarbkg taskbar pointer
+all : plain star taskbarbkg taskbar pointer mockzip
 plain : $(PLAIN)
 star : $(STAR)
 taskbar : $(TASKBAR)
 taskbarbkg : $(TASKBARBKG)
 pointer : $(POINTER)
+mockzip : $(MOCKZIP)
 
 icon-gen-512x512.png : icon.svg
 	$(CONV) icon-gen-512x512.png
@@ -110,5 +112,9 @@ icon-gen-star-36x36.png : icon-gen-star.svg
 	$(CONV) icon-gen-star-36x36.png
 	optipng -q generated/icon-gen-star-36x36.png
 
+mock-locations.zip :
+	zip generated/mock-locations.zip mock-locations.txt
+
 clean : 
 	rm -rf generated/*
+
