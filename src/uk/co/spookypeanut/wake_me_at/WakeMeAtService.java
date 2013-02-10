@@ -166,8 +166,10 @@ public class WakeMeAtService extends Service implements LocationListener {
 
         if(MockLocations.isMockLocationSet(this) == true) {
             try {
-                mockLocations = new MockLocations(this.getApplicationContext());
-                Toast.makeText(getApplicationContext(), R.string.mock_locations_allowed, Toast.LENGTH_LONG).show();
+                if (mockLocations == null) {
+                    mockLocations = new MockLocations(this.getApplicationContext());
+                    Toast.makeText(getApplicationContext(), R.string.mock_locations_allowed, Toast.LENGTH_LONG).show();
+                }
             } catch (IOException e) {
                 Log.e(LOG_NAME, "unable to create MockLocations instance", e);
             }
