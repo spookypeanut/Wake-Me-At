@@ -445,6 +445,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     public void soundAlarm() {
         mAlarm = true;
+        // This method of waking up the device seems to be required on <= 4.0
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
                             PowerManager.ACQUIRE_CAUSES_WAKEUP,
