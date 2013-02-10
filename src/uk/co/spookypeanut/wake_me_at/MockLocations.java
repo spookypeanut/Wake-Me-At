@@ -37,203 +37,222 @@ with much gratitude. REF#0025
  * a runnable class that sends mock locations for testing purposes
  */
 public class MockLocations implements Runnable {
-	
-	/*
-	 * private class level constants
-	 */
+
+    /*
+     * private class level constants
+     */
     private String LOG_NAME;
-	
-	private final String LOCATION_FILE = "mock-locations.txt";
-	private final String LOCATION_ZIP_FILE = "mock-locations.zip";
-	private String providerName = "MyMockLocationProvider";
-	
-	/*
-	 * private class level variables
-	 */
-	private String locations = null;
-	
-	private LocationManager locationManager;
-	
-	private volatile boolean keepGoing = true;
-	
-	/**
-	 * create the MockLocations class and open the zip file for the required 
-	 * location data
-	 * 
-	 * @param context the application context
-	 * 
-	 * @throws IllegalArgumentException if the context field is null
-	 * @throws IOException  if opening the zip file fails
-	 */
-	public MockLocations(Context context) throws IOException {
-//        LOG_NAME = (String) getText(R.string.app_name_nospaces);
+
+    private final String LOCATION_FILE = "mock-locations.txt";
+    private final String LOCATION_ZIP_FILE = "mock-locations.zip";
+    private String providerName = "MyMockLocationProvider";
+
+    /*
+     * private class level variables
+     */
+    private String locations = null;
+
+    private LocationManager locationManager;
+
+    private volatile boolean keepGoing = true;
+
+    /**
+     * create the MockLocations class and open the zip file for the required
+     * location data
+     * 
+     * @param context
+     *            the application context
+     * 
+     * @throws IllegalArgumentException
+     *             if the context field is null
+     * @throws IOException
+     *             if opening the zip file fails
+     */
+    public MockLocations(Context context) throws IOException {
+        // LOG_NAME = (String) getText(R.string.app_name_nospaces);
         LOG_NAME = "WakeMe@";
 
-		Log.v(LOG_NAME, "opening the zip file");
+        Log.v(LOG_NAME, "opening the zip file");
 
-		// open the zip file and get the required file inside
-		ZipInputStream mZipInput = new ZipInputStream(context.getAssets().open(LOCATION_ZIP_FILE));
-		ZipEntry mZipEntry;
-		
-		// look for the required file
-		while((mZipEntry = mZipInput.getNextEntry())!= null) {
-			
-			Log.v(LOG_NAME, "ZipEntry: " + mZipEntry.getName());
-			
-			// read the bytes from the file and convert them to a string
-			if(mZipEntry.getName().equals(LOCATION_FILE)) {
-				
-				Log.v(LOG_NAME, "required file found inside zip file");
-				
-				ByteArrayOutputStream mByteStream = new ByteArrayOutputStream();
-				byte[] mBuffer = new byte[1024];
-				int mCount;
-				
-				while((mCount = mZipInput.read(mBuffer)) != -1) {
-					mByteStream.write(mBuffer, 0, mCount);
-				}
-				
-				locations = new String(mByteStream.toByteArray(), "UTF-8");
-			}
-			
-			Log.v(LOG_NAME, "location file successfully read");
-			
-			mZipInput.closeEntry();
-		}
-		
-		mZipInput.close();
-		
-		// check to make sure everything was read successfully
-		if(locations == null) {
-			throw new IOException("unable to read the required file from the zip file");
-		}
-		
-		// get an instance of the LocationManager class
-		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
-		
-		// add a reference to our test provider
-		if (locationManager.getProvider(providerName) == null) {
-		    locationManager.addTestProvider(providerName, false, false, false, false, false, true, true, 0, 5);
-		}
-	}
-	
-	/**
-	 * check to confirm that the "Allow mock locations setting is set"
-	 * @param context a context object used to gain access to application resources
-	 * @return true if "Allow mock locations" is set, otherwise false
-	 */
-	public static boolean isMockLocationSet(Context context) { 
-		if (Settings.Secure.getString(context.getContentResolver(), Settings.Secure.ALLOW_MOCK_LOCATION).contentEquals("1")) { 
-			return true;  
-		} 
-		else { 
-			return false;
-		} 
-	} 
-	
-	public String getProviderName() {
-	    return providerName;
-	}
-	
-	/**
-	 * request that this thread stops
-	 */
-	public void requestStop() {
-		Log.v(LOG_NAME, "Mock loctions thread requested to stop");
-		
-		keepGoing = false;
-	}
-	
-	/*
-	 * (non-Javadoc)
-	 * @see java.lang.Runnable#run()
-	 */
-	@Override
-	public void run() {
-		
-		Log.v(LOG_NAME, "Mock locations thread started");
-		
-		String[] mParts;
-		
-		int mLineCount = -1; 
-		
-		int mSleepTime;
-		double mLatitude;
-		double mLongitude;
-		
-		Location mLocation;
-		
-		// loop through each of the locations
-		for(String mToken : locations.split("\\n")) {
-			
-			if(keepGoing == false)  {
-				
-				Log.v(LOG_NAME, "Mock locations thread stopped");
-				
-				return;
-			}
-			
-			mLineCount++;
-			
-			// only process lines that aren't comments
-			if(mToken.startsWith("#") == true) {
-				continue;
-			}
-			
-			mParts = mToken.split("\\|");
-			
-			/*
-			 *  validate the line
-			 */
-			if(mParts.length != 3) {
-				Log.e(LOG_NAME, "expected 3 data elements found '" + mParts.length + "' on line: " + mLineCount);
-			}
-			
-			try {
-				mSleepTime = Integer.parseInt(mParts[0]);
-			} catch (NumberFormatException e) {
-				Log.e(LOG_NAME, "unable to parse the sleep time element on line: " + mLineCount);
-				continue;
-			}
-			
-			try {
-				mLatitude = Double.parseDouble(mParts[1]);
-			} catch (NumberFormatException e) {
-				Log.e(LOG_NAME, "unable to parse the latitude element on line: " + mLineCount);
-				continue;
-			}
+        // open the zip file and get the required file inside
+        ZipInputStream mZipInput = new ZipInputStream(context.getAssets().open(
+                LOCATION_ZIP_FILE));
+        ZipEntry mZipEntry;
 
-			try {
-				mLongitude = Double.parseDouble(mParts[2]);
-			} catch (NumberFormatException e) {
-				Log.e(LOG_NAME, "unable to parse the longitude element on line: " + mLineCount);
-				continue;
-			}
-			
-			// create the new location
-			mLocation = new Location(providerName);
-			mLocation.setLatitude(mLatitude);
-			mLocation.setLongitude(mLongitude);
-			mLocation.setTime(System.currentTimeMillis());
+        // look for the required file
+        while ((mZipEntry = mZipInput.getNextEntry()) != null) {
 
-			// send the new location
-			locationManager.setTestProviderEnabled(providerName, true);
-			locationManager.setTestProviderLocation(providerName, mLocation);
-			
-			Log.v(LOG_NAME, "new location sent");
+            Log.v(LOG_NAME, "ZipEntry: " + mZipEntry.getName());
 
-			// sleep the thread
-			try {
-				Thread.sleep(mSleepTime * 1000);
-			} catch (InterruptedException e) {
-				if(keepGoing == false) {
-					Log.v(LOG_NAME, "thread was interrupted and is stopping");
-					locationManager.removeTestProvider(providerName);
-					return;
-				} else {
-					Log.w(LOG_NAME, "thread was interrupted without being requested to stop", e);
-				}
-			}
-		}
-	}
+            // read the bytes from the file and convert them to a string
+            if (mZipEntry.getName().equals(LOCATION_FILE)) {
+
+                Log.v(LOG_NAME, "required file found inside zip file");
+
+                ByteArrayOutputStream mByteStream = new ByteArrayOutputStream();
+                byte[] mBuffer = new byte[1024];
+                int mCount;
+
+                while ((mCount = mZipInput.read(mBuffer)) != -1) {
+                    mByteStream.write(mBuffer, 0, mCount);
+                }
+
+                locations = new String(mByteStream.toByteArray(), "UTF-8");
+            }
+
+            Log.v(LOG_NAME, "location file successfully read");
+
+            mZipInput.closeEntry();
+        }
+
+        mZipInput.close();
+
+        // check to make sure everything was read successfully
+        if (locations == null) {
+            throw new IOException(
+                    "unable to read the required file from the zip file");
+        }
+
+        // get an instance of the LocationManager class
+        locationManager = (LocationManager) context
+                .getSystemService(Context.LOCATION_SERVICE);
+
+        // add a reference to our test provider
+        if (locationManager.getProvider(providerName) == null) {
+            locationManager.addTestProvider(providerName, false, false, false,
+                    false, false, true, true, 0, 5);
+        }
+    }
+
+    /**
+     * check to confirm that the "Allow mock locations setting is set"
+     * 
+     * @param context
+     *            a context object used to gain access to application resources
+     * @return true if "Allow mock locations" is set, otherwise false
+     */
+    public static boolean isMockLocationSet(Context context) {
+        if (Settings.Secure.getString(context.getContentResolver(),
+                Settings.Secure.ALLOW_MOCK_LOCATION).contentEquals("1")) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    public String getProviderName() {
+        return providerName;
+    }
+
+    /**
+     * request that this thread stops
+     */
+    public void requestStop() {
+        Log.v(LOG_NAME, "Mock loctions thread requested to stop");
+
+        keepGoing = false;
+    }
+
+    /*
+     * (non-Javadoc)
+     * 
+     * @see java.lang.Runnable#run()
+     */
+    @Override
+    public void run() {
+
+        Log.v(LOG_NAME, "Mock locations thread started");
+
+        String[] mParts;
+
+        int mLineCount = -1;
+
+        int mSleepTime;
+        double mLatitude;
+        double mLongitude;
+
+        Location mLocation;
+
+        // loop through each of the locations
+        for (String mToken : locations.split("\\n")) {
+
+            if (keepGoing == false) {
+
+                Log.v(LOG_NAME, "Mock locations thread stopped");
+
+                return;
+            }
+
+            mLineCount++;
+
+            // only process lines that aren't comments
+            if (mToken.startsWith("#") == true) {
+                continue;
+            }
+
+            mParts = mToken.split("\\|");
+
+            /*
+             * validate the line
+             */
+            if (mParts.length != 3) {
+                Log.e(LOG_NAME, "expected 3 data elements found '"
+                        + mParts.length + "' on line: " + mLineCount);
+            }
+
+            try {
+                mSleepTime = Integer.parseInt(mParts[0]);
+            } catch (NumberFormatException e) {
+                Log.e(LOG_NAME,
+                        "unable to parse the sleep time element on line: "
+                                + mLineCount);
+                continue;
+            }
+
+            try {
+                mLatitude = Double.parseDouble(mParts[1]);
+            } catch (NumberFormatException e) {
+                Log.e(LOG_NAME,
+                        "unable to parse the latitude element on line: "
+                                + mLineCount);
+                continue;
+            }
+
+            try {
+                mLongitude = Double.parseDouble(mParts[2]);
+            } catch (NumberFormatException e) {
+                Log.e(LOG_NAME,
+                        "unable to parse the longitude element on line: "
+                                + mLineCount);
+                continue;
+            }
+
+            // create the new location
+            mLocation = new Location(providerName);
+            mLocation.setLatitude(mLatitude);
+            mLocation.setLongitude(mLongitude);
+            mLocation.setTime(System.currentTimeMillis());
+
+            // send the new location
+            locationManager.setTestProviderEnabled(providerName, true);
+            locationManager.setTestProviderLocation(providerName, mLocation);
+
+            Log.v(LOG_NAME, "new location sent");
+
+            // sleep the thread
+            try {
+                Thread.sleep(mSleepTime * 1000);
+            } catch (InterruptedException e) {
+                if (keepGoing == false) {
+                    Log.v(LOG_NAME, "thread was interrupted and is stopping");
+                    locationManager.removeTestProvider(providerName);
+                    return;
+                } else {
+                    Log.w(LOG_NAME,
+                            "thread was interrupted without being requested to stop",
+                            e);
+                }
+            }
+        }
+    }
 }
