@@ -317,7 +317,7 @@ public class WakeMeAtService extends Service implements LocationListener {
                     Thread mockLocationThread = new Thread(mockLocations, "MockLocations");
                     mockLocationThread.start();
                 }
-                lp = "gps";
+                lp = mockLocations.getProviderName();
             }
             mLocationManager.requestLocationUpdates(lp,
                                                     mMinTime,

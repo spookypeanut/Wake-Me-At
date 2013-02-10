@@ -46,6 +46,7 @@ public class MockLocations implements Runnable {
 	
 	private final String LOCATION_FILE = "mock-locations.txt";
 	private final String LOCATION_ZIP_FILE = "mock-locations.zip";
+	private String providerName = "MyMockLocationProvider";
 	
 	/*
 	 * private class level variables
@@ -112,8 +113,9 @@ public class MockLocations implements Runnable {
 		locationManager = (LocationManager) context.getSystemService(Context.LOCATION_SERVICE);
 		
 		// add a reference to our test provider
-		// use the standard provider name so the rest of the code still works	
-		locationManager.addTestProvider(LocationManager.GPS_PROVIDER, false, false, false, false, false, true, true, 0, 5);
+		if (locationManager.getProvider(providerName) == null) {
+		    locationManager.addTestProvider(providerName, false, false, false, false, false, true, true, 0, 5);
+		}
 	}
 	
 	/**
@@ -130,11 +132,14 @@ public class MockLocations implements Runnable {
 		} 
 	} 
 	
+	public String getProviderName() {
+	    return providerName;
+	}
+	
 	/**
 	 * request that this thread stops
 	 */
 	public void requestStop() {
-		
 		Log.v(LOG_NAME, "Mock loctions thread requested to stop");
 		
 		keepGoing = false;
@@ -207,14 +212,14 @@ public class MockLocations implements Runnable {
 			}
 			
 			// create the new location
-			mLocation = new Location(LocationManager.GPS_PROVIDER);
+			mLocation = new Location(providerName);
 			mLocation.setLatitude(mLatitude);
 			mLocation.setLongitude(mLongitude);
 			mLocation.setTime(System.currentTimeMillis());
 
 			// send the new location
-			locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
-			locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, mLocation);
+			locationManager.setTestProviderEnabled(providerName, true);
+			locationManager.setTestProviderLocation(providerName, mLocation);
 			
 			Log.v(LOG_NAME, "new location sent");
 
@@ -224,6 +229,7 @@ public class MockLocations implements Runnable {
 			} catch (InterruptedException e) {
 				if(keepGoing == false) {
 					Log.v(LOG_NAME, "thread was interrupted and is stopping");
+					locationManager.removeTestProvider(providerName);
 					return;
 				} else {
 					Log.w(LOG_NAME, "thread was interrupted without being requested to stop", e);
