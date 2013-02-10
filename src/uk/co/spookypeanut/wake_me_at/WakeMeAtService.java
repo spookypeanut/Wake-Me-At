@@ -54,7 +54,6 @@ public class WakeMeAtService extends Service implements LocationListener {
     public static boolean serviceRunning = false;
     
     private MockLocations mockLocations = null;
-    private Thread mockLocationsThread = null;
 
     // The minimum time (in milliseconds) before reporting the location again
     static final long SECONDS = 1000;

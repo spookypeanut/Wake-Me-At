@@ -42,7 +42,6 @@ public class MockLocations implements Runnable {
 	 * private class level constants
 	 */
     private String LOG_NAME;
-	private final boolean V_LOG = false;
 	
 	private final String LOCATION_FILE = "mock-locations.txt";
 	private final String LOCATION_ZIP_FILE = "mock-locations.zip";
