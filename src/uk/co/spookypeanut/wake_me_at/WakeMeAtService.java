@@ -450,7 +450,9 @@ public class WakeMeAtService extends Service implements LocationListener {
         wl = pm.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK |
                             PowerManager.ACQUIRE_CAUSES_WAKEUP,
                             LOG_NAME);
-        wl.acquire();
+        if ((wl != null) && (wl.isHeld() == false)) {
+            wl.acquire();
+        }
         Intent alarmIntent = new Intent(WakeMeAtService.this.getApplication(),
                                         Alarm.class);
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
