@@ -69,10 +69,8 @@ public class MockLocations implements Runnable {
 //        LOG_NAME = (String) getText(R.string.app_name_nospaces);
         LOG_NAME = "WakeMe@";
 
-		if(V_LOG) {
-			Log.v(LOG_NAME, "opening the zip file");
-		}
-		
+		Log.v(LOG_NAME, "opening the zip file");
+
 		// open the zip file and get the required file inside
 		ZipInputStream mZipInput = new ZipInputStream(context.getAssets().open(LOCATION_ZIP_FILE));
 		ZipEntry mZipEntry;
@@ -80,16 +78,12 @@ public class MockLocations implements Runnable {
 		// look for the required file
 		while((mZipEntry = mZipInput.getNextEntry())!= null) {
 			
-			if(V_LOG) {
-				Log.v(LOG_NAME, "ZipEntry: " + mZipEntry.getName());
-			}
+			Log.v(LOG_NAME, "ZipEntry: " + mZipEntry.getName());
 			
 			// read the bytes from the file and convert them to a string
 			if(mZipEntry.getName().equals(LOCATION_FILE)) {
 				
-				if(V_LOG) {
-					Log.v(LOG_NAME, "required file found inside zip file");
-				}
+				Log.v(LOG_NAME, "required file found inside zip file");
 				
 				ByteArrayOutputStream mByteStream = new ByteArrayOutputStream();
 				byte[] mBuffer = new byte[1024];
@@ -102,9 +96,7 @@ public class MockLocations implements Runnable {
 				locations = new String(mByteStream.toByteArray(), "UTF-8");
 			}
 			
-			if(V_LOG) {
-				Log.v(LOG_NAME, "location file successfully read");
-			}
+			Log.v(LOG_NAME, "location file successfully read");
 			
 			mZipInput.closeEntry();
 		}
@@ -143,9 +135,7 @@ public class MockLocations implements Runnable {
 	 */
 	public void requestStop() {
 		
-		if(V_LOG) {
-			Log.v(LOG_NAME, "thread requested to stop");
-		}
+		Log.v(LOG_NAME, "Mock loctions thread requested to stop");
 		
 		keepGoing = false;
 	}
@@ -157,9 +147,7 @@ public class MockLocations implements Runnable {
 	@Override
 	public void run() {
 		
-		if(V_LOG) {
-			Log.v(LOG_NAME, "thread started");
-		}
+		Log.v(LOG_NAME, "Mock locations thread started");
 		
 		String[] mParts;
 		
@@ -176,9 +164,7 @@ public class MockLocations implements Runnable {
 			
 			if(keepGoing == false)  {
 				
-				if(V_LOG) {
-					Log.v(LOG_NAME, "thread stopped");
-				}
+				Log.v(LOG_NAME, "Mock locations thread stopped");
 				
 				return;
 			}
@@ -230,18 +216,14 @@ public class MockLocations implements Runnable {
 			locationManager.setTestProviderEnabled(LocationManager.GPS_PROVIDER, true);
 			locationManager.setTestProviderLocation(LocationManager.GPS_PROVIDER, mLocation);
 			
-			if(V_LOG) {
-				Log.v(LOG_NAME, "new location sent");
-			}
+			Log.v(LOG_NAME, "new location sent");
 
 			// sleep the thread
 			try {
 				Thread.sleep(mSleepTime * 1000);
 			} catch (InterruptedException e) {
 				if(keepGoing == false) {
-					if(V_LOG) {
-						Log.v(LOG_NAME, "thread was interrupted and is stopping");
-					}
+					Log.v(LOG_NAME, "thread was interrupted and is stopping");
 					return;
 				} else {
 					Log.w(LOG_NAME, "thread was interrupted without being requested to stop", e);
