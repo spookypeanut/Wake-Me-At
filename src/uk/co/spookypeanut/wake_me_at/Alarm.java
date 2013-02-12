@@ -77,7 +77,18 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private boolean mAlarmSounding;
 
     private double mMetresAway;
-
+    
+    protected void alarmWindowFlags() {
+        //REF#0026
+        final Window win = getWindow();
+        // This method of waking up the device seems to be required on > 4.0
+        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+                   | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+                   | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
+                   | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
+                   | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+    }
+    
     @Override
     protected void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
@@ -94,6 +105,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         checkIntent.setAction(TextToSpeech.Engine.ACTION_CHECK_TTS_DATA);
         startActivityForResult(checkIntent, TTS_REQUEST_CODE);
 
+        Intent thisIntent = this.getIntent();
+        Bundle extras = thisIntent.getExtras();
+        if (extras.getBoolean("alarm") == true) {
+            alarmWindowFlags();
+        }
         setContentView(R.layout.alarm);
 
         Button button = (Button)findViewById(R.id.alarmButtonStop);
@@ -105,7 +121,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         button = (Button)findViewById(R.id.alarmButtonMain);
         button.setOnClickListener(mMainWindow);
 
-        onNewIntent(this.getIntent());
+        onNewIntent(thisIntent);
     }
 
     private void rowChanged(long rowId) {
@@ -189,15 +205,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     private void startAlarm() {
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
-        
-        //REF#0025
-        final Window win = getWindow();
-        // This method of waking up the device seems to be required on > 4.0
-        win.addFlags(WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
-                | WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
-                | WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON
-                | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON);
+
  
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
