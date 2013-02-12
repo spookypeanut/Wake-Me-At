@@ -438,6 +438,7 @@ public class WakeMeAtService extends Service implements LocationListener {
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
+        alarmIntent.putExtra("alarm", mAlarm);
 
         startActivity(alarmIntent);
     }
@@ -457,6 +458,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         alarmIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         alarmIntent.putExtra("rowId", mRowId);
         alarmIntent.putExtra("metresAway", mMetresAway);
+        alarmIntent.putExtra("alarm", mAlarm);
+
         startActivity(alarmIntent);
         updateAlarm();
     }
