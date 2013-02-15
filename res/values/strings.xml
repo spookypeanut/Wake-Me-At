@@ -16,6 +16,7 @@
  
  <!-- GLOBAL -->
  <string name="app_name">WakeMe@</string>
+ <string name="package_name">uk.co.spookypeanut.wake_me_at</string>
  <string name="app_name_nospaces">WakeMe@</string>
 <string name="alert_dialog_cancel">Cancel</string>
 <string name="alert_dialog_ok">OK</string>

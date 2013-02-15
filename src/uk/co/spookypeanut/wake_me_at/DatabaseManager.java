@@ -20,6 +20,10 @@ along with Wake Me At, in the file "COPYING".  If not, see
 
 // REF#0004
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.nio.channels.FileChannel;
 import java.util.ArrayList;
 
 import android.content.ContentValues;
@@ -28,7 +32,9 @@ import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
+import android.os.Environment;
 import android.util.Log;
+import android.widget.Toast;
 
 /**
  * Handle the database used in WakeMe@
@@ -76,6 +82,46 @@ public class DatabaseManager
         this.mContext = context;
         WakeMeAtDbHelper helper = new WakeMeAtDbHelper(context);
         this.db = helper.getWritableDatabase();
+    }
+
+    /**
+     * Export the entire database to external storage
+     */
+    public void exportDatabaseToSD() {
+        try {
+            File sd = Environment.getExternalStorageDirectory();
+            File data = Environment.getDataDirectory();
+            Log.d(LOG_NAME, "Trying to export data to SD card");
+
+            if (sd.canWrite()) {
+                String packName = (String) mContext.getText(R.string.package_name);
+                String currentDBPath = "//data//"+ packName + 
+                                       "//databases//" + DB_NAME;
+                String backupDBPath = DB_NAME;
+                File currentDB = new File(data, currentDBPath);
+                File backupDB = new File(sd, backupDBPath);
+                FileChannel src = new FileInputStream(currentDB).getChannel();
+                FileChannel dst = new FileOutputStream(backupDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                src.close();
+                dst.close();
+                Toast.makeText(mContext, backupDB.toString(), Toast.LENGTH_LONG).show();
+                Log.d(LOG_NAME, "Exported to SD card");
+            } else {
+                Log.e(LOG_NAME, "Can't write to SD card");
+            }
+        } catch (Exception e) {
+            Log.d(LOG_NAME, "Failed to export to SD card");
+            Log.e(LOG_NAME, e.toString());
+            Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG).show();
+        }
+    }
+
+    /**
+     * Import the entire database from external storage
+     */
+    public void importDatabaseFromSD() {
+        Log.d(LOG_NAME, "Not implemented yet");
     }
 
     /**
