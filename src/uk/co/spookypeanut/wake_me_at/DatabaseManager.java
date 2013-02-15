@@ -84,6 +84,21 @@ public class DatabaseManager
         this.db = helper.getWritableDatabase();
     }
 
+    
+    public String getLiveDBPath() {
+        String packName = (String) mContext.getText(R.string.package_name);
+        return ("//data//"+ packName + "//databases//" + DB_NAME);
+    }
+    
+    public String getBackupDir() {
+        String packName = (String) mContext.getText(R.string.package_name);
+        return ("data/" + packName);
+    }
+    
+    public String getBackupDBName() {
+        return DB_NAME;
+    }
+    
     /**
      * Export the entire database to external storage
      */
@@ -94,12 +109,10 @@ public class DatabaseManager
             Log.d(LOG_NAME, "Trying to export data to SD card");
 
             if (sd.canWrite()) {
-                String packName = (String) mContext.getText(R.string.package_name);
-                String currentDBPath = "//data//"+ packName + 
-                                       "//databases//" + DB_NAME;
-                String backupDBPath = DB_NAME;
-                File currentDB = new File(data, currentDBPath);
-                File backupDB = new File(sd, backupDBPath);
+                File currentDB = new File(data, getLiveDBPath());
+                File backupDir = new File(sd, getBackupDir());
+                backupDir.mkdirs();
+                File backupDB = new File(backupDir, getBackupDBName());
                 FileChannel src = new FileInputStream(currentDB).getChannel();
                 FileChannel dst = new FileOutputStream(backupDB).getChannel();
                 dst.transferFrom(src, 0, src.size());
