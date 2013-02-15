@@ -80,7 +80,11 @@ public class DatabaseManager
     public DatabaseManager(Context context) {
         LOG_NAME = (String) context.getText(R.string.app_name_nospaces);
         this.mContext = context;
-        WakeMeAtDbHelper helper = new WakeMeAtDbHelper(context);
+        openDatabase();
+    }
+    
+    public void openDatabase() {
+        WakeMeAtDbHelper helper = new WakeMeAtDbHelper(mContext);
         this.db = helper.getWritableDatabase();
     }
 
@@ -99,20 +103,33 @@ public class DatabaseManager
         return DB_NAME;
     }
     
+    public File getBackupDBFile() {
+        File sd = Environment.getExternalStorageDirectory();
+        return new File(sd, getBackupDBPath());
+    }
+    
+    public String getBackupDBPath() {
+        return getBackupDir() + "/" + getBackupDBName();
+    }
+    
+    public File getLiveDBFile() {
+        File data = Environment.getDataDirectory();
+        return new File(data, getLiveDBPath());
+    }
     /**
      * Export the entire database to external storage
      */
     public void exportDatabaseToSD() {
         try {
             File sd = Environment.getExternalStorageDirectory();
-            File data = Environment.getDataDirectory();
             Log.d(LOG_NAME, "Trying to export data to SD card");
 
             if (sd.canWrite()) {
-                File currentDB = new File(data, getLiveDBPath());
+                File currentDB = getLiveDBFile();
                 File backupDir = new File(sd, getBackupDir());
+                // First we have to make the directory, if it doesn't exist
                 backupDir.mkdirs();
-                File backupDB = new File(backupDir, getBackupDBName());
+                File backupDB = getBackupDBFile();
                 FileChannel src = new FileInputStream(currentDB).getChannel();
                 FileChannel dst = new FileOutputStream(backupDB).getChannel();
                 dst.transferFrom(src, 0, src.size());
@@ -134,7 +151,35 @@ public class DatabaseManager
      * Import the entire database from external storage
      */
     public void importDatabaseFromSD() {
-        Log.d(LOG_NAME, "Not implemented yet");
+        // Close the SQLiteOpenHelper so it will commit the created empty
+        // database to internal storage.
+        try {
+            Log.d(LOG_NAME, "Importing database");
+            File backupDB = getBackupDBFile();
+            File liveDB = getLiveDBFile();
+            if (backupDB.exists()) {
+                boolean wasOpen = false;
+                if (isOpen()) {
+                    wasOpen = true;
+                    close();
+                }
+                FileChannel src = new FileInputStream(backupDB).getChannel();
+                FileChannel dst = new FileOutputStream(liveDB).getChannel();
+                dst.transferFrom(src, 0, src.size());
+                Log.d(LOG_NAME, "Database imported");
+                if (wasOpen) {
+                    Log.d(LOG_NAME, "Database being re-opened");
+                    openDatabase();
+                }
+            } else {
+                Log.e(LOG_NAME, "Backup database doesn't exist");
+                Log.d(LOG_NAME, getBackupDBPath());
+            }
+        } catch (Exception e) {
+            Log.d(LOG_NAME, "Failed to import from SD card");
+            Log.e(LOG_NAME, e.toString());
+            Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG).show();
+        }
     }
 
     /**
@@ -605,6 +650,10 @@ public class DatabaseManager
         db.close();
     }
 
+    public boolean isOpen() {
+        return db.isOpen();
+    }
+    
     /**
      * Print the entire database to the debug log
      */
