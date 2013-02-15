@@ -29,6 +29,9 @@
 <string name="mn_new_loc">New location</string>
 <string name="mn_quit">Quit</string>
 <string name="mn_stop_all">Cancel alarm</string>
+<string name="mn_export_sd">Backup to SD card</string>
+<string name="mn_import_sd">Import from backup</string>
+
 
 <string name="mn_context_start">Wake here</string>
 <string name="mn_context_stop">Cancel alarm</string>

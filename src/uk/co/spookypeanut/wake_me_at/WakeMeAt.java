@@ -86,6 +86,13 @@ public class WakeMeAt extends ListActivity {
         case R.id.mn_stop_all:
             stopService(new Intent(WakeMeAt.this, WakeMeAtService.class));
             return true;
+        case R.id.mn_export_sd:
+            db.exportDatabaseToSD();
+            return true;
+        case R.id.mn_import_sd:
+            db.importDatabaseFromSD();
+            mLocListAdapter.notifyDataSetChanged();
+            return true;
         default:
             return super.onOptionsItemSelected(item);
         }

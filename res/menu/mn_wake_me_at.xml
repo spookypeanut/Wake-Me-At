@@ -26,4 +26,8 @@
     <item android:id="@+id/mn_stop_all"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
           android:title="@string/mn_stop_all" />
+    <item android:id="@+id/mn_export_sd"
+          android:title="@string/mn_export_sd" />
+    <item android:id="@+id/mn_import_sd"
+          android:title="@string/mn_import_sd" />
 </menu>
