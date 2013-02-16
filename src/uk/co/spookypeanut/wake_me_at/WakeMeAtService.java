@@ -105,6 +105,11 @@ public class WakeMeAtService extends Service implements LocationListener {
     private Object[] mStartForegroundArgs = new Object[2];
     private Object[] mStopForegroundArgs = new Object[1];
 
+    // Old api
+    private Method mSetForeground;
+    private Object[] mSetForegroundArgs = new Object[1];
+
+
     /**
      * Copied from one of the API example tools. One day I'll have to
      * actually go through and figure out what this does (or rather,
@@ -130,10 +135,23 @@ public class WakeMeAtService extends Service implements LocationListener {
         }
 
         // Fall back on the old API.
-        setForeground(true);
+        mSetForegroundArgs[0] = Boolean.TRUE;
+        invokeMethod(mSetForeground, mSetForegroundArgs);
         mNM.notify(id, notification);
     }
 
+    void invokeMethod(Method method, Object[] args) {
+        try {
+            method.invoke(this, args);
+        } catch (InvocationTargetException e) {
+            // Should not happen.
+            Log.w(LOG_NAME, "Unable to invoke method", e);
+        } catch (IllegalAccessException e) {
+            // Should not happen.
+            Log.w(LOG_NAME, "Unable to invoke method", e);
+        }
+    }
+    
     void stopForegroundCompat(int id) {
         // If we have the new stopForeground API, then use it.
         if (mStopForeground != null) {
@@ -153,7 +171,8 @@ public class WakeMeAtService extends Service implements LocationListener {
         // Fall back on the old API.  Note to cancel BEFORE changing the
         // foreground state, since we could be killed at that point.
         mNM.cancel(id);
-        setForeground(false);
+        mSetForegroundArgs[0] = Boolean.FALSE;
+        invokeMethod(mSetForeground, mSetForegroundArgs);
     }
 
     @Override

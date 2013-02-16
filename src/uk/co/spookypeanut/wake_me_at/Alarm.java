@@ -93,7 +93,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     protected void onCreate(Bundle icicle) {
         LOG_NAME = (String) getText(R.string.app_name_nospaces);
         BROADCAST_UPDATE = (String) getText(R.string.serviceBroadcastName);
-        Log.d(LOG_NAME, "Alarm.onCreate");
         super.onCreate(icicle);
 
         setVolumeControlStream(AudioManager.STREAM_ALARM);
@@ -125,7 +124,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
 
     private void rowChanged(long rowId) {
-        Log.v(LOG_NAME, "Alarm.rowChanged(" + rowId + ")");
         db.logOutArray();
         mRowId = rowId;
         mNick = db.getNick(mRowId);
@@ -142,7 +140,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
 
     private void distanceChanged(double distance, long locTime) {
-        Log.v(LOG_NAME, "Alarm.distanceChanged(" + distance + ")");
         mMetresAway = distance;
         mLastLocTime = locTime;
         updateText();
@@ -188,7 +185,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     };
 
     private void speak() {
-        Log.d(LOG_NAME, "Alarm.speak()");
         if (mTts != null && false == mTts.isSpeaking()) {
         //if (mTts != null) {
             HashMap<String, String> myHashAlarm = new HashMap<String, String>();
@@ -196,7 +192,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                             String.valueOf(AudioManager.STREAM_ALARM));
             myHashAlarm.put(TextToSpeech.Engine.KEY_PARAM_UTTERANCE_ID,
                             POST_UTTERANCE);
-            Log.d(LOG_NAME, "Format is " + getString(R.string.alarmSpeech));
             String speech = String.format(getString(R.string.alarmSpeech),
                                           uc.outSpeech(mMetresAway), mNick);
             mTts.speak(speech, TextToSpeech.QUEUE_FLUSH, myHashAlarm);
@@ -206,7 +201,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     private void startAlarm() {
         long pattern[] = {100, 300, 100, 100, 100, 100, 100, 200, 100, 400};
 
- 
         if (mSpeechOn) speak();
         if (mVibrateOn) mVibrator.vibrate(pattern, 0);
         if (mNoiseOn) {
@@ -226,10 +220,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
 
     private void stopAlarm() {
-        Log.d(LOG_NAME, "Alarm.stopAlarm()");
         if (mMediaPlayer != null) {
             try {
-                Log.d(LOG_NAME, "Stopping media player");
                 final AudioManager audioManager = (AudioManager)getSystemService(Context.AUDIO_SERVICE);
                 //REF#0009
                 audioManager.abandonAudioFocus(null);
@@ -249,10 +241,8 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
 
     private boolean startAlarmtone() {
-        Log.d(LOG_NAME, "Alarm.startAlarmtone()");
         float alarmVolume = (float) 1.0;
         if (null == mMediaPlayer) {
-            Log.d(LOG_NAME, "Initializing mediaPlayer");
             mMediaPlayer = new MediaPlayer();
             Uri alert = Uri.parse(db.getRingtone(mRowId));
             try {
@@ -269,16 +259,13 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             mMediaPlayer.setAudioStreamType(AudioManager.STREAM_ALARM);
             mMediaPlayer.setVolume(alarmVolume, alarmVolume);
             mMediaPlayer.setLooping(true);
-            Log.d(LOG_NAME, "About to prepare mMediaPlayer");
             try {
                  mMediaPlayer.prepare();
             }
             catch (IllegalStateException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             catch (IOException e) {
-                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
             // REF#0008
@@ -293,8 +280,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             alarmVolume = (float) 1.0;
         }
         if (true == mMediaPlayer.isPlaying()) {
-            Log.d(LOG_NAME, "About to play mMediaPlayer");
-            Log.d(LOG_NAME, "mediaPlayer is playing, exiting");
             return true;
         }
         if (alarmVolume != 0) {
@@ -305,7 +290,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onNewIntent(Intent intent) {
-        Log.v(LOG_NAME, "Alarm.onNewIntent(" + intent.toString());
         Bundle extras = intent.getExtras();
 
         rowChanged(extras.getLong("rowId"));
@@ -317,7 +301,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     }
     @Override
     protected void onResume() {
-        Log.d(LOG_NAME, "Alarm.onResume");
         super.onResume();
         IntentFilter filter = new IntentFilter(BROADCAST_UPDATE);
         this.registerReceiver(this.mReceiver, filter);
@@ -328,7 +311,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onPause() {
-        Log.d(LOG_NAME, "Alarm.onPause()");
         this.unregisterReceiver(this.mReceiver);
         stopAlarm();
         super.onPause();
@@ -339,7 +321,7 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
         if (!mAlarmSounding) {
             super.onBackPressed();
         } else {
-            Log.d(LOG_NAME, "Pressing back is not allowed while alarm is sounding");
+            Log.w(LOG_NAME, "Pressing back is not allowed while alarm is sounding");
         }
     }
 
@@ -355,16 +337,12 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     protected void onActivityResult(
             int requestCode, int resultCode, Intent data) {
-        Log.v(LOG_NAME, "onActivityResult(" +
-                requestCode + ", " +
-                resultCode + ", ");
         if (requestCode == TTS_REQUEST_CODE && mSpeechOn == true) {
             if (resultCode == TextToSpeech.Engine.CHECK_VOICE_DATA_PASS) {
                 // success, create the TTS instance
-                Log.d(LOG_NAME, "text to speech present");
                 initializeTts();
             } else {
-                Log.wtf(LOG_NAME, "No TTS data");
+                Log.e(LOG_NAME, "No TTS data");
                 Toast.makeText(getApplicationContext(), R.string.noTtsError,
                         Toast.LENGTH_LONG).show();
                 // TODO Move this to EditLocation, when turning speech on
@@ -374,14 +352,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
                 //    TextToSpeech.Engine.ACTION_INSTALL_TTS_DATA);
                 //startActivity(installIntent);
             }
-
-            Log.d(LOG_NAME, "end of onActivityResult");
         }
     }
 
     @Override
     public void onUtteranceCompleted(String uttId) {
-        Log.d(LOG_NAME, "finished speaking");
         if (uttId == POST_UTTERANCE) {
             Log.d(LOG_NAME, "finished speaking");
         }
@@ -390,7 +365,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     public void onInit(int status) {
         // REF#0003
-        Log.d(LOG_NAME, "Alarm.onInit(" + status + ")");
         if (mTts.setOnUtteranceCompletedListener(this) == TextToSpeech.ERROR) {
             Log.wtf(LOG_NAME, "setOnUtteranceCompletedListener failed");
         }
@@ -399,18 +373,15 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
 
     @Override
     protected void onDestroy() {
-        Log.d(LOG_NAME, "Alarm.onDestroy");
         db.close();
         if (mTts != null) {
             mTts.shutdown();
         }
-        Log.d(LOG_NAME, "onDestroy: removing mRunEverySecond");
         mHandler.removeCallbacks(mRunEverySecond);
         super.onDestroy();
     }
 
     private void stopService() {
-        Log.d(LOG_NAME, "Alarm.stopService()");
         mAlarmSounding = false;
         stopAlarm();
         stopService(new Intent(Alarm.this, WakeMeAtService.class));
@@ -449,7 +420,6 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     public BroadcastReceiver mReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
-            Log.d(LOG_NAME, "Alarm.onReceive");
             Bundle extras = intent.getExtras();
             long broadcastId = extras.getLong("rowId");
             if (broadcastId != mRowId && broadcastId > 0) {
