@@ -2,9 +2,12 @@ package uk.co.spookypeanut.wake_me_at;
 
 import java.util.ArrayList;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.ListActivity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
@@ -90,8 +93,7 @@ public class WakeMeAt extends ListActivity {
             db.exportDatabaseToSD();
             return true;
         case R.id.mn_import_sd:
-            db.importDatabaseFromSD();
-            mLocListAdapter.notifyDataSetChanged();
+            askBeforeImport();
             return true;
         default:
             return super.onOptionsItemSelected(item);
@@ -153,7 +155,28 @@ public class WakeMeAt extends ListActivity {
         return super.onContextItemSelected(item);
       }
     }
-
+    
+    public void askBeforeImport() {
+        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                db.importDatabaseFromSD();
+                mLocListAdapter.notifyDataSetChanged();
+            }
+        };
+        Dialog confirmDialog = new AlertDialog.Builder(mContext)
+            .setTitle(R.string.import_db_dialog_title)
+            .setIcon(R.drawable.icon)
+            .setMessage(R.string.import_db_dialog_message)
+            .setPositiveButton(R.string.alert_dialog_ok, positiveListener)
+            .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int whichButton) {
+                    // do nothing
+                }
+            })
+            .create();
+        confirmDialog.show();
+    }
+    
     @Override
     protected void onPause() {
         this.unregisterReceiver(this.mReceiver);

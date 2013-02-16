@@ -32,6 +32,8 @@
 <string name="mn_export_sd">Backup to SD card</string>
 <string name="mn_import_sd">Import from backup</string>
 
+<string name="import_db_dialog_title">Import DB?</string>
+<string name="import_db_dialog_message">This will erase all current locations</string>  
 
 <string name="mn_context_start">Wake here</string>
 <string name="mn_context_stop">Cancel alarm</string>
