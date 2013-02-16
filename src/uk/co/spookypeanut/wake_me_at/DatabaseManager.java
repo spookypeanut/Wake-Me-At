@@ -135,7 +135,9 @@ public class DatabaseManager
                 dst.transferFrom(src, 0, src.size());
                 src.close();
                 dst.close();
-                Toast.makeText(mContext, backupDB.toString(), Toast.LENGTH_LONG).show();
+                String toastMessage = String.format(mContext.getString(R.string.export_db_success,
+                        backupDB.toString()));
+                Toast.makeText(mContext, toastMessage, Toast.LENGTH_LONG).show();
                 Log.d(LOG_NAME, "Exported to SD card");
             } else {
                 Log.e(LOG_NAME, "Can't write to SD card");
@@ -143,7 +145,9 @@ public class DatabaseManager
         } catch (Exception e) {
             Log.d(LOG_NAME, "Failed to export to SD card");
             Log.e(LOG_NAME, e.toString());
-            Toast.makeText(mContext, e.toString(), Toast.LENGTH_LONG).show();
+            String toastMessage = String.format(mContext.getString(R.string.export_db_failure,
+                    e.toString()));
+            Toast.makeText(mContext, toastMessage, Toast.LENGTH_LONG).show();
         }
     }
 

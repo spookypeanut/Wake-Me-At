@@ -157,22 +157,23 @@ public class WakeMeAt extends ListActivity {
     }
     
     public void askBeforeImport() {
-        DialogInterface.OnClickListener positiveListener = new DialogInterface.OnClickListener() {
+        DialogInterface.OnClickListener okListener = new DialogInterface.OnClickListener() {
             public void onClick(DialogInterface dialog, int whichButton) {
                 db.importDatabaseFromSD();
                 mLocListAdapter.notifyDataSetChanged();
+            }
+        };
+        DialogInterface.OnClickListener cancelListener = new DialogInterface.OnClickListener() {
+            public void onClick(DialogInterface dialog, int whichButton) {
+                // do nothing if cancel is clicked
             }
         };
         Dialog confirmDialog = new AlertDialog.Builder(mContext)
             .setTitle(R.string.import_db_dialog_title)
             .setIcon(R.drawable.icon)
             .setMessage(R.string.import_db_dialog_message)
-            .setPositiveButton(R.string.alert_dialog_ok, positiveListener)
-            .setNegativeButton(R.string.alert_dialog_cancel, new DialogInterface.OnClickListener() {
-                public void onClick(DialogInterface dialog, int whichButton) {
-                    // do nothing
-                }
-            })
+            .setPositiveButton(R.string.alert_dialog_ok, okListener)
+            .setNegativeButton(R.string.alert_dialog_cancel, cancelListener)
             .create();
         confirmDialog.show();
     }
