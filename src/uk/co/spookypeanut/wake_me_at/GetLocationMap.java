@@ -335,10 +335,10 @@ implements LocationListener {
      * @return A generic Location 
      */
     private Location cantGetLocation() {
-        // The weird thing is that this is what my device (Nexus One) does this
+        // The weird thing is that this is what my device (Nexus One) does
         // anyway by default, but I've had report of a force close
         Toast.makeText(mContext, R.string.cant_get_location_msg,
-                       Toast.LENGTH_LONG);
+                       Toast.LENGTH_LONG).show();
         Location fakeLocation = new Location("");
         fakeLocation.setLatitude(0.0);
         fakeLocation.setLongitude(0.0);
@@ -364,7 +364,7 @@ implements LocationListener {
         }
         if(!locMan.isProviderEnabled(provider)){
             Toast.makeText(mContext, R.string.providerDisabledMessage,
-                           Toast.LENGTH_LONG);
+                           Toast.LENGTH_LONG).show();
             Log.wtf(LOG_NAME, "Provider is disabled");
             return cantGetLocation();
         }
