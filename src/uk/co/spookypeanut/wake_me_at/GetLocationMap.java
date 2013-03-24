@@ -509,9 +509,6 @@ implements LocationListener {
                 .setIcon(R.drawable.icon)
                 .create();
             badConnectionDlg.show();
-            // Change the button style for the dialog
-            // I can't find a way to do this in the xml, which is very annoying. Is it possible?
-            ((Button) badConnectionDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
             return;
         }
         if (mResults.size() == 0) {
@@ -528,9 +525,6 @@ implements LocationListener {
             .setIcon(R.drawable.icon)
             .create();
             noResultsDlg.show();
-            // Change the button style for the dialog
-            // I can't find a way to do this in the xml, which is very annoying. Is it possible?
-            ((Button) noResultsDlg.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
             return;
         }
         // If neither of the others happened, then presumably we have a list of
@@ -748,11 +742,6 @@ implements LocationListener {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-
-        // Change the button style for the "use this location" dialog
-        // I can't find a way to do this in the xml, which is very annoying. Is it possible?
-        ((Button) dialog.findViewById(android.R.id.button1)).setBackgroundResource(R.drawable.gn_buttonbg);
-        ((Button) dialog.findViewById(android.R.id.button2)).setBackgroundResource(R.drawable.gn_buttonbg);
     }
 
     /**
