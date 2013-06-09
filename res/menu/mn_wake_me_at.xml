@@ -22,12 +22,19 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/mn_new_loc"
           android:icon="@android:drawable/ic_menu_add"
-          android:title="@string/mn_new_loc" />
+          android:title="@string/mn_new_loc"
+          android:showAsAction="ifRoom|withText" />
+    <!--  ic_menu_stop is now public -->
     <item android:id="@+id/mn_stop_all"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
-          android:title="@string/mn_stop_all" />
+          android:title="@string/mn_stop_all"
+          android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/mn_export_sd"
-          android:title="@string/mn_export_sd" />
+          android:title="@string/mn_export_sd"
+          android:icon="@android:drawable/ic_menu_save"
+          android:showAsAction="ifRoom|withText" />
     <item android:id="@+id/mn_import_sd"
-          android:title="@string/mn_import_sd" />
+          android:title="@string/mn_import_sd"
+          android:icon="@android:drawable/ic_menu_upload"
+          android:showAsAction="ifRoom|withText" />
 </menu>
