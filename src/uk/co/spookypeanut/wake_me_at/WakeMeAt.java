@@ -2,6 +2,7 @@ package uk.co.spookypeanut.wake_me_at;
 
 import java.util.ArrayList;
 
+import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ListActivity;
@@ -220,6 +221,9 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
 
         mLocListAdapter = (LocListAdapter) getListAdapter();
+        
+        ActionBar actionBar = getActionBar();
+        actionBar.show();
     }
 
     public void deleteEmpty() {
