@@ -222,8 +222,10 @@ public class WakeMeAt extends ListActivity {
 
         mLocListAdapter = (LocListAdapter) getListAdapter();
         
-        ActionBar actionBar = getActionBar();
-        actionBar.show();
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            ActionBar actionBar = getActionBar();
+            actionBar.show();
+        }
     }
 
     public void deleteEmpty() {
