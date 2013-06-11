@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Locale;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -110,7 +111,11 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
             alarmWindowFlags();
         }
         setContentView(R.layout.alarm);
-
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setTitle(R.string.alarmTitle);
+            actionBar.setSubtitle(R.string.app_name);
+        }
         Button button = (Button)findViewById(R.id.alarmButtonStop);
         button.setOnClickListener(mStopService);
 
