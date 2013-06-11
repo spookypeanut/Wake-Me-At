@@ -221,11 +221,6 @@ public class WakeMeAt extends ListActivity {
         registerForContextMenu(lv);
 
         mLocListAdapter = (LocListAdapter) getListAdapter();
-        
-        if (android.os.Build.VERSION.SDK_INT >= 11) {
-            ActionBar actionBar = getActionBar();
-            actionBar.show();
-        }
     }
 
     public void deleteEmpty() {
