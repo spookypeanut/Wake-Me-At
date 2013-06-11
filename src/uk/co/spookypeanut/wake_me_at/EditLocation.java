@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import android.app.ActionBar;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
@@ -585,8 +586,13 @@ public class EditLocation extends ExpandableListActivity {
      * Update the gui to the latest values
      */
     protected void updateForm() {
-        TextView nickTextView = (TextView) findViewById(R.id.nick);
-        nickTextView.setText(mNick);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setTitle(mNick);
+        } else {
+            TextView nickTextView = (TextView) findViewById(R.id.nick);
+            nickTextView.setText(mNick);
+        }
 
         mLocSettingsAdapter.notifyDataSetChanged();
     }
@@ -686,9 +692,14 @@ public class EditLocation extends ExpandableListActivity {
 
         setListAdapter(new LocSettingsAdapter(this));
         mLocSettingsAdapter = (LocSettingsAdapter) getExpandableListAdapter();
-
-        TextView tv = (TextView)findViewById(R.id.nick);
-        tv.setOnClickListener(mChangeNickListener);
+        if (android.os.Build.VERSION.SDK_INT >= 11) {
+            ActionBar actionBar = getActionBar();
+            actionBar.setSubtitle(R.string.app_name);
+        }
+        
+        // TODO: This should be a menu item
+        //TextView tv = (TextView)findViewById(R.id.nick);
+        //tv.setOnClickListener(mChangeNickListener);
 
         uc = new UnitConverter(this, "m");
         ArrayList<String> units = uc.getAbbrevList();
