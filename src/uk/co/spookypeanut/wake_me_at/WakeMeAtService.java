@@ -7,8 +7,11 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.support.v4.app.NotificationCompat;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -95,7 +98,7 @@ public class WakeMeAtService extends Service implements LocationListener {
 
     private LocationManager mLocationManager;
     private NotificationManager mNM;
-    private Notification mNotification;
+    private NotificationCompat.Builder mBuilder;
     private PendingIntent mIntentOnSelect;
     private Method mStartForeground;
     private Method mStopForeground;
@@ -114,8 +117,9 @@ public class WakeMeAtService extends Service implements LocationListener {
      * @param id
      * @param notification
      */
-    void startForegroundCompat(int id, Notification notification) {
+    void startForegroundCompat(int id) {
         // If we have the new startForeground API, then use it.
+        Notification notification = mBuilder.build();
         if (mStartForeground != null) {
             mStartForegroundArgs[0] = Integer.valueOf(id);
             mStartForegroundArgs[1] = notification;
@@ -339,10 +343,14 @@ public class WakeMeAtService extends Service implements LocationListener {
         if (ACTION_FOREGROUND.equals(intent.getAction())) {
             // The text to use as the title of our notification
             CharSequence text = getText(R.string.foreground_service_started);
-
+            Bitmap icon = BitmapFactory.decodeResource(this.getResources(),
+                    R.drawable.icon);
             // Set the icon, scrolling text and timestamp
-            mNotification = new Notification(R.drawable.icontaskbar, text,
-                    System.currentTimeMillis());
+            mBuilder = new NotificationCompat.Builder(this)
+                            .setContentTitle(mNick)
+                            .setContentText(text)
+                            .setSmallIcon(R.drawable.icontaskbar)
+                            .setLargeIcon(icon);
 
             // The PendingIntent to launch our activity if the user
             // selects this notification
@@ -355,13 +363,9 @@ public class WakeMeAtService extends Service implements LocationListener {
             // FLAG_CANCEL_CURRENT to completely start from scratch
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i,
                                          PendingIntent.FLAG_CANCEL_CURRENT);
+            mBuilder.setContentIntent(mIntentOnSelect);
 
-            // Set the info for the views that show in the notification panel.
-            CharSequence msg = getText(R.string.foreground_service_started);
-            mNotification.setLatestEventInfo(this, msg, text,
-                                             mIntentOnSelect);
-
-            startForegroundCompat(ALARMNOTIFY_ID, mNotification);
+            startForegroundCompat(ALARMNOTIFY_ID);
         }
     }
 
@@ -386,13 +390,12 @@ public class WakeMeAtService extends Service implements LocationListener {
         String message = String.format(getString(R.string.notif_full),
                             uc.out(mMetresAway),
                             mNick);
-        mNotification.setLatestEventInfo(this, getText(R.string.app_name),
-                                         message, mIntentOnSelect);
+        mBuilder.setContentText(message);
         // Turn off the sound and vibrate, in case they were turned
         // on by the old location warning
-        mNotification.defaults &= ~Notification.DEFAULT_SOUND;
-        mNotification.defaults &= ~Notification.DEFAULT_VIBRATE;
-        mNM.notify(ALARMNOTIFY_ID, mNotification);
+        //mNotification.defaults &= ~Notification.DEFAULT_SOUND;
+        //mNotification.defaults &= ~Notification.DEFAULT_VIBRATE;
+        mNM.notify(ALARMNOTIFY_ID, mBuilder.build());
         if (mMetresAway < uc.toMetres(mRadius)) {
             soundAlarm();
         }
@@ -518,14 +521,14 @@ public class WakeMeAtService extends Service implements LocationListener {
         contentIntent = PendingIntent.getActivity(this, 0,
                                                   notificationIntent, 0);
         if (mWarnSound) {
-            mNotification.defaults |= Notification.DEFAULT_SOUND;
+        //    mNotification.defaults |= Notification.DEFAULT_SOUND;
         }
         if (mWarnVibrate) {
-            mNotification.defaults |= Notification.DEFAULT_VIBRATE;
+        //    mNotification.defaults |= Notification.DEFAULT_VIBRATE;
         }
 
-        mNotification.setLatestEventInfo(context, contentTitle,
-                                         contentText, contentIntent);
-        mNM.notify(ALARMNOTIFY_ID, mNotification);
+        //mNotification.setLatestEventInfo(context, contentTitle,
+        //                                 contentText, contentIntent);
+        //mNM.notify(ALARMNOTIFY_ID, mNotification);
     }
 }
