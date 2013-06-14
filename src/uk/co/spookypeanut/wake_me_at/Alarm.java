@@ -296,12 +296,16 @@ public class Alarm extends Activity implements TextToSpeech.OnInitListener, OnUt
     @Override
     protected void onNewIntent(Intent intent) {
         Bundle extras = intent.getExtras();
-
-        rowChanged(extras.getLong("rowId"));
-        distanceChanged(extras.getDouble("metresAway"),
-                        extras.getLong("locTime"));
-        if (extras.getBoolean("alarm") == true) {
-            startAlarm();
+        if (extras.getBoolean("cancel_all") == true) {
+            stopService(new Intent(Alarm.this, WakeMeAtService.class));
+            finish();
+        } else {
+            rowChanged(extras.getLong("rowId"));
+            distanceChanged(extras.getDouble("metresAway"),
+                            extras.getLong("locTime"));
+            if (extras.getBoolean("alarm") == true) {
+                startAlarm();
+            }
         }
     }
     @Override

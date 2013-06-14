@@ -100,6 +100,7 @@ public class WakeMeAtService extends Service implements LocationListener {
     private NotificationManager mNM;
     private NotificationCompat.Builder mBuilder;
     private PendingIntent mIntentOnSelect;
+    private PendingIntent mCancelIntent;
     private Method mStartForeground;
     private Method mStopForeground;
     private Object[] mStartForegroundArgs = new Object[2];
@@ -364,6 +365,13 @@ public class WakeMeAtService extends Service implements LocationListener {
             mIntentOnSelect = PendingIntent.getActivity(this, 0, i,
                                          PendingIntent.FLAG_CANCEL_CURRENT);
             mBuilder.setContentIntent(mIntentOnSelect);
+
+            i = new Intent(this, Alarm.class)
+                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                        .putExtra("cancel_all", true);
+            mCancelIntent = PendingIntent.getActivity(this, 0, i,
+                                         PendingIntent.FLAG_CANCEL_CURRENT);
+            mBuilder.addAction(R.drawable.icon, "Cancel alarm", mCancelIntent);
 
             startForegroundCompat(ALARMNOTIFY_ID);
         }
