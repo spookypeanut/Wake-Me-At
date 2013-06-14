@@ -345,7 +345,7 @@ public class WakeMeAtService extends Service implements LocationListener {
             // The text to use as the title of our notification
             CharSequence text = getText(R.string.foreground_service_started);
             Bitmap icon = BitmapFactory.decodeResource(this.getResources(),
-                    R.drawable.icon);
+                    R.drawable.iconstar);
             // Set the icon, scrolling text and timestamp
             mBuilder = new NotificationCompat.Builder(this)
                             .setContentTitle(mNick)
