@@ -371,7 +371,7 @@ public class WakeMeAtService extends Service implements LocationListener {
                         .putExtra("cancel_all", true);
             mCancelIntent = PendingIntent.getActivity(this, 0, i,
                                          PendingIntent.FLAG_CANCEL_CURRENT);
-            mBuilder.addAction(R.drawable.icon, "Cancel alarm", mCancelIntent);
+            mBuilder.addAction(R.drawable.ic_menu_close_clear_cancel, "Cancel alarm", mCancelIntent);
 
             startForegroundCompat(ALARMNOTIFY_ID);
         }
