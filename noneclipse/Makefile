@@ -1,7 +1,9 @@
 CONV := ./makepng
-PLAIN := icon-gen-512x512.png icon-gen-72x72.png \
+PLAIN := icon-gen-512x512.png icon-gen-144x144.png \
+			icon-gen-96x96.png icon-gen-72x72.png \
 			icon-gen-48x48.png icon-gen-36x36.png
-STAR := icon-gen-star-512x512.png icon-gen-star-72x72.png \
+STAR := icon-gen-star-512x512.png icon-gen-star-144x144.png \
+			icon-gen-star-96x96.png icon-gen-star-72x72.png \
 			icon-gen-star-48x48.png icon-gen-star-36x36.png
 TASKBARBKG := icon-gen-taskbarbkg-100x100.png icon-gen-taskbarbkg-25x25.png\
 				icon-gen-taskbarbkg-24x24.png icon-gen-taskbarbkg-16x16.png\
@@ -11,12 +13,15 @@ TASKBARBKG := icon-gen-taskbarbkg-100x100.png icon-gen-taskbarbkg-25x25.png\
 POINTER := icon-gen-pointer-64x128.png
 TASKBAR := icon-gen-taskbar-25x25.png icon-gen-taskbar-24x38.png\
 			icon-gen-taskbar-12x19.png icon-gen-taskbar-16x25.png
+TASKBARV11 := icon-gen-taskbarv11-24x24.png icon-gen-taskbarv11-36x36.png\
+			icon-gen-taskbarv11-48x48.png icon-gen-taskbarv11-72x72.png
 MOCKZIP := mock-locations.zip
 
 all : plain star taskbarbkg taskbar pointer mockzip
 plain : $(PLAIN)
 star : $(STAR)
 taskbar : $(TASKBAR)
+taskbarv11 : $(TASKBARV11)
 taskbarbkg : $(TASKBARBKG)
 pointer : $(POINTER)
 mockzip : $(MOCKZIP)
@@ -24,6 +29,12 @@ mockzip : $(MOCKZIP)
 icon-gen-512x512.png : icon.svg
 	$(CONV) icon-gen-512x512.png
 	optipng -q generated/icon-gen-512x512.png
+icon-gen-144x144.png : icon.svg
+	$(CONV) icon-gen-144x144.png
+	optipng -q generated/icon-gen-144x144.png
+icon-gen-96x96.png : icon.svg
+	$(CONV) icon-gen-96x96.png
+	optipng -q generated/icon-gen-96x96.png
 icon-gen-72x72.png : icon.svg
 	$(CONV) icon-gen-72x72.png
 	optipng -q generated/icon-gen-72x72.png
@@ -40,6 +51,22 @@ icon-gen-pointer.svg : icon.svg
 icon-gen-pointer-64x128.png : icon-gen-pointer.svg
 	$(CONV) icon-gen-pointer-64x128.png
 	optipng -q generated/icon-gen-pointer-64x128.png
+
+icon-gen-taskbarv11.svg : icon.svg
+	./maketaskbarv11.py
+
+icon-gen-taskbarv11-24x24.png : icon-gen-taskbarv11.svg
+	$(CONV) icon-gen-taskbarv11-24x24.png
+	optipng -q generated/icon-gen-taskbarv11-24x24.png
+icon-gen-taskbarv11-36x36.png : icon-gen-taskbarv11.svg
+	$(CONV) icon-gen-taskbarv11-36x36.png
+	optipng -q generated/icon-gen-taskbarv11-36x36.png
+icon-gen-taskbarv11-48x48.png : icon-gen-taskbarv11.svg
+	$(CONV) icon-gen-taskbarv11-48x48.png
+	optipng -q generated/icon-gen-taskbarv11-48x48.png
+icon-gen-taskbarv11-72x72.png : icon-gen-taskbarv11.svg
+	$(CONV) icon-gen-taskbarv11-72x72.png
+	optipng -q generated/icon-gen-taskbarv11-72x72.png
 
 icon-gen-taskbarbkg.svg : icon.svg
 	./maketaskbar.py
@@ -102,6 +129,12 @@ icon-gen-star.svg : icon.svg
 icon-gen-star-512x512.png : icon-gen-star.svg
 	$(CONV) icon-gen-star-512x512.png
 	optipng -q generated/icon-gen-star-512x512.png
+icon-gen-star-144x144.png : icon-gen-star.svg
+	$(CONV) icon-gen-star-144x144.png
+	optipng -q generated/icon-gen-star-144x144.png
+icon-gen-star-96x96.png : icon-gen-star.svg
+	$(CONV) icon-gen-star-96x96.png
+	optipng -q generated/icon-gen-star-96x96.png
 icon-gen-star-72x72.png : icon-gen-star.svg
 	$(CONV) icon-gen-star-72x72.png
 	optipng -q generated/icon-gen-star-72x72.png
