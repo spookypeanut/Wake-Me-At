@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- This file is part of Wake Me At. Wake Me At is the legal property of
+ its developer, Henry Bush (spookypeanut). Wake Me At is free software: you
+ can redistribute it and/or modify it under the terms of the GNU General Public
+ License as published by the Free Software Foundation, either version 3 of
+ the License, or (at your option) any later version. Wake Me At is distributed
+ in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even
+ the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
+ See the GNU General Public License for more details. You should have received
+ a copy of the GNU General Public License along with Wake Me At, in the file
+ "COPYING". If not, see <http://www.gnu.org/licenses/>. -->
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+ android:orientation="vertical" android:layout_height="fill_parent"
+ android:layout_width="fill_parent" android:layout_weight="1">
+ <LinearLayout android:orientation="horizontal"
+  android:layout_height="wrap_content" android:layout_width="match_parent"
+  android:layout_weight="1" android:baselineAligned="true">
+
+  <LinearLayout android:orientation="vertical"
+   android:layout_height="fill_parent" android:layout_width="fill_parent"
+   android:layout_weight=".5">
+   <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageOneTextView"
+    android:layout_width="match_parent" android:text="empty message"
+    android:layout_weight="1" android:gravity="center"
+    android:layout_height="wrap_content" android:textSize="18dp" />
+   <TextView style="@style/GreenNature.TextView" android:id="@+id/alarmMessageTwoTextView"
+    android:text="empty message" android:layout_width="match_parent"
+    android:layout_weight="1" android:gravity="center"
+    android:layout_height="wrap_content" android:textSize="18dp" />
+
+   <LinearLayout android:orientation="horizontal"
+    android:layout_height="wrap_content" android:layout_width="match_parent"
+    android:layout_weight="1">
+    <Button android:id="@+id/alarmButtonMain"
+     android:layout_height="match_parent" android:layout_width="0dip"
+     android:text="@string/alarmButtonMain" android:layout_weight="1"
+     android:layout_margin="5dp" />
+    <Button android:id="@+id/alarmButtonEdit"
+     android:layout_height="match_parent" android:layout_width="0dip"
+     android:layout_weight="1"
+     android:text="@string/alarmButtonEdit"
+     android:layout_margin="5dp" />
+   </LinearLayout>
+   <Button android:id="@+id/alarmButtonStop"
+    android:layout_height="wrap_content" android:layout_width="fill_parent"
+    android:text="@string/alarmButtonStop" android:gravity="center"
+    android:layout_weight="2"
+    android:layout_margin="5dp"/>
+  </LinearLayout>
+  <uk.co.spookypeanut.wake_me_at.Compass
+   android:id="@+id/compassSurface" android:gravity="center"
+   android:keepScreenOn="true" android:layout_weight="0.5"
+   android:layout_width="match_parent" android:layout_height="match_parent"
+   android:layout_gravity="center_vertical" />
+ </LinearLayout>
+</LinearLayout>
