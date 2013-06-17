@@ -27,14 +27,11 @@
     <!--  ic_menu_stop is now public -->
     <item android:id="@+id/mn_stop_all"
           android:icon="@android:drawable/ic_menu_close_clear_cancel"
-          android:title="@string/mn_stop_all"
-          android:showAsAction="ifRoom|withText" />
+          android:title="@string/mn_stop_all" />
     <item android:id="@+id/mn_export_sd"
           android:title="@string/mn_export_sd"
-          android:icon="@android:drawable/ic_menu_save"
-          android:showAsAction="ifRoom|withText" />
+          android:icon="@android:drawable/ic_menu_save" />
     <item android:id="@+id/mn_import_sd"
           android:title="@string/mn_import_sd"
-          android:icon="@android:drawable/ic_menu_upload"
-          android:showAsAction="ifRoom|withText" />
+          android:icon="@android:drawable/ic_menu_upload" />
 </menu>
