@@ -60,6 +60,9 @@ public class WakeMeAtService extends Service implements LocationListener {
     private long mMinTime;
     private long mNoLocationWarningTime;
     private long mWarningRepeat;
+    
+    static final int ALARM_INTENT_REF = 0;
+    static final int CANCEL_INTENT_REF = 1;
 
     // The minimum distance (in metres) before reporting the location again
     static final float minDistance = 0;
@@ -355,22 +358,21 @@ public class WakeMeAtService extends Service implements LocationListener {
 
             // The PendingIntent to launch our activity if the user
             // selects this notification
-            Intent i = new Intent(this, Alarm.class);
-            i.putExtra("rowId", mRowId);
-            i.putExtra("metresAway", mMetresAway);
-            i.putExtra("alarm", mAlarm);
+            Intent i = new Intent(this, Alarm.class)
+            .putExtra("rowId", mRowId)
+            .putExtra("metresAway", mMetresAway)
+            .putExtra("alarm", mAlarm);
 
             // It appears that the extras aren't updated, so we use
             // FLAG_CANCEL_CURRENT to completely start from scratch
-            mIntentOnSelect = PendingIntent.getActivity(this, 0, i,
+            mIntentOnSelect = PendingIntent.getActivity(this, ALARM_INTENT_REF, i,
                                          PendingIntent.FLAG_CANCEL_CURRENT);
             mBuilder.setContentIntent(mIntentOnSelect);
 
             i = new Intent(this, Alarm.class)
-                        .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
-                        .putExtra("cancel_all", true);
-            mCancelIntent = PendingIntent.getActivity(this, 0, i,
-                                         PendingIntent.FLAG_CANCEL_CURRENT);
+            .setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            .putExtra("cancel_all", true);
+            mCancelIntent = PendingIntent.getActivity(this, CANCEL_INTENT_REF, i, PendingIntent.FLAG_UPDATE_CURRENT);
             mBuilder.addAction(R.drawable.ic_menu_close_clear_cancel, "Cancel alarm", mCancelIntent);
 
             startForegroundCompat(ALARMNOTIFY_ID);
