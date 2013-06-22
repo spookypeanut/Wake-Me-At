@@ -17,7 +17,7 @@ TASKBARV11 := icon-gen-taskbarv11-24x24.png icon-gen-taskbarv11-36x36.png\
 			icon-gen-taskbarv11-48x48.png icon-gen-taskbarv11-72x72.png
 MOCKZIP := mock-locations.zip
 
-all : plain star taskbarbkg taskbar pointer mockzip
+all : plain star taskbarbkg taskbar pointer mockzip taskbarv11
 plain : $(PLAIN)
 star : $(STAR)
 taskbar : $(TASKBAR)
