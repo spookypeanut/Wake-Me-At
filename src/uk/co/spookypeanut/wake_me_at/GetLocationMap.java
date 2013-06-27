@@ -43,6 +43,7 @@ import android.location.LocationManager;
 import android.media.AudioManager;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.util.Log;
 import android.view.ContextThemeWrapper;
 import android.view.GestureDetector;
@@ -58,25 +59,30 @@ import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.google.android.maps.GeoPoint;
-import com.google.android.maps.MapActivity;
-import com.google.android.maps.MapController;
-import com.google.android.maps.MapView;
-import com.google.android.maps.Overlay;
-import com.google.android.maps.Projection;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
-public class GetLocationMap extends MapActivity
+//import com.google.android.maps.GeoPoint;
+//import com.google.android.maps.MapActivity;
+//import com.google.android.maps.MapController;
+//import com.google.android.maps.MapView;
+//import com.google.android.maps.Overlay;
+//import com.google.android.maps.Projection;
+
+public class GetLocationMap extends FragmentActivity
 implements LocationListener {
     public static final String PREFS_NAME = "WakeMeAtPrefs";
     private String LOG_NAME;
     Context mContext;
     LayoutInflater mInflater;
-    MapView mapView;
+    private GoogleMap mMap;
+//    MapView mapView;
     UnitConverter uc;
     Geocoder mGeocoder;
     static SearchManager mSearchManager;
@@ -85,7 +91,7 @@ implements LocationListener {
 
     Location mCurrLoc;
     double mOrigLat, mOrigLong;
-    GeoPoint mDest;
+    LatLng mDest;
     String mNick;
     double mRadius;
     
@@ -137,11 +143,11 @@ implements LocationListener {
         // We need this just to print out distances in the correct format, etc
         uc = new UnitConverter(this, "m");
 
-        mapView = (MapView) findViewById(R.id.mapview);
-        mapView.setBuiltInZoomControls(true);
-        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
+//        mapView = (MapView) findViewById(R.id.mapview);
+//        mapView.setBuiltInZoomControls(true);
+//        setDefaultKeyMode(DEFAULT_KEYS_SEARCH_LOCAL);
         // This it probably pointless here: mSatellite should always be false
-        mapView.setSatellite(mSatellite);
+//        mapView.setSatellite(mSatellite);
         
         // Get the information from the intent 
         Bundle extras = this.getIntent().getExtras();
@@ -161,13 +167,13 @@ implements LocationListener {
                 mOrigLong = currLoc.getLongitude();
             }
         }
-        moveDestinationTo(mOrigLat, mOrigLong);
+        //moveDestinationTo(mOrigLat, mOrigLong);
 
         // See onRetainNonConfigurationInstance for the information that
         // we receive here
-        final Bundle data = (Bundle) getLastNonConfigurationInstance();
+        //final Bundle data = (Bundle) getLastNonConfigurationInstance();
 
-        if (data != null) {
+        /*if (data != null) {
             // If we have an existing instance, we get the location,
             // the last search term, and whether the search box is open
             mSearchTerm = data.getString("mSearchTerm");
@@ -183,7 +189,7 @@ implements LocationListener {
         }
         if (mSearching) {
             onSearchRequested();
-        }
+        }*/
     }
 
     /** (non-Javadoc)
@@ -194,7 +200,7 @@ implements LocationListener {
      * ability to pass some information to future existences of ourself, and
      * handle it in onCreate
      */
-    @Override
+/*    @Override
     public Object onRetainNonConfigurationInstance() {
         Bundle returnBundle = new Bundle();
         returnBundle.putString("mSearchTerm", mSearchTerm);
@@ -205,7 +211,7 @@ implements LocationListener {
         returnBundle.putInt("mDestLat",mDest.getLatitudeE6());
         returnBundle.putInt("mDestLong", mDest.getLongitudeE6());
         return returnBundle;
-    }
+    }*/
 
     /* (non-Javadoc)
      * @see com.google.android.maps.MapActivity#onNewIntent(android.content.Intent)
@@ -235,40 +241,40 @@ implements LocationListener {
     /**
      * Toggle the map mode between map and satellite
      */
-    private void toggleMapMode() {
+/*    private void toggleMapMode() {
         mSatellite = !mSatellite;
         mapView.setSatellite(mSatellite);
-    }
+    }*/
 
     /**
      * Move the destination marker on the map
      * @param latitude The new latitude of the marker
      * @param longitude The new longitude of the marker
      */
-    private void moveDestinationTo(double latitude, double longitude) {
+/*    private void moveDestinationTo(double latitude, double longitude) {
         List<Overlay> mapOverlays = mapView.getOverlays();
 
         DestOverlay destOverlay = new DestOverlay(mContext, latitude, longitude, mRadius);
         mapOverlays.clear();
         mapOverlays.add(destOverlay);
-    }
+    }*/
 
     /**
      * Move the map to a given point
      * @param latitude The new latitude
      * @param longitude The new longitude
      */
-    private void moveMapTo(double latitude, double longitude) {
+/*    private void moveMapTo(double latitude, double longitude) {
         GeoPoint location = new GeoPoint((int) (latitude * 1E6),
                                             (int) (longitude * 1E6));
         moveMapTo(location);
     }
-
+*/
     /**
      * Move the map to a given point
      * @param location The new location
      */
-    private void moveMapTo(GeoPoint location) {
+/*    private void moveMapTo(GeoPoint location) {
         if (location != null) {
             MapController mc = mapView.getController();
             // We also set the zoom level. Should we?
@@ -278,7 +284,7 @@ implements LocationListener {
             Log.e(LOG_NAME, "Location to move to was null");
         }
     }
-
+*/
     /* (non-Javadoc)
      * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
      */
@@ -297,7 +303,7 @@ implements LocationListener {
         switch (item.getItemId()) {
         case R.id.mn_orig_loc:
             // Move the map back to the original location
-            moveMapTo(mOrigLat, mOrigLong);
+//            moveMapTo(mOrigLat, mOrigLong);
             return true;
         case R.id.mn_search:
             // Pop-up the search dialog
@@ -307,13 +313,13 @@ implements LocationListener {
             // Move the centre of the map to the current location
             Location here = getCurrentLocation();
             if (here != null) {
-                moveMapTo(here.getLatitude(), here.getLongitude());
+//                moveMapTo(here.getLatitude(), here.getLongitude());
             } else {
                 Log.e(LOG_NAME, "Location inaccessible");
             }
             return true;
         case R.id.mn_satellite:
-            toggleMapMode();
+//            toggleMapMode();
             // Switch the text of the menu item depending which mode we're
             // currently in
             if (mSatellite) {
@@ -378,15 +384,6 @@ implements LocationListener {
             return cantGetLocation();
         }
         return currentLocation;
-    }
-
-    /* (non-Javadoc)
-     * @see com.google.android.maps.MapActivity#isRouteDisplayed()
-     * This is required to inherit, but there is never a route displayed
-     */
-    @Override
-    protected boolean isRouteDisplayed() {
-        return false;
     }
 
     /* (non-Javadoc)
@@ -552,9 +549,9 @@ implements LocationListener {
                 long id) {
             double latitude = mResults.get(position).getLatitude();
             double longitude = mResults.get(position).getLongitude();
-            moveMapTo(latitude, longitude);
-            mDest = new GeoPoint((int) (latitude * 1E6),
-                                 (int) (longitude * 1E6));
+//            moveMapTo(latitude, longitude);
+//            mDest = new GeoPoint((int) (latitude * 1E6),
+//                                 (int) (longitude * 1E6));
             selectedLocation();
             mResultsDialog.dismiss();
         }
@@ -651,9 +648,9 @@ implements LocationListener {
         // We pass the search term back so that the caller can populate the
         // location name box with it
         i.putExtra("searchTerm", mSearchTerm);
-        setResult(RESULT_OK, i.setAction(
-                mDest.getLatitudeE6() / 1E6 + "," +
-                mDest.getLongitudeE6() / 1E6));
+//        setResult(RESULT_OK, i.setAction(
+//                mDest.getLatitudeE6() / 1E6 + "," +
+//                mDest.getLongitudeE6() / 1E6));
         finish();
     }
 
@@ -663,20 +660,20 @@ implements LocationListener {
      * the addresses
      */
     public void selectedLocation() {
-        final double latitude = mDest.getLatitudeE6()  / 1E6;
-        final double longitude = mDest.getLongitudeE6() / 1E6;
-        moveDestinationTo(latitude, longitude);
-        Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
+//        final double latitude = mDest.getLatitudeE6()  / 1E6;
+//        final double longitude = mDest.getLongitudeE6() / 1E6;
+//        moveDestinationTo(latitude, longitude);
+//        Log.d(LOG_NAME, "Attempting geocoder lookup from " + latitude + ", " + longitude);
 
         // Fire off a thread to do some work that we shouldn't do directly in
         // the UI thread. In this case, geo-code a location.
         Thread t = new Thread() {
             public void run() {
-                try {
-                    mDestAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+//                try {
+//                    mDestAddresses = mGeocoder.getFromLocation(latitude, longitude, 1);
+//                } catch (IOException e) {
+//                    e.printStackTrace();
+//                }
                 mHandler.post(mGotAddresses);
                 }
         };
@@ -693,12 +690,12 @@ implements LocationListener {
      * from the geocoder. It finishes the process started in selectedLocation()
      */
     private void gotDestinationAddress() {
-        final double latitude = mDest.getLatitudeE6()  / 1E6;
-        final double longitude = mDest.getLongitudeE6() / 1E6;
+//        final double latitude = mDest.getLatitudeE6()  / 1E6;
+//        final double longitude = mDest.getLongitudeE6() / 1E6;
 
         // Prepare the various strings to display in the alert dialog
         String latlongMsg = "Latitude / Longitude:\n";
-        latlongMsg += latitude + ", " + longitude;
+//        latlongMsg += latitude + ", " + longitude;
 
         String addressMsg = "";
         if (mDestAddresses != null && mDestAddresses.size() > 0) {
@@ -742,13 +739,13 @@ implements LocationListener {
         });
         AlertDialog dialog = builder.create();
         dialog.show();
-    }
+//    }
 
     /**
      * The class for the destination overlay on the map. Includes long-pressing
      * to select a location, and double-tapping to zoom in
      */
-    public class DestOverlay extends Overlay implements OnGestureListener, 
+/*    public class DestOverlay extends Overlay implements OnGestureListener, 
                                                         OnDoubleTapListener{
         private GestureDetector gestureDetector;
 
@@ -767,12 +764,12 @@ implements LocationListener {
                 gestureDetector = new GestureDetector(this);
                 gestureDetector.setOnDoubleTapListener((OnDoubleTapListener) this);
          }
-
+*/
          /**
           * How to draw the overlay.
           * This includes both the marker and the circle denoting the radius
           */
-         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
+/*         public void draw(Canvas canvas, MapView mapView, boolean shadow) {
              super.draw(canvas, mapView, shadow);
              Resources res = oContext.getResources();
              float[] result = new float[1];
@@ -833,23 +830,23 @@ implements LocationListener {
              }
              return false;
          }
-
+*/
          /**
           * If a long press is heard, select the location
           */
-         @Override
+/*         @Override
          public void onLongPress(MotionEvent event) {
              mDest = mapView.getProjection().fromPixels(
                      (int) event.getX(),
                      (int) event.getY());
              selectedLocation();
          }
-
+*/
          /**
           * These methods are all required to implement gesture listener, but
           *  don't need them
           */
-         @Override
+/*         @Override
          public boolean onDown(MotionEvent e) {
              return false;
          }
@@ -874,23 +871,25 @@ implements LocationListener {
          public boolean onSingleTapUp(MotionEvent e) {
              return false;
          }
-
+*/
 
         /* (non-Javadoc)
          * @see android.view.GestureDetector.OnDoubleTapListener#onSingleTapConfirmed(android.view.MotionEvent)
          */
+    /*
         @Override
         public boolean onSingleTapConfirmed(MotionEvent e) {
             return false;
         }
-
+*/
 
         /* (non-Javadoc)
          * @see android.view.GestureDetector.OnDoubleTapListener#onDoubleTapEvent(android.view.MotionEvent)
          */
-        @Override
+  /*      @Override
         public boolean onDoubleTapEvent(MotionEvent e) {
             return false;
         }
+        */
     }
 }
